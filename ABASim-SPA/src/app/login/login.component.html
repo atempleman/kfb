@@ -1,0 +1,132 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--  -->
+  <!--    Document Title-->
+  <!-- =============================================-->
+  <title>Slick | Create Beautiful Websites. Effortlessly.</title>
+  <!--  -->
+  <!--    Favicons-->
+  <!--    =============================================-->
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicons/favicon-16x16.png">
+  <link rel="shortcut icon" type="image/x-icon" href="./assets/images/favicons/favicon.ico">
+  <link rel="manifest" href="./assets/images/favicons/manifest.json">
+  <link rel="mask-icon" href="./assets/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileImage" content="./assets/images/favicons/mstile-150x150.png">
+  <meta name="theme-color" content="#ffffff">
+  <!--  -->
+  <!--    Stylesheets-->
+  <!--    =============================================-->
+  <!-- Default stylesheets-->
+  <!-- <link href="./assets/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- Template specific stylesheets-->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet">
+  <!-- <link href="./assets/lib/hamburgers/dist/hamburgers.min.css" rel="stylesheet">
+  <link href="./assets/lib/iconsmind/iconsmind.css" rel="stylesheet">
+  <link href="./assets/lib/flexslider/flexslider.css" rel="stylesheet">
+  <link href="./assets/lib/loaders.css/loaders.min.css" rel="stylesheet">
+  <link href="./assets/lib/remodal/dist/remodal.css" rel="stylesheet">
+  <link href="./assets/lib/remodal/dist/remodal-default-theme.css" rel="stylesheet">
+  <link href="./assets/lib/semantic-ui-dropdown/dropdown.min.css" rel="stylesheet">
+  <link href="./assets/lib/semantic-ui-accordion/accordion.min.css" rel="stylesheet">
+  <link href="./assets/lib/semantic-ui-transition/transition.min.css" rel="stylesheet">
+  <link href="./assets/lib/owl.carousel/dist/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="./assets/lib/owl.carousel/dist/assets/owl.theme.default.min.css" rel="stylesheet">
+  <link href="./assets/lib/lightbox2/dist/css/lightbox.css" rel="stylesheet"> -->
+  <!-- Main stylesheet and color file-->
+  <!-- <link href="./assets/css/style.css" rel="stylesheet">
+  <link href="./assets/css/custom.css" rel="stylesheet"> -->
+</head>
+
+<section class="text-center py-md-0" id="header-2">
+  <div class="background-holder overlay overlay-0" style="background-image:url(./assets/images/branding/login001.jpg);">
+    <div class="youtube-background" data-property="{&quot;videoURL&quot;:&quot;https://www.youtube.com/watch?v=iGpuQ0ioPrM&quot;,&quot;mute&quot;:true,&quot;showYTLogo&quot;:false}"></div>
+  </div>
+  <!--/.background-holder-->
+  <div class="container">
+    <div class="row h-full align-items-center justify-content-center">
+      <!-- <div class="col-sm-6 col-lg-5 text-sm-right"><img src="./assets/images/iphone-x-4.png" alt="iphone7" width="300"></div> -->
+      <div class="col-11 col-sm-6 col-lg-7 mt-5 mt-sm-0">
+        <div class="row justify-content-center">
+          
+          <div class="col-lg-10 mt-4">
+            
+              <form [formGroup]="loginForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2" (ngSubmit)="login()">
+                <div class="row justify-content-center">
+                  <h2 class="color-10 justify-content-center">Login</h2>
+                      <div class="col-md-12">
+                          <!-- <div class="form-group">
+                              <input class="form-control background-white border-2x" type="hidden" name="to" value="username@domain.extension" />
+                          </div> -->
+                      </div>
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Username</label>
+                              <input class="form-control background-white" type="text" formControlName="username" required="required" />
+                          </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Password</label>
+                            <input class="form-control background-white" type="password" formControlName="password" required="required" />
+                        </div>
+                    </div>
+                      <div class="col-md-6 text-center mt-4">
+                          <input class="btn btn-primary btn-block" type="submit" name="submit" value="Login" />
+                      </div>
+                  </div>
+                  <div class="zform-feedback mt-3"></div>
+              </form>
+          </div>
+      </div>
+      </div>
+    </div>
+    <!--/.row-->
+  </div>
+  <!--/.container-->
+</section>
+
+<!--  -->
+        <!--    JavaScripts-->
+        <!--    =============================================-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+        <script src="./assets/lib/jquery/dist/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="./assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="./assets/js/imagesloaded.pkgd.js"></script>
+        <script src="./assets/lib/@fontawesome/js/all.min.js"></script>
+        <script src="./assets/js/TweenMax.js"></script>
+        <script src="./assets/js/CustomEase.js"></script>
+        <script src="./assets/js/ScrollToPlugin.js"></script>
+        <script src="./assets/js/Utils.js"></script>
+        <script src="./assets/js/detector.js"></script>
+        <script src="./assets/js/inertia.js"></script>
+        <script src="./assets/lib/sticky-kit/dist/sticky-kit.min.js"></script>
+        <script src="./assets/lib/stickyfilljs/dist/stickyfill.min.js"></script>
+        <script src="./assets/js/stickykit.js"></script>
+        <script src="./assets/js/stickyfill.js"></script>
+        <script src="./assets/js/zanimation.js"></script>
+        <script src="./assets/js/border-animation.js"></script>
+        <script src="./assets/lib/remodal/dist/remodal.js"></script>
+        <script src="./assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
+        <script src="./assets/lib/semantic-ui-dropdown/dropdown.min.js"></script>
+        <script src="./assets/lib/semantic-ui-accordion/accordion.min.js"></script>
+        <script src="./assets/lib/semantic-ui-transition/transition.min.js"></script>
+        <script src="./assets/lib/lightbox2/dist/js/lightbox.js"></script>
+        <script src="./assets/lib/tableCollation.js"></script>
+        <script src="./assets/js/countup.js"></script>
+        <script src="./assets/js/googlemap.js"></script>
+        <script src="./assets/lib/rellax/rellax.min.js"></script>
+        <script src="./assets/lib/isotope-layout/dist/isotope.pkgd.min.js"></script>
+        <script src="./assets/lib/isotope-packery/packery-mode.pkgd.min.js"></script>
+        <script src="./assets/lib/typed.js/lib/typed.min.js"></script>
+        <script src="./assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.min.js"></script>
+        <script src="./assets/lib/flexslider/jquery.flexslider-min.js"></script>
+        <!--script(src!='https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap' async)-->
+        <!-- "Replace the source with this link. Note: YOUR_API_KEY should be replaced with your API key"-->
+        <script src="./assets/js/core.js"></script>
+        <script src="./assets/js/main.js"></script>

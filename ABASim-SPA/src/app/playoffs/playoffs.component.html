@@ -1,0 +1,76 @@
+<div class="jumbotron">
+	<h3 class="display">PLAYOFFS</h3>
+	<p>Season #{{ this.league?.year }}</p>
+	<span class="badge badge-danger"
+		*ngIf="this.league?.stateId == 1 || this.league?.stateId == 14">{{ this.league?.state }}</span>
+	<span class="badge badge-info"
+		*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+	<span class="badge badge-success"
+		*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
+	<span class="badge badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
+	<span class="badge badge-warning"
+		*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
+	<span class="badge badge-secondary" *ngIf="this.league?.stateId == 10">{{ this.league?.state }}</span>
+	<span
+		*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14">
+		- Day #{{ this.league?.day }}</span>
+</div>
+
+
+<div class="box">
+	<div class="container">
+		<div class="row cards-row">
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header"><i class="fa fa-signal fa-2x"></i><span
+						class="header-card ml-3"><strong>PLAYOFF STATS</strong></span></div>
+				<div class="card-body">
+					<p class="card-text">View the statistics of players and teams during the playoffs.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToStats()">Go to Playoff
+							Stats</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header"><i class="fa fa-trophy fa-2x"></i><span
+						class="header-card ml-3"><strong>PLAYOFF RESULTS</strong></span></div>
+				<div class="card-body">
+					<p class="card-text">View the results of playoff games.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToResults()">Go to Playoff
+							Results</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="box">
+	<div class="jumbotron" *ngIf="this.league?.day != 0">
+		<h3>Playoff Picture</h3>
+		<p>select a round to view</p>
+		<select name="playoffround" [(ngModel)]="playoffRoundSelection">
+			<option *ngIf="this.league?.stateId >= 8" [value]="1">First Round</option>
+			<option *ngIf="this.league?.stateId >= 9" [value]="2">Conference Semis</option>
+			<option *ngIf="this.league?.stateId >= 10" [value]="3">Conference Finals</option>
+			<option *ngIf="this.league?.stateId >= 11" [value]="4">ABA Finals</option>
+		</select>
+		<button type="submit" class="btn btn-primary ml-2" (click)="playoffRoundSelected()">Select</button>
+
+		<div class="row event-row">
+				<table class="table table-hover events-table">
+					<tbody>
+						<tr class="table-secondary" *ngFor="let series of this.playoffSummaries">
+							<td>
+								{{ series.awayTeam }}: {{ series.awayWins }}
+								<br />
+								{{ series.homeTeam }}: {{ series.homeWins }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+</div>

@@ -1,0 +1,154 @@
+<section class="text-center py-md-0" id="header-2">
+  <div class="background-holder overlay overlay-0" style="background-image:url(./assets/images/branding/login001.jpg);">
+    <div class="youtube-background"
+      data-property="{&quot;videoURL&quot;:&quot;https://www.youtube.com/watch?v=iGpuQ0ioPrM&quot;,&quot;mute&quot;:true,&quot;showYTLogo&quot;:false}">
+    </div>
+  </div>
+  <div class="row justify-content-center">
+</div>
+  <!--/.background-holder-->
+  <div class="container">
+    <div class="row h-full align-items-center justify-content-center">
+      <!-- <div class="col-sm-6 col-lg-5 text-sm-right"><img src="./assets/images/iphone-x-4.png" alt="iphone7" width="300"></div> -->
+      <div class="col-11 col-sm-6 col-lg-7 mt-5 mt-sm-0">
+        <div class="row justify-content-center">
+
+          <div class="col-lg-10 mt-4">
+            <form [formGroup]="registerForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2"
+              (ngSubmit)="register()" *ngIf="this.availableTeams">
+              <div class="row justify-content-center">
+                <h2 class="color-10 justify-content-center">Register your Klutch Fantasy Basketball Team.</h2>
+                <!-- <p class="color-8 justify-content-center">If there are available teams in an open league you will be able to register and begin playing.</p> -->
+                <div class="col-md-12">
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="username">Username</label>
+                    <input class="form-control background-white" type="text" formControlName="username"
+                      required="required" value="" name="username" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="password">Password</label>
+                    <input class="form-control background-white" type="password" formControlName="password"
+                      required="required" value="" name="password" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="confirmpassword">Confirm Password</label>
+                    <input class="form-control background-white" type="password" name="confirmpassword"
+                      formControlName="confirmPassword" required="required" value="" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="email">Email</label>
+                    <input class="form-control background-white" type="text" name="email" formControlName="email"
+                      required="required" value="" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Name</label>
+                    <input class="form-control background-white" type="text" name="name" formControlName="name"
+                      required="required" value="" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Select your Team</label>
+                    <select class="form-control" formControlName="teamSelection" teamSelection name="teamSelection">
+                      <option *ngFor="let team of this.selectableTeams" [value]="team.id">{{ team.teamname }} {{ team.mascot }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 text-center mt-4">
+                  <input class="btn btn-primary btn-block" type="submit" name="submit" value="Register" />
+                </div>
+              </div>
+              <div class="zform-feedback mt-3"></div>
+            </form>
+
+            <form [formGroup]="contactForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2" (ngSubmit)="submitContactForm()" *ngIf="!this.availableTeams">
+              <div class="row justify-content-center">
+                <h4 class="color-10 justify-content-center">No teams are available. Please register your interest and you will be notified when a team is available</h4>
+                  <div class="col-md-12">
+                      <!-- <div class="form-group">
+                          <input class="form-control background-white border-2x" type="hidden" name="to" value="username@domain.extension" />
+                      </div> -->
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Name</label>
+                          <input class="form-control background-white" id="name" formControlName="name" type="text" name="name" required="required" />
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label class="ls text-uppercase color-8 fw-700 mb-0" for="email">Email</label>
+                          <input class="form-control background-white" id="email" formControlName="email" type="text" name="email" required="required" />
+                      </div>
+                  </div>
+                  <div class="col-12">
+                      <div class="form-group">
+                          <label class="ls text-uppercase color-8 fw-700 mb-0" for="contact">Message</label>
+                          <textarea class="form-control background-white" id="contact" rows="8" name="message" formControlName="contact"></textarea>
+                      </div>
+                  </div>
+                  <div class="col-md-6 text-center mt-4">
+                      <input class="btn btn-primary btn-block" type="submit" name="submit" value="Send!" />
+                  </div>
+              </div>
+              <div class="zform-feedback mt-3"></div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/.row-->
+  </div>
+  <div class="row justify-content-center">
+  </div>
+  <!--/.container-->
+</section>
+
+
+
+<!-- <section class="py-0" id="header-7">
+  <div class="background-holder  overlay-0 d-none d-lg-block w-75 background-left" style="background-image:url(./assets/images/16.jpg);">
+  </div> -->
+<!--/.background-holder-->
+<!-- <div class="container-fluid">
+      <div class="row justify-content-end">
+          <div class="col-lg-8 col-xl-7 background-white py-6 h-lg-full d-flex">
+              <div class="align-self-center mx-auto" style="max-width: 34.375rem">
+                  
+                  <form class="zform mt-5" *ngIf="this.availableTeams">
+                      <div class="row align-items-center">
+                          <div class="col-6 pr-2">
+                              <input class="form-control radius-square" type="text" placeholder="First Name" />
+                          </div>
+                          <div class="col-6 pl-2">
+                              <input class="form-control radius-square" type="text" placeholder="Last Name" />
+                          </div>
+                          <div class="col-12 my-3">
+                              <input class="form-control radius-square" type="email" placeholder="Your Email" />
+                          </div>
+                          <div class="col-sm-6 col-xl-7 pr-sm-2">
+                              <input class="form-control radius-square" type="password" placeholder="Password" />
+                          </div>
+                          <div class="col-sm-6 col-xl-5 mt-3 mt-sm-0 pl-sm-2">
+                              <div class="btn btn-success w-100">Create an Account</div>
+                          </div>
+                      </div>
+                      <div class="zform-feedback"></div>
+                  </form>
+                  <p class="fs--1 fw-300 color-3 mt-2">By signing up, you agree to <a href="#">Terms of Service.</a></p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section> -->

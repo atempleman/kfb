@@ -1,0 +1,151 @@
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+
+<section class="dashboard-area">
+	<h3 class="display">Team Coaching</h3>
+</section>
+
+<div class="box content-class">
+	<div class="row ml-3 mr-2">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.goToTab ? 'active' : ''" (click)="goToTabClick()">Go
+					To Players</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.offensiveStrategyTab ? 'active' : ''"
+					(click)="offensiveStrategyTabClick()">Offensive Strategy</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.defensiveStrategyTab ? 'active' : ''"
+					(click)="defensiveStrategyTabClick()">Defensive Strategy</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="row">
+		<div class="col">
+			<table class="table table-hover roster-table" *ngIf="this.goToTab == 1">
+				<thead>
+					<tr>
+						<th>Go To Player #1</th>
+						<th>Go To Player #2</th>
+						<th>Go To Player #3</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary">
+						<td *ngIf="this.coachSetting?.goToPlayerOne == 0 && this.isEdit == 0">
+							No player set
+						</td>
+						<td *ngIf="this.coachSetting?.goToPlayerOne != 0 && this.isEdit == 0"
+							[style.color]="this.injuredOne == 1 ? 'red' : ''">
+							{{ this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerOne, 1) }}
+						</td>
+						<td *ngIf="this.isEdit == 1">
+							<select [(ngModel)]="gotoOne">
+								<option [value]="0"></option>
+								<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
+									{{ this.getPlayerName(player.id) }}
+								</option>
+							</select>
+						</td>
+						<td *ngIf="this.coachSetting?.goToPlayerTwo == 0 && this.isEdit == 0">
+							No player set
+						</td>
+						<td *ngIf="this.coachSetting?.goToPlayerTwo != 0 && this.isEdit == 0"
+							[style.color]="this.injuredTwo == 1 ? 'red' : ''">
+							{{ this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerTwo, 2) }}
+						</td>
+						<td *ngIf="this.isEdit == 1">
+							<select [(ngModel)]="gotoTwo">
+								<option [value]="0"></option>
+								<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
+									{{ this.getPlayerName(player.id) }}
+								</option>
+							</select>
+						</td>
+						<td *ngIf="this.coachSetting?.goToPlayerThree == 0 && this.isEdit == 0">
+							No player set
+						</td>
+						<td *ngIf="this.coachSetting?.goToPlayerThree != 0 && this.isEdit == 0"
+							[style.color]="this.injuredThree == 1 ? 'red' : ''">
+							{{ this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerThree, 3) }}
+						</td>
+						<td *ngIf="this.isEdit == 1">
+							<select [(ngModel)]="gotoThree">
+								<option [value]="0"></option>
+								<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
+									{{ this.getPlayerName(player.id) }}
+								</option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row edit-button" *ngIf="this.isEdit == 0 && this.goToTab == 1">
+				<button type="button" class="btn btn-primary" (click)="editCoaching()">Edit</button>
+			</div>
+			<div class="row editing-buttons" *ngIf="this.isEdit == 1 && this.goToTab == 1">
+				<button type="button" class="btn btn-primary" (click)="saveCoaching()">Save</button>
+				<button type="button" class="btn btn-danger ml-3" (click)="cancelCoaching()">Cancel</button>
+			</div>
+
+			<div class="row ml-3 mr-2 mt-3" *ngIf="this.offensiveStrategyTab == 1">
+				<p *ngIf="this.isEdit == 0" class="ml-6 mr-2">Your offensive strategy - {{ this.teamStrategy?.offensiveStrategyName }}
+					<ng-container *ngIf="this.teamStrategy == null"> No Strategy Set</ng-container>
+				</p>
+				<p class="ml-10 mt-3" *ngIf="this.isEdit == 1">
+					<select [(ngModel)]="offStrategySelection">
+						<option [value]="0"></option>
+						<option *ngFor="let strategy of this.offStrategies" [value]="strategy.id">
+							{{ strategy.name }}
+						</option>
+					</select>
+				</p>
+				<div class="row edit-button" *ngIf="this.isEdit == 0">
+					<button type="button" class="btn btn-primary" (click)="editOffensiveStrategy()">Edit</button>
+				</div>
+				<div class="row editing-buttons" *ngIf="this.isEdit == 1">
+					<button type="button" class="btn btn-primary" (click)="saveStrategy()">Save</button>
+					<button type="button" class="btn btn-danger ml-3"
+						(click)="cancelOffensiveStrategy()">Cancel</button>
+				</div>
+			</div>
+			<div class="row ml-3 mr-2 mt-4" *ngIf="this.offensiveStrategyTab == 1">
+				<ul *ngFor="let strat of this.offStrategies">
+					<p class="details"><b class="text-success">{{ strat.name }}</b> - {{ strat.description }}</p>
+				</ul>
+			</div>
+
+			<div class="row ml-3 mr-2 mt-3" *ngIf="this.defensiveStrategyTab == 1">
+				<p *ngIf="this.isEdit == 0" class="ml-6 m-2">Your defensive strategy - {{ this.teamStrategy?.defensiveStrategyName }}
+					<ng-container *ngIf="this.teamStrategy == null"> No Strategy Set</ng-container>
+				</p>
+				<p class="ml-10 mt-3" *ngIf="this.isEdit == 1">
+					<select [(ngModel)]="defStrategySelection">
+						<option [value]="0"></option>
+						<option *ngFor="let strategy of this.defStrategies" [value]="strategy.id">
+							{{ strategy.name }}
+						</option>
+					</select>
+				</p>
+				<div class="row edit-button" *ngIf="this.isEdit == 0">
+					<button type="button" class="btn btn-primary" (click)="editDefensiveStrategy()">Edit</button>
+				</div>
+				<div class="row editing-buttons" *ngIf="this.isEdit == 1">
+					<button type="button" class="btn btn-primary" (click)="saveStrategy()">Save</button>
+					<button type="button" class="btn btn-danger ml-3"
+						(click)="cancelDefensiveStrategy()">Cancel</button>
+				</div>
+			</div>
+			<div class="row ml-3 mr-2 mt-4" *ngIf="this.defensiveStrategyTab == 1">
+				<ul *ngFor="let strat of this.defStrategies">
+					<p class="details"><b class="text-success">{{ strat.name }}</b> - {{ strat.description }}</p>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</div>

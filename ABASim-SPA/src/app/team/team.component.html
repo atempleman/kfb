@@ -1,0 +1,406 @@
+<section class="dashboard-area">
+	<h3 class="display">{{ this.team?.teamname }} {{this.team?.mascot }}</h3>
+	<p class="color-8">Season #{{ this.league?.year }}</p>
+	<span class="badge badge-danger mb-3"
+		*ngIf="this.league?.stateId == 1">{{ this.league?.state }}</span>
+	<span class="badge badge-info mb-3"
+		*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+	<span class="badge badge-success mb-3"
+		*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
+	<span class="badge badge-primary mb-3" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
+	<span class="badge badge-warning mb-3"
+		*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
+	<span class="badge badge-secondary mb-3" *ngIf="this.league?.stateId == 10">{{ this.league?.state }}</span>
+	<span
+		*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14">
+		- Day #{{ this.league?.day }}</span>
+</section>
+
+<div class="tabs">
+	<div class="nav-bar nav-bar-center">
+		<div class="nav-bar-item active color-8"><span class="fa fa-users fs-2"></span><br>Roster</div>
+		<div class="nav-bar-item color-8"><span class="fa fa-bullhorn fs-2"></span><br>Coaching</div>
+		<div class="nav-bar-item color-8"><span class="fa fa-list-ol fs-2"></span><br>Finances</div>
+		<div class="nav-bar-item color-8"><span class="fa fa-retweet fs-2"></span><br>Trades</div>
+		<div class="nav-bar-item color-8"><span class="fa fa-list fs-2"></span><br>Free Agents</div>
+	</div>
+	<div class="tab-contents">
+		<div class="tab-content active">
+			<p class="lead color-1">
+				 Duis ac facilisis mauris. Pellentesque leo tortor, maximus sed gravida dapibus, suscipit non nisi. Duis ultrices diam a maximus imperdiet. Nam eu purus a erat tristique ornare. Donec condimentum tristique diam eu congue. </p>
+		</div>
+		<div class="tab-content">
+			<p class="lead color-1">
+				 Nullam sed tempus mauris, vitae pretium nibh. Nam pretium diam id massa mollis pretium. Aenean lacus massa, tristique id mauris ac, sollicitudin auctor neque. Cras laoreet nunc nibh, ac tristique orci rutrum quis. Nam luctus, sapien ligula finibus turpis.</p>
+		</div>
+		<div class="tab-content">
+			<p class="lead color-1">
+				 Vestibulum convallis diam id nibh tempus, ac scelerisque nulla congue. Cras laoreet nunc nibh, ac tristique orci rutrum quis. Sed eu tellus pharetra, scelerisque nulla in, vehicula libero. Curabitur interdum nec metus ante sed luctus.</p>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- <link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+<section class="dashboard-area">
+	<h3 class="display">{{ this.team?.teamname }} {{this.team?.mascot }}</h3>
+	<p>Current Salary - ${{ this.teamCap?.currentSalaryAmount | number }}</p>
+	<p>League Salary Cap - ${{ this.teamCap?.salaryCapAmount | number }}</p>
+	<p>Cap Space Remaining - ${{ this.remainingCapSpace | number }}</p>
+</section>
+
+<div class="box">
+	<div class="container">
+		<div class="row cards-row">
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header" [style.background-color]="'rgb(' + primaryColor + ')'"><i class="fa fa-address-card fa-2x"></i><span
+						class="header-card ml-3"><strong>COACHING</strong></span></div>
+				<div class="card-body" [style.background-color]="'rgb(' + secondaryColor + ')'">
+					<p class="card-text">Modify your team's strategy and coach them to victory.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToCoaching()">Coaching</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header" [style.background-color]="'rgb(' + primaryColor + ')'"><i class="fa fa-address-book fa-2x"></i><span
+						class="header-card ml-3"><strong>DEPTH CHART</strong></span></div>
+				<div class="card-body" [style.background-color]="'rgb(' + secondaryColor + ')'">
+					<p class="card-text">Manage your team's depth chart. Decide who plays at every position,</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToDepthCharts()">Set Depth
+							Chart</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 5">
+				<div class="card-header" [style.background-color]="'rgb(' + primaryColor + ')'"><i class="fa fa-user-secret fa-2x" aria-hidden="true"></i><span
+						class="header-card ml-3"><strong>TRADES</strong></span></div>
+				<div class="card-body" [style.background-color]="'rgb(' + secondaryColor + ')'">
+					<p class="card-text">Improve your team. Offer other teams trades.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToTrades()">Make Trades</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 5">
+				<div class="card-header" [style.background-color]="'rgb(' + primaryColor + ')'"><i class="fa fa-list fa-2x" aria-hidden="true"></i><span
+						class="header-card ml-3"><strong>FREE AGENTS</strong></span></div>
+				<div class="card-body" [style.background-color]="'rgb(' + secondaryColor + ')'">
+					<p class="card-text">View the available free agents and sign players.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToFreeAgents()">Go to Free
+							Agents</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<div class="box ml-3 mr-2" *ngIf="this.league?.stateId > 2">
+	<div class="row ml-3 mr-2">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.statusGrades ? 'active' : ''"
+					(click)="gradesClick()">Grades</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.statusStats ? 'active' : ''"
+					(click)="statisticsClick()">Statistics</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.statusContracts ? 'active' : ''"
+					(click)="contractsClick()">Player Contracts</a>
+			</li>
+		</ul>
+	</div>
+	<div class="row">
+		<div class="col">
+			<table class="table table-hover roster-table" *ngIf="this.playerCount != 0 && this.statusGrades == 1">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Position(s)</th>
+						<th>Age</th>
+						<th>2pt</th>
+						<th>3pt</th>
+						<th>Ft</th>
+						<th>O-Reb</th>
+						<th>D-Reb</th>
+						<th>Handling</th>
+						<th>Passing</th>
+						<th>Block</th>
+						<th>Steal</th>
+						<th>Stamina</th>
+						<th>Intangibles</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary" *ngFor="let player of this.playingRoster">
+						<td>
+							{{ player.firstName }} {{ player.surname }} <span
+								*ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
+									class="fa fa-medkit fa-2x"></i></span>
+						</td>
+						<td>
+							<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
+							<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
+							<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
+							<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
+							<ng-container *ngIf="player.cPosition == 1">C </ng-container>
+						</td>
+						<td>{{ player.age }}</td>
+						<td>
+							{{ player.twoGrade }}
+						</td>
+						<td>
+							{{ player.threeGrade }}
+						</td>
+						<td>
+							{{ player.ftGrade }}
+						</td>
+						<td>
+							{{ player.oRebGrade }}
+						</td>
+						<td>
+							{{ player.dRebGrade }}
+						</td>
+						<td>
+							{{ player.handlingGrade }}
+						</td>
+						<td>
+							{{ player.passingGrade }}
+						</td>
+						<td>
+							{{ player.blockGrade }}
+						</td>
+						<td>
+							{{ player.stealGrade }}
+						</td>
+						<td>
+							{{ player.staminaGrade }}
+						</td>
+						<td>
+							{{ player.intangiblesGrade }}
+						</td>
+						<td class="text-center">
+							<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"><i
+									class="fa fa-edit"></i> View</button>
+							<button class="btn btn-danger btn-xs tablebutton" (click)="openModal(waive, player)"><i
+									class="fa fa-trash"></i> Waive</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-hover roster-table" *ngIf="this.playerCount != 0 && this.statusStats">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Age</th>
+						<th>G</th>
+						<th>MP</th>
+						<th>FG</th>
+						<th>FGA</th>
+						<th>FG%</th>
+						<th>3P</th>
+						<th>3PA</th>
+						<th>3P%</th>
+						<th>FT</th>
+						<th>FTA</th>
+						<th>FT%</th>
+						<th>ORB</th>
+						<th>DRB</th>
+						<th>TRB</th>
+						<th>AST</th>
+						<th>STL</th>
+						<th>BLK</th>
+						<th>TOV</th>
+						<th>PF</th>
+						<th>PTS</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary" *ngFor="let player of this.playingRoster">
+						<td>
+							{{ this.player?.firstName }} {{ this.player?.surname }}
+						</td>
+						<td>
+							{{ this.player?.age }}
+						</td>
+						<td>
+							{{ this.player?.gamesStats }}
+						</td>
+						<td>
+							{{ getMinutesAverage(player) }}
+						</td>
+						<td>
+							{{ getFGAverage(player) }}
+						</td>
+						<td>
+							{{ getFGAAverage(player) }}
+						</td>
+						<td>
+							{{ getFgPercentage(player) }}
+						</td>
+						<td>
+							{{ getThreeFGAverage(player) }}
+						</td>
+						<td>
+							{{ getThreeFGAAverage(player) }}
+						</td>
+						<td>
+							{{ getThreeFgPercentage(player) }}
+						</td>
+						<td>
+							{{ getFTAverage(player) }}
+						</td>
+						<td>
+							{{ getFTAAverage(player) }}
+						</td>
+						<td>
+							{{ getFTPercentage(player) }}
+						</td>
+						<td>
+							{{ getOrebAverage(player) }}
+						</td>
+						<td>
+							{{ getDrebverage(player) }}
+						</td>
+						<td>
+							{{ getTotalRebAverage(player) }}
+						</td>
+						<td>
+							{{ getTotalAstAverage(player) }}
+						</td>
+						<td>
+							{{ getTotalStlAverage(player) }}
+						</td>
+						<td>
+							{{ getTotalBlkAverage(player) }}
+						</td>
+						<td>
+							{{ getTotalTovAverage(player) }}
+						</td>
+						<td>
+							{{ getTotalFoulsAverage(player) }}
+						</td>
+						<td>
+							{{ getTotalPointsAverage(player) }}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table table-hover roster-table" *ngIf="this.statusContracts">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Current Year</th>
+						<th>2nd Year</th>
+						<th>3rd Year</th>
+						<th>4th Year</th>
+						<th>5th Year</th>
+						<th>Option</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary" *ngFor="let player of this.teamContracts">
+						<td>
+							{{ player?.playerName }}
+						</td>
+						<td>
+							${{ player?.yearOne | number }}
+							<p *ngIf="player?.guranteedOne == 1"> - Guarenteed</p>
+						</td>
+						<td>
+							${{ player?.yearTwo | number }}
+							<p *ngIf="player?.guranteedTwo == 1"> - Guarenteed</p>
+						</td>
+						<td>
+							${{ player?.yearThree | number }}
+							<p *ngIf="player?.guranteedThree == 1"> - Guarenteed</p>
+						</td>
+						<td>
+							${{ player?.yearFour | number }}
+							<p *ngIf="player?.guranteedFour == 1"> - Guarenteed</p>
+						</td>
+						<td>
+							${{ player?.yearFive | number }}
+							<p *ngIf="player?.guranteedFive == 1"> - Guarenteed</p>
+						</td>
+						<td>
+							<p *ngIf="player?.teamOption == 1">Team</p>
+                            <p *ngIf="player?.playerOption == 1">Player</p>
+						</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row" *ngIf="this.statusContracts"></div>
+			<h6 *ngIf="this.statusContracts">Waived Contracts still counting towards salary cap</h6>
+			<table class="table table-hover roster-table" *ngIf="this.statusContracts">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Current Year</th>
+						<th>2nd Year</th>
+						<th>3rd Year</th>
+						<th>4th Year</th>
+						<th>5th Year</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="table-secondary" *ngFor="let player of this.waivedContracts">
+						<td>
+							{{ player?.playerName }}
+						</td>
+						<td>
+							${{ player?.yearOne | number }}
+						</td>
+						<td>
+							${{ player?.yearTwo | number }}
+						</td>
+						<td>
+							${{ player?.yearThree | number }}
+						</td>
+						<td>
+							${{ player?.yearFour | number }}
+						</td>
+						<td>
+							${{ player?.yearFive | number }}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div> -->
+
+
+	<!-- WAIVE MODAL -->
+	<!-- <ng-template #waive>
+		<div class="modal-header">
+			<h5 class="modal-title">Waive Player</h5>
+			<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+		</div>
+		<form #draftlotteryForm>
+			<div class="modal-body">
+				<p>Are you sure you want to waive {{ this.selectedPlayer.firstName }} {{ this.selectedPlayer.surname }}?
+				</p>
+			</div>
+			<div class="modal-footer form-group text-center">
+				<button type="submit" class="btn btn-primary" (click)="confirmedWaived()">Waive</button>
+				<button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
+			</div>
+		</form>
+	</ng-template> -->

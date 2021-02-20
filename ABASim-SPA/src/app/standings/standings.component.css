@@ -1,0 +1,31 @@
+.dashboard-area {
+    position: relative;
+    text-align: center;
+    background: #202120;
+    overflow: hidden;
+}
+.dashboard-area h3, span {
+    padding: 10px;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    color: #ffffff;
+}
+
+.cards-row {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #03fca1;
+    text-decoration: underline;
+    cursor: pointer;
+  }

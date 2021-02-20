@@ -1,0 +1,67 @@
+.dashboard-area {
+    position: relative;
+    text-align: center;
+    background: #202120;
+    overflow: hidden;
+}
+.dashboard-area h3, span {
+    padding: 10px;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    color: #ffffff;
+}
+
+
+
+
+.lead {
+    text-align: center;
+    padding: 30px 0;
+    position: relative;
+}
+
+.events {
+    padding: 20px;
+    text-align: center;
+}
+
+.stats {
+    padding: 20px;
+    text-align: center;
+}
+
+.upcoming {
+    margin: 0 auto;
+}
+
+.cards-row {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+td { 
+    padding: 10px;
+}
+
+table { 
+    border-spacing: 10px;
+    border-collapse: separate;
+}
+
+.column {
+    float: left;
+  }
+  
+  .left {
+    width: 50%;
+  }
+  
+  .right {
+    width: 50%;
+  }
+
+  .carousel {
+    margin: 0 auto;
+  }

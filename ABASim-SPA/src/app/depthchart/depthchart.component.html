@@ -1,0 +1,218 @@
+<link rel="stylesheet" type="text/css"
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+
+<div class="jumbotron">
+  <h3 class="display">DEPTH CHARTS</h3>
+</div>
+
+<div class="box content-class">
+  <div class="row">
+    <div class="col">
+      <table class="table table-hover roster-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Starter</th>
+            <th>Backup</th>
+            <th>Depth</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-secondary" *ngIf="this.rosterSet == 1">
+            <td>Point Guard</td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(1, 1) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+							<select [(ngModel)]="pg01Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+									{{ this.getPlayerName(player.id) }}
+								</option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(1, 2) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="pg02Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(1, 3) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="pg03Id">
+                <option [value]="0" [selected]="0 === this.pg03Id"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id"
+                  [selected]="player.id === this.pg03Id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+          </tr>
+
+          <tr class="table-secondary" *ngIf="this.rosterSet == 1">
+            <td>Shooting Guard</td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(2, 1) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="sg01Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(2, 2) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="sg02Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(2, 3) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="sg03Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+          </tr>
+
+          <tr class="table-secondary" *ngIf="this.rosterSet == 1">
+            <td>Small Forward</td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(3, 1) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="sf01Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(3, 2) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="sf02Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(3, 3) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="sf03Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+          </tr>
+
+          <tr class="table-secondary" *ngIf="this.rosterSet == 1">
+            <td>Power Forward</td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(4, 1) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="pf01Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(4, 2) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="pf02Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(4, 3) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="pf03Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+          </tr>
+
+          <tr class="table-secondary" *ngIf="this.rosterSet == 1">
+            <td>Centre</td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(5, 1) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="c01Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(5, 2) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="c02Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="this.isEdit == 0">
+              {{ getDepthChartValue(5, 3) }}
+            </td>
+            <td *ngIf="this.isEdit == 1">
+              <select [(ngModel)]="c03Id">
+                <option [value]="0"></option>
+                <option *ngFor="let player of this.playingRoster" [value]="player.id">
+                  {{ this.getPlayerName(player.id) }}
+                </option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row edit-button" *ngIf="this.isEdit == 0">
+    <button type="button" class="btn btn-primary" (click)="editDepthChart()">Edit</button>
+  </div>
+  <div class="row editing-buttons" *ngIf="this.isEdit == 1">
+    <button type="button" class="btn btn-primary" (click)="saveDepthChart()">Save</button>
+    <button type="button" class="btn btn-danger ml-3" (click)="cancelDepthChart()">Cancel</button>
+  </div>
+</div>

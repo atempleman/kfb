@@ -1,0 +1,66 @@
+<section class="dashboard-area">
+	<h3 class="display">Injuries around the league</h3>
+	<p>Season #{{ this.league?.year }}</p>
+	<span class="badge badge-danger mb-3"
+		*ngIf="this.league?.stateId == 1 || this.league?.stateId == 14">{{ this.league?.state }}</span>
+	<span class="badge badge-info mb-3"
+		*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+	<span class="badge badge-success mb-3"
+		*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
+	<span class="badge badge-primary mb-3" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
+	<span class="badge badge-warning mb-3"
+		*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
+	<span class="badge badge-secondary mb-3" *ngIf="this.league?.stateId == 10">{{ this.league?.state }}</span>
+	<span
+		*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14">
+		- Day #{{ this.league?.day }}</span>
+  </section>
+
+<div class="box">
+	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+		<p class="loading">Loading Injuries...</p>
+	</ngx-spinner>
+	<div class="row">
+		<div class="col">
+			<table class="table table-hover roster-table" *ngIf="this.leagueInjuries.length > 0">
+				<thead>
+					<tr>
+					  <th>Team</th>
+					  <th>Player</th>
+					  <th>Injury</th>
+            <th>Time Out</th>
+            <th>Start Day</th>
+            <th>End Day</th>
+					  <th></th>
+					</tr>
+				  </thead>
+				<tbody>
+					<tr class="table-secondary" *ngFor="let injury of this.leagueInjuries">
+						<td>
+              				{{ injury.teamName }}
+						</td>
+						<td>
+							{{ injury.playerName }}
+						</td>
+						<td>
+							{{ injury.type }}
+						</td>
+						<td>
+							{{ injury.timeMissed }}
+						</td>
+						<td>
+							{{ injury.startDay }}
+            </td>
+            <td>
+							{{ injury.endDay }}
+						</td>
+						<td class="text-center">
+							<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(injury)">View</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<span class="notrans" *ngIf="this.leagueInjuries.length == 0"><h4>There are no current injuries</h4></span>
+		</div>
+	</div>
+</div>

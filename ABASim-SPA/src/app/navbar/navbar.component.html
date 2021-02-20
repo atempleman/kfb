@@ -1,0 +1,128 @@
+<div class="znav-container background-on-scroll-transparent position-fixed" id="znav-container">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg">
+      <a class="navbar-brand">
+        <img class="logo-image" src="assets\images\branding\kfb_very_small_logo.png" alt="Logo"/>
+      </a>
+      <button class="navbar-toggler d-lg-none" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="navbarNavDropdown" aria-label="Toggle navigation">
+        <span class="hamburger hamburger--emphatic">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown" [ngbCollapse]="isCollapsed">
+        <ul class="navbar-nav pos-lg-absolute absolute-centered-lg">
+          <li class="nav-item" *ngIf="loggedIn()" >
+            <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
+          </li>
+          <li class="nav-item" *ngIf="loggedIn()" >
+            <a class="nav-link" [routerLink]="['/playoffs']" *ngIf="this.league?.stateId > 7">Playoffs</a>
+          </li>
+          <li class="nav-item" *ngIf="loggedIn() && this.league?.stateId != 1">
+            <a class="nav-link" [routerLink]="['/league']">League</a>
+          </li>
+          <li class="nav-item" *ngIf="loggedIn()" >
+            <a class="nav-link" [routerLink]="['/team']">Team</a>
+          </li>
+          <li class="nav-item" *ngIf="loggedIn() && (this.league?.stateId < 7 || this.league?.stateId > 11)">
+            <a class="nav-link" [routerLink]="['/draft']">Draft</a>
+          </li>
+          <li class="nav-item" *ngIf="loggedIn()">
+            <a class="nav-link" [routerLink]="['/inbox']">Inbox
+              <span class="badge badge-warning" *ngIf="this.countOfMessages?.countOfMessages != 0">( {{ this.countOfMessages?.countOfMessages }} )</span>
+              <span *ngIf="this.countOfMessages?.countOfMessages == 0">( 0 )</span>
+            </a>  
+          </li>
+          <li class="nav-item" *ngIf="loggedIn() && this.isAdmin == 1">
+            <a class="nav-link" [routerLink]="['/admin']" *ngIf="this.isAdmin == 1">Admin</a>
+          </li>
+          <li class="nav-item" *ngIf="loggedIn()">
+            <a class="nav-link" [routerLink]="" (click)="logout()">Logout</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto" *ngIf="!loggedIn()">
+          <li><a [routerLink]="['/login']">Sign In</a></li>
+          <li><a [routerLink]="['/register']" class="btn btn-primary btn-capsule btn-sm" href="#">Sign Up</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+  <!--    JavaScripts-->
+  <!--    =============================================-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script src="./assets/lib/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="./assets/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="./assets/js/imagesloaded.pkgd.js"></script>
+  <script src="./assets/lib/@fontawesome/js/all.min.js"></script>
+  <script src="./assets/lib/jQuery-menu-aim/jquery.menu-aim.js"></script>
+  <script src="./assets/js/TweenMax.js"></script>
+  <script src="./assets/js/CustomEase.js"></script>
+  <script src="./assets/js/ScrollToPlugin.js"></script>
+  <script src="./assets/js/Utils.js"></script>
+  <script src="./assets/js/detector.js"></script>
+  <script src="./assets/js/inertia.js"></script>
+  <script src="./assets/js/zanimation.js"></script>
+  <script src="./assets/js/border-animation.js"></script>
+  <script src="./assets/lib/remodal/dist/remodal.js"></script>
+  <script src="./assets/lib/owl.carousel/dist/owl.carousel.min.js"></script>
+  <script src="./assets/lib/semantic-ui-dropdown/dropdown.min.js"></script>
+  <script src="./assets/lib/semantic-ui-accordion/accordion.min.js"></script>
+  <script src="./assets/lib/semantic-ui-transition/transition.min.js"></script>
+  <script src="./assets/lib/lightbox2/dist/js/lightbox.js"></script>
+  <script src="./assets/lib/tableCollation.js"></script>
+  <script src="./assets/js/countup.js"></script>
+  <script src="./assets/js/googlemap.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async></script>
+  <script src="./assets/lib/rellax/rellax.min.js"></script>
+  <script src="./assets/lib/isotope-layout/dist/isotope.pkgd.js"></script>
+  <script src="./assets/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.min.js"></script>
+  <script src="./assets/lib/flexslider/jquery.flexslider-min.js"></script>
+  <script src="./assets/js/core.js"></script>
+  <script src="./assets/js/main.js"></script>
+
+
+
+
+
+  <!-- <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand"><img class="logo-image" src="assets\images\branding\kfb_logo.png" alt="Logo"/> KLUTCH FANTASY BASKETBALL</a>
+  <button class="navbar-toggler d-lg-none" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="navbarsExampleDefault" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault" [ngbCollapse]="isCollapsed">
+    <ul class="navbar-nav">
+      <li class="nav-item" *ngIf="loggedIn()" >
+        <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="nav-item" *ngIf="loggedIn()" >
+        <a class="nav-link" [routerLink]="['/playoffs']" *ngIf="this.league?.stateId > 7">Playoffs</a>
+      </li>
+      <li class="nav-item" *ngIf="loggedIn() && this.league?.stateId != 1">
+        <a class="nav-link" [routerLink]="['/league']">League</a>
+      </li>
+      <li class="nav-item" *ngIf="loggedIn()" >
+        <a class="nav-link" [routerLink]="['/team']">Team</a>
+      </li>
+      <li class="nav-item" *ngIf="loggedIn() && (this.league?.stateId < 7 || this.league?.stateId > 11)">
+        <a class="nav-link" [routerLink]="['/draft']">Draft</a>
+      </li>
+      <li class="nav-item" *ngIf="loggedIn()">
+        <a class="nav-link" [routerLink]="['/inbox']">Inbox
+          <span class="badge badge-warning" *ngIf="this.countOfMessages?.countOfMessages != 0">( {{ this.countOfMessages?.countOfMessages }} )</span>
+          <span *ngIf="this.countOfMessages?.countOfMessages == 0">( 0 )</span>
+        </a>  
+      </li>
+      <li class="nav-item" *ngIf="loggedIn() && this.isAdmin == 1">
+        <a class="nav-link" [routerLink]="['/admin']" *ngIf="this.isAdmin == 1">Admin</a>
+      </li>
+      <li class="nav-item" *ngIf="loggedIn()">
+        <a class="nav-link" [routerLink]="" (click)="logout()">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav> -->

@@ -1,0 +1,99 @@
+<section class="dashboard-area">
+	<h3 class="display">League Transactions</h3>
+  </section>
+
+<!-- <div class="box">
+	<div class="container">
+		<div class="row cards-row">
+      <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header"><i class="fa fa-home fa-2x"></i><span
+						class="header-card ml-3"><strong>LEAGUE HOME</strong></span></div>
+				<div class="card-body">
+					<p class="card-text">Go to the league page. View recent results and upcoming games.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToLeague()">Go to League</button>
+					</div>
+				</div>
+      </div>
+      
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header"><i class="fa fa-list-ol fa-2x"></i><span
+						class="header-card ml-3"><strong>STANDINGS</strong></span></div>
+				<div class="card-body">
+					<p class="card-text">View the league standings for league, conference or division.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToStandings()">Standings</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header"><i class="fa fa-signal fa-2x"></i><span
+						class="header-card ml-3"><strong>STATISTICS</strong></span></div>
+				<div class="card-body">
+					<p class="card-text">View the statistics of players and teams.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToStats()">Go to Statistics</button>
+					</div>
+				</div>
+			</div>
+      
+      <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+				<div class="card-header"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i><span
+						class="header-card ml-3"><strong>SCHEDULE</strong></span></div>
+				<div class="card-body">
+					<p class="card-text">View the league schedule, upcoming and past games.</p>
+					<div style="text-align: right;">
+						<button type="button" class="btn btn-link text-left" (click)="goToSchedule()">Schedule</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br/> -->
+
+<div class="box">
+	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+		<p class="loading">Loading Transactions...</p>
+	</ngx-spinner>
+	<div class="row">
+		<div class="col">
+			<table class="table table-hover roster-table" *ngIf="this.transCount > 0">
+				<thead>
+					<tr>
+					  <th>Day</th>
+					  <th>Team</th>
+					  <th>Player</th>
+					  <th>Transaction</th>
+					  <th></th>
+					</tr>
+				  </thead>
+				<tbody>
+					<tr class="table-secondary" *ngFor="let tran of this.transactions">
+						<td>
+							Day #{{ tran.day }}
+						</td>
+						<td>
+							{{ tran.teamMascot }}
+						</td>
+						<td *ngIf="tran.playerId != 0">
+							{{ tran.playerName }}
+						</td>
+						<td *ngIf="tran.playerId == 0">
+							{{ tran.pickText }}
+						</td>
+						<td>
+							{{ tran.transactionType }}
+						</td>
+						<td class="text-center">
+							<button class="btn btn-info btn-xs tablebutton" *ngIf="tran.playerId != 0" (click)="viewPlayer(tran)">View</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<span class="notrans" *ngIf="this.transCount == 0"><h4>No Transactions have been made yet</h4></span>
+		</div>
+	</div>
+</div>
