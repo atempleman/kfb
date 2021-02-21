@@ -1,24 +1,24 @@
 <div class="box ml-3 mr-2" *ngIf="this.league?.stateId > 2">
   <!-- <div class="row ml-3 mr-2"> -->
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="" [ngClass]="this.statusStats ? 'active' : ''"
-          (click)="statisticsClick()">Statistics</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="" [ngClass]="this.statusGrades ? 'active' : ''"
-          (click)="gradesClick()">Grades</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="" [ngClass]="this.statusContracts ? 'active' : ''"
-          (click)="contractsClick()">Player Contracts</a>
-      </li>
-    </ul>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="" [ngClass]="this.statusStats ? 'active' : ''"
+        (click)="statisticsClick()">Statistics</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="" [ngClass]="this.statusGrades ? 'active' : ''"
+        (click)="gradesClick()">Grades</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [routerLink]="" [ngClass]="this.statusContracts ? 'active' : ''"
+        (click)="contractsClick()">Player Contracts</a>
+    </li>
+  </ul>
   <!-- </div> -->
   <div class="row">
-    <div class="col">
-      <table class="table table-striped color-3" *ngIf="this.playerCount != 0 && this.statusGrades == 1">
-        <thead>
+    <div class="col table-columns">
+      <table class="table table-striped color-3 mr-2" *ngIf="this.playerCount != 0 && this.statusGrades == 1">
+        <thead *ngIf="this.playingRoster.length > 0">
           <tr>
             <th>Name</th>
             <th>Position(s)</th>
@@ -37,11 +37,10 @@
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="this.playingRoster.length > 0">
           <tr *ngFor="let player of this.playingRoster">
             <td>
-              {{ player.firstName }} {{ player.surname }} <span
-                *ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
+              {{ player.firstName }} {{ player.surname }} <span *ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
                   class="fa fa-medkit fa-2x"></i></span>
             </td>
             <td>
@@ -93,9 +92,12 @@
             </td>
           </tr>
         </tbody>
+        <tbody *ngIf="this.playingRoster.length == 0">
+          <tr class="lead color-2 ml-3">Your team does not have any players.</tr>
+        </tbody>
       </table>
-      <table class="table table-striped color-3" *ngIf="this.playerCount != 0 && this.statusStats">
-        <thead>
+      <table class="table table-striped color-3 mr-2" *ngIf="this.playerCount != 0 && this.statusStats">
+        <thead *ngIf="this.playingRoster.length > 0">
           <tr>
             <th>Name</th>
             <th>Age</th>
@@ -121,7 +123,7 @@
             <th>PTS</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="this.playingRoster.length > 0">
           <tr *ngFor="let player of this.playingRoster">
             <td>
               {{ this.player?.firstName }} {{ this.player?.surname }}
@@ -191,9 +193,12 @@
             </td>
           </tr>
         </tbody>
+        <tbody *ngIf="this.playingRoster.length == 0">
+          <tr class="lead color-2 ml-3">Your team does not have any players.</tr>
+        </tbody>
       </table>
-      <table class="table table-striped color-3" *ngIf="this.statusContracts">
-        <thead>
+      <table class="table table-striped color-3 mr-2" *ngIf="this.statusContracts">
+        <thead *ngIf="this.teamContracts.length > 0">
           <tr>
             <th>Name</th>
             <th>Current Year</th>
@@ -205,7 +210,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="this.teamContracts.length > 0">
           <tr *ngFor="let player of this.teamContracts">
             <td>
               {{ player?.playerName }}
@@ -234,65 +239,76 @@
               <p *ngIf="player?.teamOption == 1">Team</p>
               <p *ngIf="player?.playerOption == 1">Player</p>
             </td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="row" *ngIf="this.statusContracts"></div>
-      <h6 *ngIf="this.statusContracts">Waived Contracts still counting towards salary cap</h6>
-      <table class="table table-hover roster-table" *ngIf="this.statusContracts">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Current Year</th>
-            <th>2nd Year</th>
-            <th>3rd Year</th>
-            <th>4th Year</th>
-            <th>5th Year</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="table-secondary" *ngFor="let player of this.waivedContracts">
-            <td>
-              {{ player?.playerName }}
-            </td>
-            <td>
-              ${{ player?.yearOne | number }}
-            </td>
-            <td>
-              ${{ player?.yearTwo | number }}
-            </td>
-            <td>
-              ${{ player?.yearThree | number }}
-            </td>
-            <td>
-              ${{ player?.yearFour | number }}
-            </td>
-            <td>
-              ${{ player?.yearFive | number }}
+            <td class="text-center">
+              <!-- <button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"><i
+                  class="fa fa-edit"></i> View</button> -->
+              <button class="btn btn-danger btn-xs tablebutton" (click)="openModal(waive, player)"><i
+                  class="fa fa-minus-circle"></i></button>
             </td>
           </tr>
         </tbody>
+        <tbody *ngIf="this.teamContracts.length == 0">
+          <tr class="lead color-2 ml-3">Your team does not have any current contracts .</tr>
+        </tbody>
       </table>
+      <div class="row color-2" *ngIf="this.statusContracts">
+        <h5 class="color-10 ml-3 mr-2">Waived Contracts still counting towards salary cap</h5>
+        <table class="table table-striped color-3 ml-3 mr-2" *ngIf="this.statusContracts">
+          <thead *ngIf="this.waivedContracts.length > 0">
+            <tr>
+              <th>Name</th>
+              <th>Current Year</th>
+              <th>2nd Year</th>
+              <th>3rd Year</th>
+              <th>4th Year</th>
+              <th>5th Year</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="this.waivedContracts.length > 0">
+            <tr class="table-secondary" *ngFor="let player of this.waivedContracts">
+              <td>
+                {{ player?.playerName }}
+              </td>
+              <td>
+                ${{ player?.yearOne | number }}
+              </td>
+              <td>
+                ${{ player?.yearTwo | number }}
+              </td>
+              <td>
+                ${{ player?.yearThree | number }}
+              </td>
+              <td>
+                ${{ player?.yearFour | number }}
+              </td>
+              <td>
+                ${{ player?.yearFive | number }}
+              </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="this.waivedContracts.length == 0">
+            <tr class="lead color-2 ml-3">Your team does not have any waived contracts against your cap space.</tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>			
-</div>
+  </div>
 
 
-<!-- WAIVE MODAL -->
-	<ng-template #waive>
-				<div class="modal-header">
-					<h5 class="modal-title">Waive Player</h5>
-					<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
-				</div>
-				<form #draftlotteryForm>
-					<div class="modal-body">
-						<p>Are you sure you want to waive {{ this.selectedPlayer.firstName }} {{ this.selectedPlayer.surname }}?
-						</p>
-					</div>
-					<div class="modal-footer form-group text-center">
-						<button type="submit" class="btn btn-primary" (click)="confirmedWaived()">Waive</button>
-						<button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
-					</div>
-				</form>
-			</ng-template>
+  <!-- WAIVE MODAL -->
+  <ng-template #waive>
+    <div class="modal-header">
+      <h5 class="modal-title">Waive Player</h5>
+      <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+    </div>
+    <form #draftlotteryForm>
+      <div class="modal-body">
+        <p>Are you sure you want to waive {{ this.selectedPlayer.firstName }} {{ this.selectedPlayer.surname }}?
+        </p>
+      </div>
+      <div class="modal-footer form-group text-center">
+        <button type="submit" class="btn btn-primary" (click)="confirmedWaived()">Waive</button>
+        <button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
+      </div>
+    </form>
+  </ng-template>
