@@ -54,13 +54,15 @@ import { RetiredComponent } from './retired/retired.component';
 import { ViewRetiredPlayerComponent } from './view-retired-player/view-retired-player.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { RosterComponent } from './roster/roster.component';
+import { FinancesComponent } from './finances/finances.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
 }
 
 @NgModule({
-   declarations: [				
+   declarations: [						
       AppComponent,
       NavbarComponent,
       FooterComponent,
@@ -102,7 +104,9 @@ export function tokenGetter() {
       RetiredComponent,
       ViewRetiredPlayerComponent,
       LoginComponent,
-      RegisterComponent
+      RegisterComponent,
+      RosterComponent,
+      FinancesComponent
    ],
    imports: [
       BrowserModule,
