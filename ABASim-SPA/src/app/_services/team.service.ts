@@ -22,6 +22,7 @@ import { Strategy } from '../_models/strategy';
 import { ContractOffer } from '../_models/contractOffer';
 import { WaivedContract } from '../_models/waivedContract';
 import { TradePlayerView } from '../_models/tradePlayerView';
+import { Standing } from '../_models/standing';
 
 @Injectable({
   providedIn: 'root'
@@ -186,5 +187,9 @@ export class TeamService {
 
   getTradePlayerView(teamId: number): Observable<TradePlayerView[]> {
     return this.http.get<TradePlayerView[]>(this.baseUrl + 'gettradeplayerviews/' + teamId);
+  }
+
+  getTeamRecord(teamId: number): Observable<Standing> {
+    return this.http.get<Standing>(this.baseUrl + 'getteamrecord/' + teamId);
   }
 }

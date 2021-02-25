@@ -849,6 +849,7 @@ namespace ABASim.api.Data
                     {
                         PlayerName = player.FirstName + " " + player.Surname,
                         PlayerId = player.Id,
+                        Age = player.Age,
                         TeamId = teamId,
                         YearOne = pc.YearOne,
                         GuranteedOne = pc.GuranteedOne,
@@ -871,6 +872,7 @@ namespace ABASim.api.Data
                     {
                         PlayerName = player.FirstName + " " + player.Surname,
                         PlayerId = player.Id,
+                        Age = player.Age,
                         TeamId = teamId,
                         YearOne = 1000000,
                         GuranteedOne = 1,
@@ -1517,6 +1519,7 @@ namespace ABASim.api.Data
             // Now need to check if the player has any guarenteed years
             WaivedContract wc = new WaivedContract();
             wc.PlayerId = waived.PlayerId;
+            wc.TeamId = waived.TeamId;
             int guarenteed = 0;
 
             if (playerContract.GuranteedOne > 0) {
@@ -1577,6 +1580,25 @@ namespace ABASim.api.Data
             await _context.AddAsync(trans);
 
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<StandingsDto> GetTeamRecord(int teamId)
+        {
+            var standingRecord = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamId);
+            StandingsDto dto = new StandingsDto
+            {
+                Team = "",
+                GamesPlayed = standingRecord.GamesPlayed,
+                Wins = standingRecord.Wins,
+                Losses = standingRecord.Losses,
+                HomeWins = standingRecord.HomeWins,
+                HomeLosses = standingRecord.HomeLosses,
+                RoadWins = standingRecord.RoadWins,
+                RoadLosses = standingRecord.RoadLosses,
+                ConfLosses = standingRecord.ConfLosses,
+                ConfWins = standingRecord.ConfWins
+            };
+            return dto;
         }
     }
 }

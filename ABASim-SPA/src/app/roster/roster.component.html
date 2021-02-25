@@ -40,7 +40,7 @@
         <tbody *ngIf="this.playingRoster.length > 0">
           <tr *ngFor="let player of this.playingRoster">
             <td>
-              {{ player.firstName }} {{ player.surname }} <span *ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
+              <button class="link-button" (click)="viewPlayer(player.firstName, player.surname)">{{ player.firstName }} {{ player.surname }}</button> <span *ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
                   class="fa fa-medkit fa-2x"></i></span>
             </td>
             <td>
@@ -100,7 +100,7 @@
         <thead *ngIf="this.playingRoster.length > 0">
           <tr>
             <th>Name</th>
-            <th>Age</th>
+            <!-- <th>Age</th> -->
             <th>G</th>
             <th>MP</th>
             <th>FG</th>
@@ -126,11 +126,12 @@
         <tbody *ngIf="this.playingRoster.length > 0">
           <tr *ngFor="let player of this.playingRoster">
             <td>
-              {{ this.player?.firstName }} {{ this.player?.surname }}
+              <button class="link-button" (click)="viewPlayer(player.firstName, player.surname)">{{ player.firstName }} {{ player.surname }}</button> <span *ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
+                class="fa fa-medkit fa-2x"></i></span>
             </td>
-            <td>
+            <!-- <td>
               {{ this.player?.age }}
-            </td>
+            </td> -->
             <td>
               {{ this.player?.gamesStats }}
             </td>
@@ -201,6 +202,7 @@
         <thead *ngIf="this.teamContracts.length > 0">
           <tr>
             <th>Name</th>
+            <th>Age</th>
             <th>Current Year</th>
             <th>2nd Year</th>
             <th>3rd Year</th>
@@ -213,8 +215,9 @@
         <tbody *ngIf="this.teamContracts.length > 0">
           <tr *ngFor="let player of this.teamContracts">
             <td>
-              {{ player?.playerName }}
+              <button class="link-button" (click)="viewPlayerFromContract(player.playerName)">{{ player.playerName }}</button>
             </td>
+            <td>{{ player?.age }}</td>
             <td>
               ${{ player?.yearOne | number }}
               <p *ngIf="player?.guranteedOne == 1"> - Guarenteed</p>
@@ -265,9 +268,9 @@
             </tr>
           </thead>
           <tbody *ngIf="this.waivedContracts.length > 0">
-            <tr class="table-secondary" *ngFor="let player of this.waivedContracts">
+            <tr *ngFor="let player of this.waivedContracts">
               <td>
-                {{ player?.playerName }}
+                <button class="link-button" (click)="viewPlayerFromContract(player.playerName)">{{ player.playerName }}</button>
               </td>
               <td>
                 ${{ player?.yearOne | number }}
@@ -298,13 +301,14 @@
   <!-- WAIVE MODAL -->
   <ng-template #waive>
     <div class="modal-header">
-      <h5 class="modal-title">Waive Player</h5>
+      <h5 class="modal-title color-9">Waive Player</h5>
       <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
     </div>
     <form #draftlotteryForm>
       <div class="modal-body">
-        <p>Are you sure you want to waive {{ this.selectedPlayer.firstName }} {{ this.selectedPlayer.surname }}?
+        <p class="color-6">Are you sure you want to waive <b class="color-10">{{ this.waivePlayerName }}</b>?
         </p>
+        <p class="color-6">If his salary is guarenteed, it will still count against your salary cap.</p>
       </div>
       <div class="modal-footer form-group text-center">
         <button type="submit" class="btn btn-primary" (click)="confirmedWaived()">Waive</button>

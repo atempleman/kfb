@@ -15,6 +15,7 @@ import { CompletePlayer } from '../_models/completePlayer';
 import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { PlayerContractDetailed } from '../_models/playerContractDetailed';
 import { WaivedContract } from '../_models/waivedContract';
+import { Standing } from '../_models/standing';
 
 @Component({
   selector: 'app-team',
@@ -30,6 +31,8 @@ export class TeamComponent implements OnInit {
   finacnesSelected = 0;
   tradesSelected = 0;
   freeagentsSelected = 0;
+
+  teamRecord: Standing;
 
   isAdmin = 0;
   message: number;
@@ -61,8 +64,18 @@ export class TeamComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
-      this.backgroundStyle();
+      this.getTeamStandings();
+      
+      // this.backgroundStyle();
       this.getSalaryCapDetails();
+    });
+  }
+
+  getTeamStandings() {
+    this.teamService.getTeamRecord(this.team.id).subscribe(result => {
+      this.teamRecord = result;
+    }, error => {
+      this.alertify.error('Error getting team record');
     });
   }
 

@@ -7,6 +7,8 @@
 @import '../node_modules/bootswatch/dist/darkly/bootstrap.min.css';
 @import './assets/lib/hamburgers/dist/hamburgers.min.css';
 @import './assets/css/custom.css';
+@import './assets/lib/semantic-ui-accordion/accordion.min.css';
+@import './assets/lib/semantic-ui-transition/transition.min.css';
 
 /*
 <!--    Stylesheets-->
@@ -2645,26 +2647,31 @@ body {
   }
   
   .table > thead > tr > th {
-    border-bottom: 1px solid #e1e1e1;
+    border-bottom: 1px solid #000000;
   }
   
   .table {
-    border: 1px solid #e1e1e1;
-    background-color: #fff;
+    border: 1px solid rgb(122, 117, 117);
+    background-color: rgb(122, 117, 117);
     border-radius: 3px;
   }
   
   .table tbody tr:not(:first-child) {
-    border-top: 1px solid #e1e1e1;
+    border-top: 1px solid rgb(122, 117, 117);
   }
   
   .table th, .table td {
     vertical-align: middle;
     border: 0;
   }
+
+  .table td {
+    color: #d8d3d3de;
+  }
   
   .table thead {
-    background-color: #f2f2f2;
+    background-color: #383737;
+    color: #dad6d6ef;
   }
   
   .table thead th {
@@ -2674,11 +2681,12 @@ body {
   }
   
   .table-striped tbody tr:nth-of-type(even) {
-    background-color: #fafafa;
+    background-color: #b9b9b928;
   }
   
   .table-striped tbody tr:nth-of-type(odd) {
-    background-color: #fff;
+   background-color: #fafafa28;
+;
   }
   
   /*///////////////////////////////////

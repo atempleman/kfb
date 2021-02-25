@@ -12,6 +12,7 @@ import { WaivedPlayer } from '../_models/waivedPlayer';
 import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
 import { LeagueService } from '../_services/league.service';
+import { PlayerService } from '../_services/player.service';
 import { TeamService } from '../_services/team.service';
 import { TransferService } from '../_services/transfer.service';
 
@@ -34,11 +35,13 @@ export class RosterComponent implements OnInit {
   public modalRef: BsModalRef;
   teamContracts: PlayerContractDetailed[] = [];
   waivedContracts: WaivedContract[] = [];
-  selectedPlayer: CompletePlayer;
+  selectedPlayer: PlayerContractDetailed;
+
+  waivePlayerName = '';
 
   constructor(private leagueService: LeagueService, private alertify: AlertifyService, private teamService: TeamService,
               private authService: AuthService, private transferService: TransferService, private router: Router,
-              private modalService: BsModalService) { }
+              private modalService: BsModalService, private playerService: PlayerService) { }
 
   ngOnInit() {
     this.leagueService.getLeague().subscribe(result => {
@@ -84,7 +87,7 @@ export class RosterComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting your roster');
     }, () => {
-      console.log(this.playingRoster);
+      // console.log(this.playingRoster);
     });
   }
 
@@ -105,13 +108,14 @@ export class RosterComponent implements OnInit {
     });
   }
 
-  viewPlayer(player: ExtendedPlayer) {
-    this.transferService.setData(player.playerId);
-    this.router.navigate(['/view-player']);
-  }
+  // viewPlayer(player: ExtendedPlayer) {
+  //   this.transferService.setData(player.playerId);
+  //   this.router.navigate(['/view-player']);
+  // }
 
-  public openModal(template: TemplateRef<any>, player: CompletePlayer) {
+  public openModal(template: TemplateRef<any>, player: PlayerContractDetailed) {
     this.selectedPlayer = player;
+    this.waivePlayerName = player.playerName;
     this.modalRef = this.modalService.show(template);
   }
 
@@ -120,6 +124,7 @@ export class RosterComponent implements OnInit {
       teamId: this.team.id,
       playerId: this.selectedPlayer.playerId
     };
+
     this.teamService.waivePlayer(waivePlayer).subscribe(result => {
 
     }, error => {
@@ -127,6 +132,7 @@ export class RosterComponent implements OnInit {
     }, () => {
       // this.getRosterForTeam();
       this.modalRef.hide();
+      window.location.reload();
     });
   }
 
@@ -141,6 +147,33 @@ export class RosterComponent implements OnInit {
       this.waivedContracts = result;
     }, error => {
       this.alertify.error('Error getting waived contracts');
+    });
+  }
+
+  viewPlayer(firstName: string, lastName: string) {
+    // Need to get player id for name
+    let playerId = 0;
+    const playerName = firstName + ' ' + lastName;
+    this.playerService.getPlayerForName(playerName).subscribe(result => {
+      playerId = result.id;
+    }, error => {
+      this.alertify.error('Error getting player name');
+    }, () => {
+      this.transferService.setData(playerId);
+      this.router.navigate(['/view-player']);
+    });
+  }
+
+  viewPlayerFromContract(name: string) {
+    // Need to get player id for name
+    let playerId = 0;
+    this.playerService.getPlayerForName(name).subscribe(result => {
+      playerId = result.id;
+    }, error => {
+      this.alertify.error('Error getting player name');
+    }, () => {
+      this.transferService.setData(playerId);
+      this.router.navigate(['/view-player']);
     });
   }
 
@@ -335,7 +368,6 @@ export class RosterComponent implements OnInit {
 
   getPlayoffTotalRebAverage(detailedPlayer: CompletePlayer) {
     const totalRebs = detailedPlayer.playoffOrebsStats + detailedPlayer.playoffDrebsStats;
-    // console.log('total rebs = ' + totalRebs);
     const value = (totalRebs / detailedPlayer.playoffGamesStats);
     const display = value.toFixed(1);
     return display;

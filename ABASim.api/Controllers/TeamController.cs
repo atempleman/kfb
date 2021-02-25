@@ -290,5 +290,12 @@ namespace ABASim.api.Controllers
             var result = await _repo.GetTradePlayerViews(teamId);
             return Ok(result);
         }
+
+        [HttpGet("getteamrecord/{teamId}")]
+        public async Task<IActionResult> GetTeamRecord(int teamId)
+        {
+            var result = await _repo.GetTeamRecord(teamId);
+            return Ok(result);
+        }
     }
 }

@@ -1,6 +1,7 @@
 export interface PlayerContractDetailed {
     playerName: string;
     playerId: number;
+    age: number;
     years: number;
     teamId: number;
     yearOne: number;

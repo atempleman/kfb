@@ -84,5 +84,7 @@ namespace ABASim.api.Data
         Task<IEnumerable<WaivedContractDto>> GetWaivedContracts(int teamId);
 
         Task<IEnumerable<TradePlayerViewDto>> GetTradePlayerViews(int teamId);
+
+        Task<StandingsDto> GetTeamRecord(int teamId);
     }
 }
