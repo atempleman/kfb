@@ -1,3 +1,24 @@
-<p>
-  finances works!
-</p>
+<div class="content">
+  <div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
+    <p class="justify-content-center color-11">View your teams current financial situation in regards to the Salary Cap
+      and how much cap space you currently have.</p>
+  </div>
+  <div class="row justify-content-center mt-3 color-1">
+    <h6 class="center color-11">LEAGUE SALARY CAP</h6>
+  </div>
+  <div class="row justify-content-center mt-3 color-1">
+    <p class="lead color-7">${{ this.teamCap?.salaryCapAmount | number }}</p>
+  </div>
+  <div class="row justify-content-center mt-3 color-1">
+    <h6 class="center color-11">CURRENT TEAM SALARY</h6>
+  </div>
+  <div class="row justify-content-center mt-3 color-1">
+    <p class="lead color-7">${{ this.teamCap?.currentSalaryAmount | number }}</p>
+  </div>
+  <div class="row justify-content-center mt-3 color-1">
+    <h6 class="center color-11">LEAGUE SALARY CAP</h6>
+  </div>
+  <div class="row justify-content-center mt-3 color-1">
+    <p class="lead color-7">${{ this.teamCap?.salaryCapAmount - this.teamCap?.currentSalaryAmount | number }}</p>
+  </div>
+</div>

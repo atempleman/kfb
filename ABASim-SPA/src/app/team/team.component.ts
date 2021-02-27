@@ -37,9 +37,6 @@ export class TeamComponent implements OnInit {
   isAdmin = 0;
   message: number;
 
-  teamCap: TeamSalaryCapInfo;
-  remainingCapSpace = 0;
-
   primaryColor: string = '22, 24, 100';
   secondaryColor: string = '12,126,120';
 
@@ -65,9 +62,7 @@ export class TeamComponent implements OnInit {
       this.alertify.error('Error getting your Team');
     }, () => {
       this.getTeamStandings();
-      
       // this.backgroundStyle();
-      this.getSalaryCapDetails();
     });
   }
 
@@ -76,16 +71,6 @@ export class TeamComponent implements OnInit {
       this.teamRecord = result;
     }, error => {
       this.alertify.error('Error getting team record');
-    });
-  }
-
-  getSalaryCapDetails() {
-    this.teamService.getTeamSalaryCapDetails(this.team.id).subscribe(result => {
-      this.teamCap = result;
-    }, error => {
-      this.alertify.error('Error getting salary cap details');
-    }, () => {
-      this.remainingCapSpace = this.teamCap.salaryCapAmount - this.teamCap.currentSalaryAmount;
     });
   }
 
