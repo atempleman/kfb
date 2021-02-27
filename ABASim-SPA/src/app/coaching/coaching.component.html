@@ -1,10 +1,107 @@
+<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+	<p class="loading">Loading Go To Players...</p>
+</ngx-spinner>
 <div class="container">
-<div class="ui styled fluid accordion">
-	<div class="title"><i class="dropdown icon"></i> Depth Chart</div>
-	<div class="content">
-		<p class="transition hidden">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+	<div class="ui styled fluid accordion">
+		<div class="title" (click)="toggleDepth()"><i class="fa fa-caret-right mr-3"
+				*ngIf="this.depthAccordion == 0"></i><i class="fa fa-caret-down mr-3"
+				*ngIf="this.depthAccordion == 1"></i> Depth Chart</div>
+
 	</div>
-</div>
+	<div class="content" *ngIf="this.depthAccordion == 1">
+		<div class="ui styled fluid accordion">
+			<br>
+			<app-depthchart></app-depthchart>
+			<br>
+		</div>
+	</div>
+	<div class="ui styled fluid accordion">
+		<div class="title" (click)="toggleGoTo()"><i class="fa fa-caret-right mr-3"
+				*ngIf="this.gotoAccordion == 0"></i><i class="fa fa-caret-down mr-3"
+				*ngIf="this.gotoAccordion == 1"></i> Go To Players</div>
+	</div>
+	<div class="content" *ngIf="this.gotoAccordion == 1">
+		<div class="ui styled fluid accordion">
+			<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
+				<p class="justify-content-center color-11">Go to players will receive Usage boosts when playing for your
+					team.</p>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<h6 class="center color-11">Go To Player #1</h6>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerOne == 0 && this.isGoToEdit == 0">No player
+					set</p>
+				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerOne != 0 && this.isGoToEdit == 0">{{
+					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerOne, 1) }}</p>
+				<!-- <p class="lead color-7"></p> -->
+				<select [(ngModel)]="gotoOne" *ngIf="this.isGoToEdit == 1">
+					<option [value]="0"></option>
+					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
+						{{ this.getPlayerName(player.id) }}
+					</option>
+				</select>
+			</div>
+
+
+			<div class="row justify-content-center mt-3">
+				<h6 class="center color-11">Go To Player #2</h6>
+				<p class="lead color-8 center"></p>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerTwo == 0 && this.isGoToEdit == 0">No player
+					set</p>
+				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerTwo != 0 && this.isGoToEdit == 0">{{
+					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerTwo, 2) }}</p>
+				<select [(ngModel)]="gotoTwo" *ngIf="this.isGoToEdit == 1">
+					<option [value]="0"></option>
+					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
+						{{ this.getPlayerName(player.id) }}
+					</option>
+				</select>
+			</div>
+
+
+			<div class="row justify-content-center mt-3">
+				<h6 class="center color-11">Go To Player #3</h6>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerThree == 0 && this.isGoToEdit == 0">No
+					player set</p>
+				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerThree != 0 && this.isGoToEdit == 0">{{
+					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerThree, 3) }}</p>
+				<select [(ngModel)]="gotoThree" *ngIf="this.isGoToEdit == 1">
+					<option [value]="0"></option>
+					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
+						{{ this.getPlayerName(player.id) }}
+					</option>
+				</select>
+			</div>
+
+			<div class="row justify-content-center mt-3">
+				<button type="button" class="btn btn-primary btn-xs" (click)="editCoaching()"
+					*ngIf="this.isGoToEdit == 0"><i class="fa fa-edit"></i></button>
+				<button type="button" class="btn btn-primary btn-xs" (click)="saveCoaching()"
+					*ngIf="this.isGoToEdit == 1"><i class="fa fa-save"></i></button>
+				<button type="button" class="btn btn-danger btn-xs ml-1" (click)="cancelCoaching()"
+					*ngIf="this.isGoToEdit == 1"><i class="fa fa-times"></i></button>
+			</div>
+			<br>
+		</div>
+	</div>
+	<div class="ui styled fluid accordion">
+		<div class="title" (click)="toggleStrategy()">
+			<i class="fa fa-caret-right mr-3" *ngIf="this.strategyAccordion == 0"></i><i class="fa fa-caret-down mr-3"
+				*ngIf="this.strategyAccordion == 1"></i> Team Strategies
+		</div>
+	</div>
+	<div class="content" *ngIf="strategyAccordion == 1">
+		<div class="ui styled fluid accordion">
+			<br>
+
+			<br>
+		</div>
+	</div>
 </div>
 
 
@@ -29,71 +126,7 @@
 
 	<div class="row">
 		<div class="col">
-			<table class="table table-hover roster-table" *ngIf="this.goToTab == 1">
-				<thead>
-					<tr>
-						<th>Go To Player #1</th>
-						<th>Go To Player #2</th>
-						<th>Go To Player #3</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="table-secondary">
-						<td *ngIf="this.coachSetting?.goToPlayerOne == 0 && this.isEdit == 0">
-							No player set
-						</td>
-						<td *ngIf="this.coachSetting?.goToPlayerOne != 0 && this.isEdit == 0"
-							[style.color]="this.injuredOne == 1 ? 'red' : ''">
-							{{ this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerOne, 1) }}
-						</td>
-						<td *ngIf="this.isEdit == 1">
-							<select [(ngModel)]="gotoOne">
-								<option [value]="0"></option>
-								<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
-									{{ this.getPlayerName(player.id) }}
-								</option>
-							</select>
-						</td>
-						<td *ngIf="this.coachSetting?.goToPlayerTwo == 0 && this.isEdit == 0">
-							No player set
-						</td>
-						<td *ngIf="this.coachSetting?.goToPlayerTwo != 0 && this.isEdit == 0"
-							[style.color]="this.injuredTwo == 1 ? 'red' : ''">
-							{{ this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerTwo, 2) }}
-						</td>
-						<td *ngIf="this.isEdit == 1">
-							<select [(ngModel)]="gotoTwo">
-								<option [value]="0"></option>
-								<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
-									{{ this.getPlayerName(player.id) }}
-								</option>
-							</select>
-						</td>
-						<td *ngIf="this.coachSetting?.goToPlayerThree == 0 && this.isEdit == 0">
-							No player set
-						</td>
-						<td *ngIf="this.coachSetting?.goToPlayerThree != 0 && this.isEdit == 0"
-							[style.color]="this.injuredThree == 1 ? 'red' : ''">
-							{{ this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerThree, 3) }}
-						</td>
-						<td *ngIf="this.isEdit == 1">
-							<select [(ngModel)]="gotoThree">
-								<option [value]="0"></option>
-								<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
-									{{ this.getPlayerName(player.id) }}
-								</option>
-							</select>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="row edit-button" *ngIf="this.isEdit == 0 && this.goToTab == 1">
-				<button type="button" class="btn btn-primary" (click)="editCoaching()">Edit</button>
-			</div>
-			<div class="row editing-buttons" *ngIf="this.isEdit == 1 && this.goToTab == 1">
-				<button type="button" class="btn btn-primary" (click)="saveCoaching()">Save</button>
-				<button type="button" class="btn btn-danger ml-3" (click)="cancelCoaching()">Cancel</button>
-			</div>
+			
 
 			<div class="row ml-3 mr-2 mt-3" *ngIf="this.offensiveStrategyTab == 1">
 				<p *ngIf="this.isEdit == 0" class="ml-6 mr-2">Your offensive strategy - {{ this.teamStrategy?.offensiveStrategyName }}

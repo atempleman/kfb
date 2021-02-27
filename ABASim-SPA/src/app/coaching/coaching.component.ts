@@ -12,6 +12,7 @@ import { OffensiveStrategy } from '../_models/offensiveStrategy';
 import { DefensiveStrategy } from '../_models/defensiveStrategyId';
 import { Strategy } from '../_models/strategy';
 import { SaveStrategy } from '../_models/saveStrategy';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-coaching',
@@ -19,14 +20,24 @@ import { SaveStrategy } from '../_models/saveStrategy';
   styleUrls: ['./coaching.component.css']
 })
 export class CoachingComponent implements OnInit {
+  depthAccordion = 0;
+
+  gotoAccordion = 0;
+  isGoToEdit = 0;
+  gotoOne: number;
+  gotoTwo: number;
+  gotoThree: number;
+
+  strategyAccordion = 0;
+
+
+
   isAdmin: number;
   team: Team;
   coachSetting: CoachSetting;
   extendedPlayers: Player[] = [];
   isEdit = 0;
-  gotoOne: number;
-  gotoTwo: number;
-  gotoThree: number;
+
   teamsInjuries: PlayerInjury[] = [];
 
   injuredOne = 0;
@@ -45,7 +56,7 @@ export class CoachingComponent implements OnInit {
   teamStrategy: Strategy;
 
   constructor(private router: Router, private alertify: AlertifyService, private authService: AuthService,
-              private teamService: TeamService) { }
+              private teamService: TeamService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     // Check to see if the user is an admin user
@@ -88,9 +99,14 @@ export class CoachingComponent implements OnInit {
 
     this.teamService.getCoachingSettings(this.team.id).subscribe(result => {
       this.coachSetting = result;
+      console.log('ashley');
       console.log(this.coachSetting);
     }, error => {
       this.alertify.error('Error getting Coach Settings');
+    }, () => {
+      this.gotoOne = this.coachSetting.goToPlayerOne;
+      this.gotoTwo = this.coachSetting.goToPlayerTwo;
+      this.gotoThree = this.coachSetting.goToPlayerThree;
     });
   }
 
@@ -139,7 +155,7 @@ export class CoachingComponent implements OnInit {
   }
 
   editCoaching() {
-    this.isEdit = 1;
+    this.isGoToEdit = 1;
   }
 
   editOffensiveStrategy() {
@@ -164,7 +180,7 @@ export class CoachingComponent implements OnInit {
       this.alertify.success('Coach Settings saved successfully');
     });
 
-    this.isEdit = 0;
+    this.isGoToEdit = 0;
   }
 
   saveStrategy() {
@@ -223,8 +239,33 @@ export class CoachingComponent implements OnInit {
     });
   }
 
+  toggleDepth() {
+    if (this.depthAccordion == 0) {
+      this.depthAccordion = 1;
+    } else {
+      this.depthAccordion = 0;
+    }
+  }
+
+  toggleStrategy() {
+    if (this.strategyAccordion == 0) {
+      this.strategyAccordion = 1;
+    } else {
+      this.strategyAccordion = 0;
+    }
+  }
+
+  toggleGoTo() {
+    if (this.gotoAccordion == 0) {
+      this.gotoAccordion = 1;
+      this.isGoToEdit = 0;
+    } else {
+      this.gotoAccordion = 0;
+    }
+  }
+
   cancelCoaching() {
-    this.isEdit = 0;
+    this.isGoToEdit = 0;
   }
 
   cancelOffensiveStrategy() {
