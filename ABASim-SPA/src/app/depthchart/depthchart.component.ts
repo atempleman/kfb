@@ -404,10 +404,15 @@ export class DepthchartComponent implements OnInit {
     }
 
     if (isSet === 1 || dc.playerId === 0) {
-      return '';
+      return 'N/A';
     } else {
       const player = this.playingRoster.find(x => x.id === dc.playerId);
-      return player.firstName + ' ' + player.surname;
+      if (player === undefined) {
+        return 'N/A';
+      }
+      else {
+        return player.firstName + ' ' + player.surname;
+      }
     }
   }
 
