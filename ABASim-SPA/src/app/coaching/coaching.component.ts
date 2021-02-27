@@ -29,6 +29,7 @@ export class CoachingComponent implements OnInit {
   gotoThree: number;
 
   strategyAccordion = 0;
+  isStrategyEdit = 0;
 
 
 
@@ -36,7 +37,6 @@ export class CoachingComponent implements OnInit {
   team: Team;
   coachSetting: CoachSetting;
   extendedPlayers: Player[] = [];
-  isEdit = 0;
 
   teamsInjuries: PlayerInjury[] = [];
 
@@ -99,8 +99,6 @@ export class CoachingComponent implements OnInit {
 
     this.teamService.getCoachingSettings(this.team.id).subscribe(result => {
       this.coachSetting = result;
-      console.log('ashley');
-      console.log(this.coachSetting);
     }, error => {
       this.alertify.error('Error getting Coach Settings');
     }, () => {
@@ -116,7 +114,8 @@ export class CoachingComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting team strategy');
     }, () => {
-      // console.log(this.teamStrategy);
+      this.offStrategySelection = this.teamStrategy.offensiveStrategyId;
+      this.defStrategySelection = this.teamStrategy.defensiveStrategyId;
     });
 
     this.teamService.getOffensiveStrategies().subscribe(result => {
@@ -158,12 +157,8 @@ export class CoachingComponent implements OnInit {
     this.isGoToEdit = 1;
   }
 
-  editOffensiveStrategy() {
-    this.isEdit = 1;
-  }
-
-  editDefensiveStrategy() {
-    this.isEdit = 1;
+  editStrategy() {
+    this.isStrategyEdit = 1;
   }
 
   saveCoaching() {
@@ -235,7 +230,7 @@ export class CoachingComponent implements OnInit {
       this.alertify.error('Error saving strategy');
     }, () => {
       this.alertify.success('Team strategy saved successfully');
-      this.isEdit = 0;
+      this.isStrategyEdit = 0;
     });
   }
 
@@ -268,20 +263,8 @@ export class CoachingComponent implements OnInit {
     this.isGoToEdit = 0;
   }
 
-  cancelOffensiveStrategy() {
-    this.isEdit = 0;
-  }
-
-  cancelDefensiveStrategy() {
-    this.isEdit = 0;
-  }
-
-  goToTeam() {
-    this.router.navigate(['/team']);
-  }
-
-  goToDepthCharts() {
-    this.router.navigate(['/depthchart']);
+  cancelStrategy() {
+    this.isStrategyEdit = 0;
   }
 
   goToFreeAgents() {
@@ -290,23 +273,5 @@ export class CoachingComponent implements OnInit {
 
   goToTrades() {
     this.router.navigate(['/trades']);
-  }
-
-  goToTabClick() {
-    this.offensiveStrategyTab = 0;
-    this.defensiveStrategyTab = 0;
-    this.goToTab = 1;
-  }
-
-  offensiveStrategyTabClick() {
-    this.defensiveStrategyTab = 0;
-    this.goToTab = 0;
-    this.offensiveStrategyTab = 1;
-  }
-
-  defensiveStrategyTabClick() {
-    this.goToTab = 0;
-    this.offensiveStrategyTab = 0;
-    this.defensiveStrategyTab = 1;
   }
 }

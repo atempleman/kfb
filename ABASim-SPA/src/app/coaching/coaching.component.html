@@ -34,7 +34,6 @@
 					set</p>
 				<p class="lead color-7" *ngIf="this.coachSetting?.goToPlayerOne != 0 && this.isGoToEdit == 0">{{
 					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerOne, 1) }}</p>
-				<!-- <p class="lead color-7"></p> -->
 				<select [(ngModel)]="gotoOne" *ngIf="this.isGoToEdit == 1">
 					<option [value]="0"></option>
 					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
@@ -97,75 +96,76 @@
 	</div>
 	<div class="content" *ngIf="strategyAccordion == 1">
 		<div class="ui styled fluid accordion">
-			<br>
+			<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
+				<p class="justify-content-center color-11">Set your team strategies for offence and defence.</p>
+			</div>
 
-			<br>
+			<div class="row justify-content-center mt-3 color-1">
+				<h6 class="center color-11" >Offensive Strategy</h6>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<p *ngIf="this.isStrategyEdit == 0" class="lead color-7">Your offensive strategy - {{ this.teamStrategy?.offensiveStrategyName }}
+					<ng-container *ngIf="this.teamStrategy == null"> No Strategy Set</ng-container>
+				</p>
+				<select [(ngModel)]="offStrategySelection" *ngIf="this.isStrategyEdit == 1">
+					<option [value]="0"></option>
+					<option *ngFor="let strategy of this.offStrategies" [value]="strategy.id">
+						{{ strategy.name }}
+					</option>
+				</select>
+			</div>
+			<div class="row justify-content-center mt-3">
+				<ul *ngFor="let strat of this.offStrategies">
+					<p class="details"><b class="text-success">{{ strat.name }}</b> - {{ strat.description }}</p>
+				</ul>
+			</div>
+
+
+			<div class="row justify-content-center mt-3 color-1">
+				<h6 class="center color-11">Defensive Strategy</h6>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<p *ngIf="this.isStrategyEdit == 0" class="lead color-7">Your defensive strategy - {{ this.teamStrategy?.defensiveStrategyName }}
+					<ng-container *ngIf="this.teamStrategy == null"> No Strategy Set</ng-container>
+				</p>
+				<select [(ngModel)]="defStrategySelection" *ngIf="this.isStrategyEdit == 1">
+					<option [value]="0"></option>
+					<option *ngFor="let strategy of this.defStrategies" [value]="strategy.id">
+						{{ strategy.name }}
+					</option>
+				</select>
+			</div>
+			<div class="row justify-content-center mt-3 color-1">
+				<ul *ngFor="let strat of this.defStrategies">
+					<p class="details"><b class="text-success">{{ strat.name }}</b> - {{ strat.description }}</p>
+				</ul>
+			</div>
+
+			<div class="row justify-content-center mt-3 color-1 mb-2">
+				<button type="button" class="btn btn-primary btn-xs" (click)="editStrategy()" *ngIf="this.isStrategyEdit == 0"><i class="fa fa-edit"></i></button>
+				<button type="button" class="btn btn-primary btn-xs" (click)="saveStrategy()" *ngIf="this.isStrategyEdit == 1"><i class="fa fa-save"></i></button>
+				<button type="button" class="btn btn-danger btn-xs ml-3" (click)="cancelStrategy()" *ngIf="this.isStrategyEdit == 1"><i class="fa fa-times"></i></button>
+			</div>
 		</div>
 	</div>
 </div>
 
 
 
-<!-- <div class="box content-class">
-	<div class="row ml-3 mr-2">
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link" [routerLink]="" [ngClass]="this.goToTab ? 'active' : ''" (click)="goToTabClick()">Go
-					To Players</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" [routerLink]="" [ngClass]="this.offensiveStrategyTab ? 'active' : ''"
-					(click)="offensiveStrategyTabClick()">Offensive Strategy</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" [routerLink]="" [ngClass]="this.defensiveStrategyTab ? 'active' : ''"
-					(click)="defensiveStrategyTabClick()">Defensive Strategy</a>
-			</li>
-		</ul>
-	</div>
-
-	<div class="row">
-		<div class="col">
-			
-
-			<div class="row ml-3 mr-2 mt-3" *ngIf="this.offensiveStrategyTab == 1">
-				<p *ngIf="this.isEdit == 0" class="ml-6 mr-2">Your offensive strategy - {{ this.teamStrategy?.offensiveStrategyName }}
-					<ng-container *ngIf="this.teamStrategy == null"> No Strategy Set</ng-container>
-				</p>
-				<p class="ml-10 mt-3" *ngIf="this.isEdit == 1">
-					<select [(ngModel)]="offStrategySelection">
-						<option [value]="0"></option>
-						<option *ngFor="let strategy of this.offStrategies" [value]="strategy.id">
-							{{ strategy.name }}
-						</option>
-					</select>
-				</p>
+<!-- 
 				<div class="row edit-button" *ngIf="this.isEdit == 0">
 					<button type="button" class="btn btn-primary" (click)="editOffensiveStrategy()">Edit</button>
 				</div>
 				<div class="row editing-buttons" *ngIf="this.isEdit == 1">
-					<button type="button" class="btn btn-primary" (click)="saveStrategy()">Save</button>
-					<button type="button" class="btn btn-danger ml-3"
-						(click)="cancelOffensiveStrategy()">Cancel</button>
+					
 				</div>
 			</div>
-			<div class="row ml-3 mr-2 mt-4" *ngIf="this.offensiveStrategyTab == 1">
-				<ul *ngFor="let strat of this.offStrategies">
-					<p class="details"><b class="text-success">{{ strat.name }}</b> - {{ strat.description }}</p>
-				</ul>
-			</div>
+			
 
 			<div class="row ml-3 mr-2 mt-3" *ngIf="this.defensiveStrategyTab == 1">
-				<p *ngIf="this.isEdit == 0" class="ml-6 m-2">Your defensive strategy - {{ this.teamStrategy?.defensiveStrategyName }}
-					<ng-container *ngIf="this.teamStrategy == null"> No Strategy Set</ng-container>
-				</p>
+				
 				<p class="ml-10 mt-3" *ngIf="this.isEdit == 1">
-					<select [(ngModel)]="defStrategySelection">
-						<option [value]="0"></option>
-						<option *ngFor="let strategy of this.defStrategies" [value]="strategy.id">
-							{{ strategy.name }}
-						</option>
-					</select>
+					
 				</p>
 				<div class="row edit-button" *ngIf="this.isEdit == 0">
 					<button type="button" class="btn btn-primary" (click)="editDefensiveStrategy()">Edit</button>
