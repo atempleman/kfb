@@ -7,6 +7,8 @@ import { TransferService } from '../_services/transfer.service';
 import { AuthService } from '../_services/auth.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { League } from '../_models/league';
+import { LeagueService } from '../_services/league.service';
 
 @Component({
   selector: 'app-players',
@@ -18,9 +20,11 @@ export class PlayersComponent implements OnInit {
   searchForm: FormGroup;
   positionFilter = 0;
 
+  league: League;
+
   constructor(private router: Router, private alertify: AlertifyService, private authService: AuthService,
               private transferService: TransferService, private playerService: PlayerService,
-              private fb: FormBuilder, private spinner: NgxSpinnerService) { }
+              private fb: FormBuilder, private spinner: NgxSpinnerService, private leagueService: LeagueService) { }
 
   ngOnInit() {
     this.spinner.show();
@@ -28,6 +32,14 @@ export class PlayersComponent implements OnInit {
 
     this.searchForm = this.fb.group({
       filter: ['']
+    });
+
+    // get the league object
+    this.leagueService.getLeague().subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
     });
   }
 

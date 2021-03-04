@@ -1,82 +1,107 @@
-<section class="dashboard-area">
-	<h3 class="display">Players</h3>
+<section class="py-sm-0 text-center" id="header-12">
+	<br />
+	<br />
+	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
+	</div>
+	<!--/.background-holder-->
+	<div class="container">
+		<div class="row h-full align-items-center">
+			<div class="col my-6">
+				<h3 class="fs-lg-7 fw-600 color-white">PLAYERS</h3>
+				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} -
+					<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state
+						}}</span>
+					<span class="badge badge-pill badge-info"
+						*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+					<span class="badge badge-pill badge-success"
+						*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state
+						}}</span>
+					<span class="badge badge-pill badge-warning"
+						*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-danger"
+						*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
+					- Day #{{ this.league?.day }}
+				</h6>
+
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<div class="item px-xl-5">
+							<p class="lead color-8">View all of the players that are in the current season of the
+								simulation.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+	</div>
+	<!--/.container-->
 </section>
 
-
-<div class="row ml-2 mr-2 textdesc">
-	<p>The following table provides a list of all players in the simulation.</p>
+<div class="row justify-content-center mt-3 ml-3 mr-3 color-1">
+	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+		<p class="loading">Loading Players...</p>
+	</ngx-spinner>
 </div>
 
-<div class="box">
-	<ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium">
-		<p class="loading">Loading Player Pool...</p>
-	</ngx-spinner>
+<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.allPlayers?.length != 0">
+	<form id="filter_form" class="btn-group" [formGroup]="searchForm">
+		<input type="text" id="filter_keywords" name="filter_keywords" placeholder="Filter by name"
+			formControlName="filter" />
+		<input class="btn btn-default" type="submit" id="filter_submit" name="filter_submit" value="Go"
+			(click)="filterTable()" />
+		<input class="btn btn-default" type="reset" id="filter_reset" name="filter_reset" value="Reset"
+			(click)="resetFilter()" />
+	</form>
+</div>
 
-	<div class="row table-row text-center ml-2 mr-2" *ngIf="this.allPlayers?.length != 0">
-		<form id="filter_form" class="btn-group" [formGroup]="searchForm">
-			<input type="text" id="filter_keywords" name="filter_keywords" placeholder="Filter by name"
-				formControlName="filter" />
-			<input class="btn btn-default" type="submit" id="filter_submit" name="filter_submit" value="Go"
-				(click)="filterTable()" />
-			<input class="btn btn-default" type="reset" id="filter_reset" name="filter_reset" value="Reset"
-				(click)="resetFilter()" />
-		</form>
-		<div class="btn-group" role="group" aria-label="First group">
-			<span class="filtertitle mr-1 ml-2">Filter by Position:</span>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 1 }"
-				(click)="filterByPos(1)">PG</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 2 }"
-				(click)="filterByPos(2)">SG</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 3 }"
-				(click)="filterByPos(3)">SF</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 4 }"
-				(click)="filterByPos(4)">PF</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 5 }"
-				(click)="filterByPos(5)">C</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 0 }"
-				(click)="filterByPos(0)">ALL</button>
-		</div>
+<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.allPlayers?.length != 0">
+	<div class="btn-group">
+		<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 1 }"
+			(click)="filterByPos(1)">PG</button>
+		<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 2 }"
+			(click)="filterByPos(2)">SG</button>
+		<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 3 }"
+			(click)="filterByPos(3)">SF</button>
+		<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 4 }"
+			(click)="filterByPos(4)">PF</button>
+		<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 5 }"
+			(click)="filterByPos(5)">C</button>
+		<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 0 }"
+			(click)="filterByPos(0)">ALL</button>
 	</div>
-	<div class="row table-row text-center ml-2 mr-2">
-		<table *ngIf="this.allPlayers?.length != 0" class="table table-striped custab">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Position(s)</th>
-					<th>Age</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tr *ngFor="let player of this.allPlayers">
-				<td>
-					{{ player.firstName }} {{ player.surname }}
-				</td>
-				<td>
-					<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
-					<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
-					<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
-					<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
-					<ng-container *ngIf="player.cPosition == 1">C </ng-container>
-				</td>
-				<td>{{ player.age }}</td>
-				<td class="text-center">
-					<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"> View</button>
-				</td>
+</div>
+
+<div class="row justify-content-center mt-3 ml-3 mr-3 color-1">
+	<table *ngIf="this.allPlayers?.length != 0" class="table table-striped custab">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Position(s)</th>
+				<th>Age</th>
+				<th></th>
 			</tr>
-		</table>
-
-		<!-- <div class="pager" *ngIf="this.displayPaging == 0">
-			<ul class="pagination">
-				<li class="page-item">
-					<a class="page-link" (click)="pagerPrev()">&laquo;</a>
-				</li>
-				<li class="page-item" *ngFor="let page of counter(this.pages); let i = index;">
-					<a class="page-link" (click)="goToPage(i+1)">{{ i + 1 }}</a>
-				</li>
-				<li class="page-item">
-					<a class="page-link" (click)="pagerNext()">&raquo;</a>
-				</li>
-			</ul>
-		</div> -->
-	</div>
+		</thead>
+		<tr *ngFor="let player of this.allPlayers">
+			<td>
+				{{ player.firstName }} {{ player.surname }}
+			</td>
+			<td>
+				<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
+				<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
+				<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
+				<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
+				<ng-container *ngIf="player.cPosition == 1">C </ng-container>
+			</td>
+			<td>{{ player.age }}</td>
+			<td class="text-center">
+				<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"> View</button>
+			</td>
+		</tr>
+	</table>
 </div>

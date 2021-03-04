@@ -48,7 +48,7 @@ export class TeamComponent implements OnInit {
     // Check to see if the user is an admin user
     this.isAdmin = this.authService.isAdmin();
 
-    // get the league object - TODO - roll the league state into the object as a Dto and pass back
+    // get the league object
     this.leagueService.getLeague().subscribe(result => {
       this.league = result;
     }, error => {
