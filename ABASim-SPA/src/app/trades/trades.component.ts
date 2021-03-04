@@ -23,11 +23,12 @@ import { TradePlayerView } from '../_models/tradePlayerView';
   styleUrls: ['./trades.component.css']
 })
 export class TradesComponent implements OnInit {
+  tradeOffers = 0;
+  makeTradeOffer = 0;
+
   league: League;
   allOtherTeams: Team[] = [];
   teamSelected: number;
-  // yourTeamRoster: Player[] = [];
-  // selectedTeamRoster: Player[] = [];
   playersInTrade: TradePlayerView[] = [];
   team: Team;
   tradeTeam: Team;
@@ -69,6 +70,7 @@ export class TradesComponent implements OnInit {
   theirPicksSelection = false;
 
   yourSalaryCapSpace: TeamSalaryCapInfo;
+  yourDefaultCapSpace: TeamSalaryCapInfo;
   theirSalaryCapSpace: TeamSalaryCapInfo;
 
   invalidTradeMessage = '';
@@ -123,20 +125,54 @@ export class TradesComponent implements OnInit {
     });
 
     this.teamService.getTeamDraftPicks(teamId).subscribe(result => {
+      console.log('ash');
+      
       this.yourTeamPicks = result;
       this.yourTeamPicks.forEach(val => this.masterYourTeamPicks.push(Object.assign({}, val)));
+      console.log(this.yourTeamPicks);
+      console.log(this.masterYourTeamPicks);
     }, error => {
       this.alertify.error('Error getting your teams picks');
     });
 
     this.teamService.getTeamSalaryCapDetails(teamId).subscribe(result => {
       this.yourSalaryCapSpace = result;
+      this.yourDefaultCapSpace = result;
     }, error => {
       this.alertify.error('Error getting your teams salary cap');
     });
   }
 
+  toggleTradeOffersView() {
+    if (this.tradeOffers == 0) {
+      this.tradeOffers = 1;
+    } else {
+      this.tradeOffers = 0;
+    }
+  }
+
+  toggleMakeOffersView() {
+    if (this.makeTradeOffer == 0) {
+      this.makeTradeOffer = 1;
+    } else {
+      this.makeTradeOffer = 0;
+    }
+  }
+
   getTeamsPlayers() {
+    // Clear all of the current trade details
+    this.proposedTradeReceiving = [];
+    this.proposedTradeSending = [];
+
+    // Update the available cap space
+    if (this.yourSalaryCapSpace !== undefined) {
+      this.yourSalaryCapSpace = this.yourDefaultCapSpace;
+    }
+
+    if (this.theirSalaryCapSpace !== undefined) {
+      this.theirSalaryCapSpace.currentSalaryAmount = 0;
+    }
+
     this.showPropose = true;
 
     // tslint:disable-next-line: triple-equals
@@ -213,7 +249,7 @@ export class TradesComponent implements OnInit {
       });
 
       // Now the calc to check if the trade is valid
-      const value = 100000 + (theirSalaryReceived * .25);
+      const value = (100000 + (theirSalaryReceived * .25) + yourSalaryReceived);
 
       if (value < yourSalaryReceived) {
         this.invalidTradeMessage = 'Your team cannot make this trade due to salary cap rules';
@@ -234,7 +270,7 @@ export class TradesComponent implements OnInit {
       });
 
       // Now the calc to check if the trade is valid
-      const value = 100000 + (yourSalaryReceived * .25);
+      const value = (100000 + (yourSalaryReceived * .25)) + theirSalaryReceived;
 
       if (value < theirSalaryReceived) {
         this.invalidTradeMessage = 'Their team cannot make this trade due to salary cap rules';
@@ -269,9 +305,13 @@ export class TradesComponent implements OnInit {
         });
       } else {
         this.alertify.error('Both sides must have something in a trade');
+        this.invalidTradeMessage = 'Both sides must have something in a trade';
+        this.spinner.hide();
       }
     } else {
       this.alertify.error('Trade is invalid due to salary cap rules');
+      this.invalidTradeMessage = 'Trade is invalid due to salary cap rules';
+      this.spinner.hide();
     }
 
   }

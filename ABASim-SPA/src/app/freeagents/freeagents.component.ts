@@ -58,6 +58,9 @@ export class FreeagentsComponent implements OnInit {
   contractOffers: ContractOffer[] = [];
   viewedOffer: ContractOffer;
 
+  faOffers = 0;
+  faView = 0;
+
   constructor(private alertify: AlertifyService, private playerService: PlayerService, private teamService: TeamService,
               private authService: AuthService, private router: Router, private transferService: TransferService,
               private modalService: BsModalService, private spinner: NgxSpinnerService, private fb: FormBuilder,
@@ -69,9 +72,9 @@ export class FreeagentsComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting your team');
     }, () => {
-      this.backgroundStyle();
+      // this.backgroundStyle();
       this.CheckRosterSpots();
-      this.GetSalaryCapDetails();
+      // this.GetSalaryCapDetails();
       this.GetContractOffers();
     });
 
@@ -87,6 +90,24 @@ export class FreeagentsComponent implements OnInit {
       filter: ['']
     });
   }
+
+  toggleOffersView() {
+    if (this.faOffers == 0) {
+      console.log('ash');
+      this.faOffers = 1;
+    } else {
+      console.log('ash2');
+      this.faOffers = 0;
+    }
+  }
+
+  // toggleFAView(){
+  //   if (this.faView = 0) {
+  //     this.faView = 1;
+  //   } else {
+  //     this.faView = 0;
+  //   }
+  // }
 
   GetContractOffers() {
     this.teamService.getContractOffersForTeam(this.team.id).subscribe(result => {
@@ -125,11 +146,10 @@ export class FreeagentsComponent implements OnInit {
   GetFreeAgents() {
     this.spinner.show();
 
-    // Get the freeagents player listing
     this.playerService.getFreeAgents().subscribe(result => {
       this.freeAgents = result;
     }, error => {
-      this.alertify.error('Error getting free agents');
+      this.alertify.error(error);
     }, () => {
       this.getFreeAgentInjuries();
       this.spinner.hide();

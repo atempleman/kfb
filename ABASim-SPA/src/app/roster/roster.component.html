@@ -17,7 +17,7 @@
   <!-- </div> -->
   <div class="row">
     <div class="col table-columns">
-      <table class="table table-striped color-3 mr-2" *ngIf="this.playerCount != 0 && this.statusGrades == 1">
+      <table class="table table-striped custab" *ngIf="this.playerCount != 0 && this.statusGrades == 1">
         <thead *ngIf="this.playingRoster.length > 0">
           <tr>
             <th>Name</th>
@@ -96,7 +96,7 @@
           <tr class="lead color-2 ml-3">Your team does not have any players.</tr>
         </tbody>
       </table>
-      <table class="table table-striped color-3 mr-2" *ngIf="this.playerCount != 0 && this.statusStats">
+      <table class="table table-striped custab" *ngIf="this.playerCount != 0 && this.statusStats">
         <thead *ngIf="this.playingRoster.length > 0">
           <tr>
             <th>Name</th>
@@ -198,7 +198,7 @@
           <tr class="lead color-2 ml-3">Your team does not have any players.</tr>
         </tbody>
       </table>
-      <table class="table table-striped color-3 mr-2" *ngIf="this.statusContracts">
+      <table class="table table-striped custab" *ngIf="this.statusContracts">
         <thead *ngIf="this.teamContracts.length > 0">
           <tr>
             <th>Name</th>
@@ -256,7 +256,7 @@
       </table>
       <div class="row color-2" *ngIf="this.statusContracts">
         <h5 class="color-10 ml-3 mr-2">Waived Contracts still counting towards salary cap</h5>
-        <table class="table table-striped color-3 ml-3 mr-2" *ngIf="this.statusContracts">
+        <table class="table table-striped custab" *ngIf="this.statusContracts">
           <thead *ngIf="this.waivedContracts.length > 0">
             <tr>
               <th>Name</th>

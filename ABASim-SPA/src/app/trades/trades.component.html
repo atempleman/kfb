@@ -1,341 +1,417 @@
-<link rel="stylesheet" type="text/css"
-	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-
-
-<div class="jumbotron">
-	<h3 class="display">TRADES</h3>
-</div>
-
 <div class="box" *ngIf="this.tradesReady">
 	<ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium">
 		<p class="loading">Loading Trades...</p>
 	</ngx-spinner>
+
 	<div class="container">
-		<div *ngFor="let trade of this.tradesToDisplay">
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
-				*ngIf="trade?.tradingTeam == this.team.id">
-				<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>Trade Offer for {{ trade.tradingTeamName }} &
-							{{ trade.receivingTeamName }}</strong></span></div>
-				<div class="card-body">
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(trademodal, trade.tradeId)">View Trade</button>
-					</div>
+		<div class="ui styled fluid accordion">
+			<div class="title" (click)="toggleTradeOffersView()"><i class="fa fa-caret-right mr-3"
+					*ngIf="this.tradeOffers == 0"></i><i class="fa fa-caret-down mr-3"
+					*ngIf="this.tradeOffers == 1"></i> Active Trade Offers</div>
+		</div>
+		<div class="content" *ngIf="this.tradeOffers == 1">
+			<div class="ui styled fluid accordion">
+				<div class="row justify-content-center mt-3 color-1" *ngIf="this.tradesToDisplay.length == 0">
+					<p class="lead color-7">No offers have been made or received</p>
+				</div>
+				<div class="row justify-content-center mt-3 ml-1 mr-1 color-1" *ngFor="let trade of this.tradesToDisplay">
+					<p class="lead color-7" *ngIf="trade?.tradingTeam == this.team.id"><i class="fa fa-exchange"
+							aria-hidden="true"></i> Trade Offer for {{ trade.tradingTeamName }} &
+						{{ trade.receivingTeamName }} <button type="button" class="btn btn-link text-left"
+							(click)="openModal(trademodal, trade.tradeId)">View Trade</button></p>
+					<p class="lead color-7" *ngIf="trade?.receivingTeam == this.team.id"><i class="fa fa-exchange"
+							aria-hidden="true"></i> Trade Offer for {{ trade.receivingTeamName }} &
+						{{ trade.tradingTeamName }} <button type="button" class="btn btn-link text-left"
+							(click)="openModal(trademodal, trade.tradeId)">View Trade</button></p>
 				</div>
 			</div>
 		</div>
 
-		<div *ngFor="let trade of this.tradesToDisplay">
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
-				*ngIf="trade?.receivingTeam == this.team.id">
-				<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>Trade Offer for {{ trade.receivingTeamName }} &
-							{{ trade.tradingTeamName }}</strong></span></div>
-				<div class="card-body">
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(trademodal, trade.tradeId)">View Trade</button>
+		<div class="ui styled fluid accordion">
+			<div class="title" (click)="toggleMakeOffersView()"><i class="fa fa-caret-right mr-3"
+					*ngIf="this.makeTradeOffer == 0"></i><i class="fa fa-caret-down mr-3"
+					*ngIf="this.makeTradeOffer == 1"></i> Make Trade Offer</div>
+		</div>
+		<div class="content" *ngIf="this.makeTradeOffer == 1">
+			<div class="ui styled fluid accordion">
+				<div class="row justify-content-center mt-3 color-1">
+					<!-- Your Team Trade Receiving Card -->
+					<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+						<div class="card-header"><span class="mb-0">YOU RECEIVE</span></div>
+						<div class="card-body">
+							<p class="color-7">Available cap space: <span
+									[style.color]="(this.yourSalaryCapSpace?.salaryCapAmount - this.yourSalaryCapSpace?.currentSalaryAmount) >= 0 ? 'green' : 'red'">${{
+									(this.yourSalaryCapSpace.salaryCapAmount -
+									this.yourSalaryCapSpace.currentSalaryAmount) | number }}</span>
+							</p>
+							<p class="color-7" *ngIf="this.proposedTradeReceiving.length == 0">No assets added</p>
+							<div class="row" *ngIf="this.proposedTradeReceiving.length != 0">
+								<table class="table table-hover events-table">
+									<tbody>
+										<tr class="table-secondary" *ngFor="let trade of this.proposedTradeReceiving">
+											<td *ngIf="trade.playerId != 0">
+												{{ trade.playerName }}
+												<p>{{ trade.years }} years - ${{ trade.yearOne | number }}</p>
+											</td>
+											<td *ngIf="trade.pick != 0">
+												{{ getPickDetails(1, trade.pick, trade.year, trade.originalTeamId) }}
+											</td>
+											<td>
+												<i class="fa fa-minus-circle" (click)="removePlayer(trade, 0)"></i>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- Trade Partner Card -->
+					<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+						<div class="card-header"><span class="mb-0">THEY RECEIVE</span></div>
+						<div class="card-body">
+							<p class="color-7">Available cap space:
+								<span
+									[style.color]="(this.theirSalaryCapSpace?.salaryCapAmount - this.theirSalaryCapSpace?.currentSalaryAmount) >= 0 ? 'green' : 'red'">${{
+									(this.theirSalaryCapSpace?.salaryCapAmount -
+									this.theirSalaryCapSpace?.currentSalaryAmount) | number }}</span>
+							</p>
+							<p class="color-7" *ngIf="this.proposedTradeSending?.length == 0">No assets added</p>
+							<div class="row" *ngIf="this.proposedTradeSending.length != 0">
+								<table class="table table-hover events-table">
+									<tbody>
+										<tr class="table-secondary" *ngFor="let trade of this.proposedTradeSending">
+											<td *ngIf="trade.playerId != 0">
+												{{ trade.playerName }}
+												<p>{{ trade.years }} years - ${{ trade.yearOne | number }}</p>
+											</td>
+											<td *ngIf="trade.pick != 0">
+												{{ getPickDetails(0, trade.pick, trade.year, trade.originalTeamId) }}
+											</td>
+											<td>
+												<i class="fa fa-minus-circle" (click)="removePlayer(trade, 1)"></i>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="row justify-content-center mt-3 color-1" *ngIf='this.validTrade == 0'>
+					<p class="lead" style="color:red">{{ this.invalidTradeMessage }}</p>
+				</div>
+				<div class="row justify-content-center mt-3 mb-2 color-1">
+					<button class="btn btn-success btn-xs" (click)="proposeTrade()" *ngIf="this.showPropose"><span
+							class="glyphicon glyphicon-edit"></span> Propose Trade</button>
+				</div>
+
+				<div class="row justify-content-center mt-3 mb-2 color-1">
+					<h6 class="fw-600 fs-0 ls color-10" style="text-align:center">Select a Team to
+						Trade with</h6>
+				</div>
+				<div class="row justify-content-center mb-2 color-1">
+					<form #tradeWithTeamForm (ngSubmit)="getTeamsPlayers()">
+						<select name="leagueStatus" [(ngModel)]="this.teamSelected">
+							<option *ngFor="let team of this.allOtherTeams" [value]="team.id">{{ team.teamname }}
+								{{ team.mascot }}</option>
+						</select>
+						<div class="row justify-content-center mb-2 color-1">
+							<button type="submit" class="mt-2 btn btn-primary btn-sm">Select</button>
+						</div>
+					</form>
+				</div>
+
+				<!-- Team Content for Trades -->
+				<div class="row justify-content-center mt-5 mb-2 color-1" *ngIf="this.displayTeams == 1">
+					<!-- <div class="col-6"> -->
+					<h6 class="fw-600 fs-0 ls color-10" style="text-align:center">{{ this.team?.teamname }} {{
+						this.team?.mascot }}</h6>
+				</div>
+				<div class="row justify-content-center mt-5 mb-2 color-1" *ngIf="this.displayTeams == 1">
+					<div class="nav-bar nav-bar-center">
+						<div class="nav-bar-item color-8" (click)="this.yourSelection(0)"><span
+								class="fa fa-users fs-2"></span><br>Players</div>
+						<div class="nav-bar-item color-8" (click)="this.yourSelection(1)"><span
+								class="fa fa-bullhorn fs-2"></span><br>Picks</div>
 					</div>
 				</div>
+				<div class="row justify-content-center mt-2 mb-2 color-1" *ngIf="this.displayTeams == 1 && this.yourPlayersSelection">
+					<div class="col-md-2 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Name</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Pos</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Age</p>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Current</p>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Total</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Years</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Guarantee</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center"></p>
+					</div>
+				</div>
+				<div *ngFor="let player of this.yourTeamRoster">
+					<div class="row justify-content-center mt-2 mb-2 color-1"
+						*ngIf="this.displayTeams == 1 && this.yourPlayersSelection">
+						<div class="col-md-2 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								{{ player.surname }}
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
+								<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
+								<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
+								<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
+								<ng-container *ngIf="player.cPosition == 1">C </ng-container>
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								{{ player.age }}
+							</p>
+						</div>
+						<div class="col-md-2 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								${{ player.currentSeasonValue | number }}
+							</p>
+						</div>
+						<div class="col-md-2 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								${{ player.totalValue | number }}
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								{{ player.years | number }}
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center" *ngIf="player.yearOneGuarentee == 0">
+								No
+							</p>
+							<p class="color-7" style="text-align:center" *ngIf="player.yearOneGuarentee == 1">
+								Yes
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1" style="text-align: center;">
+							<button class="btn btn-info btn-xs" (click)="viewPlayer(player)">
+								<i class="fa fa-eye"></i>
+							</button>
+							&nbsp;
+							<button class="btn btn-danger btn-xs mb-1" (click)="addToTrade(player, 0)">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="row justify-content-center mt-2 mb-2 color-1" *ngIf="this.displayTeams == 1 && this.yourPicksSelection">
+					<div class="col-2">
+						<p class="lead color-10" style="text-align:center">Pick</p>
+					</div>
+					<div class="col-1">
+						<p class="lead color-10" style="text-align:center"></p>
+					</div>
+				</div>
+				<div *ngFor="let pick of this.yourTeamPicks">
+					<div class="row justify-content-center mt-2 mb-2 color-1"
+						*ngIf="this.displayTeams == 1 && this.yourPicksSelection">
+						<div class="col-2">
+							<p class="color-7" style="text-align:center">
+								{{ pick?.originalTeamName }} Year: {{ pick?.year }} Round: {{ pick?.round }}
+							</p>
+						</div>
+						<div class="col-1">
+							<button class="btn btn-danger btn-xs tablebutton" (click)="addPickToTrade(pick, 0)">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Select Team's Section -->
+				<div class="row justify-content-center mt-5 mb-2 color-1" *ngIf="this.displayTeams == 1">
+					<!-- <div class="col-6"> -->
+					<h6 class="fw-600 fs-0 ls color-10" style="text-align:center">{{ this.tradeTeam?.teamname }} {{ this.tradeTeam?.mascot }}</h6>
+				</div>
+				<div class="row justify-content-center mt-5 mb-2 color-1" *ngIf="this.displayTeams == 1">
+					<div class="nav-bar nav-bar-center">
+						<div class="nav-bar-item color-8" (click)="this.theirSelection(0)"><span
+								class="fa fa-users fs-2"></span><br>Players</div>
+						<div class="nav-bar-item color-8" (click)="this.theirSelection(1)"><span
+								class="fa fa-bullhorn fs-2"></span><br>Picks</div>
+					</div>
+				</div>
+
+				<div class="row justify-content-center mt-2 mb-2 color-1" *ngIf="this.displayTeams == 1 && this.theirPlayersSelection">
+					<div class="col-md-2 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Name</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Pos</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Age</p>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Current</p>
+					</div>
+					<div class="col-md-2 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Total</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Years</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center">Guarantee</p>
+					</div>
+					<div class="col-md-1 col-sm-1">
+						<p class="lead color-10" style="text-align:center"></p>
+					</div>
+				</div>
+				<div *ngFor="let player of this.selectedTeamRoster">
+					<div class="row justify-content-center mt-2 mb-2 color-1"
+						*ngIf="this.displayTeams == 1 && this.theirPlayersSelection">
+						<div class="col-md-2 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								{{ player.surname }}
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
+								<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
+								<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
+								<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
+								<ng-container *ngIf="player.cPosition == 1">C </ng-container>
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								{{ player.age }}
+							</p>
+						</div>
+						<div class="col-md-2 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								${{ player.currentSeasonValue | number }}
+							</p>
+						</div>
+						<div class="col-md-2 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								${{ player.totalValue | number }}
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center">
+								{{ player.years | number }}
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1">
+							<p class="color-7" style="text-align:center" *ngIf="player.yearOneGuarentee == 0">
+								No
+							</p>
+							<p class="color-7" style="text-align:center" *ngIf="player.yearOneGuarentee == 1">
+								Yes
+							</p>
+						</div>
+						<div class="col-md-1 col-sm-1" style="text-align: center;">
+							<button class="btn btn-info btn-xs" (click)="viewPlayer(player)">
+								<i class="fa fa-eye"></i>
+							</button>
+							<button class="btn btn-danger btn-xs mr-2" (click)="addToTrade(player, 1)">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="row justify-content-center mt-2 mb-2 color-1" *ngIf="this.displayTeams == 1 && this.theirPicksSelection">
+					<div class="col-2">
+						<p class="lead color-10" style="text-align:center">Pick</p>
+					</div>
+					<div class="col-1">
+						<p class="lead color-10" style="text-align:center"></p>
+					</div>
+				</div>
+				<div *ngFor="let pick of this.selectedTeamPicks">
+					<div class="row justify-content-center mt-2 mb-2 color-1"
+						*ngIf="this.displayTeams == 1 && this.theirPicksSelection">
+						<div class="col-2">
+							<p class="color-7" style="text-align:center">
+								{{ pick?.originalTeamName }} Year: {{ pick?.year }} Round: {{ pick?.round }}
+							</p>
+						</div>
+						<div class="col-1">
+							<button class="btn btn-danger btn-xs tablebutton" (click)="addPickToTrade(pick, 1)">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
 </div>
-
-
-<div class="box">
-	<div class="container">
-		<div class="row cards-row">
-			<h4>Trade Proposal</h4>
-			<div class="divider"></div>
-		</div>
-		<div class="row cards-row">
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header" [style.background-color]="'rgb(' + primaryColor + ')'"><i class="fa fa-list fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>YOU RECEIVE</strong></span></div>
-				<div class="card-body" [style.background-color]="'rgb(' + secondaryColor + ')'">
-					<p>Available cap space: <span
-							[style.color]="(this.yourSalaryCapSpace?.salaryCapAmount - this.yourSalaryCapSpace?.currentSalaryAmount) >= 0 ? 'green' : 'red'">${{ (this.yourSalaryCapSpace.salaryCapAmount - this.yourSalaryCapSpace.currentSalaryAmount) | number }}</span>
-					</p>
-					<p *ngIf="this.proposedTradeReceiving.length == 0">No assets added</p>
-					<div class="row" *ngIf="this.proposedTradeReceiving.length != 0">
-						<table class="table table-hover events-table">
-							<tbody>
-								<tr class="table-secondary" *ngFor="let trade of this.proposedTradeReceiving">
-									<td *ngIf="trade.playerId != 0">
-										{{ trade.playerName }}
-										<p>{{ trade.years }} years - ${{ trade.yearOne | number }}</p>
-									</td>
-									<td *ngIf="trade.pick != 0">
-										{{ getPickDetails(1, trade.pick, trade.year, trade.originalTeamId) }}
-									</td>
-									<td>
-										<i class="fa fa-minus-circle" (click)="removePlayer(trade, 0)"></i>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-list fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>THEY RECEIVE</strong></span></div>
-				<div class="card-body">
-					<p>Available cap space: <span
-							[style.color]="(this.theirSalaryCapSpace?.salaryCapAmount - this.theirSalaryCapSpace?.currentSalaryAmount) >= 0 ? 'green' : 'red'">${{ (this.theirSalaryCapSpace?.salaryCapAmount - this.theirSalaryCapSpace?.currentSalaryAmount) | number }}</span>
-					</p>
-					<p *ngIf="this.proposedTradeSending?.length == 0">No assets added</p>
-					<div class="row" *ngIf="this.proposedTradeSending.length != 0">
-						<table class="table table-hover events-table">
-							<tbody>
-								<tr class="table-secondary" *ngFor="let trade of this.proposedTradeSending">
-									<td *ngIf="trade.playerId != 0">
-										{{ trade.playerName }}
-										<p>{{ trade.years }} years - ${{ trade.yearOne | number }}</p>
-									</td>
-									<td *ngIf="trade.pick != 0">
-										{{ getPickDetails(0, trade.pick, trade.year, trade.originalTeamId) }}
-									</td>
-									<td>
-										<i class="fa fa-minus-circle" (click)="removePlayer(trade, 1)"></i>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row cards-row" style="color:red" *ngIf='this.validTrade == 0'>
-			{{ this.invalidTradeMessage }}
-		</div>
-		<div class="row cards-row">
-			<button class="btn btn-info btn-xs" (click)="proposeTrade()" *ngIf="this.showPropose"><span
-					class="glyphicon glyphicon-edit"></span> Propose Trade</button>
-		</div>
-		<div class="tradedisplay">
-			<form #tradeWithTeamForm (ngSubmit)="getTeamsPlayers()">
-				<div class="form-group">
-					<h4>Select a Team to Trade with</h4>
-					<br />
-					<select name="leagueStatus" [(ngModel)]="this.teamSelected">
-						<option *ngFor="let team of this.allOtherTeams" [value]="team.id">{{ team.teamname }}
-							{{ team.mascot }}</option>
-					</select>
-					<div class="divider"></div>
-					<button type="submit" class="btn btn-primary">Select</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-
-<div class="box" *ngIf="this.displayTeams == 1">
-	<div class="row event-row">
-		<div class="col-lg-6 events" *ngIf="this.league?.day != 0">
-			<h4>{{ this.team?.teamname }} {{ this.team?.mascot }}</h4>
-			<div class="row event-row">
-				<ul class="nav nav-tabs">
-					<li class="nav-item">
-						<a class="nav-link" [routerLink]="" [ngClass]="this.yourPlayersSelection ? 'active' : ''"
-							(click)="this.yourSelection(0)">Players</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" [routerLink]="" [ngClass]="this.yourPicksSelection ? 'active' : ''"
-							(click)="this.yourSelection(1)">Picks</a>
-					</li>
-				</ul>
-			</div>
-			<table class="table table-hover events-table" *ngIf="this.yourPlayersSelection">
-				<thead>
-					<th>Name</th>
-					<th>Position</th>
-					<th>Age</th>
-					<th>Current Season</th>
-					<th>Total Value</th>
-					<th>Years</th>
-					<th>Current Guarentee</th>
-					<th></th>
-				</thead>
-				<tbody>
-					<tr class="table-secondary" *ngFor="let player of this.yourTeamRoster">
-						<td>
-							{{ player.surname }}
-						</td>
-						<td>
-							<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
-							<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
-							<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
-							<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
-							<ng-container *ngIf="player.cPosition == 1">C </ng-container>
-						</td>
-						<td>
-							{{ player.age }}
-						</td>
-						<td>
-							${{ player.currentSeasonValue | number }}
-						</td>
-						<td>
-							${{ player.totalValue | number }}
-						</td>
-						<td>
-							{{ player.years | number }}
-						</td>
-						<td *ngIf="player.yearOneGuarentee == 0">
-							No
-						</td>
-						<td *ngIf="player.yearOneGuarentee == 1">
-							Yes
-						</td>
-						<td class="text-center">
-							<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"><span
-									class="glyphicon glyphicon-edit"></span> View</button>
-							<div class="divider"></div>
-							<button class="btn btn-danger btn-xs tablebutton" (click)="addToTrade(player, 0)"><span
-									class="glyphicon glyphicon-remove"></span> Trade</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<table class="table table-hover events-table" *ngIf="this.yourPicksSelection">
-				<tbody>
-					<tr class="table-secondary" *ngFor="let pick of this.yourTeamPicks">
-						<td>
-							{{ pick.originalTeamName }} Year: {{ pick.year }} Round: {{ pick.round }}
-						</td>
-						<td class="text-center">
-							<button class="btn btn-danger btn-xs tablebutton" (click)="addPickToTrade(pick, 0)"><span
-									class="glyphicon glyphicon-remove"></span> Trade</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="col-lg-6 events upcoming">
-			<h4>{{ this.tradeTeam?.teamname }} {{ this.tradeTeam?.mascot }}</h4>
-			<div class="row event-row">
-				<ul class="nav nav-tabs">
-					<li class="nav-item">
-						<a class="nav-link" [routerLink]="" [ngClass]="this.theirPlayersSelection ? 'active' : ''"
-							(click)="this.theirSelection(0)">Players</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" [routerLink]="" [ngClass]="this.theirPicksSelection ? 'active' : ''"
-							(click)="this.theirSelection(1)">Picks</a>
-					</li>
-				</ul>
-			</div>
-			<table class="table table-hover events-table" *ngIf="this.theirPlayersSelection">
-				<thead>
-					<th>Name</th>
-					<th>Position</th>
-					<th>Age</th>
-					<th>Current Season</th>
-					<th>Total Value</th>
-					<th>Years</th>
-					<th>Current Guarentee</th>
-					<th></th>
-				</thead>
-				<tbody>
-					<tr class="table-secondary" *ngFor="let player of this.selectedTeamRoster">
-						<td>
-							{{ player.surname }}
-						</td>
-						<td>
-							<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
-							<ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
-							<ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
-							<ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
-							<ng-container *ngIf="player.cPosition == 1">C </ng-container>
-						</td>
-						<td>
-							{{ player.age }}
-						</td>
-						<td>
-							${{ player.currentSeasonValue | number }}
-						</td>
-						<td>
-							${{ player.totalValue | number }}
-						</td>
-						<td>
-							{{ player.years | number }}
-						</td>
-						<td *ngIf="player.yearOneGuarentee == 0">
-							No
-						</td>
-						<td *ngIf="player.yearOneGuarentee == 1">
-							Yes
-						</td>
-						<td class="text-center">
-							<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"><span
-									class="glyphicon glyphicon-edit"></span> View</button>
-							<div class="divider"></div>
-							<button class="btn btn-danger btn-xs tablebutton" (click)="addToTrade(player, 1)"><span
-									class="glyphicon glyphicon-remove"></span> Trade</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<table class="table table-hover events-table" *ngIf="this.theirPicksSelection">
-				<tbody>
-					<tr class="table-secondary" *ngFor="let pick of this.selectedTeamPicks">
-						<td>
-							{{ pick.originalTeamName }} Year: {{ pick.year }} Round: {{ pick.round }}
-						</td>
-						<td class="text-center">
-							<button class="btn btn-danger btn-xs tablebutton" (click)="addPickToTrade(pick, 1)"><span
-									class="glyphicon glyphicon-remove"></span> Trade</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
 
 
 
 <ng-template #trademodal>
 	<div class="modal-header">
-		<h4 class="modal-title">Trade Offer</h4>
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center">TRADE OFFER</h6>
 		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
 	</div>
 	<div class="modal-body">
 		<div *ngIf="!this.tmDisplay">
-			<div class="row"
+			<div class="row justify-content-center mt-2 mb-2 color-1"
 				*ngIf="this.tradeDisplay[0]?.status == 2 && this.team.id == this.tradeDisplay[0]?.tradingTeam">
-				<p class="ml-2">Trade has been rejected. Please pull the offer and try another trade</p>
+				<p class="color-7">Trade has been rejected. Please pull the offer and try another trade</p>
 				<br />
-				<p class="ml-2" *ngIf="this.tradeDisplay[0]?.status == 2 && this.tradeMessage?.isMessage == 1">Trade
+				<p class="color-7" *ngIf="this.tradeDisplay[0]?.status == 2 && this.tradeMessage?.isMessage == 1">Trade
 					Message - {{ this.tradeMessage?.message }}</p>
 			</div>
 		</div>
-		<h4>{{ this.team.mascot }} Receive:</h4>
-		<div class="row ml-2" *ngFor="let trade of this.tradeDisplay">
-			<p class="mt-1" *ngIf="trade.receivingTeam == this.team.id && trade.playerId != 0">{{ trade.playerName }}
+		<div class="row justify-content-center mt-2 mb-2 color-1">
+			<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center">{{ this.team.mascot }} Receive:</h6>
+		</div>
+		<div class="row justify-content-center mt-2 mb-2 color-1" *ngFor="let trade of this.tradeDisplay">
+			<p class="color-7" *ngIf="trade.receivingTeam == this.team.id && trade.playerId != 0">{{ trade.playerName }}
 			</p>
-			<p class="mt-1" *ngIf="trade.receivingTeam == this.team.id && trade.playerId == 0">Pick -
+			<p class="color-7" *ngIf="trade.receivingTeam == this.team.id && trade.playerId == 0">Pick -
 				{{ getTeamShortCode(trade.originalTeamId) }} Year: {{ trade.year }} Round: {{ trade.pick }}</p>
 			<div class="divider"></div>
-			<i class="fa fa-info-circle" *ngIf="trade.receivingTeam == this.team.id"
-				(click)="viewPlayerForId(trade.playerId)"></i>
-				<p class="ml-2" *ngIf="trade.receivingTeam == this.team.id && trade.playerId != 0"> - {{ trade.years }} year(s) - ${{ trade.totalValue | number }} - current ${{ trade.yearOne | number }} </p>
+			<span>&nbsp;<i class="fa fa-info-circle color-white" *ngIf="trade.receivingTeam == this.team.id"
+				(click)="viewPlayerForId(trade.playerId)"></i></span>
+			<p class="color-7" *ngIf="trade.receivingTeam == this.team.id && trade.playerId != 0"> - {{ trade.years }}
+				year(s) - ${{ trade.totalValue | number }} - current ${{ trade.yearOne | number }} </p>
 		</div>
 		<br />
-		<h4>{{ this.recevingTeamText }} Receive:</h4>
-		<div class="row ml-2" *ngFor="let trade of this.tradeDisplay">
-			<p class="mt-1" *ngIf="trade.receivingTeam != this.team.id && trade.playerId != 0">{{ trade.playerName }}
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center">{{ this.recevingTeamText }} Receive:</h6>
+		<div class="row justify-content-center mt-2 mb-2 color-1" *ngFor="let trade of this.tradeDisplay">
+			<p class="color-7" *ngIf="trade.receivingTeam != this.team.id && trade.playerId != 0">{{ trade.playerName }}
 			</p>
-			<p class="mt-1" *ngIf="trade.receivingTeam != this.team.id && trade.playerId == 0">Pick -
+			<p class="color-7" *ngIf="trade.receivingTeam != this.team.id && trade.playerId == 0">Pick -
 				{{ getTeamShortCode(trade.originalTeamId) }} Year: {{ trade.year }} Round: {{ trade.pick }}</p>
 			<div class="divider"></div>
-			<span><i class="fa fa-info-circle" *ngIf="trade.receivingTeam != this.team.id"
-				(click)="viewPlayerForId(trade.playerId)"></i></span>
-			<p class="ml-2" *ngIf="trade.receivingTeam != this.team.id && trade.playerId != 0"> - {{ trade.years }} year(s) - ${{ trade.totalValue | number }} - current ${{ trade.yearOne | number }} </p>
+			<span>&nbsp;<i class="fa fa-info-circle color-white" *ngIf="trade.receivingTeam != this.team.id"
+					(click)="viewPlayerForId(trade.playerId)"></i></span>
+			<p class="color-7" *ngIf="trade.receivingTeam != this.team.id && trade.playerId != 0"> - {{ trade.years }}
+				year(s) - ${{ trade.totalValue | number }} - current ${{ trade.yearOne | number }} </p>
 		</div>
 		<form [formGroup]="tmForm" (ngSubmit)="submitTradeMessage()" *ngIf="this.tmDisplay">
 			<div class="modal-body">
@@ -347,8 +423,8 @@
 				</div>
 			</div>
 			<div class="modal-footer form-group text-center">
-				<button type="submit" class="btn btn-primary">Reject</button>
-				<button type="button" class="btn btn-danger" (click)="backToTrade()">Back</button>
+				<button type="submit" class="btn btn-primary btn-sm">Reject</button>
+				<button type="button" class="btn btn-danger btn-sm" (click)="backToTrade()">Back</button>
 			</div>
 		</form>
 	</div>
@@ -356,14 +432,14 @@
 		{{ this.invalidTradeMessage }}
 	</div>
 	<div class="modal-footer form-group text-center">
-		<button type="submit" class="btn btn-primary"
+		<button type="submit" class="btn btn-primary btn-sm"
 			*ngIf="this.team.id == this.tradeDisplay[0].tradingTeam && !this.tmDisplay && this.tradeDisplay[0].status != 2"
 			(click)="acceptTrade(this.tradeDisplay[0].tradeId)">Accept</button>
-		<button type="submit" class="btn btn-primary" (click)="modalRef.hide()" *ngIf="!this.tmDisplay">Close</button>
-		<button type="button" class="btn btn-danger"
+		<button type="submit" class="btn btn-primary btn-sm" (click)="modalRef.hide()" *ngIf="!this.tmDisplay">Close</button>
+		<button type="button" class="btn btn-danger btn-sm"
 			*ngIf="this.team.id == this.tradeDisplay[0].receivingTeam && !this.tmDisplay"
 			(click)="pullTrade(this.tradeDisplay[0].tradeId)">Cancel Offer</button>
-		<button type="button" class="btn btn-danger" (click)="rejectTrade()"
+		<button type="button" class="btn btn-danger btn-sm" (click)="rejectTrade()"
 			*ngIf="this.team.id == this.tradeDisplay[0].tradingTeam && !this.tmDisplay && this.tradeDisplay[0].status != 2">Reject</button>
 	</div>
 </ng-template>

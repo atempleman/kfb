@@ -1,36 +1,51 @@
-<section class="dashboard-area">
-	<h3 class="display">Free Agents</h3>
-	<p>Current Salary - ${{ this.capInfo?.currentSalaryAmount | number }}</p>
-	<p>League Salary Cap - ${{ this.capInfo?.salaryCapAmount | number }}</p>
-	<p>Cap Space Remaining - ${{ this.availableCapSpace | number }}</p>
-</section>
-
-<section *ngIf="this.league?.stateId > 5">
-<div class="row ml-2 mr-2 textdesc">
-	<p>The following is a list of all the players who are available as free agents. You can sign players, but can only
-		have a maximum of 15 players on your roster at any time. Any offers made will go against your slary cap as a cap hold.</p>
+<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.league?.stateId > 5">
+	<p class="color-7 ml-3 mr-3">The following is a list of all the players who are available as free agents. You can
+		sign players, but can only
+		have a maximum of 15 players on your roster at any time. Any offers made will go against your slary cap as a cap
+		hold.</p>
 </div>
 
-<div class="row ml-5 mr-5">
-	<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngFor="let co of this.contractOffers">
-		<div class="card-header" [style.background-color]="'rgb(' + primaryColor + ')'"><i class="fa fa-question-circle fa-2x"></i><span
-				class="header-card ml-3"><strong>Contract Offer</strong></span></div>
-		<div class="card-body" [style.background-color]="'rgb(' + secondaryColor + ')'">
-			<h5 class="card-text">{{ co.playerName }}</h5>
-			<p>{{ this.GetContractYears(co) }} years, ${{ co.yearOne + co.yearTwo + co.yearThree + co.yearFour + co.yearFive  | number }} total value</p>
-			<div style="text-align: right;">
-				<button type="button" class="btn btn-link text-left" (click)="openViewModal(viewoffer, co)">View</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="box">
+<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.league?.stateId > 5">
 	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
 		<p class="loading">Loading Free Agents...</p>
 	</ngx-spinner>
+</div>
 
-	<div class="row table-row text-center ml-2 mr-2" *ngIf="this.freeAgents?.length != 0">
+
+<div class="container">
+	<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.league?.stateId > 5">
+		<div class="ui styled fluid accordion">
+			<div class="title" (click)="toggleOffersView()"><i class="fa fa-caret-right mr-3"
+					*ngIf="this.faOffers == 0"></i><i class="fa fa-caret-down mr-3" *ngIf="this.faOffers == 1"></i>
+				Active
+				Offers</div>
+		</div>
+		<div class="content" *ngIf="this.faOffers == 1">
+			<div class="ui styled fluid accordion">
+				<div class="row justify-content-center mt-3 color-1 ml-1 mr-1" *ngIf="this.contractOffers.length == 0">
+					<p class="lead color-7">No offers have been made. Make an offer to a player below.</p>
+				</div>
+				<div class="row justify-content-center mt-3 ml-1 mr-1 color-1" *ngFor="let co of this.contractOffers">
+					<p class="lead color-7"><i class="fa fa-question-circle"></i> - {{ co.playerName }} - {{
+						this.GetContractYears(co) }} years, ${{ co.yearOne + co.yearTwo + co.yearThree + co.yearFour +
+						co.yearFive | number }} total value
+						<button type="button" class="btn btn-link text-left"
+							(click)="openViewModal(viewoffer, co)">View</button>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row justify-content-center mt-3 color-1" *ngIf="this.freeAgents.length == 0">
+		<p class="lead color-7 ">There are no players left in the free agent pool</p>
+	</div>
+	
+	<div class="row justify-content-center mt-3 color-1" *ngIf="this.league?.stateId < 6">
+		<p class="lead color-7">Free agents are not able to be signed at this time.</p>
+	</div>
+
+	<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.freeAgents?.length != 0">
 		<form id="filter_form" class="btn-group" [formGroup]="searchForm">
 			<input type="text" id="filter_keywords" name="filter_keywords" placeholder="Filter by name"
 				formControlName="filter" />
@@ -39,24 +54,26 @@
 			<input class="btn btn-default" type="reset" id="filter_reset" name="filter_reset" value="Reset"
 				(click)="resetFilter()" />
 		</form>
-		<div class="btn-group" role="group" aria-label="First group">
-			<span class="filtertitle mr-1 ml-2">Filter by Position:</span>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 1 }"
+	</div>
+	
+	<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.freeAgents?.length != 0">
+		<div class="btn-group">
+			<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 1 }"
 				(click)="filterByPos(1)">PG</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 2 }"
+			<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 2 }"
 				(click)="filterByPos(2)">SG</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 3 }"
+			<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 3 }"
 				(click)="filterByPos(3)">SF</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 4 }"
+			<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 4 }"
 				(click)="filterByPos(4)">PF</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 5 }"
+			<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 5 }"
 				(click)="filterByPos(5)">C</button>
-			<button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 0 }"
+			<button type="button" class="btn btn-default btn-sm" [ngClass]="{'fill-data-btn': this.positionFilter == 0 }"
 				(click)="filterByPos(0)">ALL</button>
 		</div>
 	</div>
-
-	<div class="row table-row text-center ml-2 mr-2">
+	
+	<div class="row justify-content-center mt-3 ml-3 mr-3 color-1" *ngIf="this.freeAgents?.length != 0">
 		<table *ngIf="this.freeAgents?.length != 0" class="table table-striped custab">
 			<thead>
 				<tr>
@@ -69,7 +86,7 @@
 			<tr *ngFor="let player of this.freeAgents">
 				<td>
 					{{ player.firstName }} {{ player.surname }} <span *ngIf="checkIfInjured(player.id) == 1"><i
-							class="fa fa-medkit fa-2x"></i></span>
+							class="fa fa-medkit"></i></span>
 				</td>
 				<td>
 					<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
@@ -89,14 +106,10 @@
 		</table>
 	</div>
 </div>
-<div *ngIf="this.freeAgents.length == 0">
-	There are no players left in the free agent pool
-</div>
-</section>
 
-<section *ngIf="this.league?.stateId < 6">
-	Free agents are not able to be signed at this time.
-</section>
+
+
+
 
 
 
@@ -104,17 +117,17 @@
 <!-- SIGN MODAL -->
 <ng-template #sign>
 	<div class="modal-header">
-		<h5 class="modal-title">Sign Player - {{ this.selectedPlayer?.firstName }} {{ this.selectedPlayer?.surname }}</h5>
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center">Sign Player - {{ this.selectedPlayer?.firstName }} {{ this.selectedPlayer?.surname }}</h6>
 		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
 	</div>
 	<form #draftlotteryForm>
 		<div class="modal-body">
 			<div class="row">
 				<div class="col">
-					<label>Number of Years</label>
+					<p class="color-7">Number of Years</p>
 				</div>
 				<div class="col">
-					<select [formControl]="selectControl"  [(ngModel)]="this.contractYears" (change)="yearsChanged()">
+					<select [formControl]="selectControl" [(ngModel)]="this.contractYears" (change)="yearsChanged()">
 						<option value="1">1</option>
 						<option value="2">2</option>
 						<option value="3">3</option>
@@ -128,67 +141,122 @@
 			</div>
 			<div class="row" *ngIf="this.contractYears >= 1">
 				<div class="col">
-					<label>Year 1 Amount</label>
+					<p class="color-7">Year 1 Amount</p>
 				</div>
 				<div class="col">
 					<input name="year1Amount" type="text" [(ngModel)]="year1Amount" required>
 				</div>
 				<div class="col ml-3">
-					<label>Guarenteed </label>
-					<input name="year1G" class="ml-2" [disabled]="true" type="checkbox" checked="guarenteed1.true">
+					<!-- <p class="color-7">Guarenteed </p>
+					<input name="year1G" class="ml-2" [disabled]="true" type="checkbox" checked="guarenteed1.true"> -->
+				</div>
+			</div>
+			<div class="row" *ngIf="this.contractYears >= 1">
+				<div class="col">
+					<p class="color-7">Guarenteed </p>
+				</div>
+				<div class="col">
+					<input class="ml-2" type="checkbox" name="year1G" checked="guarenteed1.true">
+				</div>
+				<div class="col">
+					
 				</div>
 			</div>
 			<div class="row" *ngIf="this.contractYears >= 2">
 				<div class="col">
-					<label>Year 2 Amount</label>
+					<p class="color-7">Year 2 Amount</p>
 				</div>
 				<div class="col">
 					<input name="year2Amount" type="text" [(ngModel)]="year2Amount" required>
 				</div>
 				<div class="col ml-3">
-					<label>Guarenteed </label>
-					<input class="ml-2" name="year2G" type="checkbox" checked="guarenteed2.true">
+					<!-- <p class="color-7">Guarenteed </p>
+					<input class="ml-2" name="year2G" type="checkbox" checked="guarenteed2.true"> -->
+				</div>
+			</div>
+			<div class="row" *ngIf="this.contractYears >= 2">
+				<div class="col">
+					<p class="color-7">Guarenteed </p>
+				</div>
+				<div class="col">
+					<input class="ml-2" type="checkbox" name="year2G" checked="guarenteed2.true">
+				</div>
+				<div class="col">
+					
 				</div>
 			</div>
 			<div class="row" *ngIf="this.contractYears >= 3">
 				<div class="col">
-					<label>Year 3 Amount</label>
+					<p class="color-7">Year 3 Amount</p>
 				</div>
 				<div class="col">
 					<input type="text" name="year3Amount" [(ngModel)]="year3Amount" required>
 				</div>
 				<div class="col ml-3">
-					<label>Guarenteed </label>
-					<input class="ml-2" name="year3G" type="checkbox" checked="guarenteed3.true">
+					<!-- <p class="color-7">Guarenteed </p>
+					<input class="ml-2" name="year3G" type="checkbox" checked="guarenteed3.true"> -->
 				</div>
 			</div>
-			<div class="row" *ngIf="this.contractYears >= 4" >
+			<div class="row" *ngIf="this.contractYears >= 3">
 				<div class="col">
-					<label>Year 4 Amount</label>
+					<p class="color-7">Guarenteed </p>
+				</div>
+				<div class="col">
+					<input class="ml-2" type="checkbox" name="year3G" checked="guarenteed3.true">
+				</div>
+				<div class="col">
+					
+				</div>
+			</div>
+			<div class="row" *ngIf="this.contractYears >= 4">
+				<div class="col">
+					<p class="color-7">Year 4 Amount</p>
 				</div>
 				<div class="col">
 					<input type="text" name="year4Amount" [(ngModel)]="year4Amount" required>
 				</div>
 				<div class="col ml-3">
-					<label>Guarenteed </label>
+					<!-- <p class="color-7">Guarenteed </p>
+					<input class="ml-2" type="checkbox" name="year4G" checked="guarenteed4.true"> -->
+				</div>
+			</div>
+			<div class="row" *ngIf="this.contractYears >= 4">
+				<div class="col">
+					<p class="color-7">Guarenteed </p>
+				</div>
+				<div class="col">
 					<input class="ml-2" type="checkbox" name="year4G" checked="guarenteed4.true">
+				</div>
+				<div class="col">
+					
 				</div>
 			</div>
 			<div class="row" *ngIf="this.contractYears >= 5">
 				<div class="col">
-					<label>Year 5 Amount</label>
+					<p class="color-7">Year 5 Amount</p>
 				</div>
 				<div class="col">
 					<input type="text" [(ngModel)]="year5Amount" name="year5Amount" required>
 				</div>
 				<div class="col ml-3">
-					<label>Guarenteed </label>
+					<!-- <p class="color-7">Guarenteed </p>
+					<input class="ml-2" type="checkbox" name="year5G" checked="guarenteed5.true"> -->
+				</div>
+			</div>
+			<div class="row" *ngIf="this.contractYears >= 5">
+				<div class="col">
+					<p class="color-7">Guarenteed </p>
+				</div>
+				<div class="col">
 					<input class="ml-2" type="checkbox" name="year5G" checked="guarenteed5.true">
+				</div>
+				<div class="col">
+					
 				</div>
 			</div>
 			<div class="row mt-2">
 				<div class="col">
-					<label>Option</label>
+					<p class="color-7">Option</p>
 				</div>
 				<div class="col">
 					<select [(ngModel)]="this.option">
@@ -198,7 +266,7 @@
 					</select>
 				</div>
 				<div class="col">
-					
+
 				</div>
 			</div>
 			<div class="row">
@@ -208,8 +276,8 @@
 		<div class="modal-footer form-group text-center">
 			<!-- <button type="submit" class="btn" (click)="minAmount()">Min</button> -->
 			<!-- <button type="submit" class="btn" (click)="maxAmount()">Max</button> -->
-			<button type="submit" class="btn btn-success" (click)="offerContract()">Make Offer</button>
-			<button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
+			<button type="submit" class="btn btn-success btn-sm" (click)="offerContract()">Make Offer</button>
+			<button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Cancel</button>
 		</div>
 	</form>
 </ng-template>
@@ -218,104 +286,104 @@
 <!-- VIEW OFFER MODAL -->
 <ng-template #viewoffer>
 	<div class="modal-header">
-		<h5 class="modal-title">Contract Offer - {{ this.viewedOffer.playerName }}</h5>
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center">Contract Offer - {{ this.viewedOffer.playerName }}</h6>
 		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
 	</div>
 	<div class="modal-body">
-		<div class="row">
+		<div class="row color-1">
 			<div class="col">
-				<label>Number of Years</label>
+				<p class="color-7">Number of Years</p>
 			</div>
 			<div class="col">
-				<label>{{ this.GetContractYears(this.viewedOffer) }} years</label>
+				<p class="color-7">{{ this.GetContractYears(this.viewedOffer) }} years</p>
 			</div>
 			<div class="col">
-
 			</div>
 		</div>
-		<div class="row">
+		<div class="row color-1">
 			<div class="col">
-				<label>Year 1 Amount</label>
+				<p class="color-7">Year 1 Amount</p>
 			</div>
 			<div class="col">
-				<label>${{ this.viewedOffer.yearOne | number }}</label>
+				<p class="color-7">${{ this.viewedOffer.yearOne | number }}</p>
 			</div>
 			<div class="col ml-3">
-				<label>Guarenteed </label>
-				<input name="year1G" class="ml-2" [disabled]="true" type="checkbox" checked="this.viewedOffer.guarenteed1 == 1">
+				<p class="color-7">Guarenteed </p>
+				<input name="year1G" class="ml-2" [disabled]="true" type="checkbox"
+					checked="this.viewedOffer.guarenteed1 == 1">
 			</div>
 		</div>
-		<div class="row" *ngIf="this.contractYears >= 2">
+		<div class="row color-1" *ngIf="this.contractYears >= 2">
 			<div class="col">
-				<label>Year 2 Amount</label>
+				<p class="color-7">Year 2 Amount</p>
 			</div>
 			<div class="col">
-				<label>${{ this.viewedOffer.yearTwo | number }}</label>
+				<p class="color-7">${{ this.viewedOffer.yearTwo | number }}</p>
 			</div>
 			<div class="col ml-3">
-				<label>Guarenteed </label>
+				<p class="color-7">Guarenteed </p>
 				<input class="ml-2" name="year2G" type="checkbox" checked="this.viewedOffer.guarenteed2 == 1">
 			</div>
 		</div>
-		<div class="row" *ngIf="this.contractYears >= 3">
+		<div class="row color-1" *ngIf="this.contractYears >= 3">
 			<div class="col">
-				<label>Year 3 Amount</label>
+				<p class="color-7">Year 3 Amount</p>
 			</div>
 			<div class="col">
-				<label>${{ this.viewedOffer.yearThree | number }}</label>
+				<p class="color-7">${{ this.viewedOffer.yearThree | number }}</p>
 			</div>
 			<div class="col ml-3">
-				<label>Guarenteed </label>
+				<p class="color-7">Guarenteed </p>
 				<input class="ml-2" name="year3G" type="checkbox" checked="this.viewedOffer.guarenteed3 == 1">
 			</div>
 		</div>
-		<div class="row" *ngIf="this.contractYears >= 4" >
+		<div class="row color-1" *ngIf="this.contractYears >= 4">
 			<div class="col">
 				<label>Year 4 Amount</label>
 			</div>
 			<div class="col">
-				<label>${{ this.viewedOffer.yearFour | number }}</label>
+				<p class="color-7">${{ this.viewedOffer.yearFour | number }}</p>
 			</div>
 			<div class="col ml-3">
 				<label>Guarenteed </label>
 				<input class="ml-2" type="checkbox" name="year4G" checked="this.viewedOffer.guarenteed4 == 1">
 			</div>
 		</div>
-		<div class="row" *ngIf="this.contractYears >= 5">
+		<div class="row color-1" *ngIf="this.contractYears >= 5">
 			<div class="col">
-				<label>Year 5 Amount</label>
+				<p class="color-7">Year 5 Amount</p>
 			</div>
 			<div class="col">
-				<label>${{ this.viewedOffer.yearFive | number }}</label>
+				<p class="color-7">${{ this.viewedOffer.yearFive | number }}</p>
 			</div>
 			<div class="col ml-3">
-				<label>Guarenteed </label>
+				<p class="color-7">Guarenteed </p>
 				<input class="ml-2" type="checkbox" name="year5G" checked="this.viewedOffer.guarenteed5 == 1">
 			</div>
 		</div>
-		<div class="row mt-2">
+		<div class="row color-1 mt-2">
 			<div class="col">
-				<label>Option </label>
+				<p class="color-7">Option </p>
 			</div>
 			<div class="col" *ngIf="this.viewedOffer.playerOption == 1">
-				<label>Player</label>
+				<p class="color-7">Player</p>
 			</div>
 			<div class="col" *ngIf="this.viewedOffer.teamOption == 1">
-				<label>Team</label>
+				<p class="color-7">Team</p>
 			</div>
 			<div class="col" *ngIf="this.viewedOffer.playerOption == 0 && this.viewedOffer.teamOption == 0">
-				<label>None</label>
+				<p class="color-7">None</p>
 			</div>
 			<div class="col">
-				
+
 			</div>
 		</div>
-		<div class="row">
+		<div class="row color-1">
 			<p>Note: Team or player option will guarentee all other years of contract</p>
 		</div>
 	</div>
 	<div class="modal-footer form-group text-center">
-		<button type="submit" class="btn btn-danger" (click)="cancelContract()">Cancel Offer</button>
-		<button type="button" class="btn btn-success" (click)="modalRef.hide()">Close</button>
+		<button type="submit" class="btn btn-danger btn-sm" (click)="cancelContract()">Cancel Offer</button>
+		<button type="button" class="btn btn-success btn-sm" (click)="modalRef.hide()">Close</button>
 	</div>
 </ng-template>

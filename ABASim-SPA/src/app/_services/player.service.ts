@@ -36,7 +36,9 @@ export class PlayerService {
   }
 
   getAllPlayers(): Observable<Player[]> {
-    return this.http.get<Player[]>(this.baseUrl + 'getallplayers');
+    let players = this.http.get<Player[]>(this.baseUrl + 'getallplayers');
+    console.log(players);
+    return players
   }
 
   filterPlayers(value: string): Observable<Player[]> {
