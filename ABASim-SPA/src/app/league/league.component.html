@@ -1,111 +1,82 @@
-<div class="jumbotron">
-	<h3 class="display">LEAGUE</h3>
-	<p>Season #{{ this.league?.year }}</p>
-	<span class="badge badge-danger"
-		*ngIf="this.league?.stateId == 1 || this.league?.stateId == 14">{{ this.league?.state }}</span>
-	<span class="badge badge-info"
-		*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
-	<span class="badge badge-success"
-		*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
-	<span class="badge badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
-	<span class="badge badge-warning"
-		*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
-	<span class="badge badge-secondary" *ngIf="this.league?.stateId == 10">{{ this.league?.state }}</span>
-	<span
-		*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14">
-		- Day #{{ this.league?.day }}</span>
-</div>
-
-
-<div class="box">
+<section class="py-sm-0 text-center" id="header-12">
+	<br />
+	<br />
+	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
+	</div>
+	<!--/.background-holder-->
 	<div class="container">
-		<div class="row cards-row">
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-list-ol fa-2x"></i><span
-						class="header-card ml-3"><strong>STANDINGS</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View the league standings for league, conference or division.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="goToStandings()">Standings</button>
-					</div>
-				</div>
-			</div>
+		<div class="row h-full align-items-center">
+			<div class="col my-6">
+				<h3 class="fs-lg-7 fw-600 color-white">LEAGUE</h3>
+				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} - 
+				<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state }}</span>
+				<span class="badge badge-pill badge-info" *ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{	this.league?.state }}</span>
+				<span class="badge badge-pill badge-success" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
+				<span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
+				<span class="badge badge-pill badge-warning" *ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
+				<span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{ this.league?.state	}}</span>
+				<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
+				- Day #{{ this.league?.day }}</h6>
 
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 6">
-				<div class="card-header"><i class="fa fa-signal fa-2x"></i><span
-						class="header-card ml-3"><strong>STATISTICS</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View the statistics of players and teams.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="goToStats()">Go to
-							Statistics</button>
-					</div>
-				</div>
-			</div>
 
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 5">
-				<div class="card-header"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>SCHEDULE</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View the league schedule, upcoming and past games.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="goToSchedule()">Schedule</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 2">
-				<div class="card-header"><i class="fa fa-retweet fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>TRANSACTIONS</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View all of the league's transactions - signings, trades and delistings.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="goToTransactions()">Go to
-							Transactions</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 2">
-				<div class="card-header"><i class="fa fa-medkit fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>INJURIES</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View all of the league's current injuries.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="goToInjuries()">Go to
-							Injuries</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId > 6">
-				<div class="card-header"><i class="fa fa-trophy fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>Award Races</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View the current award races.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="goToAwards()">Go to
-							Award Races</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.year > 1">
-				<div class="card-header"><i class="fa fa-suitcase fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>Retired Players</strong></span></div>
-				<div class="card-body">
-					<p class="card-text">View players who have retired from the league.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="goToRetiredPlayers()">View Retirees</button>
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+							<div class="item px-xl-5">
+								<p class="lead color-8">View details about the league, including Standings, Stats, Schedules, Results, Transaction, Injures and Award races.</p>
+							</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<!--/.row-->
 	</div>
-</div>
+	<!--/.container-->
+</section>
 
-<div class="box">
+<div class="tabs">
+	<div class="nav-bar nav-bar-center">
+		<div class="nav-bar-item color-8" [ngClass]="this.eventsSelected == 1 ? 'active' : ''" (click)="this.eventsSelection()"><span class="fa fa-calendar fs-2"></span><br>Today's Events</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.standingsSelected == 1 ? 'active' : ''" (click)="this.standingsSelection()"><span class="fa fa-list-ol fs-2"></span><br>Standings</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.statsSelected == 1 ? 'active' : ''" (click)="this.statisticsSelection()"><span class="fa fa-signal fs-2"></span><br>Statistics</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.scheduleSelected == 1 ? 'active' : ''" (click)="this.scheduleSelection()"><span class="fa fa-calendar fs-2"></span><br>Schedule</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.transactionsSelected == 1 ? 'active' : ''" (click)="this.transactionsSelection()"><span class="fa fa-retweet fs-2"></span><br>Transactions</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.injuresSelected == 1 ? 'active' : ''" (click)="this.injuriesSelection()"><span class="fa fa-medkit fs-2"></span><br>Injuries</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.awardsSelected == 1 ? 'active' : ''" (click)="this.awardsSelection()"><span class="fa fa-trophy fs-2"></span><br>Award Races</div>
+	</div>
+	<div class="tab-contents">
+		<div class="tab-content active" *ngIf="this.eventsSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Today's Events</h6>
+			<!-- Put events in here -->
+		</div>
+		<div class="tab-content active" *ngIf="this.standingsSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Standings</h6>
+			<app-standings></app-standings>
+		</div>
+		<div class="tab-content active" *ngIf="this.statsSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Statistics</h6>
+			<app-stats></app-stats>
+		</div>
+		<div class="tab-content active" *ngIf="this.scheduleSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Schedule</h6>
+			<app-schedule></app-schedule>
+		</div>
+		<div class="tab-content active" *ngIf="this.transactionsSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">League Transactions</h6>
+			<app-transactions></app-transactions>
+		</div>
+		<div class="tab-content active" *ngIf="this.injuresSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Injuries around the league</h6>
+			<app-injuries></app-injuries>
+		</div>
+		<div class="tab-content active" *ngIf="this.awardsSelected == 1">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Award Races</h6>
+			<app-awards></app-awards>
+		</div>
+	</div>
+
+
+
+<!-- <div class="box">
 	<div class="row event-row" *ngIf="this.league?.stateId > 5">
 		<div class="col-lg-6 events" *ngIf="this.league?.day != 0">
 			<h4>TODAY'S RESULTS</h4>
@@ -191,4 +162,4 @@
 			</table>
 		</div>
 	</div>
-</div>
+</div> -->

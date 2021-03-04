@@ -24,6 +24,14 @@ export class LeagueComponent implements OnInit {
   todaysGames: GameDisplayCurrent[] = [];
   noRun = 0;
 
+  standingsSelected = 0;
+  statsSelected = 0;
+  scheduleSelected = 0;
+  eventsSelected = 0;
+  transactionsSelected = 0;
+  injuresSelected = 0;
+  awardsSelected = 0;
+
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
               private authService: AuthService, private adminService: AdminService, private gameEngine: GameEngineService,
               private transferService: TransferService, private spinner: NgxSpinnerService) { }
@@ -41,6 +49,76 @@ export class LeagueComponent implements OnInit {
       this.getTodaysEvents();
       this.getUpcomingEvents();
     });
+  }
+
+  eventsSelection() {
+    this.transactionsSelected = 0;
+    this.awardsSelected = 0;
+    this.scheduleSelected = 0;
+    this.statsSelected = 0;
+    this.standingsSelected = 0;
+    this.eventsSelected = 1;
+    this.injuresSelected = 0;
+  }
+
+  standingsSelection() {
+    this.transactionsSelected = 0;
+    this.awardsSelected = 0;
+    this.scheduleSelected = 0;
+    this.statsSelected = 0;
+    this.standingsSelected = 1;
+    this.eventsSelected = 0;
+    this.injuresSelected = 0;
+  }
+
+  statisticsSelection() {
+    this.transactionsSelected = 0;
+    this.awardsSelected = 0;
+    this.scheduleSelected = 0;
+    this.statsSelected = 1;
+    this.standingsSelected = 0;
+    this.eventsSelected = 0;
+    this.injuresSelected = 0;
+  }
+
+  scheduleSelection() {
+    this.transactionsSelected = 0;
+    this.awardsSelected = 0;
+    this.scheduleSelected = 1;
+    this.statsSelected = 0;
+    this.standingsSelected = 0;
+    this.eventsSelected = 0;
+    this.injuresSelected = 0;
+  }
+
+  transactionsSelection() {
+    this.transactionsSelected = 1;
+    this.awardsSelected = 0;
+    this.scheduleSelected = 0;
+    this.statsSelected = 0;
+    this.standingsSelected = 0;
+    this.eventsSelected = 0;
+    this.injuresSelected = 0;
+  }
+
+  injuriesSelection() {
+    this.transactionsSelected = 0;
+    this.awardsSelected = 0;
+    this.scheduleSelected = 0;
+    this.statsSelected = 0;
+    this.standingsSelected = 0;
+    this.eventsSelected = 0;
+    this.injuresSelected = 1;
+  }
+
+  awardsSelection() {
+    this.transactionsSelected = 0;
+    this.awardsSelected = 1;
+    this.scheduleSelected = 0;
+    this.statsSelected = 0;
+    this.standingsSelected = 0;
+    this.eventsSelected = 0;
+    this.injuresSelected = 0;
   }
 
   getTodaysEvents() {
