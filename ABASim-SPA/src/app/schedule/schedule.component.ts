@@ -6,6 +6,7 @@ import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Schedule } from '../_models/schedule';
 import { TransferService } from '../_services/transfer.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-schedule',
@@ -19,9 +20,10 @@ export class ScheduleComponent implements OnInit {
   gameDayViewing = 0;
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
-              private authService: AuthService, private transferService: TransferService) { }
+              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
+    this.spinner.show();
     this.leagueService.getLeague().subscribe(result => {
       this.league = result;
     }, error => {
@@ -40,6 +42,8 @@ export class ScheduleComponent implements OnInit {
       this.schedules = result;
     }, error => {
       this.alertify.error('Error getting schedule games');
+    }, () => {
+      this.spinner.hide();
     });
   }
 
