@@ -13,10 +13,10 @@
 }
 
 table { 
-    border-spacing: 10px;
+    border-spacing: 5px;
     /* border-collapse: separate; */
-    margin-left: 10px;
-    margin-right: 20px;
+    /* margin-left: 10px;
+    margin-right: 10px; */
 }
 
 .tablebutton {

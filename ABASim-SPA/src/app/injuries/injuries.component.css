@@ -14,12 +14,6 @@
 
 table { 
     border-spacing: 10px;
-    /* margin-left: 10px;
-    margin-right: 20px; */
-    /* margin: 0 auto; */
-    /* display: block;
-    overflow-x: auto;
-    white-space: pre-wrap; */
     table-layout: fixed;
     position: relative;
     left: 40%;

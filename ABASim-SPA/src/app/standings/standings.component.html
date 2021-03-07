@@ -1,283 +1,292 @@
-<section class="dashboard-area">
-  <h3 class="display">Standings</h3>
-</section>
-
 <div class="box">
   <ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
-		<p class="loading">Loading Standings...</p>
-	</ngx-spinner>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-          <ul class="nav nav-tabs">
-              <li class="nav-item">
-                  <a class="nav-link" [routerLink]="" [ngClass]="this.statusConference ? 'active' : ''" (click)="conferenceClick()">Conference</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" [routerLink]="" [ngClass]="this.statusDivision ? 'active' : ''" (click)="divisionClick()">Division</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link" [routerLink]="" [ngClass]="this.statusLeague ? 'active' : ''" (click)="leagueClick()">League</a>
-              </li>
-          </ul>
-          <br />
-          <div class="tab-content ml-1" id="myTabContent">
-            <h4 *ngIf="this.statusConference">Eastern Conference</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusConference">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr *ngFor="let stand of this.eastStandings; let i = index" [ngClass]="i < 8 ? 'table-primary' : 'table-secondary'">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <p class="loading">Loading Standings...</p>
+  </ngx-spinner>
 
-            <h4 *ngIf="this.statusConference">Western Conference</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusConference">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr *ngFor="let stand of this.westStandings; let i = index" [ngClass]="i < 8 ? 'table-primary' : 'table-secondary'">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                        
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <h4 *ngIf="this.statusDivision">Atlantic Division</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusDivision">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.atlanticStandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 *ngIf="this.statusDivision">Central Division</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusDivision">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.centralstandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 *ngIf="this.statusDivision">South East Division</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusDivision">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.southeastStandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 *ngIf="this.statusDivision">North West Division</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusDivision">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.northwestStandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 *ngIf="this.statusDivision">Pacific Division</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusDivision">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.pacificStandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h4 *ngIf="this.statusDivision">South West Division</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusDivision">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.southwestStandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <h4 *ngIf="this.statusLeague">League Standings</h4>
-            <table class="table table-hover roster-table" *ngIf="this.statusLeague">
-                <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Wins</th>
-                      <th>Losses</th>
-                      <th>Win %</th>
-                    </tr>
-                  </thead>
-                <tbody>
-                    <tr class="table-secondary" *ngFor="let stand of this.allStandings">
-                        <td>
-                          <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
-                        </td>
-                        <td>
-                          {{ stand.wins }}
-                        </td>
-                        <td>
-                          {{ stand.losses }}
-                        </td>
-                        <td>
-                          {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-          </div>
-      </div>
+  <div class="row justify-content-center mt-2 mb-2 color-1">
+    <div class="col-12 justify-content-center">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="" [ngClass]="this.statusConference ? 'active' : ''"
+            (click)="conferenceClick()">Conference</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="" [ngClass]="this.statusDivision ? 'active' : ''"
+            (click)="divisionClick()">Division</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="" [ngClass]="this.statusLeague ? 'active' : ''"
+            (click)="leagueClick()">League</a>
+        </li>
+      </ul>
     </div>
+  </div>
+
+  <div class="row justify-content-center mt-2 mb-2 ml-2 mr-2 color-1">
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusConference">Eastern
+      Conference</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusConference">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stand of this.eastStandings; let i = index"
+          [ngClass]="i < 8 ? 'table-primary' : 'table-secondary'">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusConference">Western
+      Conference</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusConference">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stand of this.westStandings; let i = index"
+          [ngClass]="i < 8 ? 'table-primary' : 'table-secondary'">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusDivision">Atlantic
+      Division</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusDivision">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.atlanticStandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusDivision">Central
+      Division</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusDivision">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.centralstandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusDivision">South East
+      Division</h6>
+    <table class="table table-hover roster-table mr-2 ml-2" *ngIf="this.statusDivision">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.southeastStandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusDivision">North West
+      Division</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusDivision">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.northwestStandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusDivision">Pacific
+      Division</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusDivision">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.pacificStandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusDivision">South West
+      Division</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusDivision">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.southwestStandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <h6 class="fw-600 fs-0 ls color-10 mt-3 color-8" style="text-align:center" *ngIf="this.statusLeague">League
+      Standings</h6>
+    <table class="table table-hover roster-table ml-2 mr-2" *ngIf="this.statusLeague">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Win %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary" *ngFor="let stand of this.allStandings">
+          <td>
+            <button (click)="viewTeam(stand.team)">{{ stand.team }}</button>
+          </td>
+          <td>
+            {{ stand.wins }}
+          </td>
+          <td>
+            {{ stand.losses }}
+          </td>
+          <td>
+            {{ this.getWinPercantage(stand.wins, stand.gamesPlayed) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 </div>
