@@ -51,15 +51,15 @@ export class LeagueComponent implements OnInit {
     });
   }
 
-  eventsSelection() {
-    this.transactionsSelected = 0;
-    this.awardsSelected = 0;
-    this.scheduleSelected = 0;
-    this.statsSelected = 0;
-    this.standingsSelected = 0;
-    this.eventsSelected = 1;
-    this.injuresSelected = 0;
-  }
+  // eventsSelection() {
+  //   this.transactionsSelected = 0;
+  //   this.awardsSelected = 0;
+  //   this.scheduleSelected = 0;
+  //   this.statsSelected = 0;
+  //   this.standingsSelected = 0;
+  //   this.eventsSelected = 1;
+  //   this.injuresSelected = 0;
+  // }
 
   standingsSelection() {
     this.transactionsSelected = 0;
@@ -67,7 +67,7 @@ export class LeagueComponent implements OnInit {
     this.scheduleSelected = 0;
     this.statsSelected = 0;
     this.standingsSelected = 1;
-    this.eventsSelected = 0;
+    // this.eventsSelected = 0;
     this.injuresSelected = 0;
   }
 
@@ -77,7 +77,7 @@ export class LeagueComponent implements OnInit {
     this.scheduleSelected = 0;
     this.statsSelected = 1;
     this.standingsSelected = 0;
-    this.eventsSelected = 0;
+    // this.eventsSelected = 0;
     this.injuresSelected = 0;
   }
 
@@ -87,7 +87,7 @@ export class LeagueComponent implements OnInit {
     this.scheduleSelected = 1;
     this.statsSelected = 0;
     this.standingsSelected = 0;
-    this.eventsSelected = 0;
+    // this.eventsSelected = 0;
     this.injuresSelected = 0;
   }
 
@@ -97,7 +97,7 @@ export class LeagueComponent implements OnInit {
     this.scheduleSelected = 0;
     this.statsSelected = 0;
     this.standingsSelected = 0;
-    this.eventsSelected = 0;
+    // this.eventsSelected = 0;
     this.injuresSelected = 0;
   }
 
@@ -107,7 +107,7 @@ export class LeagueComponent implements OnInit {
     this.scheduleSelected = 0;
     this.statsSelected = 0;
     this.standingsSelected = 0;
-    this.eventsSelected = 0;
+    // this.eventsSelected = 0;
     this.injuresSelected = 1;
   }
 
@@ -117,7 +117,7 @@ export class LeagueComponent implements OnInit {
     this.scheduleSelected = 0;
     this.statsSelected = 0;
     this.standingsSelected = 0;
-    this.eventsSelected = 0;
+    // this.eventsSelected = 0;
     this.injuresSelected = 0;
   }
 

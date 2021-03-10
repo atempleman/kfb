@@ -520,3 +520,12 @@
     INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (576,278,34,534,104,50);
     INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (577,145,145,613,16,81);
     INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (578,92,160,687,46,15);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (272,455,0,455,45,45);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (192,217,85,597,62,39);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (106,131,74,727,32,36);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (66,213,52,596,88,51);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (211,152,151,606,76,15);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (412,36,36,892,18,18);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (419,107,21,799,30,43);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (409,288,0,663,37,12);
+    INSERT INTO PlayerTendancies (PlayerId, TwoPointTendancy, ThreePointTendnacy, PassTendancy, FoulTendancy, TurnoverTendancy) VALUES (335,114,136,671,43,36);

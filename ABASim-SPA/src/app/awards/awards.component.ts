@@ -26,6 +26,7 @@ export class AwardsComponent implements OnInit {
               private transferService: TransferService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
+    this.spinner.show();
     this.leagueService.getLeague().subscribe(result => {
       this.league = result;
     }, error => {
@@ -59,6 +60,8 @@ export class AwardsComponent implements OnInit {
       this.firstTeam = this.allnbateams.splice(0, 5);
       this.secondTeam = this.allnbateams.splice(0, 5);
       this.thirdTeam = this.allnbateams.splice(0, 5);
+
+      this.spinner.hide();
     });
   }
 

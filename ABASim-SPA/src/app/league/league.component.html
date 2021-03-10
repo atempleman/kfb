@@ -8,22 +8,33 @@
 		<div class="row h-full align-items-center">
 			<div class="col my-6">
 				<h3 class="fs-lg-7 fw-600 color-white">LEAGUE</h3>
-				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} - 
-				<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state }}</span>
-				<span class="badge badge-pill badge-info" *ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{	this.league?.state }}</span>
-				<span class="badge badge-pill badge-success" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
-				<span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
-				<span class="badge badge-pill badge-warning" *ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
-				<span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{ this.league?.state	}}</span>
-				<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
-				- Day #{{ this.league?.day }}</h6>
+				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} -
+					<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state
+						}}</span>
+					<span class="badge badge-pill badge-info"
+						*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+					<span class="badge badge-pill badge-success"
+						*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state
+						}}</span>
+					<span class="badge badge-pill badge-warning"
+						*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-danger"
+						*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
+					- Day #{{ this.league?.day }}
+				</h6>
 
 
 				<div class="row justify-content-center">
 					<div class="col-lg-8">
-							<div class="item px-xl-5">
-								<p class="lead color-8">View details about the league, including Standings, Stats, Schedules, Results, Transaction, Injures and Award races.</p>
-							</div>
+						<div class="item px-xl-5">
+							<p class="lead color-8">View details about the league, including Standings, Stats,
+								Schedules, Results, Transaction, Injures and Award races.</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -35,131 +46,144 @@
 
 <div class="tabs">
 	<div class="nav-bar nav-bar-center">
-		<div class="nav-bar-item color-8" [ngClass]="this.eventsSelected == 1 ? 'active' : ''" (click)="this.eventsSelection()"><span class="fa fa-calendar fs-2"></span><br>Today's Events</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.standingsSelected == 1 ? 'active' : ''" (click)="this.standingsSelection()"><span class="fa fa-list-ol fs-2"></span><br>Standings</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.statsSelected == 1 ? 'active' : ''" (click)="this.statisticsSelection()"><span class="fa fa-signal fs-2"></span><br>Statistics</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.scheduleSelected == 1 ? 'active' : ''" (click)="this.scheduleSelection()"><span class="fa fa-calendar fs-2"></span><br>Schedule</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.transactionsSelected == 1 ? 'active' : ''" (click)="this.transactionsSelection()"><span class="fa fa-retweet fs-2"></span><br>Transactions</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.injuresSelected == 1 ? 'active' : ''" (click)="this.injuriesSelection()"><span class="fa fa-medkit fs-2"></span><br>Injuries</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.awardsSelected == 1 ? 'active' : ''" (click)="this.awardsSelection()"><span class="fa fa-trophy fs-2"></span><br>Award Races</div>
+		<!-- <div class="nav-bar-item color-8" [ngClass]="this.eventsSelected == 1 ? 'active' : ''"
+			(click)="this.eventsSelection()"><span class="fa fa-calendar fs-2"></span><br>Today's Events</div> -->
+		<div class="nav-bar-item color-8" [ngClass]="this.standingsSelected == 1 ? 'active' : ''"
+			(click)="this.standingsSelection()"><span class="fa fa-list-ol fs-2"></span><br>Standings</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.statsSelected == 1 ? 'active' : ''"
+			(click)="this.statisticsSelection()"><span class="fa fa-signal fs-2"></span><br>Statistics</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.scheduleSelected == 1 ? 'active' : ''"
+			(click)="this.scheduleSelection()"><span class="fa fa-calendar fs-2"></span><br>Schedule</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.transactionsSelected == 1 ? 'active' : ''"
+			(click)="this.transactionsSelection()"><span class="fa fa-retweet fs-2"></span><br>Transactions</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.injuresSelected == 1 ? 'active' : ''"
+			(click)="this.injuriesSelection()"><span class="fa fa-medkit fs-2"></span><br>Injuries</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.awardsSelected == 1 ? 'active' : ''"
+			(click)="this.awardsSelection()"><span class="fa fa-trophy fs-2"></span><br>Award Races</div>
 	</div>
-	<div class="tab-contents">
-		<div class="tab-content active" *ngIf="this.eventsSelected == 1">
+	<!-- <div class="tab-contents" *ngIf="this.eventsSelected == 1">
+		<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
 			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Today's Events</h6>
-			<!-- Put events in here -->
 		</div>
-		<div class="tab-content active" *ngIf="this.standingsSelected == 1">
-			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Standings</h6>
-			<app-standings></app-standings>
+		<div class="row justify-content-center mt-3 ml-4 mr-4 color-1" *ngIf="this.league?.stateId > 5">
+			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8">TODAY'S RESULTS</h6>
+			<div class="row justify-content-center mt-3 ml-4 mr-4 color-1" *ngIf="this.league?.stateId > 5">
+				<p class="text-success" *ngIf="this.league?.stateId == 5">Beginning of the Preseason</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 6">Preason Day #{{ this.league?.day }}</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 7">Regular Season Day #{{ this.league?.day }}
+					</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 8">Playoffs - Round 1 Day #{{
+						this.league?.day }}
+					</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 9">Playoffs - Conference Semi Finals Day
+						#{{ this.league?.day }}</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 10">Playoffs - Conference Finals
+						#{{ this.league?.day }}</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 11">Playoffs - ABA Finals #{{
+						this.league?.day }}
+					</p>
+					<p class="text-success" *ngIf="this.league?.stateId == 15">Free Agency #{{ this.league?.day }}</p>
+					<table class="table table-hover events-table" *ngIf="this.league?.stateId == 7">
+						<tbody>
+							<tr class="table-secondary" *ngFor="let game of this.todaysGames">
+								<td>
+									{{ game.awayTeamName }} @ {{ game.homeTeamName }}
+									<button
+										*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 7 && this.noRun == 0"
+										type="button" class="btn btn-link" (click)="runGameSeason(game)"><i
+											class="fa fa-play-circle" aria-hidden="true"></i></button>
+									<button
+										*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 6 && this.noRun == 0"
+										type="button" class="btn btn-link" (click)="runGame(game)"><i
+											class="fa fa-play-circle" aria-hidden="true"></i></button>
+									<button
+										*ngIf="this.isAdmin == 1 && game.completed == 0 && (this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 10 || this.league?.stateId == 11) && this.noRun == 0"
+										type="button" class="btn btn-link" (click)="runGamePlayoffs(game)"><i
+											class="fa fa-play-circle" aria-hidden="true"></i></button>
+									<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
+										class="btn btn-link" (click)="watchGame(game.id, 1)"><i class="fa fa-eye"
+											aria-hidden="true"></i></button>
+									<button
+										*ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
+										type="button" class="btn btn-link" (click)="watchGame(game.id, 2)"><i
+											class="fa fa-eye" aria-hidden="true"></i></button>
+									<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
+										class="btn btn-link" (click)="watchGame(game.id, 0)"><i class="fa fa-eye"
+											aria-hidden="true"></i></button>
+									&nbsp;
+									<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
+										class="btn btn-link" (click)="fullGame(game.id, 1)"><i class="fa fa-list-ul"
+											aria-hidden="true"></i></button>
+									<button
+										*ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
+										type="button" class="btn btn-link" (click)="fullGame(game.id, 2)"><i
+											class="fa fa-list-ul" aria-hidden="true"></i></button>
+									<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
+										class="btn btn-link" (click)="fullGame(game.id, 0)"><i class="fa fa-list-ul"
+											aria-hidden="true"></i></button>
+									&nbsp;
+									<button *ngIf="game.completed == 1" type="button" class="btn btn-link"
+										(click)="viewBoxScore(game.id)"><i class="fa fa-list-alt"
+											aria-hidden="true"></i></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+			</div>
 		</div>
-		<div class="tab-content active" *ngIf="this.statsSelected == 1">
-			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Statistics</h6>
-			<app-stats></app-stats>
-		</div>
-		<div class="tab-content active" *ngIf="this.scheduleSelected == 1">
-			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Schedule</h6>
-			<app-schedule></app-schedule>
-		</div>
-		<div class="tab-content active" *ngIf="this.transactionsSelected == 1">
-			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">League Transactions</h6>
-			<app-transactions></app-transactions>
-		</div>
-		<div class="tab-content active" *ngIf="this.injuresSelected == 1">
-			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Injuries around the league</h6>
-			<app-injuries></app-injuries>
-		</div>
-		<div class="tab-content active" *ngIf="this.awardsSelected == 1">
-			<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Award Races</h6>
-			<app-awards></app-awards>
-		</div>
+	</div> -->
+	
+	<!-- <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8">UPCOMING EVENTS</h6>
+				<p class="text-success" *ngIf="this.league?.stateId == 6">Preason Day #{{ this.league?.day + 1 }}
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 7">Regular Season Day #{{ this.league?.day +
+					1 }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 8">Playoffs - Round 1 Day #{{
+					this.league?.day + 1 }}
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 9">Playoffs - Conference Semi Finals Day
+					#{{ this.league?.day + 1 }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 10">Playoffs - Conference Finals
+					#{{ this.league?.day + 1 }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 11">Playoffs - ABA Finals #{{
+					this.league?.day + 1 }}
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 15">Free Agency #{{ this.league?.day + 1 }}
+				</p>
+				<div class="row justify-content-center mt-3 color-1">
+					<table class="table table-hover events-table" *ngIf="this.league?.stateId == 7">
+						<tbody>
+							<tr class="table-secondary" *ngFor="let game of this.upcomingGames">
+								<td>{{ game.awayTeamName }} @ {{ game.homeTeamName }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div> -->
+	<!-- </div> -->
+	<div class="tab-content active" *ngIf="this.standingsSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Standings</h6>
+		<app-standings></app-standings>
 	</div>
-
-
-
-<!-- <div class="box">
-	<div class="row event-row" *ngIf="this.league?.stateId > 5">
-		<div class="col-lg-6 events" *ngIf="this.league?.day != 0">
-			<h4>TODAY'S RESULTS</h4>
-			<p class="text-success" *ngIf="this.league?.stateId == 5">Beginning of the Preseason</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 6">Preason Day #{{ this.league?.day }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 7">Regular Season Day #{{ this.league?.day }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 8">Playoffs - Round 1 Day #{{ this.league?.day }}
-			</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 9">Playoffs - Conference Semi Finals Day
-				#{{ this.league?.day }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 10">Playoffs - Conference Finals
-				#{{ this.league?.day }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 11">Playoffs - ABA Finals #{{ this.league?.day }}
-			</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 15">Free Agency #{{ this.league?.day }}</p>
-
-			<table class="table table-hover events-table" *ngIf="this.league?.stateId == 7">
-				<tbody>
-					<tr class="table-secondary" *ngFor="let game of this.todaysGames">
-						<td>
-							{{ game.awayTeamName }} @ {{ game.homeTeamName }}
-							<button
-								*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 7 && this.noRun == 0"
-								type="button" class="btn btn-link" (click)="runGameSeason(game)"><i
-									class="fa fa-play-circle" aria-hidden="true"></i></button>
-							<button
-								*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 6 && this.noRun == 0"
-								type="button" class="btn btn-link" (click)="runGame(game)"><i class="fa fa-play-circle"
-									aria-hidden="true"></i></button>
-							<button
-								*ngIf="this.isAdmin == 1 && game.completed == 0 && (this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 10 || this.league?.stateId == 11) && this.noRun == 0"
-								type="button" class="btn btn-link" (click)="runGamePlayoffs(game)"><i
-									class="fa fa-play-circle" aria-hidden="true"></i></button>
-							<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
-								class="btn btn-link" (click)="watchGame(game.id, 1)"><i class="fa fa-eye"
-									aria-hidden="true"></i></button>
-							<button *ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
-								type="button" class="btn btn-link" (click)="watchGame(game.id, 2)"><i class="fa fa-eye"
-									aria-hidden="true"></i></button>
-							<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
-								class="btn btn-link" (click)="watchGame(game.id, 0)"><i class="fa fa-eye"
-									aria-hidden="true"></i></button>
-							&nbsp;
-							<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
-								class="btn btn-link" (click)="fullGame(game.id, 1)"><i class="fa fa-list-ul"
-									aria-hidden="true"></i></button>
-							<button *ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
-								type="button" class="btn btn-link" (click)="fullGame(game.id, 2)"><i class="fa fa-list-ul"
-									aria-hidden="true"></i></button>
-							<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
-								class="btn btn-link" (click)="fullGame(game.id, 0)"><i class="fa fa-list-ul"
-									aria-hidden="true"></i></button>
-							&nbsp;
-							<button *ngIf="game.completed == 1" type="button" class="btn btn-link"
-								(click)="viewBoxScore(game.id)"><i class="fa fa-list-alt" aria-hidden="true"></i></button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="col-lg-6 events upcoming" *ngIf="this.league?.stateId > 5">
-			<h4>UPCOMING EVENTS</h4>
-			<p class="text-success" *ngIf="this.league?.stateId == 6">Preason Day #{{ this.league?.day + 1 }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 7">Regular Season Day #{{ this.league?.day + 1 }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 8">Playoffs - Round 1 Day #{{ this.league?.day + 1 }}
-			</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 9">Playoffs - Conference Semi Finals Day
-				#{{ this.league?.day + 1 }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 10">Playoffs - Conference Finals
-				#{{ this.league?.day + 1 }}</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 11">Playoffs - ABA Finals #{{ this.league?.day + 1 }}
-			</p>
-			<p class="text-success" *ngIf="this.league?.stateId == 15">Free Agency #{{ this.league?.day + 1 }}</p>
-
-
-
-			<table class="table table-hover events-table" *ngIf="this.league?.stateId == 7">
-				<tbody>
-					<tr class="table-secondary" *ngFor="let game of this.upcomingGames">
-						<td>{{ game.awayTeamName }} @ {{ game.homeTeamName }}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	<div class="tab-content active" *ngIf="this.statsSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Statistics</h6>
+		<app-stats></app-stats>
 	</div>
-</div> -->
+	<div class="tab-content active" *ngIf="this.scheduleSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Schedule</h6>
+		<app-schedule></app-schedule>
+	</div>
+	<div class="tab-content active" *ngIf="this.transactionsSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">League Transactions</h6>
+		<app-transactions></app-transactions>
+	</div>
+	<div class="tab-content active" *ngIf="this.injuresSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Injuries around the league
+		</h6>
+		<app-injuries></app-injuries>
+	</div>
+	<div class="tab-content active" *ngIf="this.awardsSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Award Races</h6>
+		<app-awards></app-awards>
+	</div>
+</div>

@@ -490,3 +490,12 @@
     INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (480,N'Thaddeus',N'Young',0,0,1,1,0,26);
     INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (481,N'Cody',N'Zeller',0,0,0,1,1,22);
     INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (482,N'Tyler',N'Zeller',0,0,0,0,1,25);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (272,N'DeAndre',N'Liggins',0,1,1,0,0,26);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (192,N'Manny',N'Harris',0,0,1,0,0,25);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (106,N'Jordan',N'Crawford',1,1,0,0,0,26);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (66,N'MarShon',N'Brooks',0,1,0,0,0,26);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (211,N'Scotty',N'Hopson',1,0,0,0,0,25);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (412,N'Julyan',N'Stone',1,0,0,0,0,26);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (419,N'Marques',N'Teague',1,0,0,0,0,21);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (409,N'DJ',N'Stephens',0,1,0,0,0,24);
+    INSERT INTO Players (Id, FirstName, Surname, PGPosition, SGPosition, SFPosition, PFPosition, CPosition, Age) VALUES (335,N'James',N'Nunnally',0,0,1,0,0,24);

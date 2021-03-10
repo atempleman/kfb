@@ -47,7 +47,8 @@
 
       <div class="row justify-content-center mt-2 mb-2 color-1 ml- mr-2"
         *ngIf="(this.league?.day > 0 && this.league?.stateId >= 7)">
-        <table *ngIf="this.pointsStats?.length != 0 && this.pointsSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.pointsStats?.length != 0 && this.pointsSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -66,7 +67,8 @@
           </tr>
         </table>
 
-        <table *ngIf="this.assistsStats?.length != 0 && this.assistsSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.assistsStats?.length != 0 && this.assistsSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -85,7 +87,8 @@
           </tr>
         </table>
 
-        <table *ngIf="this.reboundStats?.length != 0 && this.reboundsSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.reboundStats?.length != 0 && this.reboundsSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -104,7 +107,8 @@
           </tr>
         </table>
 
-        <table *ngIf="this.blocksStats?.length != 0 && this.blocksSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.blocksStats?.length != 0 && this.blocksSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -123,7 +127,8 @@
           </tr>
         </table>
 
-        <table *ngIf="this.stealsStats?.length != 0 && this.stealsSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.stealsStats?.length != 0 && this.stealsSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -142,7 +147,8 @@
           </tr>
         </table>
 
-        <table *ngIf="this.turnoversStats?.length != 0 && this.turnoversSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.turnoversStats?.length != 0 && this.turnoversSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -180,7 +186,8 @@
           </tr>
         </table>
 
-        <table *ngIf="this.minutesStats?.length != 0 && this.minutesSelection" class="table table-striped custab ml-2 mr-2">
+        <table *ngIf="this.minutesStats?.length != 0 && this.minutesSelection"
+          class="table table-striped custab ml-2 mr-2">
           <thead>
             <tr>
               <th>Rank</th>
@@ -199,6 +206,15 @@
           </tr>
         </table>
       </div>
+      <div class="row">
+        <div class="col colleft">
+          <button type="button" class="btn btn-primary" *ngIf="this.pager != 1"
+            (click)="this.pagerPrev()">PREVIOUS</button>
+        </div>
+        <div class="col colright">
+          <button type="button" class="btn btn-primary" (click)="this.pagerNext()">NEXT</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -206,14 +222,7 @@
 
   <!--
 
-          <div class="row">
-            <div class="col colleft">
-              <button type="button" class="btn btn-primary" *ngIf="this.pager != 1" (click)="this.pagerPrev()">PREVIOUS</button>
-            </div>
-            <div class="col colright">
-              <button type="button" class="btn btn-primary" (click)="this.pagerNext()">NEXT</button>
-            </div>
-          </div>
+         
         </div> 
 
       </div>
