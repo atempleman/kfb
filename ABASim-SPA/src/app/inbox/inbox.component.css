@@ -45,11 +45,11 @@ td {
     padding: 10px;
 }
 
-table { 
-    border-spacing: 10px;
-    border-collapse: separate;
+.table-row, box {
+    padding: 10px;
+    text-align: center;
+    position: relative;
 }
-
 .column {
     float: left;
   }
