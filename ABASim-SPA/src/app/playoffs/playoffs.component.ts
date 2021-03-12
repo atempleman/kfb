@@ -17,6 +17,10 @@ export class PlayoffsComponent implements OnInit {
   playoffRoundSelection = 0;
   playoffSummaries: PlayoffSummary[] = [];
 
+  ppSelected = 1;
+  statsSelected = 0;
+  scheduleSelected = 0;
+
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
               private authService: AuthService) { }
 
@@ -72,6 +76,24 @@ export class PlayoffsComponent implements OnInit {
 
   goToResults() {
     this.router.navigate(['/playoffs-results']);
+  }
+
+  playoffPicture() {
+    this.statsSelected = 0;
+    this.scheduleSelected = 0;
+    this.ppSelected = 1;
+  }
+
+  statisticsSelection() {
+    this.ppSelected = 0;
+    this.scheduleSelected = 0;
+    this.statsSelected = 1;
+  }
+
+  scheduleSelection() {
+    this.ppSelected = 0;
+    this.statsSelected = 0;
+    this.scheduleSelected = 1;
   }
 
 }
