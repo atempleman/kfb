@@ -13,5 +13,7 @@ namespace ABASim.api.Models
         public string Mascot { get; set; }
 
         public int Division { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

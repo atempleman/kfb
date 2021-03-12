@@ -5,4 +5,5 @@ export interface Team {
     shortCode: string;
     mascot: string;
     division: number;
+    leagueId: number;
 }
