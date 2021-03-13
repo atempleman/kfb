@@ -38,6 +38,10 @@ export class ScheduleComponent implements OnInit {
   getScheduleForDay(day: number) {
     this.gameDayViewing = day;
 
+    if (this.gameDayViewing > 150) {
+      this.gameDayViewing = 150;
+    }
+
     this.leagueService.getScheduleGames(this.gameDayViewing).subscribe(result => {
       this.schedules = result;
     }, error => {
@@ -61,6 +65,8 @@ export class ScheduleComponent implements OnInit {
     let endNumber = 0;
     if (this.gameDayViewing - 2 < 0) {
       startNumber = 1;
+    } else if (this.gameDayViewing + 2 >= 150) {
+      startNumber = 148;
     } else {
       startNumber = this.gameDayViewing - 2;
     }

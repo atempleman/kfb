@@ -39,10 +39,10 @@
 
 	<div class="row justify-content-center mt-2 mb-2 color-1">
 		<div class="col colleft">
-			<button type="button" class="btn btn-primary" (click)="getPrevDays()">PREVIOUS</button>
+			<button type="button" class="btn btn-primary" (click)="getPrevDays()" *ngIf="!(this.gameDayViewing - 2 <= 0)">PREVIOUS</button>
 		</div>
 		<div class="col colright">
-			<button type="button" class="btn btn-primary" (click)="getNextDays()">NEXT</button>
+			<button type="button" class="btn btn-primary" (click)="getNextDays()" *ngIf="!(this.gameDayViewing + 2 >= 150)">NEXT</button>
 		</div>
 	</div>
 </div>

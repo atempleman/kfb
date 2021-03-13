@@ -1160,11 +1160,11 @@ namespace ABASim.api.Data
             int startDay = day - 2;
             int endDay = day + 2;
 
-            if (startDay < 0)
-                startDay = 0;
+            if (startDay < 218)
+                startDay = 218;
 
-            if (endDay > 150)
-                endDay = 150;
+            if (endDay > 282)
+                endDay = 282;
 
             // Get all of the games for the period passed in
             var scheduledGames = await _context.SchedulesPlayoffs.Where(x => x.GameDay >= startDay && x.GameDay <= endDay).ToListAsync();

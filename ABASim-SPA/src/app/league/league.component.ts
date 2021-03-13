@@ -24,10 +24,10 @@ export class LeagueComponent implements OnInit {
   todaysGames: GameDisplayCurrent[] = [];
   noRun = 0;
 
-  standingsSelected = 0;
+  standingsSelected = 1;
   statsSelected = 0;
   scheduleSelected = 0;
-  eventsSelected = 0;
+  // eventsSelected = 0;
   transactionsSelected = 0;
   injuresSelected = 0;
   awardsSelected = 0;

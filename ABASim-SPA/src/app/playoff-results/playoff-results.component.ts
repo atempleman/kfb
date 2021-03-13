@@ -28,13 +28,18 @@ export class PlayoffResultsComponent implements OnInit {
       this.alertify.error('Error getting League Details');
     }, () => {
       // Now need to get the schedule
-      // console.log(localStorage.getItem('teamId'));
       this.getScheduleForDay(this.league.day);
     });
   }
 
   getScheduleForDay(day: number) {
     this.gameDayViewing = day;
+
+    if (this.gameDayViewing - 2 <= 218) {
+      this.gameDayViewing = 218;
+    } else if (this.gameDayViewing + 2 >= 282) {
+      this.gameDayViewing = 282;
+    }
 
     this.leagueService.getPlayoffGames(this.gameDayViewing).subscribe(result => {
       this.schedules = result;
@@ -55,14 +60,16 @@ export class PlayoffResultsComponent implements OnInit {
   getDaysViewing() {
     let startNumber = 0;
     let endNumber = 0;
-    if (this.gameDayViewing - 2 < 0) {
-      startNumber = 1;
+    if (this.gameDayViewing - 2 < 218) {
+      startNumber = 218;
+    } else if (this.gameDayViewing + 2 >= 282) {
+      startNumber = 280;
     } else {
       startNumber = this.gameDayViewing - 2;
     }
 
-    if (this.gameDayViewing + 2 > 150) {
-      endNumber = 150;
+    if (this.gameDayViewing + 2 > 282) {
+      endNumber = 282;
     } else {
       endNumber = this.gameDayViewing + 2;
     }
