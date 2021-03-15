@@ -707,10 +707,17 @@ namespace ABASim.api.Data
             }
         }
 
-        public int GetCountOfDraftPlayers()
+        public async Task<int> GetCountOfDraftPlayers()
         {
-            var count = _context.PlayerTeams.Where(x => x.TeamId == 0 || x.TeamId == 31).Count();
-            return count;
+            var league = await _context.Leagues.FirstOrDefaultAsync();
+            if (league.StateId <= 5) {
+                var count = await _context.PlayerTeams.Where(x => x.TeamId == 31).CountAsync();
+                return count;
+            } else if (league.StateId > 5) {
+                // var count = await _context.PlayerTeams.Where(x => x.TeamId == 31).CountAsync();
+                return 0; // NEED TO UPDATE THIS TO PULL FROM THE RIGHT TABLE
+            }
+            return 0;
         }
 
         public async Task<DetailedRetiredPlayerDto> GetDetailRetiredPlayer(int playerId)

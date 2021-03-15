@@ -7,6 +7,7 @@ import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 import { TransferService } from '../_services/transfer.service';
 import { LeagueService } from '../_services/league.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-fullgamepbp',
@@ -21,17 +22,17 @@ export class FullgamepbpComponent implements OnInit {
   gameBegun = 0;
   playByPlays: PlayByPlay[] = [];
   playNumber = 0;
-  // displayedPlayByPlays: PlayByPlay[] = [];
   numberOfPlays = 0;
   playNo = 0;
   displayBoxScoresButtons = 0;
 
   constructor(private alertify: AlertifyService, private authService: AuthService, private leagueService: LeagueService,
-              private transferService: TransferService, private router: Router) { }
+              private transferService: TransferService, private router: Router, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.gameId = this.transferService.getData();
     this.state = this.transferService.getState();
+    this.spinner.show();
 
     this.leagueService.getLeague().subscribe(result => {
       this.league = result;
@@ -65,6 +66,7 @@ export class FullgamepbpComponent implements OnInit {
         }, error => {
           this.alertify.error('Error getting Play by Play');
         }, () => {
+          this.spinner.hide();
         });
       });
     } else if (this.state === 1) {
@@ -89,6 +91,7 @@ export class FullgamepbpComponent implements OnInit {
         }, error => {
           this.alertify.error('Error getting Play by Play');
         }, () => {
+          this.spinner.hide();
         });
       });
     } else if (this.state === 2) {
@@ -113,6 +116,7 @@ export class FullgamepbpComponent implements OnInit {
         }, error => {
           this.alertify.error('Error getting Play by Play');
         }, () => {
+          this.spinner.hide();
         });
       });
     }

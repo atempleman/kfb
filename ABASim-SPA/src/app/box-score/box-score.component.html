@@ -1,14 +1,144 @@
+<section>
+  <ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+    <p class="loading">Loading Free Agents...</p>
+  </ngx-spinner>
+  <div class="container">
+		<!-- <div class="row h-full align-items-center"> -->
+      <h6 class="fw-600 fs-0 ls color-10 mt-3">{{ this.gameDetails?.awayTeam }} - {{ this.awayPoints }} vs {{ this.gameDetails?.homeTeam }} - {{ this.homePoints }}</h6>
+    <!-- </div> -->
+  <!-- </div> -->
+  <!-- <div class="container"> -->
+    <div class="row">
+      <div class="col">
+        <h6 class="fw-600 fs-0 ls color-10 mt-3">Away Box Score</h6>
+        <table *ngIf="this.awayBoxScores?.length != 0" class="table table-striped custab">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Minutes</th>
+              <th>Points</th>
+              <th>Rebounds</th>
+              <th>Assists</th>
+              <th>Steals</th>
+              <th>Blocks</th>
+              <th>BA</th>
+              <th>Turnovers</th>
+              <th>FGM-FGA</th>
+              <th>3FGM-3FGA</th>
+              <th>FTM-FTA</th>
+              <th>ORebs</th>
+              <th>DRebs</th>
+              <th>Fouls</th>
+              <th>+/-</th>
+            </tr>
+          </thead>
+          <tr *ngFor="let player of this.awayBoxScores">
+            <button (click)="viewPlayer(player.firstName, player.lastName)">{{ player.firstName }} {{ player.lastName }}</button>
+            <td>{{ (player.minutes / 60).toFixed(0) }}:{{ player.minutes % 60 }}</td>
+            <td>{{ player.points }}</td>
+            <td>{{ player.rebounds }}</td>
+            <td>{{ player.assists }}</td>
+            <td>{{ player.steals }}</td>
+            <td>{{ player.blocks }}</td>
+            <td>{{ player.blockedAttempts }}</td>
+            <td>{{ player.turnovers }}</td>
+            <td>{{ player.fgm }}-{{ player.fga }}</td>
+            <td>{{ player.threeFGM }}-{{ player.threeFGA }}</td>
+            <td>{{ player.ftm }}-{{ player.fta }}</td>
+            <td>{{ player.oRebs }}</td>
+            <td>{{ player.dRebs }}</td>
+            <td>{{ player.fouls }}</td>
+            <td>{{ player.plusMinus }}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>{{ this.awayMinutes }}</td>
+            <td>{{ this.awayPoints }}</td>
+            <td>{{ this.awayRebounds }}</td>
+            <td>{{ this.awayAssists }}</td>
+            <td>{{ this.awaySteals }}</td>
+            <td>{{ this.awayBlocks }}</td>
+            <td>{{ this.awayBlockedAttempts }}</td>
+            <td>{{ this.awayTurnovers }}</td>
+            <td>{{ this.awayFGM }}-{{ this.awayFGA }}</td>
+            <td>{{ this.away3FGM }}-{{ this.away3FGA }}</td>
+            <td>{{ this.awayFTM }}-{{ this.awayFTA }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ this.awayFouls }}</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
 
-<section class="dashboard-area">
-	<h3 class="display">{{ this.gameDetails?.awayTeam }} - {{ this.awayPoints }} vs {{ this.gameDetails?.homeTeam }} - {{ this.homePoints }}</h3>
+    <div class="row">
+      <div class="col">
+        <h6 class="fw-600 fs-0 ls color-10 mt-3">Home Box Score</h6>
+        <table *ngIf="this.homeBoxScores?.length != 0" class="table table-striped custab">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Minutes</th>
+              <th>Points</th>
+              <th>Rebounds</th>
+              <th>Assists</th>
+              <th>Steals</th>
+              <th>Blocks</th>
+              <th>BA</th>
+              <th>Turnovers</th>
+              <th>FGM-FGA</th>
+              <th>3FGM-3FGA</th>
+              <th>FTM-FTA</th>
+              <th>ORebs</th>
+              <th>DRebs</th>
+              <th>Fouls</th>
+              <th>+/-</th>
+            </tr>
+          </thead>
+          <tr *ngFor="let player of this.homeBoxScores">
+            <button (click)="viewPlayer(player.firstName, player.lastName)">{{ player.firstName }} {{ player.lastName }}</button>
+            <td>{{ (player.minutes / 60).toFixed(0) }}:{{ player.minutes % 60 }}</td>
+            <td>{{ player.points }}</td>
+            <td>{{ player.rebounds }}</td>
+            <td>{{ player.assists }}</td>
+            <td>{{ player.steals }}</td>
+            <td>{{ player.blocks }}</td>
+            <td>{{ player.blockedAttempts }}</td>
+            <td>{{ player.turnovers }}</td>
+            <td>{{ player.fgm }}-{{ player.fga }}</td>
+            <td>{{ player.threeFGM }}-{{ player.threeFGA }}</td>
+            <td>{{ player.ftm }}-{{ player.fta }}</td>
+            <td>{{ player.oRebs }}</td>
+            <td>{{ player.dRebs }}</td>
+            <td>{{ player.fouls }}</td>
+            <td>{{ player.plusMinus }}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>{{ this.homeMinutes }}</td>
+            <td>{{ this.homePoints }}</td>
+            <td>{{ this.homeRebounds }}</td>
+            <td>{{ this.homeAssists }}</td>
+            <td>{{ this.homeSteals }}</td>
+            <td>{{ this.homeBlocks }}</td>
+            <td>{{ this.homeBlockedAttempts }}</td>
+            <td>{{ this.homeTurnovers }}</td>
+            <td>{{ this.homeFGM }}-{{ this.homeFGA }}</td>
+            <td>{{ this.home3FGM }}-{{ this.home3FGA }}</td>
+            <td>{{ this.homeFTM }}-{{ this.homeFTA }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ this.homeFouls }}</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </section>
-
-<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
-  <p class="loading">Loading Free Agents...</p>
-</ngx-spinner>
-
+<!-- 
 <div class="box">
-  
 	<div class="container">
     <div class="row">
       <div class="col">
@@ -155,4 +285,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

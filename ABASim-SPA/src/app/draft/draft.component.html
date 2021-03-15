@@ -1,23 +1,111 @@
-<section class="dashboard-area">
-    <h3 class="display">Draft Headquarters</h3>
-    <p>Season #{{ this.league?.year }}</p>
-	<span class="badge badge-danger mb-3"
-		*ngIf="this.league?.stateId == 1 || this.league?.stateId == 14">{{ this.league?.state }}</span>
-	<span class="badge badge-info mb-3"
-		*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
-	<span class="badge badge-success mb-3"
-		*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{ this.league?.state }}</span>
-	<span class="badge badge-primary mb-3" *ngIf="this.league?.stateId == 7">{{ this.league?.state }}</span>
-	<span class="badge badge-warning mb-3"
-		*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{ this.league?.state }}</span>
-	<span class="badge badge-secondary mb-3" *ngIf="this.league?.stateId == 10">{{ this.league?.state }}</span>
-	<span
-		*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14">
-		- Day #{{ this.league?.day }}</span>
+<section class="py-sm-0 text-center" id="header-12">
+	<br />
+	<br />
+	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
+	</div>
+	<!--/.background-holder-->
+	<div class="container">
+		<div class="row h-full align-items-center">
+			<div class="col my-6">
+				<h3 class="fs-lg-7 fw-600 color-white">DRAFT HEADQUARTERS</h3>
+				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} -
+					<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state
+						}}</span>
+					<span class="badge badge-pill badge-info"
+						*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+					<span class="badge badge-pill badge-success"
+						*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state
+						}}</span>
+					<span class="badge badge-pill badge-warning"
+						*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{
+						this.league?.state }}</span>
+					<span class="badge badge-pill badge-danger"
+						*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
+					- Day #{{ this.league?.day }}
+				</h6>
+
+
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<div class="item px-xl-5">
+							<p class="lead color-8">The home of everything draft related. Scout player pools for upcoming drafts, set draftboards and draft through the draft headquarters.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+	</div>
+	<!--/.container-->
 </section>
 
 
-<div class="box">
+<div class="tabs" *ngIf="this.league.stateId <= 5">
+	<div class="nav-bar nav-bar-center">
+		<div class="nav-bar-item color-8" [ngClass]="this.initialDraftSelected == 1 ? 'active' : ''"
+			(click)="this.intialDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.initialDraftLotterySelected == 1 ? 'active' : ''"
+			(click)="this.intialDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.initialPlayerPoolSelected == 1 ? 'active' : ''"
+			(click)="this.initialPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.initialDraftboardSelected == 1 ? 'active' : ''"
+			(click)="this.initialDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
+	</div>
+
+    <div class="tab-content active" *ngIf="this.initialDraftSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
+		
+	</div>
+	<div class="tab-content active" *ngIf="this.initialDraftLotterySelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
+		<app-initiallottery></app-initiallottery>
+	</div>
+	<div class="tab-content active" *ngIf="this.initialPlayerPoolSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
+		<app-draft-player-pool></app-draft-player-pool>
+	</div>
+	<div class="tab-content active" *ngIf="this.initialDraftboardSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
+		
+	</div>
+</div>
+
+<div class="tabs" *ngIf="this.league.stateId > 5">
+	<div class="nav-bar nav-bar-center">
+		<div class="nav-bar-item color-8" [ngClass]="this.seasonDraftSelected == 1 ? 'active' : ''"
+			(click)="this.seasonDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.seasonDraftLotterySelected == 1 ? 'active' : ''"
+			(click)="this.seasonDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
+		<div class="nav-bar-item color-8" [ngClass]="this.seasonPlayerPoolSelected == 1 ? 'active' : ''"
+			(click)="this.seasonPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftboardSelected == 1 ? 'active' : ''"
+			(click)="this.seasonDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
+	</div>
+
+    <div class="tab-content active" *ngIf="this.seasonDraftSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
+		
+	</div>
+	<div class="tab-content active" *ngIf="this.seasonDraftLotterySelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
+		<app-initiallottery></app-initiallottery>
+	</div>
+	<div class="tab-content active" *ngIf="this.seasonPlayerPoolSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
+		<app-draft-player-pool></app-draft-player-pool>
+	</div>
+	<div class="tab-content active" *ngIf="this.seasonDraftboardSelected == 1">
+		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
+		
+	</div>
+</div>
+
+
+<!-- <div class="box">
     <div class="container">
         <div class="row cards-row">
             <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
@@ -171,4 +259,4 @@
     <div class="modal-footer form-group text-center">
         <button type="button" class="btn btn-danger" (click)="modalRef.hide()">Close</button>
       </div>
-</ng-template> 
+</ng-template>  -->

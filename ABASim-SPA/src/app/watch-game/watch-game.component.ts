@@ -90,7 +90,7 @@ export class WatchGameComponent implements OnInit {
             this.displayBoxScoresButtons = 1;
             clearInterval(refreshId);
           }
-        }, 1000);
+        }, 3000);
       });
     } else if (this.state === 2) {
       this.leagueService.getPlayoffsPlayByPlaysForId(this.gameId).subscribe(result => {
@@ -115,7 +115,7 @@ export class WatchGameComponent implements OnInit {
             this.displayBoxScoresButtons = 1;
             clearInterval(refreshId);
           }
-        }, 1000);
+        }, 3000);
       });
     }
   }

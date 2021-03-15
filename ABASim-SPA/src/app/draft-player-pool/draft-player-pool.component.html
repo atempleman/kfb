@@ -1,65 +1,26 @@
-<section class="dashboard-area">
-  <h3 class="display">Draft Player Pool</h3>
-</section>
-
-<div class="box">
-  <div class="container">
-    <div class="row cards-row">
-      <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-        <div class="card-header"><i class="fa fa-list fa-2x" aria-hidden="true"></i><span
-            class="header-card ml-3"><strong>Draft Headquarters</strong></span></div>
-        <div class="card-body">
-          <p class="card-text">View the Draft Headquarters where all draft actions take place.</p>
-          <div style="text-align: right;">
-            <button type="button" class="btn btn-link text-left" (click)="draftHQClicked()">Go to
-              Draft HQ</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-        <div class="card-header"><i class="fa fa-users fa-2x" aria-hidden="true"></i><span
-            class="header-card ml-3"><strong>Draftboard</strong></span></div>
-        <div class="card-body">
-          <p class="card-text">View your draftboard and order your auto-picks..</p>
-          <div style="text-align: right;">
-            <button type="button" class="btn btn-link text-left" (click)="rankingsClicked()">Go to
-              Draftboard</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId != 1">
-        <div class="card-header"><i class="fa fa-list-ol fa-2x" aria-hidden="true"></i><span
-            class="header-card ml-3"><strong>Draft Lottery</strong></span></div>
-        <div class="card-body">
-          <p class="card-text">View the draft lottery and see what the odds or draft order.</p>
-          <div style="text-align: right;">
-            <button type="button" class="btn btn-link text-left" (click)="lotteryClicked()">Go to Draft
-              Lottery</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row ml-2 mr-2 textdesc">
-  <p>The following table provides details on all of the players who are available in the draft. You can add players to your draftboard here.</p>
+<div class="row justify-content-center">
+  <p class="color-8">The following table provides details on all of the players who are available in the draft. You can
+    add players to your draftboard here.</p>
 </div>
 
 <div class="box">
-  <ngx-spinner [fullScreen]="false" type="ball-spin-fade" size="medium">
+  <ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
     <p class="loading">Loading Player Pool...</p>
   </ngx-spinner>
-  <div class="row table-row text-center ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0">
+
+  <div class="row justify-content-center mt-3" *ngIf="this.draftPlayers.length == 0">
+    <p class="color-7">There are no players left in the draft pool</p>
+  </div>
+
+  <div class="row justify-content-center mt-3" *ngIf="this.draftPlayers?.length != 0">
     <form id="filter_form" class="btn-group" [formGroup]="searchForm">
       <input type="text" id="filter_keywords" name="filter_keywords" placeholder="Filter by name" formControlName="filter"/>
       <input class="btn btn-default" type="submit" id="filter_submit" name="filter_submit" value="Go" (click)="filterTable()"/>
       <input class="btn btn-default" type="reset" id="filter_reset" name="filter_reset" value="Reset" (click)="resetFilter()"/>
     </form>
+
     <div class="btn-group" role="group" aria-label="First group">
-      <span class="filtertitle mr-1 ml-2">Filter by Position:</span>
+      <span class="filtertitle mr-1 ml-2">Position:</span>
       <button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 1 }" (click)="filterByPos(1)">PG</button>
       <button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 2 }" (click)="filterByPos(2)">SG</button>
       <button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 3 }" (click)="filterByPos(3)">SF</button>
@@ -68,7 +29,8 @@
       <button type="button" class="btn btn-default" [ngClass]="{'fill-data-btn': this.positionFilter == 0 }" (click)="filterByPos(0)">ALL</button>
     </div>
   </div>
-  <div class="row table-row text-center ml-2 mr-2">
+
+  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0">
     <table *ngIf="this.draftPlayers?.length != 0" class="table table-striped custab">
       <thead>
         <tr>
@@ -120,7 +82,9 @@
         </td>
       </tr>
     </table>
+  </div>
 
+  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0">
     <div class="pager" *ngIf="this.displayPaging == 0">
       <ul class="pagination">
         <li class="page-item">
@@ -135,7 +99,4 @@
       </ul>
     </div>
   </div>
-</div>
-<div *ngIf="this.draftPlayers.length == 0">
-  There are no players left in the draft pool
 </div>

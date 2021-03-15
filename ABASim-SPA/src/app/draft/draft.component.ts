@@ -30,6 +30,15 @@ export class DraftComponent implements OnInit {
   teamOnClock: Team;
   team: Team;
 
+  initialDraftSelected = 1;
+  seasonDraftSelected = 1;
+  initialDraftLotterySelected = 0;
+  seasonDraftLotterySelected = 0;
+  initialPlayerPoolSelected = 0;
+  seasonPlayerPoolSelected = 0;
+  initialDraftboardSelected = 0;
+  seasonDraftboardSelected = 0;
+
   tracker: DraftTracker;
 
   allDraftPicks: InitialDraftPicks[] = [];
@@ -270,5 +279,61 @@ export class DraftComponent implements OnInit {
   getPickSalary(round: number, pick: number) {
     const value = this.initialPickSalary.find(x => x.round === round && x.pick === pick);
     return value.salary;
+  }
+
+  intialDraftSelection() {
+    this.initialDraftLotterySelected = 0;
+    this.initialDraftboardSelected = 0;
+    this.initialPlayerPoolSelected = 0;
+    this.initialDraftSelected = 1;
+  }
+
+  seasonDraftSelection() {
+    this.seasonDraftLotterySelected = 0;
+    this.seasonDraftboardSelected = 0;
+    this.seasonPlayerPoolSelected = 0;
+    this.seasonDraftSelected = 1;
+  }
+
+  intialDraftLotterySelection() {
+    this.initialDraftboardSelected = 0;
+    this.initialPlayerPoolSelected = 0;
+    this.initialDraftSelected = 0;
+    this.initialDraftLotterySelected = 1;
+  }
+
+  seasonDraftLotterySelection() {
+    this.seasonDraftboardSelected = 0;
+    this.seasonPlayerPoolSelected = 0;
+    this.seasonDraftSelected = 0;
+    this.seasonDraftLotterySelected = 1;
+  }
+
+  initialPlayerPoolSelection() {
+    this.initialDraftboardSelected = 0;
+    this.initialDraftSelected = 0;
+    this.initialDraftLotterySelected = 0;
+    this.initialPlayerPoolSelected = 1;
+  }
+
+  seasonPlayerPoolSelection() {
+    this.seasonDraftboardSelected = 0;
+    this.seasonDraftSelected = 0;
+    this.seasonDraftLotterySelected = 0;
+    this.seasonPlayerPoolSelected = 1;
+  }
+
+  initialDraftboardSelection() {
+    this.initialDraftSelected = 0;
+    this.initialDraftLotterySelected = 0;
+    this.initialPlayerPoolSelected = 0;
+    this.initialDraftboardSelected = 1;
+  }
+
+  seasonDraftboardSelection() {
+    this.seasonDraftSelected = 0;
+    this.seasonDraftLotterySelected = 0;
+    this.seasonPlayerPoolSelected = 0;
+    this.seasonDraftboardSelected = 1;
   }
 }

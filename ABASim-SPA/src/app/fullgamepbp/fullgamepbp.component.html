@@ -1,21 +1,24 @@
-<div class="jumbotron">
-	<h3 class="display">{{ this.gameDetails?.awayTeam }} vs {{ this.gameDetails?.homeTeam }} </h3>
-</div>
-
-<div class="box">
-	<div class="container">
-		<div class="row cards-row">
-			  <button type="button" class="btn btn-success" (click)="this.viewBoxScore(this.gameDetails.gameId)">Box Scores</button>
-    	</div>
-    	<div class="row">
-      		<table class="table table-hover events-table">
+<section>
+	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+		<p class="loading">Loading Play by Plays...</p>
+	</ngx-spinner>
+	<div class="container mt-6">
+		<h6 class="fw-600 fs-0 ls color-10 mt-3">{{ this.gameDetails?.awayTeam }} vs {{ this.gameDetails?.homeTeam }}
+			Play by Play</h6>
+		<div class="row">
+			<div class="col">
+				<button type="button" class="btn btn-primary btn-sm" (click)="this.viewBoxScore(this.gameDetails.gameId)">Box
+					Scores</button>
+			</div>
+		</div>
+		<div class="row mt-2">
+			<table class="table table-hover events-table">
 				<tbody>
 					<tr class="table-secondary" *ngFor="let item of this.playByPlays">
 						<td>{{ item.commentary }}</td>
 					</tr>
 				</tbody>
 			</table>
-    	</div>
-  	</div>
-</div>
-
+		</div>
+	</div>
+</section>

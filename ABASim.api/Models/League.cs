@@ -9,5 +9,9 @@ namespace ABASim.api.Models
         public int Day { get; set; }
 
         public int Year { get; set; }
+
+        public string LeagueName { get; set; }
+
+        public string LeagueCode { get; set; }
     }
 }

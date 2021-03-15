@@ -24,6 +24,9 @@ export class AdminComponent implements OnInit {
   league: League;
   public modalRef: BsModalRef;
 
+  nextActionAccordion = 1;
+  otherAccordion = 0;
+
   statusSelection: number;
   currentStatus = '';
   leagueStates: LeagueState[] = [];
@@ -525,5 +528,21 @@ export class AdminComponent implements OnInit {
       this.modalRef.hide();
       this.spinner.hide();
     });
+  }
+
+  toggleNextAction() {
+    if (this.nextActionAccordion == 0) {
+      this.nextActionAccordion = 1;
+    } else {
+      this.nextActionAccordion = 0;
+    }
+  }
+
+  toggleOtherAction() {
+    if (this.otherAccordion == 0) {
+      this.otherAccordion = 1;
+    } else {
+      this.otherAccordion = 0;
+    }
   }
 }

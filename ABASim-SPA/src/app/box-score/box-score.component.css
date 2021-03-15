@@ -1,15 +1,7 @@
-.dashboard-area {
-    position: relative;
-    text-align: center;
-    background: #202120;
-    overflow: hidden;
-}
-.dashboard-area h3, span {
-    padding: 10px;
-    text-align: center;
-    z-index: 2;
-    position: relative;
-    color: #ffffff;
+table {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
 }
 button {
     background: none!important;

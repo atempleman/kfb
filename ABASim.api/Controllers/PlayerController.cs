@@ -66,7 +66,7 @@ namespace ABASim.api.Controllers
         [HttpGet("getcountofdraftplayers")]
         public async Task<IActionResult> GetCountOfDraftPlayers()
         {
-            var count = _repo.GetCountOfDraftPlayers();
+            var count = await _repo.GetCountOfDraftPlayers();
             return Ok(count);
         }
 

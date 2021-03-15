@@ -47,6 +47,8 @@ export class DraftPlayerPoolComponent implements OnInit {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting league details');
+    }, () => {
+      
     });
 
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
