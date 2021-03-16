@@ -1,180 +1,141 @@
 <section class="py-sm-0 text-center" id="header-12">
-	<br />
-	<br />
-	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
-	</div>
-	<!--/.background-holder-->
-	<div class="container">
-		<div class="row h-full align-items-center">
-			<div class="col my-6">
-				<h3 class="fs-lg-7 fw-600 color-white">DRAFT HEADQUARTERS</h3>
-				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} -
-					<span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state
-						}}</span>
-					<span class="badge badge-pill badge-info"
-						*ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
-					<span class="badge badge-pill badge-success"
-						*ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{
-						this.league?.state }}</span>
-					<span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state
-						}}</span>
-					<span class="badge badge-pill badge-warning"
-						*ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{
-						this.league?.state }}</span>
-					<span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{
-						this.league?.state }}</span>
-					<span class="badge badge-pill badge-danger"
-						*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
-					- Day #{{ this.league?.day }}
-				</h6>
+    <br />
+    <br />
+    <div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
+    </div>
+    <!--/.background-holder-->
+    <div class="container">
+        <div class="row h-full align-items-center">
+            <div class="col my-6">
+                <h3 class="fs-lg-7 fw-600 color-white">DRAFT HEADQUARTERS</h3>
+                <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} -
+                    <span class="badge badge-pill badge-danger" *ngIf="this.league?.stateId == 1">{{ this.league?.state
+                        }}</span>
+                    <span class="badge badge-pill badge-info"
+                        *ngIf="this.league?.stateId == 2 || this.league?.stateId == 6">{{ this.league?.state }}</span>
+                    <span class="badge badge-pill badge-success"
+                        *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5 || this.league?.stateId == 11 || this.league?.stateId == 13 || this.league?.stateId == 14">{{
+                        this.league?.state }}</span>
+                    <span class="badge badge-pill badge-primary" *ngIf="this.league?.stateId == 7">{{ this.league?.state
+                        }}</span>
+                    <span class="badge badge-pill badge-warning"
+                        *ngIf="this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 15">{{
+                        this.league?.state }}</span>
+                    <span class="badge badge-pill badge-secondary" *ngIf="this.league?.stateId == 10">{{
+                        this.league?.state }}</span>
+                    <span class="badge badge-pill badge-danger"
+                        *ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
+                    - Day #{{ this.league?.day }}
+                </h6>
 
 
-				<div class="row justify-content-center">
-					<div class="col-lg-8">
-						<div class="item px-xl-5">
-							<p class="lead color-8">The home of everything draft related. Scout player pools for upcoming drafts, set draftboards and draft through the draft headquarters.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--/.row-->
-	</div>
-	<!--/.container-->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="item px-xl-5">
+                            <p class="lead color-8">The home of everything draft related. Scout player pools for
+                                upcoming drafts, set draftboards and draft through the draft headquarters.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/.row-->
+    </div>
+    <!--/.container-->
 </section>
 
 
 <div class="tabs" *ngIf="this.league.stateId <= 5">
-	<div class="nav-bar nav-bar-center">
-		<div class="nav-bar-item color-8" [ngClass]="this.initialDraftSelected == 1 ? 'active' : ''"
-			(click)="this.intialDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.initialDraftLotterySelected == 1 ? 'active' : ''"
-			(click)="this.intialDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.initialPlayerPoolSelected == 1 ? 'active' : ''"
-			(click)="this.initialPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
+    <div class="nav-bar nav-bar-center">
+        <div class="nav-bar-item color-8" [ngClass]="this.initialDraftSelected == 1 ? 'active' : ''"
+            (click)="this.intialDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.initialDraftLotterySelected == 1 ? 'active' : ''"
+            (click)="this.intialDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.initialPlayerPoolSelected == 1 ? 'active' : ''"
+            (click)="this.initialPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
         <div class="nav-bar-item color-8" [ngClass]="this.initialDraftboardSelected == 1 ? 'active' : ''"
-			(click)="this.initialDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
-	</div>
+            (click)="this.initialDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
+    </div>
 
     <div class="tab-content active" *ngIf="this.initialDraftSelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
-		
-	</div>
-	<div class="tab-content active" *ngIf="this.initialDraftLotterySelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
-		<app-initiallottery></app-initiallottery>
-	</div>
-	<div class="tab-content active" *ngIf="this.initialPlayerPoolSelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
-		<app-draft-player-pool></app-draft-player-pool>
-	</div>
-	<div class="tab-content active" *ngIf="this.initialDraftboardSelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
-		
-	</div>
-</div>
-
-<div class="tabs" *ngIf="this.league.stateId > 5">
-	<div class="nav-bar nav-bar-center">
-		<div class="nav-bar-item color-8" [ngClass]="this.seasonDraftSelected == 1 ? 'active' : ''"
-			(click)="this.seasonDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.seasonDraftLotterySelected == 1 ? 'active' : ''"
-			(click)="this.seasonDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.seasonPlayerPoolSelected == 1 ? 'active' : ''"
-			(click)="this.seasonPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
-        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftboardSelected == 1 ? 'active' : ''"
-			(click)="this.seasonDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
-	</div>
-
-    <div class="tab-content active" *ngIf="this.seasonDraftSelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
-		
-	</div>
-	<div class="tab-content active" *ngIf="this.seasonDraftLotterySelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
-		<app-initiallottery></app-initiallottery>
-	</div>
-	<div class="tab-content active" *ngIf="this.seasonPlayerPoolSelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
-		<app-draft-player-pool></app-draft-player-pool>
-	</div>
-	<div class="tab-content active" *ngIf="this.seasonDraftboardSelected == 1">
-		<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
-		
-	</div>
-</div>
-
-
-<!-- <div class="box">
-    <div class="container">
-        <div class="row cards-row">
-            <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-                <div class="card-header"><i class="fa fa-list fa-2x" aria-hidden="true"></i><span
-                        class="header-card ml-3"><strong>Player Pool</strong></span></div>
-                <div class="card-body">
-                    <p class="card-text">View the available players in the upcoming draft.</p>
-                    <div style="text-align: right;">
-                        <button type="button" class="btn btn-link text-left" (click)="playerPoolClicked()">Go to
-                            Player Pool</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-                <div class="card-header"><i class="fa fa-users fa-2x" aria-hidden="true"></i><span
-                        class="header-card ml-3"><strong>Draftboard</strong></span></div>
-                <div class="card-body">
-                    <p class="card-text">View your draftboard and order your auto-picks..</p>
-                    <div style="text-align: right;">
-                        <button type="button" class="btn btn-link text-left" (click)="rankingsClicked()">Go to
-                            Draftboard</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;" *ngIf="this.league?.stateId != 1">
-                <div class="card-header"><i class="fa fa-list-ol fa-2x" aria-hidden="true"></i><span
-                        class="header-card ml-3"><strong>Draft Lottery</strong></span></div>
-                <div class="card-body">
-                    <p class="card-text">View the draft lottery and see what the odds or draft order.</p>
-                    <div style="text-align: right;">
-                        <button class="teamlink" type="button" class="btn btn-link text-left" (click)="lotteryClicked()">Go to Draft
-                            Lottery</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
+    </div>
+    <div class="tab-content active" *ngIf="this.initialDraftLotterySelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
+        <app-initiallottery></app-initiallottery>
+    </div>
+    <div class="tab-content active" *ngIf="this.initialPlayerPoolSelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
+        <app-draft-player-pool></app-draft-player-pool>
+    </div>
+    <div class="tab-content active" *ngIf="this.initialDraftboardSelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
+        <app-draftboard></app-draftboard>
     </div>
 </div>
 
+<div class="tabs" *ngIf="this.league.stateId > 5">
+    <div class="nav-bar nav-bar-center">
+        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftSelected == 1 ? 'active' : ''"
+            (click)="this.seasonDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftLotterySelected == 1 ? 'active' : ''"
+            (click)="this.seasonDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.seasonPlayerPoolSelected == 1 ? 'active' : ''"
+            (click)="this.seasonPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
+        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftboardSelected == 1 ? 'active' : ''"
+            (click)="this.seasonDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
+    </div>
 
-<div class="box">
+    <div class="tab-content active" *ngIf="this.seasonDraftSelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
+
+    </div>
+    <div class="tab-content active" *ngIf="this.seasonDraftLotterySelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
+        <app-initiallottery></app-initiallottery>
+    </div>
+    <div class="tab-content active" *ngIf="this.seasonPlayerPoolSelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
+        <app-draft-player-pool></app-draft-player-pool>
+    </div>
+    <div class="tab-content active" *ngIf="this.seasonDraftboardSelected == 1">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
+        <app-draftboard></app-draftboard>
+    </div>
+</div>
+
+<!-- Intial Draft Code -->
+<div class="box" *ngIf="this.initialDraftSelected == 1">
     <div class="container">
-        <div class="row cards-row" *ngIf="this.league?.stateId == 2">
+        <div class="row h-full align-items-center" *ngIf="this.league?.stateId == 2">
             <blockquote class="blockquote">
-                <p class="mb-0 text-warning">Initial Draft Lottery is awaiting to be run by the league administrator.
-                </p>
-                <footer class="blockquote-footer">League Information
-                </footer>
+                <p class="mb-0 text-warning color-8">Initial Draft Lottery is awaiting to be run by the league
+                    administrator.</p>
             </blockquote>
         </div>
 
-        <div class="row cards-row" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
-            <h4 class="text-success">Draft - Round {{ this.currentRound }} - {{ this.timeDisplay }}</h4>
+        <div class="row h-full align-items-center"
+            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
+            <h6 class="fw-600 fs-0 ls text-success">Draft - Round {{ this.currentRound }} - {{ this.timeDisplay }}</h6>
             <br />
-            <button class="btn btn-danger ml-3" *ngIf="this.isAdmin == 1 && this.league?.stateId == 3" (click)="beginDraft()">Start Draft</button>
+            <button class="btn btn-danger bn-sm ml-3" *ngIf="this.isAdmin == 1 && this.league?.stateId == 3"
+                (click)="beginDraft()">Start Draft</button>
         </div>
 
-        <div class="row cards-row">
-            <p>View default salaries for each pick </p><i class="fa fa-info-circle" (click)="openModal(viewsalaries)"></i>
+        <div class="row h-full align-items-center">
+            <p class="color-7">View default salaries for each pick </p><i class="fa fa-info-circle ml-1"
+                (click)="openModal(viewsalaries)"></i>
         </div>
 
-        <div class="row cards-row" *ngIf="this.league?.stateId == 4">
-            <h4 class="title">Current - Pick #{{ tracker?.pick }} <ng-container *ngIf="this.onClockLoaded == 2">{{ getTeamOnClock() }}</ng-container></h4>
+        <div class="row h-full align-items-center" *ngIf="this.league?.stateId == 4">
+            <h4 h6 class="fw-600 fs-0 ls">Current - Pick #{{ tracker?.pick }} <ng-container
+                    *ngIf="this.onClockLoaded == 2">{{ getTeamOnClock() }}</ng-container>
+            </h4>
         </div>
 
-        <div class="row cards-row" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
-            <table class="table-secondary">
+        <div class="row h-full align-items-center"
+            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
+            <table class="table table-striped custab">
                 <thead>
                     <tr>
                         <th>Pick</th>
@@ -184,21 +145,28 @@
                 </thead>
                 <tr *ngFor="let picks of this.draftPicks; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td><button class="teamlink" (click)="viewTeam(this.picks.teamId)">{{ picks.teamName }}</button></td>
+                    <td><button class="teamlink" (click)="viewTeam(this.picks.teamId)">{{ picks.teamName }}</button>
+                    </td>
                     <td>{{ picks.playerName }}</td>
                     <td></td>
                     <td>
-                        <ng-container *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.teamId == picks.teamId">
-                            <button type="submit" class="btn btn-primary" (click)="openModal(makePick)">Make Pick</button>
+                        <ng-container
+                            *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.teamId == picks.teamId">
+                            <button type="submit" class="btn btn-primary btn-sm" (click)="openModal(makePick)">Make
+                                Pick</button>
                         </ng-container>
-                        <ng-container *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.isAdmin == 1">
-                            <button type="submit" class="btn btn-danger ml-1" (click)="autoPickAction()">Auto Pick</button>
+                        <ng-container
+                            *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.isAdmin == 1">
+                            <button type="submit" class="btn btn-danger btn-sm ml-1" (click)="autoPickAction()">Auto
+                                Pick</button>
                         </ng-container>
                     </td>
                 </tr>
             </table>
         </div>
-        <div class="row cards-row" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
+
+        <div class="row h-full align-items-center"
+            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
             <ul class="pagination">
                 <li class="page-item">
                     <a class="page-link">&laquo;</a>
@@ -216,31 +184,34 @@
 
 
 
-  <ng-template #makePick>
-	<div class="modal-header">
-	  <h4 class="modal-title">Make Draft Selection - Round #{{ this.tracker?.round }} Pick #{{ this.tracker?.pick }}</h4>
-	  <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
-	</div>
-	<form #draftPlayerForm>
-		<div class="modal-body">
-                  <p>The {{ this.team.teamname }} {{ this.team.mascot }} select:</p>
-                  <select name="leagueStatus" [(ngModel)]="this.draftSelection">
-                        <option *ngFor="let player of this.draftablePlayers" [value]="player.playerId">{{ player.surname }}, {{ player.firstName }}</option>
-                  </select>
-		</div>
-		<div class="modal-footer form-group text-center">
-			<button type="submit" class="btn btn-primary" (click)="makeDraftPick()">Select</button>
-			<button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
-		  </div>
-	</form>
-</ng-template> 
+<ng-template #makePick>
+    <div class="modal-header">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" class="modal-title">Make Draft Selection - Round #{{
+            this.tracker?.round }} Pick #{{ this.tracker?.pick }}</h6>
+        <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+    </div>
+    <form #draftPlayerForm>
+        <div class="modal-body">
+            <p class="color-7">The {{ this.team.teamname }} {{ this.team.mascot }} select:</p>
+            <select name="leagueStatus" [(ngModel)]="this.draftSelection">
+                <option *ngFor="let player of this.draftablePlayers" [value]="player.playerId">{{ player.surname }}, {{
+                    player.firstName }}</option>
+            </select>
+        </div>
+        <div class="modal-footer form-group text-center">
+            <button type="submit" class="btn btn-primary btn-sm" (click)="makeDraftPick()">Select</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Cancel</button>
+        </div>
+    </form>
+</ng-template>
 
 <ng-template #viewsalaries>
-	<div class="modal-header">
-	  <h4 class="modal-title">Make Draft Selection - Round #{{ this.tracker?.round }} Pick #{{ this.tracker?.pick }}</h4>
-	  <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
-	</div>
-	<table>
+    <div class="modal-header">
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8">Make Draft Selection - Round #{{ this.tracker?.round }}
+            Pick #{{ this.tracker?.pick }}</h6>
+        <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+    </div>
+    <table class="table table-striped custab">
         <thead>
             <tr>
                 <th>Round</th>
@@ -257,6 +228,6 @@
         </tr>
     </table>
     <div class="modal-footer form-group text-center">
-        <button type="button" class="btn btn-danger" (click)="modalRef.hide()">Close</button>
-      </div>
-</ng-template>  -->
+        <button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Close</button>
+    </div>
+</ng-template>
