@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { CompletePlayer } from '../_models/completePlayer';
 import { ExtendedPlayer } from '../_models/extendedPlayer';
 import { PlayerContractDetailed } from '../_models/playerContractDetailed';
 import { PlayerInjury } from '../_models/playerInjury';
+import { Standing } from '../_models/standing';
 import { Team } from '../_models/team';
 import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { AlertifyService } from '../_services/alertify.service';
+import { PlayerService } from '../_services/player.service';
 import { TeamService } from '../_services/team.service';
 import { TransferService } from '../_services/transfer.service';
 
@@ -21,28 +24,40 @@ export class ViewTeamComponent implements OnInit {
   teamsInjuries: PlayerInjury[] = [];
   playingRoster: CompletePlayer[] = [];
   playerCount = 0;
-  statusGrades = 1;
-  statusStats = 0;
+  statusGrades = 0;
+  statusStats = 1;
   statusContracts = 0;
   teamCap: TeamSalaryCapInfo;
   remainingCapSpace = 0;
   teamContracts: PlayerContractDetailed[] = [];
 
+  teamRecord: Standing;
+
   constructor(private alertify: AlertifyService, private transferService: TransferService, private teamService: TeamService,
-              private router: Router) { }
+              private router: Router, private playerService: PlayerService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.teamId = this.transferService.getData();
 
     this.teamService.getTeamForTeamId(this.teamId).subscribe(result => {
+      this.spinner.show();
       this.team = result;
     }, error => {
       this.alertify.error('Error getting team');
     }, () => {
+      this.getTeamStandings();
       this.getPlayerInjuries();
       this.getRosterForTeam();
       this.getSalaryCapDetails();
       this.getTeamContracts();
+    });
+  }
+
+  getTeamStandings() {
+    this.teamService.getTeamRecord(this.team.id).subscribe(result => {
+      this.teamRecord = result;
+    }, error => {
+      this.alertify.error('Error getting team record');
     });
   }
 
@@ -88,12 +103,27 @@ export class ViewTeamComponent implements OnInit {
       this.playerCount = this.playingRoster.length;
     }, error => {
       this.alertify.error('Error getting your roster');
+    }, () => {
+      this.spinner.hide();
     });
   }
 
   viewPlayer(player: CompletePlayer) {
     this.transferService.setData(player.playerId);
     this.router.navigate(['/view-player']);
+  }
+
+  viewPlayerFromContract(name: string) {
+    // Need to get player id for name
+    let playerId = 0;
+    this.playerService.getPlayerForName(name).subscribe(result => {
+      playerId = result.id;
+    }, error => {
+      this.alertify.error('Error getting player name');
+    }, () => {
+      this.transferService.setData(playerId);
+      this.router.navigate(['/view-player']);
+    });
   }
 
   gradesClick() {
@@ -344,5 +374,4 @@ export class ViewTeamComponent implements OnInit {
     const display = value.toFixed(1);
     return display;
   }
-
 }

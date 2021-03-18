@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { CompletePlayer } from '../_models/completePlayer';
 import { ExtendedPlayer } from '../_models/extendedPlayer';
 import { League } from '../_models/league';
@@ -41,10 +42,11 @@ export class RosterComponent implements OnInit {
 
   constructor(private leagueService: LeagueService, private alertify: AlertifyService, private teamService: TeamService,
               private authService: AuthService, private transferService: TransferService, private router: Router,
-              private modalService: BsModalService, private playerService: PlayerService) { }
+              private modalService: BsModalService, private playerService: PlayerService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.leagueService.getLeague().subscribe(result => {
+      this.spinner.show();
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
@@ -141,6 +143,8 @@ export class RosterComponent implements OnInit {
       this.teamContracts = result;
     }, error => {
       this.alertify.error('Error getting team contracts');
+    }, () => {
+      this.spinner.hide();
     });
 
     this.teamService.getWaivedContracts(this.team.id).subscribe(result => {

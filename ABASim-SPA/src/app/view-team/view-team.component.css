@@ -1,4 +1,4 @@
-.dashboard-area {
+/* .dashboard-area {
     position: relative;
     text-align: center;
     background: #202120;
@@ -10,4 +10,18 @@
     z-index: 2;
     position: relative;
     color: #ffffff;
+} */
+table {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
 }
+.link-button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-family: arial, sans-serif;
+    color: #03fca1;
+    text-decoration: underline;
+    cursor: pointer;
+  }

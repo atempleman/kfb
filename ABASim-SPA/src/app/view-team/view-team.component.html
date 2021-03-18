@@ -1,21 +1,45 @@
-<section class="dashboard-area">
-	<h3 class="display">{{ this.team?.teamname }} {{this.team?.mascot }}</h3>
-	<p>Current Salary - ${{ this.teamCap?.currentSalaryAmount | number }}</p>
-	<p>League Salary Cap - ${{ this.teamCap?.salaryCapAmount | number }}</p>
-	<p>Cap Space Remaining - ${{ this.remainingCapSpace | number }}</p>
+<section class="py-sm-0 text-center" id="header-12">
+	<br />
+	<br />
+	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
+	</div>
+	<!--/.background-holder-->
+	<div class="container">
+		<div class="row h-full align-items-center">
+			<div class="col my-6">
+				<h3 class="fs-lg-7 fw-600 color-white">{{ this.team?.teamname }} {{this.team?.mascot }}</h3>
+				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">({{ this.teamRecord?.wins }} - {{ this.teamRecord?.losses }})</h6>
+
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+							<div class="item px-xl-5">
+								<p class="lead color-8">Current Salary - ${{ this.teamCap?.currentSalaryAmount | number }}</p>
+								<p class="lead color-8">League Salary Cap - ${{ this.teamCap?.salaryCapAmount | number }}</p>
+								<p class="lead color-8">Cap Space Remaining - ${{ this.remainingCapSpace | number }}</p>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/.row-->
+	</div>
+	<!--/.container-->
 </section>
 
-
-<div class="box ml-3 mr-2">
+<!-- <div class="row h-full align-items-center"> -->
+<section>
+	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+		<p class="loading">Loading Roster...</p>
+	</ngx-spinner>	
 	<div class="row ml-3 mr-2">
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link" [routerLink]="" [ngClass]="this.statusGrades ? 'active' : ''"
-					(click)="gradesClick()">Grades</a>
-			</li>
-			<li class="nav-item">
 				<a class="nav-link" [routerLink]="" [ngClass]="this.statusStats ? 'active' : ''"
 					(click)="statisticsClick()">Statistics</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLink]="" [ngClass]="this.statusGrades ? 'active' : ''"
+					(click)="gradesClick()">Grades</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" [routerLink]="" [ngClass]="this.statusContracts ? 'active' : ''"
@@ -42,15 +66,14 @@
 						<th>Steal</th>
 						<th>Stamina</th>
 						<th>Intangibles</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class="table-secondary" *ngFor="let player of this.playingRoster">
 						<td>
-							{{ player.firstName }} {{ player.surname }} <span
-								*ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
-									class="fa fa-medkit fa-2x"></i></span>
+							<button class="link-button" (click)="viewPlayer(player.firstName, player.surname)">{{
+								player.firstName }} {{ player.surname }}</button> <span
+								*ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i class="fa fa-medkit"></i></span>
 						</td>
 						<td>
 							<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
@@ -95,10 +118,6 @@
 						<td>
 							{{ player.intangiblesGrade }}
 						</td>
-						<td class="text-center">
-							<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"><i
-									class="fa fa-edit"></i> View</button>
-						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -132,7 +151,8 @@
 				<tbody>
 					<tr class="table-secondary" *ngFor="let player of this.playingRoster">
 						<td>
-							{{ this.player?.firstName }} {{ this.player?.surname }}
+							<button class="link-button" (click)="viewPlayer(player.firstName, player.surname)">{{
+								player.firstName }} {{ player.surname }}</button>
 						</td>
 						<td>
 							{{ this.player?.age }}
@@ -210,13 +230,14 @@
 						<th>4th Year</th>
 						<th>5th Year</th>
 						<th>Option</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr class="table-secondary" *ngFor="let player of this.teamContracts">
 						<td>
-							{{ player?.playerName }}
+
+							<button class="link-button" (click)="viewPlayerFromContract(player.playerName)">{{
+								player?.playerName }}</button>
 						</td>
 						<td>
 							${{ player?.yearOne | number }}
@@ -242,9 +263,9 @@
 							<p *ngIf="player?.teamOption == 1">Team</p>
 							<p *ngIf="player?.playerOption == 1">Player</p>
 						</td>
-						<td></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+</section>

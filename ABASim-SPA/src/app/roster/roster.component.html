@@ -1,3 +1,6 @@
+<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+  <p class="loading">Loading Roster...</p>
+  </ngx-spinner>
 <div class="box ml-3 mr-2" *ngIf="this.league?.stateId > 2">
   <!-- <div class="row ml-3 mr-2"> -->
   <ul class="nav nav-tabs">
@@ -41,7 +44,7 @@
           <tr *ngFor="let player of this.playingRoster">
             <td>
               <button class="link-button" (click)="viewPlayer(player.firstName, player.surname)">{{ player.firstName }} {{ player.surname }}</button> <span *ngIf="checkIfInjured(player.playerId) == 1">&nbsp;<i
-                  class="fa fa-medkit fa-2x"></i></span>
+                  class="fa fa-medkit"></i></span>
             </td>
             <td>
               <ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
