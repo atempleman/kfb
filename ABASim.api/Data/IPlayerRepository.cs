@@ -33,7 +33,7 @@ namespace ABASim.api.Data
 
          Task<CompletePlayerDto> GetCompletePlayer(int playerId);
 
-         Task<int> GetCountOfDraftPlayers()
+         Task<int> GetCountOfDraftPlayers();
 
          Task<Player> GetPlayerForName(string name);
 

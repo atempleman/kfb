@@ -1,653 +1,661 @@
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title mb-4">
-                        <div class="d-flex justify-content-start">
-                            <div class="image-container">
-                                <!-- <img src="http://placehold.it/150x150" id="imgProfile" -->
-                                <img src="{{ this.imageSrc }}" id="imgProfile" style="width: 150px; height: 150px"
-                                    class="img-thumbnail" />
-                            </div>
-                            <div class="userData ml-3">
-                                <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold">
-                                    {{ this.detailedPlayer?.firstName }} {{ this.detailedPlayer?.surname }}</h2>
-                                <h6 class="d-block">Age: {{ this.detailedPlayer?.age }}</h6>
-                                <h6 class="d-block">Team: <button (click)="viewTeam()">{{ this.playersTeam.teamname }} {{ this.playersTeam.mascot }}</button></h6>
-                                <h6 class="d-block">
-                                    Position:
-                                    <ng-container *ngIf="this.detailedPlayer?.pgPosition == 1">PG </ng-container>
-                                    <ng-container *ngIf="this.detailedPlayer?.sgPosition == 1">SG </ng-container>
-                                    <ng-container *ngIf="this.detailedPlayer?.sfPosition == 1">SF </ng-container>
-                                    <ng-container *ngIf="this.detailedPlayer?.pfPosition == 1">PF </ng-container>
-                                    <ng-container *ngIf="this.detailedPlayer?.cPosition == 1">C </ng-container>
-                                </h6>
-                                <span *ngIf="this.injurySet == 1"><i class="fa fa-medkit fa-2x"></i>
-                                    <h6> {{ this.playerInjury.type }} Injury - will miss
-                                        {{ this.playerInjury.timeMissed }} days</h6>
-                                </span>
-                                <span>{{ this.playerContractQuick.years }} year(s) -
-                                    ${{ this.playerContractQuick.currentYearAmount | number }} this year,
-                                    ${{ this.playerContractQuick.totalAmount | number }} total</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link" [routerLink]="" [ngClass]="this.statusStats ? 'active' : ''"
-                                        (click)="statisticsClick()">Statistics</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" [routerLink]="" [ngClass]="this.statusGrades ? 'active' : ''"
-                                        (click)="gradesClick()">Grades</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" [routerLink]="" [ngClass]="this.statusRatings ? 'active' : ''"
-                                        (click)="ratingsClick()">Ratings</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" [routerLink]=""
-                                        [ngClass]="this.statusTendancies ? 'active' : ''"
-                                        (click)="tendanciesClick()">Tendancies</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" [routerLink]="" [ngClass]="this.statusContract ? 'active' : ''"
-                                        (click)="contractClick()">Contract</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" [routerLink]=""
-                                        [ngClass]="this.statusCareerStats ? 'active' : ''"
-                                        (click)="careerStatsClick()">Career Stats</a>
-                                </li>
-                            </ul>
-
-                            <div class="tab-content ml-1" id="myTabContent">
-                                <h4 *ngIf="this.statusStats">Regular Season</h4>
-                                <table class="table table-hover roster-table" *ngIf="this.statusStats">
-                                    <thead>
-                                        <tr>
-                                            <th>G</th>
-                                            <th>MP</th>
-                                            <th>FG</th>
-                                            <th>FGA</th>
-                                            <th>FG%</th>
-                                            <th>3P</th>
-                                            <th>3PA</th>
-                                            <th>3P%</th>
-                                            <th>FT</th>
-                                            <th>FTA</th>
-                                            <th>FT%</th>
-                                            <th>ORB</th>
-                                            <th>DRB</th>
-                                            <th>TRB</th>
-                                            <th>AST</th>
-                                            <th>STL</th>
-                                            <th>BLK</th>
-                                            <th>TOV</th>
-                                            <th>PF</th>
-                                            <th>PTS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <td>
-                                                {{ this.detailedPlayer?.gamesStats }}
-                                            </td>
-                                            <td>
-                                                {{ getMinutesAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getFGAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getFGAAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getFgPercentage() }}
-                                            </td>
-                                            <td>
-                                                {{ getThreeFGAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getThreeFGAAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getThreeFgPercentage() }}
-                                            </td>
-                                            <td>
-                                                {{ getFTAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getFTAAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getFTPercentage() }}
-                                            </td>
-                                            <td>
-                                                {{ getOrebAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getDrebverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalRebAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalAstAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalStlAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalBlkAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalTovAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalFoulsAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalPointsAverage() }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <h4
-                                    *ngIf="this.league?.stateId > 8 || (this.league?.stateId == 7 && this.league?.day > 0) && this.statusStats">
-                                    Playoffs</h4>
-                                <table class="table table-hover roster-table"
-                                    *ngIf="this.league?.stateId > 8 || (this.league?.stateId == 7 && this.league?.day > 0) && this.statusStats">
-                                    <thead>
-                                        <tr>
-                                            <th>G</th>
-                                            <th>MP</th>
-                                            <th>FG</th>
-                                            <th>FGA</th>
-                                            <th>FG%</th>
-                                            <th>3P</th>
-                                            <th>3PA</th>
-                                            <th>3P%</th>
-                                            <th>FT</th>
-                                            <th>FTA</th>
-                                            <th>FT%</th>
-                                            <th>ORB</th>
-                                            <th>DRB</th>
-                                            <th>TRB</th>
-                                            <th>AST</th>
-                                            <th>STL</th>
-                                            <th>BLK</th>
-                                            <th>TOV</th>
-                                            <th>PF</th>
-                                            <th>PTS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <td>
-                                                {{ this.detailedPlayer?.playoffGamesStats }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffMinutesAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFGAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFGAAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFgPercentage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffThreeFGAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffThreeFGAAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffThreeFgPercentage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFTAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFTAAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFTPercentage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffOrebAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffDrebverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalRebAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalAstAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalStlAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalBlkAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalTovAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalFoulsAverage() }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalPointsAverage() }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table class="table table-hover roster-table" *ngIf="this.statusGrades">
-                                    <thead>
-                                        <tr>
-                                            <th>2pt</th>
-                                            <th>3pt</th>
-                                            <th>Ft</th>
-                                            <th>O-Reb</th>
-                                            <th>D-Reb</th>
-                                            <th>Handling</th>
-                                            <th>Passing</th>
-                                            <th>Block</th>
-                                            <th>Steal</th>
-                                            <th>Stamina</th>
-                                            <th>Intangibles</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <td>
-                                                {{ this.detailedPlayer?.twoGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.threeGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.ftGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.oRebGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.dRebGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.handlingGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.passingGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.blockGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.stealGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.staminaGrade }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.intangiblesGrade }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table class="table table-hover roster-table" *ngIf="this.statusRatings">
-                                    <thead>
-                                        <tr>
-                                            <th>2pt</th>
-                                            <th>3pt</th>
-                                            <th>Ft</th>
-                                            <th>O-Reb</th>
-                                            <th>D-Reb</th>
-                                            <th>Assist</th>
-                                            <th>Steal</th>
-                                            <th>Block</th>
-                                            <th>Usage</th>
-                                            <th>Stamina</th>
-                                            <th>ORPM</th>
-                                            <th>DRPM</th>
-                                            <th>Fouling</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <td>
-                                                {{ this.detailedPlayer?.twoRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.threeRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.ftRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.orebRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.drebRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.passAssistRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.stealRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.blockRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.usageRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.staminaRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.orpmRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.drpmRating }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.foulingRating }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table class="table table-hover roster-table" *ngIf="this.statusTendancies">
-                                    <thead>
-                                        <tr>
-                                            <th>2pt</th>
-                                            <th>3pt</th>
-                                            <th>Pass</th>
-                                            <th>Fouled</th>
-                                            <th>Turnover</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <td>
-                                                {{ this.detailedPlayer?.twoPointTendancy }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.threePointTendancy }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.passTendancy }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.fouledTendancy }}
-                                            </td>
-                                            <td>
-                                                {{ this.detailedPlayer?.turnoverTendancy }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                
-                                <h4 *ngIf="this.statusCareerStats">Regular Season</h4>
-                                <table class="table table-hover roster-table" *ngIf="this.statusCareerStats">
-                                    <thead>
-                                        <tr>
-                                            <th>Season</th>
-                                            <th>Team</th>
-                                            <th>G</th>
-                                            <th>MP</th>
-                                            <th>FG</th>
-                                            <th>FGA</th>
-                                            <th>FG%</th>
-                                            <th>3P</th>
-                                            <th>3PA</th>
-                                            <th>3P%</th>
-                                            <th>FT</th>
-                                            <th>FTA</th>
-                                            <th>FT%</th>
-                                            <th>ORB</th>
-                                            <th>DRB</th>
-                                            <th>TRB</th>
-                                            <th>AST</th>
-                                            <th>STL</th>
-                                            <th>BLK</th>
-                                            <th>TOV</th>
-                                            <th>PF</th>
-                                            <th>PTS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary" *ngFor="let seasonStats of this.careerStats">
-                                            <td>
-                                                {{ seasonStats?.seasonId }}
-                                            </td>
-                                            <td>
-                                                {{ seasonStats?.teamName }}
-                                            </td>
-                                            <td>
-                                                {{ seasonStats?.gamesStats }}
-                                            </td>
-                                            <td>
-                                                {{ getMinutesAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getFGAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getFGAAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getFgPercentageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getThreeFGAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getThreeFGAAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getThreeFgPercentageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getFTAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getFTAAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getFTPercentageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getOrebAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getDrebverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalRebAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalAstAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalStlAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalBlkAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalTovAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalFoulsAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getTotalPointsAverageForCareer(seasonStats) }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table class="table table-hover roster-table" *ngIf="this.statusContract">
-                                    <thead>
-                                        <tr>
-                                            <th>Current Year</th>
-                                            <th>Year 2</th>
-                                            <th>Year 3</th>
-                                            <th>Year 4</th>
-                                            <th>Year 5</th>
-                                            <th>Option</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <td>
-                                                ${{ this.playerContract?.yearOne | number }}
-                                                <p *ngIf="this.playerContract?.guranteedOne == 1"> - Guarenteed</p>
-                                            </td>
-                                            <td>
-                                                ${{ this.playerContract?.yearTwo | number }}
-                                                <p *ngIf="this.playerContract?.guranteedTwo == 1"> - Guarenteed</p>
-                                            </td>
-                                            <td>
-                                                ${{ this.playerContract?.yearThree | number }}
-                                                <p *ngIf="this.playerContract?.guranteedThree == 1"> - Guarenteed</p>
-                                            </td>
-                                            <td>
-                                                ${{ this.playerContract?.yearFour | number }}
-                                                <p *ngIf="this.playerContract?.guranteedFour == 1"> - Guarenteed</p>
-                                            </td>
-                                            <td>
-                                                ${{ this.playerContract?.yearFive | number }}
-                                                <p *ngIf="this.playerContract?.guranteedFive == 1"> - Guarenteed</p>
-                                            </td>
-                                            <td>
-                                                <p *ngIf="this.playerContract?.teamOption == 1">Team</p>
-                                                <p *ngIf="this.playerContract?.playerOption == 1">Player</p>
-                                                <!-- <p *ngIf="this.playerContract?.teamOption == 0 && this.playerContract?.playerOption == 0"></p> -->
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <h4 *ngIf="this.statusCareerStats">Playoffs</h4>
-                                <table class="table table-hover roster-table" *ngIf="this.statusCareerStats">
-                                    <thead>
-                                        <tr>
-                                            <th>Season</th>
-                                            <th>Team</th>
-                                            <th>G</th>
-                                            <th>MP</th>
-                                            <th>FG</th>
-                                            <th>FGA</th>
-                                            <th>FG%</th>
-                                            <th>3P</th>
-                                            <th>3PA</th>
-                                            <th>3P%</th>
-                                            <th>FT</th>
-                                            <th>FTA</th>
-                                            <th>FT%</th>
-                                            <th>ORB</th>
-                                            <th>DRB</th>
-                                            <th>TRB</th>
-                                            <th>AST</th>
-                                            <th>STL</th>
-                                            <th>BLK</th>
-                                            <th>TOV</th>
-                                            <th>PF</th>
-                                            <th>PTS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-secondary" *ngFor="let seasonStats of this.careerStats">
-                                            <td>
-                                                {{ seasonStats?.seasonId }}
-                                            </td>
-                                            <td>
-                                                {{ seasonStats?.teamName }}
-                                            </td>
-                                            <td>
-                                                {{ seasonStats.playoffGamesStats }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffMinutesAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFGAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFGAAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFgPercentageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffThreeFGAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffThreeFGAAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffThreeFgPercentageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFTAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFTAAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffFTPercentageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffOrebAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffDrebverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalRebAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalAstAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalStlAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalBlkAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalTovAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalFoulsAverageForCareer(seasonStats) }}
-                                            </td>
-                                            <td>
-                                                {{ getPlayoffTotalPointsAverageForCareer(seasonStats) }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+<section>
+    <div class="container">
+        <div class="row">
+            <!-- <div class="col-12"> -->
+                <div class="card">
+                    <!-- <div class="card-body"> -->
+                        <div class="card-title mb-4">
+                            <div class="d-flex justify-content-start">
+                                <div class="image-container">
+                                    <!-- <img src="http://placehold.it/150x150" id="imgProfile" -->
+                                    <img src="{{ this.imageSrc }}" id="imgProfile" style="width: 150px; height: 150px"
+                                        class="img-thumbnail" />
+                                </div>
+                                <div class="userData ml-3">
+                                    <h2 class="d-block color-8" style="font-size: 1.5rem; font-weight: bold">
+                                        {{ this.detailedPlayer?.firstName }} {{ this.detailedPlayer?.surname }}</h2>
+                                    <h6 class="d-block color-7">Age: {{ this.detailedPlayer?.age }}</h6>
+                                    <h6 class="d-block color-7">Team: <button (click)="viewTeam()">{{ this.playersTeam.teamname
+                                            }} {{ this.playersTeam.mascot }}</button></h6>
+                                    <h6 class="d-block color-7">
+                                        Position:
+                                        <ng-container *ngIf="this.detailedPlayer?.pgPosition == 1">PG </ng-container>
+                                        <ng-container *ngIf="this.detailedPlayer?.sgPosition == 1">SG </ng-container>
+                                        <ng-container *ngIf="this.detailedPlayer?.sfPosition == 1">SF </ng-container>
+                                        <ng-container *ngIf="this.detailedPlayer?.pfPosition == 1">PF </ng-container>
+                                        <ng-container *ngIf="this.detailedPlayer?.cPosition == 1">C </ng-container>
+                                    </h6>
+                                    <span *ngIf="this.injurySet == 1"><i class="fa fa-medkit"></i>
+                                        <h6 class="color-7"> {{ this.playerInjury.type }} Injury - will miss
+                                            {{ this.playerInjury.timeMissed }} days</h6>
+                                    </span>
+                                    <span>
+                                        <p class="color-7">{{ this.playerContractQuick.years }} year(s) -
+                                        ${{ this.playerContractQuick.currentYearAmount | number }} this year,
+                                        ${{ this.playerContractQuick.totalAmount | number }} total</p></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link" [routerLink]="" [ngClass]="this.statusStats ? 'active' : ''"
+                                            (click)="statisticsClick()">Statistics</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" [routerLink]=""
+                                            [ngClass]="this.statusGrades ? 'active' : ''"
+                                            (click)="gradesClick()">Grades</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" [routerLink]=""
+                                            [ngClass]="this.statusRatings ? 'active' : ''"
+                                            (click)="ratingsClick()">Ratings</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" [routerLink]=""
+                                            [ngClass]="this.statusTendancies ? 'active' : ''"
+                                            (click)="tendanciesClick()">Tendancies</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" [routerLink]=""
+                                            [ngClass]="this.statusContract ? 'active' : ''"
+                                            (click)="contractClick()">Contract</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" [routerLink]=""
+                                            [ngClass]="this.statusCareerStats ? 'active' : ''"
+                                            (click)="careerStatsClick()">Career Stats</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content ml-1" id="myTabContent">
+                                    <h4 *ngIf="this.statusStats" class="color-8">Regular Season</h4>
+                                    <table class="table table-hover roster-table" *ngIf="this.statusStats">
+                                        <thead>
+                                            <tr>
+                                                <th>G</th>
+                                                <th>MP</th>
+                                                <th>FG</th>
+                                                <th>FGA</th>
+                                                <th>FG%</th>
+                                                <th>3P</th>
+                                                <th>3PA</th>
+                                                <th>3P%</th>
+                                                <th>FT</th>
+                                                <th>FTA</th>
+                                                <th>FT%</th>
+                                                <th>ORB</th>
+                                                <th>DRB</th>
+                                                <th>TRB</th>
+                                                <th>AST</th>
+                                                <th>STL</th>
+                                                <th>BLK</th>
+                                                <th>TOV</th>
+                                                <th>PF</th>
+                                                <th>PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    {{ this.detailedPlayer?.gamesStats }}
+                                                </td>
+                                                <td>
+                                                    {{ getMinutesAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getFGAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getFGAAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getFgPercentage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getThreeFGAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getThreeFGAAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getThreeFgPercentage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getFTAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getFTAAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getFTPercentage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getOrebAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getDrebverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalRebAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalAstAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalStlAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalBlkAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalTovAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalFoulsAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalPointsAverage() }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h4 class="color-8"
+                                        *ngIf="this.league?.stateId > 8 || (this.league?.stateId == 7 && this.league?.day > 0) && this.statusStats">
+                                        Playoffs</h4>
+                                    <table class="table table-hover roster-table"
+                                        *ngIf="this.league?.stateId > 8 || (this.league?.stateId == 7 && this.league?.day > 0) && this.statusStats">
+                                        <thead>
+                                            <tr>
+                                                <th>G</th>
+                                                <th>MP</th>
+                                                <th>FG</th>
+                                                <th>FGA</th>
+                                                <th>FG%</th>
+                                                <th>3P</th>
+                                                <th>3PA</th>
+                                                <th>3P%</th>
+                                                <th>FT</th>
+                                                <th>FTA</th>
+                                                <th>FT%</th>
+                                                <th>ORB</th>
+                                                <th>DRB</th>
+                                                <th>TRB</th>
+                                                <th>AST</th>
+                                                <th>STL</th>
+                                                <th>BLK</th>
+                                                <th>TOV</th>
+                                                <th>PF</th>
+                                                <th>PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    {{ this.detailedPlayer?.playoffGamesStats }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffMinutesAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFGAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFGAAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFgPercentage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffThreeFGAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffThreeFGAAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffThreeFgPercentage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFTAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFTAAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFTPercentage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffOrebAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffDrebverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalRebAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalAstAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalStlAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalBlkAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalTovAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalFoulsAverage() }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalPointsAverage() }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-hover roster-table" *ngIf="this.statusGrades">
+                                        <thead>
+                                            <tr>
+                                                <th>2pt</th>
+                                                <th>3pt</th>
+                                                <th>Ft</th>
+                                                <th>O-Reb</th>
+                                                <th>D-Reb</th>
+                                                <th>Handling</th>
+                                                <th>Passing</th>
+                                                <th>Block</th>
+                                                <th>Steal</th>
+                                                <th>Stamina</th>
+                                                <th>Intangibles</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    {{ this.detailedPlayer?.twoGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.threeGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.ftGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.oRebGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.dRebGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.handlingGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.passingGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.blockGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.stealGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.staminaGrade }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.intangiblesGrade }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-hover roster-table" *ngIf="this.statusRatings">
+                                        <thead>
+                                            <tr>
+                                                <th>2pt</th>
+                                                <th>3pt</th>
+                                                <th>Ft</th>
+                                                <th>O-Reb</th>
+                                                <th>D-Reb</th>
+                                                <th>Assist</th>
+                                                <th>Steal</th>
+                                                <th>Block</th>
+                                                <th>Usage</th>
+                                                <th>Stamina</th>
+                                                <th>ORPM</th>
+                                                <th>DRPM</th>
+                                                <th>Fouling</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    {{ this.detailedPlayer?.twoRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.threeRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.ftRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.orebRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.drebRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.passAssistRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.stealRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.blockRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.usageRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.staminaRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.orpmRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.drpmRating }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.foulingRating }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-hover roster-table" *ngIf="this.statusTendancies">
+                                        <thead>
+                                            <tr>
+                                                <th>2pt</th>
+                                                <th>3pt</th>
+                                                <th>Pass</th>
+                                                <th>Fouled</th>
+                                                <th>Turnover</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    {{ this.detailedPlayer?.twoPointTendancy }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.threePointTendancy }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.passTendancy }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.fouledTendancy }}
+                                                </td>
+                                                <td>
+                                                    {{ this.detailedPlayer?.turnoverTendancy }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h4 *ngIf="this.statusCareerStats" class="color-8">Regular Season</h4>
+                                    <table class="table table-hover roster-table" *ngIf="this.statusCareerStats">
+                                        <thead>
+                                            <tr>
+                                                <th>Season</th>
+                                                <th>Team</th>
+                                                <th>G</th>
+                                                <th>MP</th>
+                                                <th>FG</th>
+                                                <th>FGA</th>
+                                                <th>FG%</th>
+                                                <th>3P</th>
+                                                <th>3PA</th>
+                                                <th>3P%</th>
+                                                <th>FT</th>
+                                                <th>FTA</th>
+                                                <th>FT%</th>
+                                                <th>ORB</th>
+                                                <th>DRB</th>
+                                                <th>TRB</th>
+                                                <th>AST</th>
+                                                <th>STL</th>
+                                                <th>BLK</th>
+                                                <th>TOV</th>
+                                                <th>PF</th>
+                                                <th>PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary" *ngFor="let seasonStats of this.careerStats">
+                                                <td>
+                                                    {{ seasonStats?.seasonId }}
+                                                </td>
+                                                <td>
+                                                    {{ seasonStats?.teamName }}
+                                                </td>
+                                                <td>
+                                                    {{ seasonStats?.gamesStats }}
+                                                </td>
+                                                <td>
+                                                    {{ getMinutesAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getFGAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getFGAAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getFgPercentageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getThreeFGAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getThreeFGAAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getThreeFgPercentageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getFTAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getFTAAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getFTPercentageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getOrebAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getDrebverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalRebAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalAstAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalStlAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalBlkAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalTovAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalFoulsAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getTotalPointsAverageForCareer(seasonStats) }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-hover roster-table" *ngIf="this.statusContract">
+                                        <thead>
+                                            <tr>
+                                                <th>Current Year</th>
+                                                <th>Year 2</th>
+                                                <th>Year 3</th>
+                                                <th>Year 4</th>
+                                                <th>Year 5</th>
+                                                <th>Option</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary">
+                                                <td>
+                                                    ${{ this.playerContract?.yearOne | number }}
+                                                    <p *ngIf="this.playerContract?.guranteedOne == 1"> - Guarenteed</p>
+                                                </td>
+                                                <td>
+                                                    ${{ this.playerContract?.yearTwo | number }}
+                                                    <p *ngIf="this.playerContract?.guranteedTwo == 1"> - Guarenteed</p>
+                                                </td>
+                                                <td>
+                                                    ${{ this.playerContract?.yearThree | number }}
+                                                    <p *ngIf="this.playerContract?.guranteedThree == 1"> - Guarenteed
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    ${{ this.playerContract?.yearFour | number }}
+                                                    <p *ngIf="this.playerContract?.guranteedFour == 1"> - Guarenteed</p>
+                                                </td>
+                                                <td>
+                                                    ${{ this.playerContract?.yearFive | number }}
+                                                    <p *ngIf="this.playerContract?.guranteedFive == 1"> - Guarenteed</p>
+                                                </td>
+                                                <td>
+                                                    <p *ngIf="this.playerContract?.teamOption == 1">Team</p>
+                                                    <p *ngIf="this.playerContract?.playerOption == 1">Player</p>
+                                                    <!-- <p *ngIf="this.playerContract?.teamOption == 0 && this.playerContract?.playerOption == 0"></p> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h4 *ngIf="this.statusCareerStats" class="color-8">Playoffs</h4>
+                                    <table class="table table-hover roster-table" *ngIf="this.statusCareerStats">
+                                        <thead>
+                                            <tr>
+                                                <th>Season</th>
+                                                <th>Team</th>
+                                                <th>G</th>
+                                                <th>MP</th>
+                                                <th>FG</th>
+                                                <th>FGA</th>
+                                                <th>FG%</th>
+                                                <th>3P</th>
+                                                <th>3PA</th>
+                                                <th>3P%</th>
+                                                <th>FT</th>
+                                                <th>FTA</th>
+                                                <th>FT%</th>
+                                                <th>ORB</th>
+                                                <th>DRB</th>
+                                                <th>TRB</th>
+                                                <th>AST</th>
+                                                <th>STL</th>
+                                                <th>BLK</th>
+                                                <th>TOV</th>
+                                                <th>PF</th>
+                                                <th>PTS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-secondary" *ngFor="let seasonStats of this.careerStats">
+                                                <td>
+                                                    {{ seasonStats?.seasonId }}
+                                                </td>
+                                                <td>
+                                                    {{ seasonStats?.teamName }}
+                                                </td>
+                                                <td>
+                                                    {{ seasonStats.playoffGamesStats }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffMinutesAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFGAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFGAAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFgPercentageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffThreeFGAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffThreeFGAAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffThreeFgPercentageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFTAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFTAAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffFTPercentageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffOrebAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffDrebverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalRebAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalAstAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalStlAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalBlkAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalTovAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalFoulsAverageForCareer(seasonStats) }}
+                                                </td>
+                                                <td>
+                                                    {{ getPlayoffTotalPointsAverageForCareer(seasonStats) }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- </div> -->
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
-</div>
+</section>
