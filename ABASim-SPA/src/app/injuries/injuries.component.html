@@ -2,8 +2,10 @@
 	<ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
 		<p class="loading">Loading Injuries...</p>
 	</ngx-spinner>
-	<div class="row">
-		<div class="col">
+
+	<div class="row justify-content-center mt-2 mb-2 color-1">
+    <div class="col-12 justify-content-center">
+		<!-- <div class="col"> -->
 			<table class="table table-hover roster-table" *ngIf="this.leagueInjuries.length > 0">
 				<thead>
 					<tr>
