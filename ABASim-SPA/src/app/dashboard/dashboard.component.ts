@@ -31,6 +31,9 @@ import { DraftService } from '../_services/draft.service';
 import { DashboardDraftPick } from '../_models/dashboardDraftPick';
 import { Transaction } from '../_models/transaction';
 import { Votes } from '../_models/votes';
+import { QuickViewPlayer } from '../_models/QuickViewPlayer';
+import { PlayerInjury } from '../_models/playerInjury';
+import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 
 @Component({
   selector: 'app-dashboard',
@@ -46,6 +49,14 @@ export class DashboardComponent implements OnInit {
   todaysGames: GameDisplayCurrent[] = [];
   playoffSummaries: PlayoffSummary[] = [];
   noRun = 0;
+
+  teamToggle = 1;
+  leagueToggle = 1;
+  chatToggle = 1;
+
+  quickTeamRoster: QuickViewPlayer[] = [];
+  quickRostCount = 0;
+  quickTeamInjuries: LeaguePlayerInjury[] = [];
 
   topFivePoints: LeagueLeadersPoints[] = [];
   topFiveRebounds: LeagueLeadersRebounds[] = [];
@@ -97,6 +108,9 @@ export class DashboardComponent implements OnInit {
       this.alertify.error('Error getting League Details');
     }, () => {
       this.spinner.show();
+      this.getTeamRoster();
+      this.getTeamInjuries();
+
       if (this.league.stateId === 4) {
         this.getDraftTracker();
       } else if (this.league.stateId === 7) {
@@ -304,6 +318,23 @@ export class DashboardComponent implements OnInit {
         this.alertify.error('Error getting upcoming games');
       });
     }
+  }
+
+  getTeamRoster() {
+    this.teamService.getQuickViewRosterForTeam(this.team.id).subscribe(result => {
+      this.quickTeamRoster = result;
+      this.quickRostCount = this.quickTeamRoster.length;
+    }, error => {
+      this.alertify.error('Error getting your roster');
+    });
+  }
+
+  getTeamInjuries() {
+    this.teamService.getInjuriesForTeam(this.team.id).subscribe(result => {
+      this.quickTeamInjuries = result;
+    }, error => {
+      this.alertify.error('Error getting injuries');
+    });
   }
 
   goToRoster() {
@@ -671,6 +702,49 @@ export class DashboardComponent implements OnInit {
         this.secondaryColor = '12, 126, 120';
         break;
     }
+  }
+
+  teamSelection() {
+    if (this.teamToggle == 0) {
+      this.teamToggle = 1;
+    } else {
+      this.teamToggle = 0;
+    }
+  }
+
+  leagueSelection() {
+    if (this.leagueToggle == 0) {
+      this.leagueToggle = 1;
+    } else {
+      this.leagueToggle = 0;
+    }
+  }
+
+  chatSelection() {
+    if (this.chatToggle == 0) {
+      this.chatToggle = 1;
+    } else {
+      this.chatToggle = 0;
+    }
+  }
+
+  getTotalPointsAverage(detailedPlayer: QuickViewPlayer) {
+    const value = (detailedPlayer.ptsStats / detailedPlayer.gamesStats);
+    const display = value.toFixed(1);
+    return display;
+  }
+
+  getTotalRebAverage(detailedPlayer: QuickViewPlayer) {
+    const totalRebs = detailedPlayer.orebsStats + detailedPlayer.drebsStats;
+    const value = (totalRebs / detailedPlayer.gamesStats);
+    const display = value.toFixed(1);
+    return display;
+  }
+
+  getTotalAstAverage(detailedPlayer: QuickViewPlayer) {
+    const value = (detailedPlayer.astStats / detailedPlayer.gamesStats);
+    const display = value.toFixed(1);
+    return display;
   }
 
 }

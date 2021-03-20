@@ -33,6 +33,10 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<CompletePlayerDto>> GetExtendPlayersForTeam(int teamId);
 
+         Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(int teamId);
+
+         Task<IEnumerable<LeaguePlayerInjuryDto>> GetTeamInjuries(int teamId);
+
          Task<bool> WaivePlayer(WaivePlayerDto waived);
 
          Task<bool> SignPlayer(SignedPlayerDto signed);

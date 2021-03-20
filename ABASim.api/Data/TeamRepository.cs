@@ -229,16 +229,26 @@ namespace ABASim.api.Data
                     playerName = player.FirstName + " " + player.Surname;
 
                     var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
-                    if (playerContract != null) {
-                        if (playerContract.YearFive > 0) {
+                    if (playerContract != null)
+                    {
+                        if (playerContract.YearFive > 0)
+                        {
                             years = 5;
-                        } else if (playerContract.YearFour > 0) {
+                        }
+                        else if (playerContract.YearFour > 0)
+                        {
                             years = 4;
-                        } else if (playerContract.YearThree > 0) {
+                        }
+                        else if (playerContract.YearThree > 0)
+                        {
                             years = 3;
-                        } else if (playerContract.YearTwo > 0) {
+                        }
+                        else if (playerContract.YearTwo > 0)
+                        {
                             years = 2;
-                        } else {
+                        }
+                        else
+                        {
                             years = 1;
                         }
 
@@ -290,16 +300,26 @@ namespace ABASim.api.Data
                     playerName = player.FirstName + " " + player.Surname;
 
                     var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
-                    if (playerContract != null) {
-                        if (playerContract.YearFive > 0) {
+                    if (playerContract != null)
+                    {
+                        if (playerContract.YearFive > 0)
+                        {
                             years = 5;
-                        } else if (playerContract.YearFour > 0) {
+                        }
+                        else if (playerContract.YearFour > 0)
+                        {
                             years = 4;
-                        } else if (playerContract.YearThree > 0) {
+                        }
+                        else if (playerContract.YearThree > 0)
+                        {
                             years = 3;
-                        } else if (playerContract.YearTwo > 0) {
+                        }
+                        else if (playerContract.YearTwo > 0)
+                        {
                             years = 2;
-                        } else {
+                        }
+                        else
+                        {
                             years = 1;
                         }
 
@@ -347,7 +367,7 @@ namespace ABASim.api.Data
         {
             List<Team> teams = new List<Team>();
             var availableTeams = await _context.Teams.Where(x => x.UserId == 0).ToListAsync();
-            
+
             if (availableTeams != null)
             {
                 foreach (var team in availableTeams)
@@ -422,6 +442,92 @@ namespace ABASim.api.Data
         {
             var deptchCharts = await _context.DepthCharts.Where(x => x.TeamId == teamId).ToListAsync();
             return deptchCharts;
+        }
+
+        public async Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(int teamId)
+        {
+            List<QuickViewPlayerDto> players = new List<QuickViewPlayerDto>();
+            var teamsRosteredPlayers = await _context.Rosters.Where(x => x.TeamId == teamId).ToListAsync();
+
+            // Now need to get the player details
+            foreach (var rosterPlayer in teamsRosteredPlayers)
+            {
+                var league = await _context.Leagues.FirstOrDefaultAsync();
+                var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.Id == rosterPlayer.PlayerId);
+                var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId);
+
+                if (playerStats != null)
+                {
+                    QuickViewPlayerDto dto = new QuickViewPlayerDto
+                    {
+                        PlayerId = rosterPlayer.PlayerId,
+                        FirstName = playerDetails.FirstName,
+                        Surname = playerDetails.Surname,
+                        PGPosition = playerDetails.PGPosition,
+                        SGPosition = playerDetails.SGPosition,
+                        SFPosition = playerDetails.SFPosition,
+                        PFPosition = playerDetails.PFPosition,
+                        CPosition = playerDetails.CPosition,
+                        GamesStats = playerStats.GamesPlayed,
+                        OrebsStats = playerStats.ORebs,
+                        DrebsStats = playerStats.DRebs,
+                        AstStats = playerStats.Assists,
+                        PtsStats = playerStats.Points
+                    };
+                    players.Add(dto);
+                }
+                else
+                {
+                    QuickViewPlayerDto dto = new QuickViewPlayerDto
+                    {
+                        PlayerId = rosterPlayer.PlayerId,
+                        FirstName = playerDetails.FirstName,
+                        Surname = playerDetails.Surname,
+                        PGPosition = playerDetails.PGPosition,
+                        SGPosition = playerDetails.SGPosition,
+                        SFPosition = playerDetails.SFPosition,
+                        PFPosition = playerDetails.PFPosition,
+                        CPosition = playerDetails.CPosition,
+                        GamesStats = 0,
+                        OrebsStats = 0,
+                        DrebsStats = 0,
+                        AstStats = 0,
+                        PtsStats = 0
+                    };
+                    players.Add(dto);
+                }
+            }
+            return players;
+        }
+
+        public async Task<IEnumerable<LeaguePlayerInjuryDto>> GetTeamInjuries(int teamId)
+        {
+            List<LeaguePlayerInjuryDto> injuries = new List<LeaguePlayerInjuryDto>();
+
+            var playerInjuries = await _context.PlayerInjuries.Where(x => x.CurrentlyInjured == 1).OrderBy(x => x.StartDay).ToListAsync();
+
+            foreach (var injury in playerInjuries)
+            {
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == injury.PlayerId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId);
+
+                if (playerTeam.TeamId == teamId)
+                {
+                    LeaguePlayerInjuryDto dto = new LeaguePlayerInjuryDto
+                    {
+                        PlayerId = injury.PlayerId,
+                        PlayerName = player.FirstName + " " + player.Surname,
+                        TeamName = "",
+                        Severity = injury.Severity,
+                        Type = injury.Type,
+                        TimeMissed = injury.TimeMissed,
+                        StartDay = injury.StartDay,
+                        EndDay = injury.EndDay
+                    };
+                    injuries.Add(dto);
+                }
+            }
+            return injuries;
         }
 
         public async Task<IEnumerable<CompletePlayerDto>> GetExtendPlayersForTeam(int teamId)
@@ -1061,22 +1167,32 @@ namespace ABASim.api.Data
                         playerName = player.FirstName + " " + player.Surname;
 
                         var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
-                    if (playerContract != null) {
-                        if (playerContract.YearFive > 0) {
-                            years = 5;
-                        } else if (playerContract.YearFour > 0) {
-                            years = 4;
-                        } else if (playerContract.YearThree > 0) {
-                            years = 3;
-                        } else if (playerContract.YearTwo > 0) {
-                            years = 2;
-                        } else {
-                            years = 1;
-                        }
+                        if (playerContract != null)
+                        {
+                            if (playerContract.YearFive > 0)
+                            {
+                                years = 5;
+                            }
+                            else if (playerContract.YearFour > 0)
+                            {
+                                years = 4;
+                            }
+                            else if (playerContract.YearThree > 0)
+                            {
+                                years = 3;
+                            }
+                            else if (playerContract.YearTwo > 0)
+                            {
+                                years = 2;
+                            }
+                            else
+                            {
+                                years = 1;
+                            }
 
-                        total = playerContract.YearFive + playerContract.YearFour + playerContract.YearThree + playerContract.YearTwo + playerContract.YearOne;
-                        current = playerContract.YearOne;
-                    }
+                            total = playerContract.YearFive + playerContract.YearFour + playerContract.YearThree + playerContract.YearTwo + playerContract.YearOne;
+                            current = playerContract.YearOne;
+                        }
                     }
 
                     TradeDto newTrade = new TradeDto
@@ -1119,16 +1235,26 @@ namespace ABASim.api.Data
                 int years = 0;
                 int totalValue = 0;
 
-                if (contract != null) {
-                    if (contract.YearFive > 0) {
+                if (contract != null)
+                {
+                    if (contract.YearFive > 0)
+                    {
                         years = 5;
-                    } else if (contract.YearFour > 0) {
+                    }
+                    else if (contract.YearFour > 0)
+                    {
                         years = 4;
-                    } else if (contract.YearThree > 0) {
+                    }
+                    else if (contract.YearThree > 0)
+                    {
                         years = 3;
-                    } else if (contract.YearTwo > 0) {
+                    }
+                    else if (contract.YearTwo > 0)
+                    {
                         years = 2;
-                    } else {
+                    }
+                    else
+                    {
                         years = 1;
                     }
 
@@ -1137,7 +1263,8 @@ namespace ABASim.api.Data
 
                 int contractYearOne = 0;
                 int contractGuarentee = 0;
-                if (contract != null) {
+                if (contract != null)
+                {
                     contractYearOne = contract.YearOne;
                     contractGuarentee = contract.GuranteedOne;
                 }
@@ -1160,7 +1287,7 @@ namespace ABASim.api.Data
                 };
                 players.Add(dto);
             }
-            return players;            
+            return players;
         }
 
         public async Task<IEnumerable<WaivedContractDto>> GetWaivedContracts(int teamId)
@@ -1320,7 +1447,7 @@ namespace ABASim.api.Data
                 {
                     daysToDecide = league.Day + 3;
                 }
-                else 
+                else
                 {
                     daysToDecide = league.Day + 2;
                 }
@@ -1522,21 +1649,26 @@ namespace ABASim.api.Data
             wc.TeamId = waived.TeamId;
             int guarenteed = 0;
 
-            if (playerContract.GuranteedOne > 0) {
+            if (playerContract.GuranteedOne > 0)
+            {
                 // Year one is guarenteed
                 guarenteed = 1;
                 wc.YearOne = playerContract.YearOne;
 
-                if (playerContract.GuranteedTwo > 0) {
+                if (playerContract.GuranteedTwo > 0)
+                {
                     wc.YearTwo = playerContract.YearTwo;
 
-                    if (playerContract.GuranteedThree > 0) {
+                    if (playerContract.GuranteedThree > 0)
+                    {
                         wc.YearThree = playerContract.YearThree;
 
-                        if (playerContract.GuranteedFour > 0) {
+                        if (playerContract.GuranteedFour > 0)
+                        {
                             wc.YearFour = playerContract.YearFour;
 
-                            if (playerContract.GuranteedFive > 0) {
+                            if (playerContract.GuranteedFive > 0)
+                            {
                                 wc.YearFive = playerContract.YearFive;
                             }
                         }
@@ -1544,10 +1676,13 @@ namespace ABASim.api.Data
                 }
             }
 
-            if (guarenteed == 1) {
+            if (guarenteed == 1)
+            {
                 // We need to save the record
                 await _context.AddAsync(wc);
-            } else {
+            }
+            else
+            {
                 // Contract was not guarenteed and we need to remove it from the team salary cap
                 var teamCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == waived.TeamId);
                 teamCap.CurrentCapAmount = teamCap.CurrentCapAmount - playerContract.YearOne;

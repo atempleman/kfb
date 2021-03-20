@@ -23,6 +23,8 @@ import { ContractOffer } from '../_models/contractOffer';
 import { WaivedContract } from '../_models/waivedContract';
 import { TradePlayerView } from '../_models/tradePlayerView';
 import { Standing } from '../_models/standing';
+import { QuickViewPlayer } from '../_models/QuickViewPlayer';
+import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +48,14 @@ export class TeamService {
 
   getExtendedRosterForTeam(teamId: number): Observable<CompletePlayer[]> {
     return this.http.get<CompletePlayer[]>(this.baseUrl + 'getextendedroster/' + teamId);
+  }
+
+  getQuickViewRosterForTeam(teamId: number): Observable<QuickViewPlayer[]> {
+    return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster/' + teamId);
+  }
+
+  getInjuriesForTeam(teamId: number): Observable<LeaguePlayerInjury[]> {
+    return this.http.get<LeaguePlayerInjury[]>(this.baseUrl + 'getteaminjuries/' + teamId);
   }
 
   getTeamForUserId(userId: number) {

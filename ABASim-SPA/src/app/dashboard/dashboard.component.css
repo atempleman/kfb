@@ -1,3 +1,21 @@
+.link-button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    font-family: arial, sans-serif;
+    color: #03fca1;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+
+
+
+
+
+
+
+
 .dashboard-area {
     position: relative;
     text-align: center;
@@ -14,20 +32,13 @@
 
 .card {
     color: white;
-    float: left;
-    width: calc(33% - 20px);
+    /* float: left; */
+    width: calc(95% - 20px);
     padding: 10px;
     border-radius: 10px;
     margin: 10px;
-    height: auto; /*550px; /* make this dynamic */
-    text-align: center;
- }
- .small-card {
-    color: white;
-    float: center;
-    padding: 5x;
-    border-radius: 5px;
-    height: auto; /*550px; /* make this dynamic */
+    height: auto;
+     /*550px; make this dynamic*/
     text-align: center;
  }
  .row {
