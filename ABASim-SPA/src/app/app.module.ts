@@ -56,6 +56,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { RosterComponent } from './roster/roster.component';
 import { FinancesComponent } from './finances/finances.component';
+import { RouterModule } from '@angular/router';
 
 export function tokenGetter() {
    return localStorage.getItem('token');

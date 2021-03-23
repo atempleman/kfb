@@ -1,11 +1,11 @@
 <section class="py-sm-0 text-center" id="header-12">
 	<br />
 	<br />
-	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/51.jpg);">
+	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/branding/boardroom001.jpg);">
 	</div>
 	<!--/.background-holder-->
 	<div class="container">
-		<div class="row h-full align-items-center">
+		<div class="row align-items-center">
 			<div class="col my-6">
 				<h3 class="fs-lg-7 fw-600 color-white">{{this.team?.mascot }} DASHBOARD</h3>
 				<h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3">Season #{{ this.league?.year }} -
@@ -27,7 +27,6 @@
 						*ngIf="this.league?.stateId >= 6 && this.league?.stateId != 12 && this.league?.stateId != 13 && this.league?.stateId != 14"></span>
 					- Day #{{ this.league?.day }}
 				</h6>
-
 
 				<div class="row justify-content-center">
 					<div class="col-lg-8">
@@ -57,9 +56,7 @@
 	</div>
 	<div class="content" *ngIf="this.teamToggle == 1">
 		<div>
-		<!-- class="ui styled fluid accordion"> -->
-
-
+			<!-- class="ui styled fluid accordion"> -->
 			<div class="card ml-1 mr-1" [style.background-color]="'rgb(' + primaryColor + ')'">
 				<h4 class="center color-11"><i class="fa fa-users" aria-hidden="true"></i> ROSTER</h4>
 				<table>
@@ -154,9 +151,398 @@
 				*ngIf="this.leagueToggle == 0"></i><i class="fa fa-caret-down mr-3" *ngIf="this.leagueToggle == 1"></i>
 			LEAGUE</div>
 	</div>
+
 	<div class="content" *ngIf="this.leagueToggle == 1">
-		<div class="ui styled fluid accordion">
-			content
+		<!-- Registration/State Card -->
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 1">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p class="color-7">Currently the league is taking on user registrations. If you know anyone get them to
+					join the league! Once
+					the league is full, the initial draft lottery will be run. For now use the global chat and scout
+					players
+					under the Players section.</p>
+			</div>
+
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 2">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p class="color-7">The league has now been filled! The draft lottery will be run shortly!</p>
+			</div>
+
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 3">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p class="color-7">The draft lottery has now been run. View the draft order and all things draft related
+					under the draft menu
+					option and don't forget to set your draftboard to cover the auto-picks! The draft will begin soon,
+					exact
+					time and date will be posted in the chat.</p>
+			</div>
+
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 6">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Preseason</h4>
+				<p class="color-7">Preseason has now begun. Each team will play 4 games - 1 per day. Now is the time to
+					try and work out your
+					lineups.</p>
+			</div>
+		</div>
+
+		<!-- <div class="ui styled fluid accordion"> -->
+		<div>
+			<!-- Todays Games Card -->
+			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'">
+				<h4><i class="fa fa-calendar" aria-hidden="true"></i> TODAY'S GAMES</h4>
+				<p class="text-success" *ngIf="this.league?.stateId == 1">Awaiting Users to register and fill the league
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 2">Initial Draft Lottery</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4">Initial League
+					Draft
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 5">Beginning of the Preseason</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 6">Preason Day #{{ this.league?.day }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 7">Regular Season Day #{{ this.league?.day }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 8">Playoffs - Round 1 Day #{{ this.league?.day }}
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 9">Playoffs - Conference Semi Finals Day
+					#{{ this.league?.day }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 10">Playoffs - Conference Finals
+					#{{ this.league?.day }}</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 11">Playoffs - ABA Finals #{{ this.league?.day }}
+				</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 12">Season End - Stats updates</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 13">Draft Lottery</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 14">Draft</p>
+				<p class="text-success" *ngIf="this.league?.stateId == 15">Free Agency #{{ this.league?.day }}</p>
+
+				<table class="table table-hover events-table"
+					*ngIf="this.league?.stateId == 6 || this.league?.stateId == 7 || this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 10 || this.league?.stateId == 11">
+					<tbody>
+						<tr class="table-secondary" *ngFor="let game of this.todaysGames">
+							<td>
+								{{ game.awayTeamName }} @ {{ game.homeTeamName }}
+								<button
+									*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 7 && this.noRun == 0"
+									type="button" class="btn btn-link" (click)="runGameSeason(game)"><i
+										class="fa fa-play-circle" aria-hidden="true"></i></button>
+								<button
+									*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 6 && this.noRun == 0"
+									type="button" class="btn btn-link" (click)="runGame(game)"><i
+										class="fa fa-play-circle" aria-hidden="true"></i></button>
+								<button
+									*ngIf="this.isAdmin == 1 && game.completed == 0 && (this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 10 || this.league?.stateId == 11) && this.noRun == 0"
+									type="button" class="btn btn-link" (click)="runGamePlayoffs(game)"><i
+										class="fa fa-play-circle" aria-hidden="true"></i></button>
+								<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
+									class="btn btn-link" (click)="watchGame(game.id, 1)"><i class="fa fa-eye"
+										aria-hidden="true"></i></button>
+								<button
+									*ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
+									type="button" class="btn btn-link" (click)="watchGame(game.id, 2)"><i
+										class="fa fa-eye" aria-hidden="true"></i></button>
+								<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
+									class="btn btn-link" (click)="watchGame(game.id, 0)"><i class="fa fa-eye"
+										aria-hidden="true"></i></button>
+								&nbsp;
+								<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
+									class="btn btn-link" (click)="fullGame(game.id, 1)"><i class="fa fa-list-ul"
+										aria-hidden="true"></i></button>
+								<button
+									*ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
+									type="button" class="btn btn-link" (click)="fullGame(game.id, 2)"><i
+										class="fa fa-list-ul" aria-hidden="true"></i></button>
+								<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
+									class="btn btn-link" (click)="fullGame(game.id, 0)"><i class="fa fa-list-ul"
+										aria-hidden="true"></i></button>
+								&nbsp;
+								<button *ngIf="game.completed == 1" type="button" class="btn btn-link"
+									(click)="viewBoxScore(game.id)"><i class="fa fa-list-alt"
+										aria-hidden="true"></i></button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 *ngIf="this.league?.stateId == 11 && this.league?.day > 281" class="text-success">The
+					{{ champion.teamname }} {{ champion.mascot }} are the ABA champions!!</h2>
+			</div>
+		</div>
+
+		<!-- Upcoming Events -->
+		<div>
+
+		</div>
+
+		<!-- Awards -->
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'" *ngIf="this.league?.stateId > 7">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Award Winners</h4>
+				<p class="color-7">The Award Winners for the season have been announced</p>
+				<div class="rowpo ml-3 mt-2">
+					<h5 class="color-7">Most Valuable Player - {{ this.mvp[0].playerName }} ({{ this.mvp[0].teamName }})
+					</h5>
+					<h5 class="color-7">6th Man of the Year- {{ this.sixth[0].playerName }} ({{ this.sixth[0].teamName
+						}})</h5>
+					<h5 class="color-7">Defensive Player of the Year - {{ this.dpoy[0].playerName }} ({{
+						this.dpoy[0].teamName }})</h5>
+				</div>
+			</div>
+		</div>
+
+		<!-- Playoof Summaries -->
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 9">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Second Round of the Playoffs
+				</h4>
+				<p class="color-7">The Conference Semi-Finals are now underway.</p>
+				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
+					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" class="color-7">
+						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 8">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> First Round of the Playoffs
+				</h4>
+				<p class="color-7">The playoffs have begun! The first round is underway.</p>
+				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
+					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" class="color-7">
+						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 10">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Conference Finals</h4>
+				<p class="color-7">The Conference Finals are now underway.</p>
+				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
+					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" class="color-7">
+						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 11">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> ABA Finals</h4>
+				<p class="color-7">The ABA Finals are now underway.</p>
+				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
+					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" class="color-7">
+						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 12">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Champions: {{
+					this.champion.teamname }} {{ this.champion.mascot }}</h4>
+				<p class="color-7">The {{ this.champion.teamname }} {{ this.champion.mascot }} are the ABA champions!
+					Congratulations.</p>
+			</div>
+		</div>
+
+		<!-- League Leaders -->
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 7">
+				<carousel class="justify-content-center">
+					<slide class="justify-content-center">
+						<!-- <div class="justify-content-center"> -->
+						<h5 class="color-8">PPG Leaders</h5>
+						<table style="margin-left:auto;margin-right:auto;">
+							<thead>
+								<tr>
+									<th>Rank</th>
+									<th>Player</th>
+									<th>Team</th>
+									<th>PPG</th>
+									<!-- <th></th> -->
+								</tr>
+							</thead>
+							<tr *ngFor="let player of this.topFivePoints; let i = index">
+								<td>{{ i + 1 }}</td>
+								<td>{{ player.playerName }}</td>
+								<td>{{ player.teamShortCode }}</td>
+								<td>{{ (player.points / player.gamesPlayed).toFixed(1) }}</td>
+								<!-- <td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i -->
+								<!-- class="fa fa-eye"></i></button></td> -->
+							</tr>
+						</table>
+						<!-- </div> -->
+						<!-- <button class="btn btn-link" (click)="goToStats(1)">More</button> -->
+					</slide>
+					<slide class="slideclass center-block">
+						<h5 class="color-8">RPG Leaders</h5>
+						<table style="margin-left:auto;margin-right:auto;">
+							<thead>
+								<tr>
+									<th>Rank</th>
+									<th>Player</th>
+									<th>Team</th>
+									<th>RPG</th>
+									<!-- <th></th> -->
+								</tr>
+							</thead>
+							<tr *ngFor="let player of this.topFiveRebounds; let i = index">
+								<td>{{ i + 1 }}</td>
+								<td>{{ player.playerName }}</td>
+								<td>{{ player.teamShortCode }}</td>
+								<td>{{ (player.rebounds / player.gamesPlayed).toFixed(1) }}</td>
+								<!-- <td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i -->
+								<!-- class="fa fa-eye"></i></button></td> -->
+							</tr>
+						</table>
+						<!-- <button class="btn btn-link" (click)="goToStats(2)">More</button> -->
+					</slide>
+					<slide class="slideclass center-block">
+						<h5 class="color-8">APG Leaders</h5>
+						<table style="margin-left:auto;margin-right:auto;">
+							<thead>
+								<tr>
+									<th>Rank</th>
+									<th>Player</th>
+									<th>Team</th>
+									<th>APG</th>
+									<!-- <th></th> -->
+								</tr>
+							</thead>
+							<tr *ngFor="let player of this.topFiveAssists; let i = index">
+								<td>{{ i + 1 }}</td>
+								<td>{{ player.playerName }}</td>
+								<td>{{ player.teamShortCode }}</td>
+								<td>{{ (player.assists / player.gamesPlayed).toFixed(1) }}</td>
+								<!-- <td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i -->
+								<!-- class="fa fa-eye"></i></button></td> -->
+							</tr>
+						</table>
+						<!-- <button class="btn btn-link" (click)="goToStats(3)">More</button> -->
+					</slide>
+					<slide class="slideclass center-block">
+						<h5 class="color-8">SPG Leaders</h5>
+						<table style="margin-left:auto;margin-right:auto;">
+							<thead>
+								<tr>
+									<th>Rank</th>
+									<th>Player</th>
+									<th>Team</th>
+									<th>SPG</th>
+									<!-- <th></th> -->
+								</tr>
+							</thead>
+							<tr *ngFor="let player of this.topFiveSteals; let i = index">
+								<td>{{ i + 1 }}</td>
+								<td>{{ player.playerName }}</td>
+								<td>{{ player.teamShortCode }}</td>
+								<td>{{ (player.steals / player.gamesPlayed).toFixed(1) }}</td>
+								<!-- <td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i -->
+								<!-- class="fa fa-eye"></i></button></td> -->
+							</tr>
+						</table>
+						<!-- <button class="btn btn-link" (click)="goToStats(4)">More</button> -->
+					</slide>
+					<slide class="slideclass center-block">
+						<h5 class="color-8">BPG Leaders</h5>
+						<table style="margin-left:auto;margin-right:auto;">
+							<thead>
+								<tr>
+									<th>Rank</th>
+									<th>Player</th>
+									<th>Team</th>
+									<th>BPG</th>
+									<!-- <th></th> -->
+								</tr>
+							</thead>
+							<tr *ngFor="let player of this.topFiveBlocks; let i = index">
+								<td>{{ i + 1 }}</td>
+								<td>{{ player.playerName }}</td>
+								<td>{{ player.teamShortCode }}</td>
+								<td>{{ (player.blocks / player.gamesPlayed).toFixed(1) }}</td>
+								<!-- <td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i -->
+								<!-- class="fa fa-eye"></i></button></td> -->
+							</tr>
+						</table>
+						<!-- <button class="btn btn-link" (click)="goToStats(5)">More</button> -->
+					</slide>
+				</carousel>
+			</div>
+		</div>
+
+		<!-- Transactions -->
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'"
+				*ngIf="this.league?.stateId == 6 || this.league?.stateId == 7 || this.league?.stateId == 15">
+				<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Yesterday's Transactions</h4>
+				<table *ngIf="this.yesterdaysTransactions?.length > 0">
+					<thead>
+						<tr>
+							<th>Team</th>
+							<th>Player</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tr *ngFor="let trans of this.yesterdaysTransactions">
+						<td>{{ trans.teamMascot }}</td>
+						<td *ngIf="trans.playerName.length > 0">{{ trans.playerName }}</td>
+						<td *ngIf="trans.playerName.length == 0">{{ trans.pickText }}</td>
+						<td>{{ trans.transactionType }}</td>
+					</tr>
+				</table>
+				<p *ngIf="this.yesterdaysTransactions?.length == 0">No transactions were made.</p>
+			</div>
+		</div>
+
+		<!-- Draft -->
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 4">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Draft HQ</h4>
+				<p class="color-7">Round #{{ this.tracker.round }}</p>
+				<div class="small-card">
+					<p class="color-7">#{{ this.previousPick.pick }} - <button class="teamlink"
+							(click)="viewTeam(this.previousPick.teamMascot)">{{ this.previousPick.teamMascot }}</button>
+						-
+						{{ this.previousPick.playerName }}
+					</p>
+					<p class="color-7">#{{ this.currentPick.pick }} - <button class="teamlink"
+							(click)="viewTeam(this.currentPick.teamMascot)">{{ this.currentPick.teamMascot }}</button> -
+						ON THE
+						CLOCK</p>
+					<p class="color-7">#{{ this.nextPick.pick }} - <button class="teamlink"
+							(click)="viewTeam(this.nextPick.teamMascot)">{{ this.nextPick.teamMascot }}</button> - UP
+						NEXT</p>
+					<div style="text-align: center;">
+						<button type="button" class="btn btn-link text-left" (click)="goToDraft()">Go to Draft</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 5">
+				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p class="color-7">The draft is no complete. Teams can fill out their rosters via Teams. A roster may
+					contain up to 15 players.
+					Teams are required to set their depth charts via the Team section which is required. Teams may also
+					choose
+					to set go to players via the Team section.</p>
+			</div>
 		</div>
 	</div>
 
@@ -166,372 +552,43 @@
 		</div>
 	</div>
 	<div class="content" *ngIf="this.chatToggle == 1">
-		<div class="ui styled fluid accordion">
-			content
-		</div>
-	</div>
-</div>
+		<div>
+			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'">
+				<h4 class="color-8"><i class="fa fa-commenting-o" aria-hidden="true"></i> GLOBAL CHAT <button
+						class="btn btn-secondary ml-2" (click)="refreshChat()"><i class="fa fa-refresh"></i></button>
+				</h4>
+				<p class="color-7" *ngIf="this.chatRecords.length == 0">No chat records exist</p>
+				<div class="container">
+					<div class="row">
+						<div class="message-wrap col-lg-12">
+							<div class="msg-wrap">
+								<div class="media msg" *ngFor="let item of this.chatRecords">
+									<div class="media-body">
+										<small class="pull-right time"><i class="fa fa-clock-o"></i> {{ item.chatTime
+											}}</small>
 
-<!-- 
-<div class="cardContainer">
-	
-	<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'">
-		<h4><i class="fa fa-calendar" aria-hidden="true"></i> TODAY'S GAMES</h4>
-		<p class="text-success" *ngIf="this.league?.stateId == 1">Awaiting Users to register and fill the league</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 2">Initial Draft Lottery</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4">Initial League Draft
-		</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 5">Beginning of the Preseason</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 6">Preason Day #{{ this.league?.day }}</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 7">Regular Season Day #{{ this.league?.day }}</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 8">Playoffs - Round 1 Day #{{ this.league?.day }}
-		</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 9">Playoffs - Conference Semi Finals Day
-			#{{ this.league?.day }}</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 10">Playoffs - Conference Finals
-			#{{ this.league?.day }}</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 11">Playoffs - ABA Finals #{{ this.league?.day }}
-		</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 12">Season End - Stats updates</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 13">Draft Lottery</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 14">Draft</p>
-		<p class="text-success" *ngIf="this.league?.stateId == 15">Free Agency #{{ this.league?.day }}</p>
-
-		<table class="table table-hover events-table"
-			*ngIf="this.league?.stateId == 6 || this.league?.stateId == 7 || this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 10 || this.league?.stateId == 11">
-			<tbody>
-				<tr class="table-secondary" *ngFor="let game of this.todaysGames">
-					<td>
-						{{ game.awayTeamName }} @ {{ game.homeTeamName }}
-						<button
-							*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 7 && this.noRun == 0"
-							type="button" class="btn btn-link" (click)="runGameSeason(game)"><i
-								class="fa fa-play-circle" aria-hidden="true"></i></button>
-						<button
-							*ngIf="this.isAdmin == 1 && game.completed == 0 && this.league?.stateId == 6 && this.noRun == 0"
-							type="button" class="btn btn-link" (click)="runGame(game)"><i class="fa fa-play-circle"
-								aria-hidden="true"></i></button>
-						<button
-							*ngIf="this.isAdmin == 1 && game.completed == 0 && (this.league?.stateId == 8 || this.league?.stateId == 9 || this.league?.stateId == 10 || this.league?.stateId == 11) && this.noRun == 0"
-							type="button" class="btn btn-link" (click)="runGamePlayoffs(game)"><i
-								class="fa fa-play-circle" aria-hidden="true"></i></button>
-						<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
-							class="btn btn-link" (click)="watchGame(game.id, 1)"><i class="fa fa-eye"
-								aria-hidden="true"></i></button>
-						<button *ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
-							type="button" class="btn btn-link" (click)="watchGame(game.id, 2)"><i class="fa fa-eye"
-								aria-hidden="true"></i></button>
-						<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
-							class="btn btn-link" (click)="watchGame(game.id, 0)"><i class="fa fa-eye"
-								aria-hidden="true"></i></button>
-						&nbsp;
-						<button *ngIf="game.completed == 1 && this.league?.stateId == 7" type="button"
-							class="btn btn-link" (click)="fullGame(game.id, 1)"><i class="fa fa-list-ul"
-								aria-hidden="true"></i></button>
-						<button *ngIf="game.completed == 1 && this.league?.stateId >= 8 && this.league?.stateId <= 11"
-							type="button" class="btn btn-link" (click)="fullGame(game.id, 2)"><i class="fa fa-list-ul"
-								aria-hidden="true"></i></button>
-						<button *ngIf="game.completed == 1 && this.league?.stateId == 6" type="button"
-							class="btn btn-link" (click)="fullGame(game.id, 0)"><i class="fa fa-list-ul"
-								aria-hidden="true"></i></button>
-						&nbsp;
-						<button *ngIf="game.completed == 1" type="button" class="btn btn-link"
-							(click)="viewBoxScore(game.id)"><i class="fa fa-list-alt" aria-hidden="true"></i></button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<h2 *ngIf="this.league?.stateId == 11 && this.league?.day > 281" class="text-success">The
-			{{ champion.teamname }} {{ champion.mascot }} are the ABA champions!!</h2>
-	</div>
-
-
-
-
-
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 1">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-		<p>Currently the league is taking on user registrations. If you know anyone get them to join the league! Once
-			the league is full, the initial draft lottery will be run. For now use the global chat and scout players
-			under the Players section.</p>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 2">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-		<p>The league has now been filled! The draft lottery will be run shortly!</p>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 3">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-		<p>The draft lottery has now been run. View the draft order and all things draft related under the draft menu
-			option and don't forget to set your draftboard to cover the auto-picks! The draft will begin soon, exact
-			time and date will be posted in the chat.</p>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 4">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Draft HQ</h4>
-		<p>Round #{{ this.tracker.round }}</p>
-		<div class="small-card">
-			<p>#{{ this.previousPick.pick }} - <button class="teamlink"
-					(click)="viewTeam(this.previousPick.teamMascot)">{{ this.previousPick.teamMascot }}</button> -
-				{{ this.previousPick.playerName }}
-			</p>
-			<p>#{{ this.currentPick.pick }} - <button class="teamlink"
-					(click)="viewTeam(this.currentPick.teamMascot)">{{ this.currentPick.teamMascot }}</button> - ON THE
-				CLOCK</p>
-			<p>#{{ this.nextPick.pick }} - <button class="teamlink"
-					(click)="viewTeam(this.nextPick.teamMascot)">{{ this.nextPick.teamMascot }}</button> - UP NEXT</p>
-			<div style="text-align: center;">
-				<button type="button" class="btn btn-link text-left" (click)="goToDraft()">Go to Draft</button>
-			</div>
-		</div>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 5">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-		<p>The draft is no complete. Teams can fill out their rosters via Teams. A roster may contain up to 15 players.
-			Teams are required to set their depth charts via the Team section which is required. Teams may also choose
-			to set go to players via the Team section.</p>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 6">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Preseason</h4>
-		<p>Preseason has now begun. Each team will play 4 games - 1 per day. Now is the time to try and work out your
-			lineups.</p>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 7">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Regular Season</h4>
-		<p>Regular Season is underway. Ensure your depth charts and tactics are up to do and updated when injuries
-			occur.</p>
-		<br />
-		<div class="row ml-3 mr-5">
-			<carousel>
-				<slide>
-					<h5>PPG Leaders</h5>
-					<table>
-						<thead>
-							<tr>
-								<th>Rank</th>
-								<th>Player</th>
-								<th>Team</th>
-								<th>PPG</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tr *ngFor="let player of this.topFivePoints; let i = index">
-							<td>{{ i + 1 }}</td>
-							<td>{{ player.playerName }}</td>
-							<td>{{ player.teamShortCode }}</td>
-							<td>{{ (player.points / player.gamesPlayed).toFixed(1) }}</td>
-							<td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i
-										class="fa fa-eye"></i></button></td>
-						</tr>
-					</table>
-					<br />
-					<button class="btn btn-link" (click)="goToStats(1)">More</button>
-				</slide>
-				<slide class="slideclass center-block">
-					<h5>RPG Leaders</h5>
-					<table>
-						<thead>
-							<tr>
-								<th>Rank</th>
-								<th>Player</th>
-								<th>Team</th>
-								<th>RPG</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tr *ngFor="let player of this.topFiveRebounds; let i = index">
-							<td>{{ i + 1 }}</td>
-							<td>{{ player.playerName }}</td>
-							<td>{{ player.teamShortCode }}</td>
-							<td>{{ (player.rebounds / player.gamesPlayed).toFixed(1) }}</td>
-							<td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i
-										class="fa fa-eye"></i></button></td>
-						</tr>
-					</table>
-					<br />
-					<button class="btn btn-link" (click)="goToStats(2)">More</button>
-				</slide>
-				<slide class="slideclass center-block">
-					<h5>APG Leaders</h5>
-					<table>
-						<thead>
-							<tr>
-								<th>Rank</th>
-								<th>Player</th>
-								<th>Team</th>
-								<th>APG</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tr *ngFor="let player of this.topFiveAssists; let i = index">
-							<td>{{ i + 1 }}</td>
-							<td>{{ player.playerName }}</td>
-							<td>{{ player.teamShortCode }}</td>
-							<td>{{ (player.assists / player.gamesPlayed).toFixed(1) }}</td>
-							<td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i
-										class="fa fa-eye"></i></button></td>
-						</tr>
-					</table>
-					<br />
-					<button class="btn btn-link" (click)="goToStats(3)">More</button>
-				</slide>
-				<slide class="slideclass center-block">
-					<h5>SPG Leaders</h5>
-					<table>
-						<thead>
-							<tr>
-								<th>Rank</th>
-								<th>Player</th>
-								<th>Team</th>
-								<th>SPG</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tr *ngFor="let player of this.topFiveSteals; let i = index">
-							<td>{{ i + 1 }}</td>
-							<td>{{ player.playerName }}</td>
-							<td>{{ player.teamShortCode }}</td>
-							<td>{{ (player.steals / player.gamesPlayed).toFixed(1) }}</td>
-							<td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i
-										class="fa fa-eye"></i></button></td>
-						</tr>
-					</table>
-					<br />
-					<button class="btn btn-link" (click)="goToStats(4)">More</button>
-				</slide>
-				<slide class="slideclass center-block">
-					<h5>BPG Leaders</h5>
-					<table>
-						<thead>
-							<tr>
-								<th>Rank</th>
-								<th>Player</th>
-								<th>Team</th>
-								<th>BPG</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tr *ngFor="let player of this.topFiveBlocks; let i = index">
-							<td>{{ i + 1 }}</td>
-							<td>{{ player.playerName }}</td>
-							<td>{{ player.teamShortCode }}</td>
-							<td>{{ (player.blocks / player.gamesPlayed).toFixed(1) }}</td>
-							<td><button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player.playerId)"><i
-										class="fa fa-eye"></i></button></td>
-						</tr>
-					</table>
-					<br />
-					<button class="btn btn-link" (click)="goToStats(5)">More</button>
-				</slide>
-			</carousel>
-		</div>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 8">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> First Round of the Playoffs</h4>
-		<p>The playoffs have begun! The first round is underway.</p>
-		<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-			<h5>Matchup #{{ i + 1 }}</h5>
-			<ul style="list-style-type:none;">
-				{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
-			</ul> 
-		</div>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 9">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Second Round of the Playoffs</h4>
-		<p>The Conference Semi-Finals are now underway.</p>
-		<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-			<h5>Matchup #{{ i + 1 }}</h5>
-			<ul style="list-style-type:none;">
-				{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
-			</ul> 
-		</div>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 10">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Conference Finals</h4>
-		<p>The Conference Finals are now underway.</p>
-		<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-			<h5>Matchup #{{ i + 1 }}</h5>
-			<ul style="list-style-type:none;">
-				{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
-			</ul> 
-		</div>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 11">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> ABA Finals</h4>
-		<p>The ABA Finals are now underway.</p>
-		<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-			<h5>Matchup #{{ i + 1 }}</h5>
-			<ul style="list-style-type:none;">
-				{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
-			</ul> 
-		</div>
-	</div>
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'" *ngIf="this.league?.stateId == 12">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i>Champions: {{ this.champion.teamname }} {{ this.champion.mascot }}</h4>
-		<p>The {{ this.champion.teamname }} {{ this.champion.mascot }} are the ABA champions! Congratulations.</p>
-	</div>
-
-	<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'" *ngIf="this.league?.stateId > 7">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Award Winners</h4>
-		<p>The Award Winners for the season have been announced</p>
-		<div class="rowpo ml-3 mt-2">
-			<h5>Most Valuable Player - {{ this.mvp[0].playerName }} ({{ this.mvp[0].teamName }})</h5>
-			<h5>6th Man of the Year- {{ this.sixth[0].playerName }} ({{ this.sixth[0].teamName }})</h5>
-			<h5>Defensive Player of the Year - {{ this.dpoy[0].playerName }} ({{ this.dpoy[0].teamName }})</h5>
-		</div>
-	</div>
-
-	<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'">
-		<h4><i class="fa fa-commenting-o" aria-hidden="true"></i> GLOBAL CHAT <button class="btn btn-secondary ml-2"
-				(click)="refreshChat()"><i class="fa fa-refresh"></i></button></h4>
-		<p *ngIf="this.chatRecords.length == 0">No chat records exist</p>
-		<div class="container">
-			<div class="row">
-				<div class="message-wrap col-lg-12">
-					<div class="msg-wrap">
-						<div class="media msg" *ngFor="let item of this.chatRecords">
-							<div class="media-body">
-								<small class="pull-right time"><i class="fa fa-clock-o"></i> {{ item.chatTime }}</small>
-
-								<h5 class="media-heading">{{ item.username }}</h5>
-								<small class="col-lg-10">{{ item.chatText }}</small>
+										<h5 class="media-heading">{{ item.username }}</h5>
+										<small class="col-lg-10">{{ item.chatText }}</small>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<br />
+				<div class="form-group">
+					<form [formGroup]="chatForm" accept-charset="UTF-8" role="form" (ngSubmit)="sendChat()">
+						<fieldset>
+							<div class="form-group">
+								<label for="exampleTextarea">Your Message</label>
+								<textarea class="form-control" id="message" rows="2" name="message"
+									formControlName="message"></textarea>
+							</div>
+							<input class="btn btn-primary mt-1" type="submit" value="Post">
+						</fieldset>
+					</form>
+				</div>
 			</div>
 		</div>
-		<br />
-		<div class="form-group">
-			<form [formGroup]="chatForm" accept-charset="UTF-8" role="form" (ngSubmit)="sendChat()">
-				<fieldset>
-					<div class="form-group">
-						<label for="exampleTextarea">Your Message</label>
-						<textarea class="form-control" id="message" rows="2" name="message"
-							formControlName="message"></textarea>
-					</div>
-					<input class="btn btn-primary mt-1" type="submit" value="Post">
-				</fieldset>
-			</form>
-		</div>
 	</div>
-
-	<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
-		*ngIf="this.league?.stateId == 6 || this.league?.stateId == 7 || this.league?.stateId == 15">
-		<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Yesterday's Transactions</h4>
-		<table *ngIf="this.yesterdaysTransactions?.length > 0">
-			<thead>
-				<tr>
-					<th>Team</th>
-					<th>Player</th>
-					<th>Type</th>
-				</tr>
-			</thead>
-			<tr *ngFor="let trans of this.yesterdaysTransactions">
-				<td>{{ trans.teamMascot }}</td>
-				<td *ngIf="trans.playerName.length > 0">{{ trans.playerName }}</td>
-				<td *ngIf="trans.playerName.length == 0">{{ trans.pickText }}</td>
-				<td>{{ trans.transactionType }}</td>
-			</tr>
-		</table>
-		<p *ngIf="this.yesterdaysTransactions?.length == 0">No transactions were made.</p>
-	</div>
-</div> -->
+</div>

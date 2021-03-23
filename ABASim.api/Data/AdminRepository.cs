@@ -1749,6 +1749,7 @@ namespace ABASim.api.Data
 
         public async Task<bool> GenerateAutoPickOrder()
         {
+            // League league = 
             var autoCount = await _context.AutoPickOrders.LongCountAsync();
             if (autoCount == 0)
             {
