@@ -11,6 +11,8 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<Team>> GetAvailableTeams();
 
+         Task<IEnumerable<Team>> GetAvailableTeamsForPrivate(string leagueCode);
+
          Task<Team> GetTeamForUserId(int userId);
 
          Task<Team> GetTeamForTeamId(int teamId);

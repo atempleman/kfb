@@ -42,6 +42,10 @@ export class LeagueService {
     return this.http.get<League>(this.baseUrl + 'getleague');
   }
 
+  getLeagueForUserId(userId: number) {
+    return this.http.get<League>(this.baseUrl + 'getleagueforuser/' + userId);
+  }
+
   getLeagueStatuses(): Observable<LeagueState[]> {
     return this.http.get<LeagueState[]>(this.baseUrl + 'getleaguestatus');
   }
@@ -239,4 +243,14 @@ export class LeagueService {
   getAllNBATeams(): Observable<Votes[]> {
     return this.http.get<Votes[]>(this.baseUrl + 'getallnbateams');
   }
+
+  checkPrivateLeagueTeams() {
+    return this.http.get<boolean>(this.baseUrl + 'checkavailableteamsprivate');
+  }
+
+  checkLeagueCode(leaguecode: string) {
+    console.log(leaguecode);
+    return this.http.get<boolean>(this.baseUrl + 'checkleaguecode/' + leaguecode);
+  }
+
 }

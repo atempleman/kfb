@@ -1,11 +1,13 @@
-<section class="text-center py-md-0" id="header-2">
+<section class="text-center py-md-0 mt-1 mb-1" id="header-2">
+  <br />
+  <br />
   <div class="background-holder overlay overlay-0" style="background-image:url(./assets/images/branding/login001.jpg);">
     <div class="youtube-background"
       data-property="{&quot;videoURL&quot;:&quot;https://www.youtube.com/watch?v=iGpuQ0ioPrM&quot;,&quot;mute&quot;:true,&quot;showYTLogo&quot;:false}">
     </div>
   </div>
   <div class="row justify-content-center">
-</div>
+  </div>
   <!--/.background-holder-->
   <div class="container">
     <div class="row h-full align-items-center justify-content-center">
@@ -58,52 +60,100 @@
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Select your Team</label>
-                    <select class="form-control" formControlName="teamSelection" teamSelection name="teamSelection">
-                      <option *ngFor="let team of this.selectableTeams" [value]="team.id">{{ team.teamname }} {{ team.mascot }}
-                      </option>
-                    </select>
+
+
+                    <!-- <input type="radio" id="male" name="gender" value="male">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="male">Join Public League</label><br>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="female">Join Private League</label><br> -->
+                    <label class="ls text-uppercase color-8 fw-700 mb-0">League Type</label><br>
+                    <div class="form-check-inline">
+                      <label class="customradio"><span class="color-7">Public</span>
+                        <input type="radio" checked="checked" name="radio" (click)="radioToggle(1)">
+                        <span class="checkmark"></span>
+                      </label>        
+                      <label class="customradio"><span class="color-7">Private</span>
+                        <input type="radio" name="radio" (click)="radioToggle(2)">
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="this.currentLeagueSelection == 1">
+                      <div class="form-group">
+                        <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Select your Team</label>
+                        <select class="form-control" formControlName="teamSelection" teamSelection name="teamSelection">
+                          <option *ngFor="let team of this.selectableTeams" [value]="team.teamId">{{ team.teamname }} {{ team.mascot }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  <div class="col-md-12" *ngIf="this.currentLeagueSelection == 2">
+                    <div class="form-group">
+                      <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">League Code</label>
+                      <input class="form-control background-white" type="text" name="code" formControlName="code"
+                        required="required" value="" />
+                      <button class="btn btn-success mt-2" (click)="checkPrivateLeagueCode()">Check</button>
+                    </div>
+                  </div>
+                  <div class="col-md-12" *ngIf="this.currentLeagueSelection == 2 && this.availablePrivateTeams && this.leagueCodeCheck">
+                    <div class="form-group">
+                      <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Select your Team</label>
+                      <select class="form-control" formControlName="teamSelection" teamSelection name="teamSelection">
+                        <option *ngFor="let team of this.selectableTeamsPrivate" [value]="team.teamId">{{ team.teamname }} {{ team.mascot }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-12" *ngIf="this.noTeamsPrivateDisplay == 1">
+                    <div class="form-group">
+                      <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">There are no teams available in this league</label>
+                    </div>
+                  </div>
+                </div>
+                  <div class="col-md-6 text-center mt-4" *ngIf="this.registerEnabled == 1">
+                    <input class="btn btn-primary btn-block" type="submit" name="submit" value="Register"/>
+                  </div>
+                </div>
+                <div class="zform-feedback mt-3"></div>
+            </form>
+
+            <form [formGroup]="contactForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2"
+              (ngSubmit)="submitContactForm()" *ngIf="!this.availableTeams">
+              <div class="row justify-content-center">
+                <h4 class="color-10 justify-content-center">No teams are available. Please register your interest and
+                  you will be notified when a team is available</h4>
+                <div class="col-md-12">
+                  <!-- <div class="form-group">
+                          <input class="form-control background-white border-2x" type="hidden" name="to" value="username@domain.extension" />
+                      </div> -->
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Name</label>
+                    <input class="form-control background-white" id="name" formControlName="name" type="text"
+                      name="name" required="required" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="email">Email</label>
+                    <input class="form-control background-white" id="email" formControlName="email" type="text"
+                      name="email" required="required" />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="ls text-uppercase color-8 fw-700 mb-0" for="contact">Message</label>
+                    <textarea class="form-control background-white" id="contact" rows="8" name="message"
+                      formControlName="contact"></textarea>
                   </div>
                 </div>
                 <div class="col-md-6 text-center mt-4">
-                  <input class="btn btn-primary btn-block" type="submit" name="submit" value="Register" />
+                  <input class="btn btn-primary btn-block" type="submit" name="submit" value="Send!" />
                 </div>
               </div>
               <div class="zform-feedback mt-3"></div>
             </form>
-
-            <form [formGroup]="contactForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2" (ngSubmit)="submitContactForm()" *ngIf="!this.availableTeams">
-              <div class="row justify-content-center">
-                <h4 class="color-10 justify-content-center">No teams are available. Please register your interest and you will be notified when a team is available</h4>
-                  <div class="col-md-12">
-                      <!-- <div class="form-group">
-                          <input class="form-control background-white border-2x" type="hidden" name="to" value="username@domain.extension" />
-                      </div> -->
-                  </div>
-                  <div class="col-md-6">
-                      <div class="form-group">
-                          <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Name</label>
-                          <input class="form-control background-white" id="name" formControlName="name" type="text" name="name" required="required" />
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <div class="form-group">
-                          <label class="ls text-uppercase color-8 fw-700 mb-0" for="email">Email</label>
-                          <input class="form-control background-white" id="email" formControlName="email" type="text" name="email" required="required" />
-                      </div>
-                  </div>
-                  <div class="col-12">
-                      <div class="form-group">
-                          <label class="ls text-uppercase color-8 fw-700 mb-0" for="contact">Message</label>
-                          <textarea class="form-control background-white" id="contact" rows="8" name="message" formControlName="contact"></textarea>
-                      </div>
-                  </div>
-                  <div class="col-md-6 text-center mt-4">
-                      <input class="btn btn-primary btn-block" type="submit" name="submit" value="Send!" />
-                  </div>
-              </div>
-              <div class="zform-feedback mt-3"></div>
-          </form>
           </div>
         </div>
       </div>

@@ -15,5 +15,7 @@ namespace ABASim.api.Dtos
         public string LeagueName { get; set; }
 
         public string LeagueCode { get; set; }
+
+        public int SeasonId { get; set; }
     }
 }

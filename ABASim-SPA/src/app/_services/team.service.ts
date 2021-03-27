@@ -25,6 +25,7 @@ import { TradePlayerView } from '../_models/tradePlayerView';
 import { Standing } from '../_models/standing';
 import { QuickViewPlayer } from '../_models/QuickViewPlayer';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
+import { LeagueService } from './league.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class TeamService {
 
   getAvailableTeams(): Observable<Team[]> {
     return this.http.get<Team[]>(this.baseUrl + 'getavailableteams');
+  }
+
+  getAvailableTeamsForPrivate(leaguecode: string): Observable<Team[]> {
+    return this.http.get<Team[]>(this.baseUrl + 'getavailableteamsprivate/' + leaguecode);
   }
 
   getRosterForTeam(teamId: number): Observable<Player[]> {
@@ -119,7 +124,6 @@ export class TeamService {
   }
 
   saveTradeProposal(trade: Trade[]) {
-    console.log(trade);
     return this.http.post(this.baseUrl + 'savetradeproposal', trade);
   }
 

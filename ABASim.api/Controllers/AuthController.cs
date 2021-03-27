@@ -43,7 +43,7 @@ namespace ABASim.api.Controllers
             var createdUser = await _repo.Register(userToCreate, userForRegister.Password);
             
             int result = Int32.Parse(userForRegister.TeamSelection);
-            var registeredTeam = await _repo.RegisterTeam(createdUser.Id, result);
+            var registeredTeam = await _repo.RegisterTeam(createdUser.Id, result, userForRegister.Code);
 
             return StatusCode(201);
         }

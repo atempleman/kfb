@@ -19,5 +19,8 @@ namespace ABASim.api.Dtos
 
         [Required]
         public string TeamSelection { get; set; }
+
+        [Required]
+        public string Code { get; set; }
     }
 }

@@ -7,7 +7,13 @@ namespace ABASim.api.Data
 {
     public interface ILeagueRepository
     {
+        Task<bool> CheckForAvailablePrivateTeams();
+
+         Task<League> GetLeagueForUserId(int userId);
+         
          Task<League> GetLeague();
+
+         Task<bool> CheckLeagueCode(string leagueCode);
 
          Task<IEnumerable<LeagueState>> GetLeagueStates();
 

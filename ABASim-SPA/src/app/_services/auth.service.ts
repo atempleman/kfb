@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { User } from '../_models/user';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { UserRegister } from '../_models/userRegister';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,12 @@ export class AuthService {
     );
   }
 
-  register(user: User) {
+  register(user: UserRegister) {
+    // console.log(user);
+    if (user.code == "") {
+      user.code ='000000';
+    }
+    // console.log(user);
     return this.http.post(this.baseUrl + 'register', user);
   }
 

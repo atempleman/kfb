@@ -190,7 +190,15 @@ namespace ABASim.api.Data
 
         public async Task<bool> CheckForAvailableTeams()
         {
-            if (await _context.Teams.AnyAsync(x => x.UserId == 0))
+            var query = await _context.Teams
+                .Join(_context.Leagues,
+                t => t.LeagueId,
+                l => l.Id,
+                (t,l) => new { Team = t, League = l })
+                .Where(lge => lge.League.LeagueCode == "000000" && lge.Team.UserId == 0).AnyAsync();
+
+            // if (await _context.Teams.AnyAsync(x => x.UserId == 0))
+            if (query)
                 return true;
 
             return false;
@@ -367,6 +375,22 @@ namespace ABASim.api.Data
         {
             List<Team> teams = new List<Team>();
             var availableTeams = await _context.Teams.Where(x => x.UserId == 0).ToListAsync();
+
+            if (availableTeams != null)
+            {
+                foreach (var team in availableTeams)
+                {
+                    teams.Add(team);
+                }
+            }
+            return teams;
+        }
+
+        public async Task<IEnumerable<Team>> GetAvailableTeamsForPrivate(string leagueCode)
+        {
+            List<Team> teams = new List<Team>();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.LeagueCode == leagueCode);
+            var availableTeams = await _context.Teams.Where(x => x.UserId == 0 && x.LeagueId == league.Id).ToListAsync();
 
             if (availableTeams != null)
             {

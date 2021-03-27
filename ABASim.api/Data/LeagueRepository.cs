@@ -15,6 +15,13 @@ namespace ABASim.api.Data
             _context = context;
         }
 
+        public async Task<League> GetLeagueForUserId(int userId)
+        {
+            var usersTeam = await _context.Teams.FirstOrDefaultAsync(x => x.UserId == userId);
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == usersTeam.LeagueId);
+            return league;
+        }
+
         public async Task<GameDetailsDto> GetPreseasonGameDetails(int gameId)
         {
             var game = await _context.PreseasonSchedules.FirstOrDefaultAsync(x => x.Id == gameId); 
@@ -1621,6 +1628,32 @@ namespace ABASim.api.Data
                 allTeams.Add(item);
             }
             return allTeams;
+        }
+
+        public async Task<bool> CheckForAvailablePrivateTeams()
+        {
+            var query = await _context.Teams
+                .Join(_context.Leagues,
+                t => t.LeagueId,
+                l => l.Id,
+                (t,l) => new { Team = t, League = l })
+                .Where(lge => lge.League.LeagueCode != "000000" && lge.Team.UserId == 0).AnyAsync();
+
+            if (query)
+                return true;
+
+            return false;
+        }
+
+        public async Task<bool> CheckLeagueCode(string leagueCode)
+        {
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.LeagueCode == leagueCode);
+            
+            if (league == null) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 }

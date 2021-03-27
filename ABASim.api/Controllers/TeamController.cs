@@ -31,6 +31,13 @@ namespace ABASim.api.Controllers
             return Ok(teams);
         }
 
+        [HttpGet("getavailableteamsprivate/{leaguecode}")]
+        public async Task<IActionResult> GetAvailableTeamsForPrivate(string leagueCode)
+        {
+            var teams = await _repo.GetAvailableTeamsForPrivate(leagueCode);
+            return Ok(teams);
+        }
+
         [HttpGet("getteamforuserid/{userId}")]
         public async Task<IActionResult> GetTeamForUserId(int userId)
         {

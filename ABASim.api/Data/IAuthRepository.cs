@@ -9,6 +9,6 @@ namespace ABASim.api.Data
          Task<User> Login(string username, string password);
          Task<bool> UserExists(string username);
 
-         Task<bool> RegisterTeam(int userId, int teamId);
+         Task<bool> RegisterTeam(int userId, int teamId, string leagueCode);
     }
 }

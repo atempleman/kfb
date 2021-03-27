@@ -19,6 +19,39 @@ namespace ABASim.api.Controllers
             _repo = repo;
         }
 
+        [HttpGet("checkavailableteamsprivate")]
+        public async Task<IActionResult> CheckForAvailablePrivateTeams()
+        {
+            var exists = await _repo.CheckForAvailablePrivateTeams();
+            return Ok(exists);
+        }
+
+        [HttpGet("checkleaguecode/{leaguecode}")]
+        public async Task<IActionResult> CheckLeagueCode(string leagueCode)
+        {
+            var exists = await _repo.CheckLeagueCode(leagueCode);
+            return Ok(exists);
+        }
+
+        [HttpGet("getleagueforuser")]
+        public async Task<IActionResult> GetLeagueForUserId(int userId)
+        {
+            var league = await _repo.GetLeagueForUserId(userId);
+            var leagueState = await _repo.GetLeagueStateForId(league.StateId);
+
+            LeagueDto leagueDto = new LeagueDto
+            {
+                Id = league.Id,
+                StateId = league.StateId,
+                Day = league.Day,
+                State = leagueState.State,
+                Year = league.Year
+            };
+
+            return Ok(leagueDto);
+        }
+
+
         [HttpGet("getleague")]
         public async Task<IActionResult> GetLeague()
         {

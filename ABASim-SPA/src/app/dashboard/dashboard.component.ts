@@ -90,16 +90,11 @@ export class DashboardComponent implements OnInit {
     private fb: FormBuilder, private contactService: ContactService, private draftService: DraftService) { }
 
   ngOnInit() {
+    this.spinner.show();
+
     // Check to see if the user is an admin user
     this.isAdmin = this.authService.isAdmin();
     localStorage.setItem('isAdmin', this.isAdmin.toString());
-
-    this.createChatForm();
-
-    this.refreshChat();
-    this.interval = setInterval(() => {
-      this.refreshChat();
-    }, 600000);
 
     // get the league object - TODO - roll the league state into the object as a Dto and pass back
     this.leagueService.getLeague().subscribe(result => {
@@ -107,8 +102,28 @@ export class DashboardComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
-      this.spinner.show();
-      this.getTeamRoster();
+      this.setupDashboard();
+    });
+
+    this.createChatForm();
+    this.refreshChat();
+    this.interval = setInterval(() => {
+      this.refreshChat();
+    }, 600000);
+
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.backgroundStyle();
+    });
+  }
+
+  setupDashboard() {
+    this.getTeamRoster();
       this.getTeamInjuries();
 
       if (this.league.stateId === 4) {
@@ -167,17 +182,6 @@ export class DashboardComponent implements OnInit {
           this.alertify.error('Error getting DPOY');
         });
       }
-    });
-
-    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
-      this.team = result;
-      // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
-    }, error => {
-      this.alertify.error('Error getting your Team');
-    }, () => {
-      this.backgroundStyle();
-    });
   }
 
   viewPlayer(player: number) {

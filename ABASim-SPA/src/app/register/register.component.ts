@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { ContactForm } from '../_models/contactForm';
 import { Team } from '../_models/team';
 import { User } from '../_models/user';
+import { UserRegister } from '../_models/userRegister';
 import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
 import { ContactService } from '../_services/contact.service';
+import { LeagueService } from '../_services/league.service';
 import { TeamService } from '../_services/team.service';
 
 @Component({
@@ -16,9 +18,11 @@ import { TeamService } from '../_services/team.service';
 })
 export class RegisterComponent implements OnInit {
   availableTeams = false;
+  availablePrivateTeams = false;
   selectableTeams: Team[] = [];
+  selectableTeamsPrivate: Team[] = [];
   registerForm: FormGroup;
-  user: User;
+  user: UserRegister;
 
   usernameRequired = 0;
   passwordRequired = 0;
@@ -34,8 +38,16 @@ export class RegisterComponent implements OnInit {
   contactForm: FormGroup;
   contactObject: ContactForm;
 
+  currentLeagueSelection = 1;
+  registerEnabled = 1;
+
+  leagueCodeCheck = false;
+  leagueCodeText = '';
+  noTeamsPrivateDisplay = 0;
+
   constructor(private teamService: TeamService, private authService: AuthService, private alertify: AlertifyService, 
-              private fb: FormBuilder, private router: Router, private contactService: ContactService) { }
+              private fb: FormBuilder, private router: Router, private contactService: ContactService,
+              private leagueService: LeagueService) { }
 
   ngOnInit() {
     this.teamService.checkAvailableTeams().subscribe(result => {
@@ -44,7 +56,34 @@ export class RegisterComponent implements OnInit {
       this.alertify.error(error);
     }, () => {
       this.getAvailableTeams();
+      this.checkAvailablePrivateTeams();
       this.createRegisterForm();
+    });
+  }
+
+  checkAvailablePrivateTeams() {
+    this.leagueService.checkPrivateLeagueTeams().subscribe(result => {
+      this.availablePrivateTeams = result;
+      if (this.availablePrivateTeams) {
+        this.registerEnabled = 1;
+      }
+    }, error => {
+      this.alertify.error('Error checking private leagues');
+    }, () => {
+    });
+  }
+
+  getAvailableTeamsForPrivate() {
+    this.teamService.getAvailableTeamsForPrivate(this.leagueCodeText).subscribe(result => {
+      this.selectableTeamsPrivate = result;
+
+      if (this.selectableTeamsPrivate.length > 0) {
+        this.registerEnabled = 1;
+      } else {
+        this.registerEnabled = 0;
+      }
+    }, error => {
+      this.alertify.error('Error getting available teams');
     });
   }
 
@@ -65,7 +104,8 @@ export class RegisterComponent implements OnInit {
       confirmPassword: ['', Validators.required],
       email: ['', Validators.required],
       name: ['', Validators.required],
-      teamSelection: ['', Validators.required]
+      teamSelection: ['', Validators.required],
+      code: ['']
     }, { validator: this.passwordMatchValidator });
   }
 
@@ -76,6 +116,9 @@ export class RegisterComponent implements OnInit {
   register() {
     if (this.registerForm.valid) {
       this.user = Object.assign({}, this.registerForm.value);
+
+      console.log(this.user);
+
       this.authService.register(this.user).subscribe(() => {
         this.alertify.success('Registration successful');
       }, error => {
@@ -171,6 +214,37 @@ export class RegisterComponent implements OnInit {
         this.contactForm.reset();
       });
     }
+  }
+
+  radioToggle(selection: number) {
+    // console.log(selection);
+
+    if (this.currentLeagueSelection != selection) {
+      // The we change the selection, otherwise we do nothing
+      this.currentLeagueSelection = selection;
+
+      if (this.currentLeagueSelection == 2) {
+        console.log('disabled');
+        this.registerEnabled = 0;
+      } else {
+        console.log('enabled');
+        this.registerEnabled = 1;
+      }
+    }
+  }
+
+  checkPrivateLeagueCode() {
+    this.leagueCodeText = this.registerForm.controls['code'].value
+    this.leagueService.checkLeagueCode(this.leagueCodeText).subscribe(result => {
+      this.leagueCodeCheck = result;
+    }, error => {
+      this.alertify.error('Error checking league code');
+    }, () => {
+      if (!this.leagueCodeCheck) {
+        this.noTeamsPrivateDisplay = 1;
+      }
+      this.getAvailableTeamsForPrivate();
+    });
   }
 
 }

@@ -6,4 +6,5 @@ export interface Team {
     mascot: string;
     division: number;
     leagueId: number;
+    teamId: number;
 }
