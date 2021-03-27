@@ -30,10 +30,10 @@ namespace ABASim.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getchatrecords")]
-        public async Task<IActionResult> GetChatRecords()
+        [HttpGet("getchatrecords/{leagueId}")]
+        public async Task<IActionResult> GetChatRecords(int leagueId)
         {
-            var records = await _repo.GetChatRecords();
+            var records = await _repo.GetChatRecords(leagueId);
             return Ok(records);
         }
 

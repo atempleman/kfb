@@ -23,8 +23,8 @@ export class ContactService {
     return this.http.post(this.baseUrl + 'savechatrecord', chat);
   }
 
-  getChatRecords(): Observable<GlobalChat[]> {
-    return this.http.get<GlobalChat[]>(this.baseUrl + 'getchatrecords');
+  getChatRecords(leagueId: number): Observable<GlobalChat[]> {
+    return this.http.get<GlobalChat[]>(this.baseUrl + 'getchatrecords/' + leagueId);
   }
 
   getInboxMessages(teamId: number): Observable<InboxMessage[]> {

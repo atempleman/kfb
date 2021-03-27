@@ -9,5 +9,7 @@ namespace ABASim.api.Models
         public string Username { get; set; }
 
         public string ChatTime { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

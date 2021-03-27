@@ -34,11 +34,10 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<GlobalChatDto>> GetChatRecords()
+        public async Task<IEnumerable<GlobalChatDto>> GetChatRecords(int leagueId)
         {
             List<GlobalChatDto> chatRecords = new List<GlobalChatDto>();
-
-            var records = await _context.GlobalChats.OrderByDescending(x => x.Id).Take(25).ToListAsync();
+            var records = await _context.GlobalChats.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Id).Take(25).ToListAsync();
 
             foreach (var chat in records)
             {
@@ -46,7 +45,8 @@ namespace ABASim.api.Data
                 {
                     ChatText = chat.ChatText,
                     ChatTime = chat.ChatTime,
-                    Username = chat.Username
+                    Username = chat.Username,
+                    LeagueId = chat.LeagueId
                 };
                 chatRecords.Add(dto);
             }
@@ -100,7 +100,8 @@ namespace ABASim.api.Data
             {
                 ChatText = chatDto.ChatText,
                 Username = team.Mascot,
-                ChatTime = chatDto.ChatTime
+                ChatTime = chatDto.ChatTime,
+                LeagueId = chatDto.LeagueId
             };
 
             await _context.GlobalChats.AddAsync(chatRecord);

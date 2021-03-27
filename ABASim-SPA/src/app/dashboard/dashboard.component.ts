@@ -96,21 +96,6 @@ export class DashboardComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     localStorage.setItem('isAdmin', this.isAdmin.toString());
 
-    // get the league object - TODO - roll the league state into the object as a Dto and pass back
-    this.leagueService.getLeague().subscribe(result => {
-      this.league = result;
-    }, error => {
-      this.alertify.error('Error getting League Details');
-    }, () => {
-      this.setupDashboard();
-    });
-
-    this.createChatForm();
-    this.refreshChat();
-    this.interval = setInterval(() => {
-      this.refreshChat();
-    }, 600000);
-
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
@@ -119,7 +104,23 @@ export class DashboardComponent implements OnInit {
       this.alertify.error('Error getting your Team');
     }, () => {
       this.backgroundStyle();
+      this.setupLeague();
     });
+  }
+
+  setupLeague() {
+      this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
+        this.league = result;
+      }, error => {
+        this.alertify.error('Error getting League Details');
+      }, () => {
+        this.setupDashboard();
+        this.createChatForm();
+        this.refreshChat();
+        this.interval = setInterval(() => {
+          this.refreshChat();
+        }, 600000);
+      });
   }
 
   setupDashboard() {
@@ -451,7 +452,7 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshChat() {
-    this.contactService.getChatRecords().subscribe(result => {
+    this.contactService.getChatRecords(this.league.id).subscribe(result => {
       this.chatRecords = result;
     }, error => {
       this.alertify.error('Error getting chat messages');
@@ -467,7 +468,8 @@ export class DashboardComponent implements OnInit {
       const chatRecord: GlobalChat = {
         chatText: result,
         username: this.authService.decodedToken.nameid,
-        chatTime: dt.toString()
+        chatTime: dt.toString(),
+        leagueId: this.league.id
       };
 
       this.contactService.sendChat(chatRecord).subscribe(rst => {
@@ -477,7 +479,7 @@ export class DashboardComponent implements OnInit {
         this.alertify.success('Message posted');
         this.chatForm.reset();
         // Need to get the chat messages again
-        this.contactService.getChatRecords().subscribe(r => {
+        this.contactService.getChatRecords(this.league.id).subscribe(r => {
           this.chatRecords = r;
         }, error => {
           this.alertify.error('Error getting chat messages');

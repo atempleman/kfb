@@ -7,5 +7,7 @@ namespace ABASim.api.Dtos
         public string Username { get; set; }
 
         public string ChatTime { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }
