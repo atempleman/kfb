@@ -26,6 +26,7 @@ import { Standing } from '../_models/standing';
 import { QuickViewPlayer } from '../_models/QuickViewPlayer';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 import { LeagueService } from './league.service';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,8 @@ export class TeamService {
     return this.http.get<CompletePlayer[]>(this.baseUrl + 'getextendedroster/' + teamId);
   }
 
-  getQuickViewRosterForTeam(teamId: number): Observable<QuickViewPlayer[]> {
-    return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster/' + teamId);
+  getQuickViewRosterForTeam(quickview: GetRosterQuickView): Observable<QuickViewPlayer[]> {
+    return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster/' + quickview);
   }
 
   getInjuriesForTeam(teamId: number): Observable<LeaguePlayerInjury[]> {

@@ -56,12 +56,12 @@ export class LeagueService {
     return this.http.get<LeagueState>(this.baseUrl + 'getleaguestateforid/' + stateId);
   }
 
-  getPreseasonGamesForTomorrow(): Observable<GameDisplay[]> {
-    return this.http.get<GameDisplay[]>(this.baseUrl + 'getgamesfortomorrow');
+  getPreseasonGamesForTomorrow(leagueId: number): Observable<GameDisplay[]> {
+    return this.http.get<GameDisplay[]>(this.baseUrl + 'getgamesfortomorrow/' + leagueId);
   }
 
-  getPreseasonGamesForToday(): Observable<GameDisplayCurrent[]> {
-    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesfortoday');
+  getPreseasonGamesForToday(leagueId: number): Observable<GameDisplayCurrent[]> {
+    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesfortoday/' + leagueId);
   }
 
   getConferenceStandings(conference: number): Observable<Standing[]> {
@@ -108,16 +108,16 @@ export class LeagueService {
     return this.http.get<GameDetails>(this.baseUrl + 'getplayoffgamedetails/ ' + gameId);
   }
 
-  getSeasonGamesForTomorrow(): Observable<GameDisplay[]> {
-    return this.http.get<GameDisplay[]>(this.baseUrl + 'getgamesfortomorrowseason');
+  getSeasonGamesForTomorrow(leagueId: number): Observable<GameDisplay[]> {
+    return this.http.get<GameDisplay[]>(this.baseUrl + 'getgamesfortomorrowseason/' + leagueId);
   }
 
-  getSeasonGamesForToday(): Observable<GameDisplayCurrent[]> {
-    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesfortodayseason');
+  getSeasonGamesForToday(leagueId: number): Observable<GameDisplayCurrent[]> {
+    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesfortodayseason/' + leagueId);
   }
 
-  getFirstRoundGamesForToday(): Observable<GameDisplayCurrent[]> {
-    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getfirstroundgamesfortoday');
+  getFirstRoundGamesForToday(leagueId: number): Observable<GameDisplayCurrent[]> {
+    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getfirstroundgamesfortoday/' + leagueId);
   }
 
   getFirstRoundSummaries(summary: GetPlayoffSummary): Observable<PlayoffSummary[]> {

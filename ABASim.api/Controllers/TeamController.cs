@@ -59,10 +59,10 @@ namespace ABASim.api.Controllers
             return Ok(team);
         }
 
-        [HttpGet("getquickviewroster/{teamId}")]
-        public async Task<IActionResult> GetQuickViewRoster(int teamId)
+        [HttpGet("getquickviewroster/{quickview}")]
+        public async Task<IActionResult> GetQuickViewRoster(GetRosterQuickViewDto quickview)
         {
-            var team = await _repo.GetQuickViewRoster(teamId);
+            var team = await _repo.GetQuickViewRoster(quickview);
             return Ok(team);
         }
 

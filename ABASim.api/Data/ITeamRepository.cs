@@ -35,7 +35,7 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<CompletePlayerDto>> GetExtendPlayersForTeam(int teamId);
 
-         Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(int teamId);
+         Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(GetRosterQuickViewDto quickview);
 
          Task<IEnumerable<LeaguePlayerInjuryDto>> GetTeamInjuries(int teamId);
 

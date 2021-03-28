@@ -84,17 +84,17 @@ namespace ABASim.api.Controllers
             return Ok(leagueState);
         }
 
-        [HttpGet("getgamesfortomorrow")]
-        public async Task<IActionResult> GetGamesForTomrrowPreseason()
+        [HttpGet("getgamesfortomorrow/{leagueId}")]
+        public async Task<IActionResult> GetGamesForTomrrowPreseason(int leagueId)
         {
-            var nextGames = await _repo.GetNextDaysGamesForPreseason();
+            var nextGames = await _repo.GetNextDaysGamesForPreseason(leagueId);
             return Ok(nextGames);
         }
 
-        [HttpGet("getgamesfortoday")]
-        public async Task<IActionResult> GetGamesForTodayPreseason()
+        [HttpGet("getgamesfortoday/{leagueId}")]
+        public async Task<IActionResult> GetGamesForTodayPreseason(int leagueId)
         {
-            var nextGames = await _repo.GetTodaysGamesForPreason();
+            var nextGames = await _repo.GetTodaysGamesForPreason(leagueId);
             return Ok(nextGames);
         }
 
@@ -175,24 +175,24 @@ namespace ABASim.api.Controllers
             return Ok(details);
         }
 
-        [HttpGet("getgamesfortomorrowseason")]
-        public async Task<IActionResult> GetGamesForTomrrowSeason()
+        [HttpGet("getgamesfortomorrowseason/{leagueId}")]
+        public async Task<IActionResult> GetGamesForTomrrowSeason(int leagueId)
         {
-            var nextGames = await _repo.GetNextDaysGamesForSeason();
+            var nextGames = await _repo.GetNextDaysGamesForSeason(leagueId);
             return Ok(nextGames);
         }
 
-        [HttpGet("getgamesfortodayseason")]
-        public async Task<IActionResult> GetGamesForTodaySeason()
+        [HttpGet("getgamesfortodayseason/{leagueId}")]
+        public async Task<IActionResult> GetGamesForTodaySeason(int leagueId)
         {
-            var nextGames = await _repo.GetTodaysGamesForSeason();
+            var nextGames = await _repo.GetTodaysGamesForSeason(leagueId);
             return Ok(nextGames);
         }
 
-        [HttpGet("getfirstroundgamesfortoday")]
-        public async Task<IActionResult> GetFirstRoundGamesForToday()
+        [HttpGet("getfirstroundgamesfortoday/{leagueId}")]
+        public async Task<IActionResult> GetFirstRoundGamesForToday(int leagueId)
         {
-            var nextGames = await _repo.GetFirstRoundGamesForToday();
+            var nextGames = await _repo.GetFirstRoundGamesForToday(leagueId);
             return Ok(nextGames);
         }
 

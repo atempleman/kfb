@@ -35,6 +35,7 @@ import { QuickViewPlayer } from '../_models/QuickViewPlayer';
 import { PlayerInjury } from '../_models/playerInjury';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-dashboard',
@@ -274,7 +275,7 @@ export class DashboardComponent implements OnInit {
 
   getTodaysEvents() {
     if (this.league.stateId === 6 && this.league.day !== 0) {
-      this.leagueService.getPreseasonGamesForToday().subscribe(result => {
+      this.leagueService.getPreseasonGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error getting todays events');
@@ -282,7 +283,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.league.stateId === 7 && this.league.day !== 0) {
-      this.leagueService.getSeasonGamesForToday().subscribe(result => {
+      this.leagueService.getSeasonGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error getting todays events');
@@ -290,7 +291,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.league.stateId === 8 && this.league.day !== 0) {
-      this.leagueService.getFirstRoundGamesForToday().subscribe(result => {
+      this.leagueService.getFirstRoundGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error gettings todays events');
@@ -298,7 +299,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.league.stateId === 9 && this.league.day !== 0) {
-      this.leagueService.getFirstRoundGamesForToday().subscribe(result => {
+      this.leagueService.getFirstRoundGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error gettings todays events');
@@ -306,7 +307,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.league.stateId === 10 && this.league.day !== 0) {
-      this.leagueService.getFirstRoundGamesForToday().subscribe(result => {
+      this.leagueService.getFirstRoundGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error gettings todays events');
@@ -314,7 +315,7 @@ export class DashboardComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.league.stateId === 11 && this.league.day !== 0) {
-      this.leagueService.getFirstRoundGamesForToday().subscribe(result => {
+      this.leagueService.getFirstRoundGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error gettings todays events');
@@ -328,13 +329,13 @@ export class DashboardComponent implements OnInit {
     // Preseason
     if (this.league.stateId === 6) {
       // Need to get the games for the day
-      this.leagueService.getPreseasonGamesForTomorrow().subscribe(result => {
+      this.leagueService.getPreseasonGamesForTomorrow(this.league.id).subscribe(result => {
         this.upcomingGames = result;
       }, error => {
         this.alertify.error('Error getting upcoming games');
       });
     } else if (this.league.stateId === 7) {
-      this.leagueService.getSeasonGamesForTomorrow().subscribe(result => {
+      this.leagueService.getSeasonGamesForTomorrow(this.league.id).subscribe(result => {
         this.upcomingGames = result;
       }, error => {
         this.alertify.error('Error getting upcoming games');
@@ -343,7 +344,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getTeamRoster() {
-    this.teamService.getQuickViewRosterForTeam(this.team.id).subscribe(result => {
+    const quickView: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.teamService.getQuickViewRosterForTeam(quickView).subscribe(result => {
       this.quickTeamRoster = result;
       this.quickRostCount = this.quickTeamRoster.length;
     }, error => {

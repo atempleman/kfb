@@ -100,9 +100,9 @@ namespace ABASim.api.Data
             return leagueStates;
         }
 
-        public async Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForPreseason()
+        public async Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForPreseason(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             var nextGames = await _context.PreseasonSchedules.Where(x => x.Day == (league.Day + 1)).ToListAsync();
 
             List<NextDaysGameDto> nextGamesList = new List<NextDaysGameDto>();
@@ -126,9 +126,9 @@ namespace ABASim.api.Data
             return nextGamesList;
         }
 
-        public async Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForSeason()
+        public async Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForSeason(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             var nextGames = await _context.Schedules.Where(x => x.GameDay == (league.Day + 1)).ToListAsync();
 
             List<NextDaysGameDto> nextGamesList = new List<NextDaysGameDto>();
@@ -306,9 +306,9 @@ namespace ABASim.api.Data
             return standings;
         }
 
-        public async Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForPreason()
+        public async Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForPreason(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             var todaysGames = await _context.PreseasonSchedules.Where(x => x.Day == (league.Day)).ToListAsync();
 
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
@@ -347,9 +347,9 @@ namespace ABASim.api.Data
             return nextGamesList;
         }
 
-        public async Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForSeason()
+        public async Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForSeason(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day)).ToListAsync();
 
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
@@ -882,9 +882,9 @@ namespace ABASim.api.Data
             return stealsList;
         }
 
-        public async Task<IEnumerable<CurrentDayGamesDto>> GetFirstRoundGamesForToday()
+        public async Task<IEnumerable<CurrentDayGamesDto>> GetFirstRoundGamesForToday(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             var todaysGames = await _context.SchedulesPlayoffs.Where(x => x.GameDay == (league.Day)).ToListAsync();
 
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();

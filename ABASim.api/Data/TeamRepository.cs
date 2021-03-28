@@ -468,10 +468,10 @@ namespace ABASim.api.Data
             return deptchCharts;
         }
 
-        public async Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(int teamId)
+        public async Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(GetRosterQuickViewDto quickview)
         {
             List<QuickViewPlayerDto> players = new List<QuickViewPlayerDto>();
-            var teamsRosteredPlayers = await _context.Rosters.Where(x => x.TeamId == teamId).ToListAsync();
+            var teamsRosteredPlayers = await _context.Rosters.Where(x => x.TeamId == quickview.TeamId && x.LeagueId == quickview.LeagueId).ToListAsync();
 
             // Now need to get the player details
             foreach (var rosterPlayer in teamsRosteredPlayers)

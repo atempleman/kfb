@@ -19,15 +19,15 @@ namespace ABASim.api.Data
 
          Task<LeagueState> GetLeagueStateForId(int stateId);
 
-         Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForPreseason();
+         Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForPreseason(int leagueId);
 
-         Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForPreason();
+         Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForPreason(int leagueId);
 
-         Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForSeason();
+         Task<IEnumerable<NextDaysGameDto>> GetNextDaysGamesForSeason(int leagueId);
 
-         Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForSeason();
+         Task<IEnumerable<CurrentDayGamesDto>> GetTodaysGamesForSeason(int leagueId);
 
-         Task<IEnumerable<CurrentDayGamesDto>> GetFirstRoundGamesForToday();
+         Task<IEnumerable<CurrentDayGamesDto>> GetFirstRoundGamesForToday(int leagueId);
 
          Task<IEnumerable<StandingsDto>> GetStandingsForLeague();
 
