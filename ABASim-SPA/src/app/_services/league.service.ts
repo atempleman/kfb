@@ -29,6 +29,7 @@ import { PlayoffResult } from '../_models/playoffResult';
 import { Team } from '../_models/team';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 import { Votes } from '../_models/votes';
+import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -119,9 +120,8 @@ export class LeagueService {
     return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getfirstroundgamesfortoday');
   }
 
-  getFirstRoundSummaries(round: number): Observable<PlayoffSummary[]> {
-    console.log('service');
-    return this.http.get<PlayoffSummary[]>(this.baseUrl + 'getplayoffsummariesforround/' + round);
+  getFirstRoundSummaries(summary: GetPlayoffSummary): Observable<PlayoffSummary[]> {
+    return this.http.get<PlayoffSummary[]>(this.baseUrl + 'getplayoffsummariesforround/' + summary);
   }
 
   getPointsLeagueLeadersForPage(page: number): Observable<LeagueLeadersPoints[]> {
@@ -160,24 +160,24 @@ export class LeagueService {
     return this.http.get<LeagueLeadersMinutes[]>(this.baseUrl + 'leagueleadersminutes/' + page);
   }
 
-  getTopFivePoints(): Observable<LeagueLeadersPoints[]> {
-    return this.http.get<LeagueLeadersPoints[]>(this.baseUrl + 'gettopfivepoints');
+  getTopFivePoints(leagueId: number): Observable<LeagueLeadersPoints[]> {
+    return this.http.get<LeagueLeadersPoints[]>(this.baseUrl + 'gettopfivepoints/' + leagueId);
   }
 
-  getTopFiveAssists(): Observable<LeagueLeadersAssists[]> {
-    return this.http.get<LeagueLeadersAssists[]>(this.baseUrl + 'gettopfiveassists');
+  getTopFiveAssists(leagueId: number): Observable<LeagueLeadersAssists[]> {
+    return this.http.get<LeagueLeadersAssists[]>(this.baseUrl + 'gettopfiveassists/' + leagueId);
   }
 
-  getTopFiveSteals(): Observable<LeagueLeadersSteals[]> {
-    return this.http.get<LeagueLeadersSteals[]>(this.baseUrl + 'gettopfivesteals');
+  getTopFiveSteals(leagueId: number): Observable<LeagueLeadersSteals[]> {
+    return this.http.get<LeagueLeadersSteals[]>(this.baseUrl + 'gettopfivesteals/' + leagueId);
   }
 
-  getTopFiveRebounds(): Observable<LeagueLeadersRebounds[]> {
-    return this.http.get<LeagueLeadersRebounds[]>(this.baseUrl + 'gettopfiverebounds');
+  getTopFiveRebounds(leagueId: number): Observable<LeagueLeadersRebounds[]> {
+    return this.http.get<LeagueLeadersRebounds[]>(this.baseUrl + 'gettopfiverebounds/' + leagueId);
   }
 
-  getTopFiveBlocks(): Observable<LeagueLeadersBlocks[]> {
-    return this.http.get<LeagueLeadersBlocks[]>(this.baseUrl + 'gettopfiveblocks');
+  getTopFiveBlocks(leagueId: number): Observable<LeagueLeadersBlocks[]> {
+    return this.http.get<LeagueLeadersBlocks[]>(this.baseUrl + 'gettopfiveblocks/' + leagueId);
   }
 
   getPlayoffsPointsLeagueLeadersForPage(page: number): Observable<LeagueLeadersPoints[]> {

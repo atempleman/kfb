@@ -288,43 +288,43 @@ namespace ABASim.api.Controllers
             return Ok(tos);
         }
 
-        [HttpGet("gettopfivepoints")]
-        public async Task<IActionResult> GetTopFivePoints()
+        [HttpGet("gettopfivepoints/{leagueId}")]
+        public async Task<IActionResult> GetTopFivePoints(int leagueId)
         {
-            var results = await _repo.GetTopFivePoints();
+            var results = await _repo.GetTopFivePoints(leagueId);
             return Ok(results);
         }
 
-        [HttpGet("gettopfiveassists")]
-        public async Task<IActionResult> GetTopFiveAssists()
+        [HttpGet("gettopfiveassists/{leagueId}")]
+        public async Task<IActionResult> GetTopFiveAssists(int leagueId)
         {
-            var results = await _repo.GetTopFiveAssists();
+            var results = await _repo.GetTopFiveAssists(leagueId);
             return Ok(results);
         }
 
-        [HttpGet("gettopfiverebounds")]
-        public async Task<IActionResult> GetTopFiveRebounds()
+        [HttpGet("gettopfiverebounds/{leagueId}")]
+        public async Task<IActionResult> GetTopFiveRebounds(int leagueId)
         {
-            var results = await _repo.GetTopFiveRebounds();
+            var results = await _repo.GetTopFiveRebounds(leagueId);
             return Ok(results);
         }
 
-        [HttpGet("gettopfivesteals")]
-        public async Task<IActionResult> GetTopFiveSteals()
+        [HttpGet("gettopfivesteals/{leagueId")]
+        public async Task<IActionResult> GetTopFiveSteals(int leagueId)
         {
-            var results = await _repo.GetTopFiveSteals();
+            var results = await _repo.GetTopFiveSteals(leagueId);
             return Ok(results);
         }
 
-        [HttpGet("gettopfiveblocks")]
-        public async Task<IActionResult> GetTopFiveBlocks()
+        [HttpGet("gettopfiveblocks/{leagueId}")]
+        public async Task<IActionResult> GetTopFiveBlocks(int leagueId)
         {
-            var results = await _repo.GetTopFiveBlocks();
+            var results = await _repo.GetTopFiveBlocks(leagueId);
             return Ok(results);
         }
 
-        [HttpGet("getplayoffsummariesforround/{round}")]
-        public async Task<IActionResult> GetPlayoffSummariesForRound(int round)
+        [HttpGet("getplayoffsummariesforround/{summary}")]
+        public async Task<IActionResult> GetPlayoffSummariesForRound(GetPlayoffSummaryDto round)
         {
             var results = await _repo.GetPlayoffSummariesForRound(round);
             return Ok(results);

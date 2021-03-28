@@ -34,6 +34,7 @@ import { Votes } from '../_models/votes';
 import { QuickViewPlayer } from '../_models/QuickViewPlayer';
 import { PlayerInjury } from '../_models/playerInjury';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
+import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 
 @Component({
   selector: 'app-dashboard',
@@ -191,7 +192,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getRoundOneSummaries() {
-    this.leagueService.getFirstRoundSummaries(1).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: 1,
+      leagueId: this.league.id
+    };
+    this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
       this.playoffSummaries = result;
       console.log(this.playoffSummaries);
     }, error => {
@@ -200,7 +205,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getConfSemiSummaries() {
-    this.leagueService.getFirstRoundSummaries(2).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: 2,
+      leagueId: this.league.id
+    };
+    this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
       this.playoffSummaries = result;
     }, error => {
       this.alertify.error('Error getting playoff summaries');
@@ -208,7 +217,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getConfFinalsSummaries() {
-    this.leagueService.getFirstRoundSummaries(3).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: 3,
+      leagueId: this.league.id
+    };
+    this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
       this.playoffSummaries = result;
     }, error => {
       this.alertify.error('Error getting playoff summaries');
@@ -216,7 +229,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getFinalsSummaries() {
-    this.leagueService.getFirstRoundSummaries(4).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: 4,
+      leagueId: this.league.id
+    };
+    this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
       this.playoffSummaries = result;
     }, error => {
       this.alertify.error('Error getting playoff summaries');
@@ -224,31 +241,31 @@ export class DashboardComponent implements OnInit {
   }
 
   getLeagueLeaders() {
-    this.leagueService.getTopFivePoints().subscribe(result => {
+    this.leagueService.getTopFivePoints(this.league.id).subscribe(result => {
       this.topFivePoints = result;
     }, error => {
       this.alertify.error('Error getting points leaders');
     });
 
-    this.leagueService.getTopFiveAssists().subscribe(result => {
+    this.leagueService.getTopFiveAssists(this.league.id).subscribe(result => {
       this.topFiveAssists = result;
     }, error => {
       this.alertify.error('Error getting assists leaders');
     });
 
-    this.leagueService.getTopFiveBlocks().subscribe(result => {
+    this.leagueService.getTopFiveBlocks(this.league.id).subscribe(result => {
       this.topFiveBlocks = result;
     }, error => {
       this.alertify.error('Error getting blocks leaders');
     });
 
-    this.leagueService.getTopFiveRebounds().subscribe(result => {
+    this.leagueService.getTopFiveRebounds(this.league.id).subscribe(result => {
       this.topFiveRebounds = result;
     }, error => {
       this.alertify.error('Error getting rebounds leaders');
     });
 
-    this.leagueService.getTopFiveSteals().subscribe(result => {
+    this.leagueService.getTopFiveSteals(this.league.id).subscribe(result => {
       this.topFiveSteals = result;
     }, error => {
       this.alertify.error('Error getting steals leaders');

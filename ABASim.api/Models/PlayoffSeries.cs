@@ -15,5 +15,7 @@ namespace ABASim.api.Models
         public int AwayWins { get; set; }
 
         public int Conference { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

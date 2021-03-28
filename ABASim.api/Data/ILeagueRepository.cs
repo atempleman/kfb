@@ -63,31 +63,31 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<LeagueLeaderPointsDto>> GetPlayoffsPointsLeagueLeaders(int page);
 
-         Task<IEnumerable<LeagueLeaderPointsDto>> GetTopFivePoints();
+         Task<IEnumerable<LeagueLeaderPointsDto>> GetTopFivePoints(int leagueId);
 
          Task<IEnumerable<LeagueLeaderAssistsDto>> GetAssistsLeagueLeaders(int page);
 
          Task<IEnumerable<LeagueLeaderAssistsDto>> GetPlayoffAssistsLeagueLeaders(int page);
 
-         Task<IEnumerable<LeagueLeaderAssistsDto>> GetTopFiveAssists();
+         Task<IEnumerable<LeagueLeaderAssistsDto>> GetTopFiveAssists(int leagueId);
 
          Task<IEnumerable<LeagueLeaderReboundsDto>> GetReboundsLeagueLeaders(int page);
 
          Task<IEnumerable<LeagueLeaderReboundsDto>> GetPlayoffReboundsLeagueLeaders(int page);
 
-         Task<IEnumerable<LeagueLeaderReboundsDto>> GetTopFiveRebounds();
+         Task<IEnumerable<LeagueLeaderReboundsDto>> GetTopFiveRebounds(int leagueId);
 
          Task<IEnumerable<LeagueLeaderBlocksDto>> GetBlocksLeagueLeaders(int page);
 
          Task<IEnumerable<LeagueLeaderBlocksDto>> GetPlayoffBlocksLeagueLeaders(int page);
 
-         Task<IEnumerable<LeagueLeaderBlocksDto>> GetTopFiveBlocks();
+         Task<IEnumerable<LeagueLeaderBlocksDto>> GetTopFiveBlocks(int leagueId);
 
          Task<IEnumerable<LeagueLeaderStealsDto>> GetStealsLeagueLeaders(int page);
 
          Task<IEnumerable<LeagueLeaderStealsDto>> GetPlayoffStealsLeagueLeaders(int page);
 
-         Task<IEnumerable<LeagueLeaderStealsDto>> GetTopFiveSteals();
+         Task<IEnumerable<LeagueLeaderStealsDto>> GetTopFiveSteals(int leagueId);
 
          Task<IEnumerable<LeagueLeaderMinutesDto>> GetMinutesLeagueLeaders(int page);
 
@@ -105,7 +105,7 @@ namespace ABASim.api.Data
 
          int GetCountOfPointsLeagueLeadersPlayoffs();
 
-         Task<IEnumerable<PlayoffSummaryDto>> GetPlayoffSummariesForRound(int round);
+         Task<IEnumerable<PlayoffSummaryDto>> GetPlayoffSummariesForRound(GetPlayoffSummaryDto round);
 
          Task<Team> GetChampion();
 

@@ -756,12 +756,12 @@ namespace ABASim.api.Data
             return turnoversList;
         }
 
-        public async Task<IEnumerable<LeagueLeaderPointsDto>> GetTopFivePoints()
+        public async Task<IEnumerable<LeagueLeaderPointsDto>> GetTopFivePoints(int leagueId)
         {
             List<LeagueLeaderPointsDto> pointsList = new List<LeagueLeaderPointsDto>();
             List<PlayerStat> playerStats = new List<PlayerStat>();
 
-            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0).OrderByDescending(x => x.Ppg).Take(5).ToListAsync();
+            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0 && x.LeagueId == leagueId).OrderByDescending(x => x.Ppg).Take(5).ToListAsync();
             
             foreach (var ps in playerStats)
             {
@@ -782,11 +782,11 @@ namespace ABASim.api.Data
             return pointsList;
         }
 
-        public async Task<IEnumerable<LeagueLeaderAssistsDto>> GetTopFiveAssists()
+        public async Task<IEnumerable<LeagueLeaderAssistsDto>> GetTopFiveAssists(int leagueId)
         {
             List<LeagueLeaderAssistsDto> assitsList = new List<LeagueLeaderAssistsDto>();
             List<PlayerStat> playerStats = new List<PlayerStat>();
-            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0).OrderByDescending(x => x.Apg).Take(5).ToListAsync();
+            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0 && x.LeagueId == leagueId).OrderByDescending(x => x.Apg).Take(5).ToListAsync();
             
             foreach (var ps in playerStats)
             {
@@ -807,11 +807,11 @@ namespace ABASim.api.Data
             return assitsList;
         }
 
-        public async Task<IEnumerable<LeagueLeaderReboundsDto>> GetTopFiveRebounds()
+        public async Task<IEnumerable<LeagueLeaderReboundsDto>> GetTopFiveRebounds(int leagueId)
         {
             List<LeagueLeaderReboundsDto> reboundsList = new List<LeagueLeaderReboundsDto>();
             List<PlayerStat> playerStats = new List<PlayerStat>();
-            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0).OrderByDescending(x => x.Rpg).Take(5).ToListAsync();
+            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0 && x.LeagueId == leagueId).OrderByDescending(x => x.Rpg).Take(5).ToListAsync();
             
             foreach (var ps in playerStats)
             {
@@ -832,11 +832,11 @@ namespace ABASim.api.Data
             return reboundsList;
         }
 
-        public async Task<IEnumerable<LeagueLeaderBlocksDto>> GetTopFiveBlocks()
+        public async Task<IEnumerable<LeagueLeaderBlocksDto>> GetTopFiveBlocks(int leagueId)
         {
             List<LeagueLeaderBlocksDto> blocksList = new List<LeagueLeaderBlocksDto>();
             List<PlayerStat> playerStats = new List<PlayerStat>();
-            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0).OrderByDescending(x => x.Bpg).Take(5).ToListAsync();
+            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0 && x.LeagueId == leagueId).OrderByDescending(x => x.Bpg).Take(5).ToListAsync();
             
             foreach (var ps in playerStats)
             {
@@ -857,11 +857,11 @@ namespace ABASim.api.Data
             return blocksList;
         }
 
-        public async Task<IEnumerable<LeagueLeaderStealsDto>> GetTopFiveSteals()
+        public async Task<IEnumerable<LeagueLeaderStealsDto>> GetTopFiveSteals(int leagueId)
         {
             List<LeagueLeaderStealsDto> stealsList = new List<LeagueLeaderStealsDto>();
             List<PlayerStat> playerStats = new List<PlayerStat>();
-            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0).OrderByDescending(x => x.Spg).Take(5).ToListAsync();
+            playerStats = await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.Minutes > 0 && x.LeagueId == leagueId).OrderByDescending(x => x.Spg).Take(5).ToListAsync();
             
             foreach (var ps in playerStats)
             {
@@ -923,16 +923,16 @@ namespace ABASim.api.Data
             return nextGamesList;
         }
 
-        public async Task<IEnumerable<PlayoffSummaryDto>> GetPlayoffSummariesForRound(int round)
+        public async Task<IEnumerable<PlayoffSummaryDto>> GetPlayoffSummariesForRound(GetPlayoffSummaryDto round)
         {
             List<PlayoffSummaryDto> summaryList = new List<PlayoffSummaryDto>();
-            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == round).ToListAsync();
+            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == round.Round && x.LeagueId == round.LeagueId).ToListAsync();
             
             if (allSeries != null) {
                 foreach (var series in allSeries)
                 {
-                    var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == series.AwayTeamId);
-                    var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == series.HomeTeamId);
+                    var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == series.AwayTeamId && x.LeagueId == round.LeagueId);
+                    var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == series.HomeTeamId && x.LeagueId == round.LeagueId);
 
                     PlayoffSummaryDto dto = new PlayoffSummaryDto
                     {
@@ -942,7 +942,6 @@ namespace ABASim.api.Data
                         AwayTeamId = series.AwayTeamId,
                         HomeWins = series.HomeWins,
                         AwayWins = series.AwayWins
-
                     };
                     summaryList.Add(dto);
                 }
