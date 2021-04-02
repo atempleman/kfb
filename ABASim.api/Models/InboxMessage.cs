@@ -23,5 +23,7 @@ namespace ABASim.api.Models
         public string MessageDate { get; set; }
 
         public int IsNew { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

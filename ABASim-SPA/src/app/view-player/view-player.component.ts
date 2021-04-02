@@ -13,6 +13,9 @@ import { Team } from '../_models/team';
 import { CareerStats } from '../_models/careerStats';
 import { PlayerContractQuickView } from '../_models/playerContractQuickView';
 import { PlayerContract } from '../_models/playerContract';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
+import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
+import { GetTeamLeague } from '../_models/getTeamLeague';
 
 @Component({
   selector: 'app-view-player',
@@ -41,32 +44,61 @@ export class ViewPlayerComponent implements OnInit {
   playerContractQuick: PlayerContractQuickView;
   playerContract: PlayerContract;
 
+  team: Team;
+
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
               private authService: AuthService, private teamService: TeamService, private transferService: TransferService,
               private playerService: PlayerService) { }
 
   ngOnInit() {
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
-      this.alertify.error('Error getting league');
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPlayer();
     });
+  }
+
+  setupPlayer() {
     this.playerId = this.transferService.getData();
 
-    this.playerService.playerForPlayerProfileById(this.playerId).subscribe(result => {
+    const playerIdLeague: GetPlayerIdLeague = {
+      playerId: this.playerId,
+      leagueId: this.league.id
+    };
+
+    this.playerService.playerForPlayerProfileById(playerIdLeague).subscribe(result => {
       this.detailedPlayer = result;
       this.imageSrc = 'https://nba-players.herokuapp.com/players/' + this.detailedPlayer.surname + '/' + this.detailedPlayer.firstName;
     }, error => {
       this.alertify.error('Error getting player profile');
     }, () => {
-      this.teamService.getTeamForTeamName(this.detailedPlayer.teamName).subscribe(result => {
+      const teamleague: GetTeamLeague = {
+        teamname: this.detailedPlayer.teamName,
+        leagueId: this.league.id
+      };
+
+      this.teamService.getTeamForTeamName(teamleague).subscribe(result => {
         this.playersTeam = result;
       }, error => {
         this.alertify.error('Error getting players team');
       });
     });
 
-    this.teamService.getInjuryForPlayer(this.playerId).subscribe(result => {
+    this.teamService.getInjuryForPlayer(playerIdLeague).subscribe(result => {
       this.playerInjury = result;
       if (this.playerInjury) {
         this.injurySet = 1;
@@ -75,19 +107,19 @@ export class ViewPlayerComponent implements OnInit {
       this.alertify.error('Error checking player injury');
     });
 
-    this.playerService.getCareerStats(this.playerId).subscribe(result => {
+    this.playerService.getCareerStats(playerIdLeague).subscribe(result => {
       this.careerStats = result;
     }, error => {
       this.alertify.error('Error getting career stats');
     });
 
-    this.playerService.getContractForPlayer(this.playerId).subscribe(result => {
+    this.playerService.getContractForPlayer(playerIdLeague).subscribe(result => {
       this.playerContractQuick = result;
     }, error => {
       this.alertify.error('Error getting players contract');
     });
 
-    this.playerService.getPlayerContractForPlayer(this.playerId).subscribe(result => {
+    this.playerService.getPlayerContractForPlayer(playerIdLeague).subscribe(result => {
       this.playerContract = result;
       console.log(result);
     }, error => {

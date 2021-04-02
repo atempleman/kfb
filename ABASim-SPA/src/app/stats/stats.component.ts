@@ -18,6 +18,10 @@ import { LeagueLeadersSteals } from '../_models/leagueLeadersSteals';
 import { LeagueLeadersFouls } from '../_models/leagueLeadersFouls';
 import { LeagueLeadersMinutes } from '../_models/leagueLeadersMinutes';
 import { LeagueLeadersTurnover } from '../_models/leagueLeadersTurnovers';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
+import { GetStatsLeague } from '../_models/getStatsLeague';
+import { GetPagerLeague } from '../_models/getPagerLeague';
 
 @Component({
   selector: 'app-stats',
@@ -50,26 +54,49 @@ export class StatsComponent implements OnInit {
 
   selectedStat = 0;
 
+  team: Team;
+
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
-              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService) { }
+              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService,
+              private teamService: TeamService) { }
 
   ngOnInit() {
     this.spinner.show();
 
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
-      this.alertify.error('Error getting league');
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
     });
+  }
 
+  setupPage() {
     this.selectedStat = this.transferService.getData();
     if (!this.selectedStat) {
       this.selectedStat = 0;
     }
 
-    console.log(this.selectedStat);
+    const summary: GetStatsLeague = {
+      page: 1,
+      leagueId: this.league.id
+    };
+
     if (this.selectedStat === 0 || this.selectedStat === 1) {
-      this.leagueService.getPointsLeagueLeadersForPage(1).subscribe(result => {
+      this.leagueService.getPointsLeagueLeadersForPage(summary).subscribe(result => {
         this.pointsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -90,7 +117,7 @@ export class StatsComponent implements OnInit {
       this.blocksClick();
     }
 
-    this.leagueService.getPointsLeagueLeadersForPage(1).subscribe(result => {
+    this.leagueService.getPointsLeagueLeadersForPage(summary).subscribe(result => {
       this.pointsStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -100,7 +127,7 @@ export class StatsComponent implements OnInit {
   }
 
   getCountForPoints() {
-    this.leagueService.getCountOfPointsLeagueLeaders().subscribe(result => {
+    this.leagueService.getCountOfPointsLeagueLeaders(this.league.id).subscribe(result => {
       this.recordTotal = result;
     }, error => {
       this.alertify.error('Error getting total records');
@@ -118,8 +145,13 @@ export class StatsComponent implements OnInit {
       this.pager = this.pager - 1;
     }
 
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
     if (this.pointsSelection) {
-      this.leagueService.getPointsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getPointsLeagueLeadersForPage(summary).subscribe(result => {
         this.pointsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -127,7 +159,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.assistsSelection) {
-      this.leagueService.getAssistsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getAssistsLeagueLeadersForPage(summary).subscribe(result => {
         this.assistsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -135,7 +167,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.reboundsSelection) {
-      this.leagueService.getReboundsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getReboundsLeagueLeadersForPage(summary).subscribe(result => {
         this.reboundStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -143,7 +175,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.stealsSelection) {
-      this.leagueService.getStealsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getStealsLeagueLeadersForPage(summary).subscribe(result => {
         this.stealsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -151,7 +183,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.blocksSelection) {
-      this.leagueService.getBlocksLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getBlocksLeagueLeadersForPage(summary).subscribe(result => {
         this.blocksStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -161,7 +193,7 @@ export class StatsComponent implements OnInit {
     } else if (this.turnoversSelection) {
 
     } else if (this.foulsSelection) {
-      this.leagueService.getFoulsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getFoulsLeagueLeadersForPage(summary).subscribe(result => {
         this.foulsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -169,7 +201,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.minutesSelection) {
-      this.leagueService.getMinutesLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getMinutesLeagueLeadersForPage(summary).subscribe(result => {
         this.minutesStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -187,8 +219,13 @@ export class StatsComponent implements OnInit {
       this.pager = this.pager + 1;
     }
 
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
     if (this.pointsSelection) {
-      this.leagueService.getPointsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getPointsLeagueLeadersForPage(summary).subscribe(result => {
         this.pointsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -196,7 +233,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.assistsSelection) {
-      this.leagueService.getAssistsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getAssistsLeagueLeadersForPage(summary).subscribe(result => {
         this.assistsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -204,7 +241,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.reboundsSelection) {
-      this.leagueService.getReboundsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getReboundsLeagueLeadersForPage(summary).subscribe(result => {
         this.reboundStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -212,7 +249,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.stealsSelection) {
-      this.leagueService.getStealsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getStealsLeagueLeadersForPage(summary).subscribe(result => {
         this.stealsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -220,7 +257,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.blocksSelection) {
-      this.leagueService.getBlocksLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getBlocksLeagueLeadersForPage(summary).subscribe(result => {
         this.blocksStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -228,7 +265,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.turnoversSelection) {
-      this.leagueService.getTurnoversLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getTurnoversLeagueLeadersForPage(summary).subscribe(result => {
         this.turnoversStats = result;
       }, error => {
         this.alertify.error('Error getting turnover stats');
@@ -236,7 +273,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       })
     } else if (this.foulsSelection) {
-      this.leagueService.getFoulsLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getFoulsLeagueLeadersForPage(summary).subscribe(result => {
         this.foulsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -244,7 +281,7 @@ export class StatsComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.minutesSelection) {
-      this.leagueService.getMinutesLeagueLeadersForPage(this.pager).subscribe(result => {
+      this.leagueService.getMinutesLeagueLeadersForPage(summary).subscribe(result => {
         this.minutesStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');
@@ -268,7 +305,13 @@ export class StatsComponent implements OnInit {
     this.pointsSelection = true;
 
     this.pager = 1;
-    this.leagueService.getPointsLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getPointsLeagueLeadersForPage(summary).subscribe(result => {
       this.pointsStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -291,7 +334,13 @@ export class StatsComponent implements OnInit {
     this.blocksSelection = true;
 
     this.pager = 1;
-    this.leagueService.getBlocksLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getBlocksLeagueLeadersForPage(summary).subscribe(result => {
       this.blocksStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -314,7 +363,13 @@ export class StatsComponent implements OnInit {
     this.assistsSelection = true;
 
     this.pager = 1;
-    this.leagueService.getAssistsLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getAssistsLeagueLeadersForPage(summary).subscribe(result => {
       this.assistsStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -337,7 +392,13 @@ export class StatsComponent implements OnInit {
     this.reboundsSelection = true;
 
     this.pager = 1;
-    this.leagueService.getReboundsLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getReboundsLeagueLeadersForPage(summary).subscribe(result => {
       this.reboundStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -360,7 +421,13 @@ export class StatsComponent implements OnInit {
     this.stealsSelection = true;
 
     this.pager = 1;
-    this.leagueService.getStealsLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getStealsLeagueLeadersForPage(summary).subscribe(result => {
       this.stealsStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -383,7 +450,13 @@ export class StatsComponent implements OnInit {
     this.minutesSelection = true;
 
     this.pager = 1;
-    this.leagueService.getMinutesLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getMinutesLeagueLeadersForPage(summary).subscribe(result => {
       this.minutesStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -406,7 +479,13 @@ export class StatsComponent implements OnInit {
     this.foulsSelection = true;
 
     this.pager = 1;
-    this.leagueService.getFoulsLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getFoulsLeagueLeadersForPage(summary).subscribe(result => {
       this.foulsStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');
@@ -429,7 +508,13 @@ export class StatsComponent implements OnInit {
     this.turnoversSelection = true;
 
     this.pager = 1;
-    this.leagueService.getTurnoversLeagueLeadersForPage(this.pager).subscribe(result => {
+
+    const summary: GetStatsLeague = {
+      page: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getTurnoversLeagueLeadersForPage(summary).subscribe(result => {
       this.turnoversStats = result;
     }, error => {
       this.alertify.error('Error getting scoring stats');

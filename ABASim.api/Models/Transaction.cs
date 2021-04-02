@@ -15,5 +15,7 @@ namespace ABASim.api.Models
         public int Pick { get; set; }
 
         public string PickText { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

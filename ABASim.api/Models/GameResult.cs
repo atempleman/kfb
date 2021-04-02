@@ -13,5 +13,7 @@ namespace ABASim.api.Models
         public int WinningTeamId { get; set; }
 
         public int Completed { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

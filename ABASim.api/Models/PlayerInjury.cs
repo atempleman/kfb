@@ -17,5 +17,7 @@ namespace ABASim.api.Models
         public int EndDay { get; set; }
 
         public int CurrentlyInjured { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

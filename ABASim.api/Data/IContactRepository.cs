@@ -12,7 +12,7 @@ namespace ABASim.api.Data
 
         Task<IEnumerable<GlobalChatDto>> GetChatRecords(int leagueId);
 
-        Task<IEnumerable<InboxMessageDto>> GetInboxMessages(int teamId);
+        Task<IEnumerable<InboxMessageDto>> GetInboxMessages(GetRosterQuickViewDto dto);
 
         Task<bool> SendInboxMessage(InboxMessageDto message);
 
@@ -20,6 +20,6 @@ namespace ABASim.api.Data
 
         Task<bool> DeleteInboxMessage(int messageId);
 
-        Task<InboxMessageCountDto> CountOfMessages(int teamId);
+        Task<InboxMessageCountDto> CountOfMessages(GetRosterQuickViewDto teamId);
     }
 }

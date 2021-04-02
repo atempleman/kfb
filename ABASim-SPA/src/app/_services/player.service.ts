@@ -10,6 +10,8 @@ import { PlayerContractQuickView } from '../_models/playerContractQuickView';
 import { PlayerContract } from '../_models/playerContract';
 import { RetiredPlayer } from '../_models/retiredPlayer';
 import { DetailedRetiredPlayer } from '../_models/detailedRetiredPlayer';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
+import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +37,8 @@ export class PlayerService {
     return this.http.get<Player>(this.baseUrl + 'getplayerforid/' + playerId);
   }
 
-  getAllPlayers(): Observable<Player[]> {
-    let players = this.http.get<Player[]>(this.baseUrl + 'getallplayers');
-    console.log(players);
+  getAllPlayers(leagueId: number): Observable<Player[]> {
+    let players = this.http.get<Player[]>(this.baseUrl + 'getallplayers/' + leagueId);
     return players
   }
 
@@ -45,20 +46,20 @@ export class PlayerService {
     return this.http.get<Player[]>(this.baseUrl + 'filterplayers/' + value);
   }
 
-  getFreeAgents(): Observable<Player[]> {
-    return this.http.get<Player[]>(this.baseUrl + 'getfreeagents');
+  getFreeAgents(leagueId: number): Observable<Player[]> {
+    return this.http.get<Player[]>(this.baseUrl + 'getfreeagents/' + leagueId);
   }
 
-  getFreeAgentsByPos(pos: number): Observable<Player[]> {
+  getFreeAgentsByPos(pos: GetPlayerIdLeague): Observable<Player[]> {
     return this.http.get<Player[]>(this.baseUrl + 'getfreeagentsbypos/' + pos);
   }
 
-  filterFreeAgents(value: string): Observable<Player[]> {
+  filterFreeAgents(value: GetPlayerLeague): Observable<Player[]> {
     return this.http.get<Player[]>(this.baseUrl + 'getfilteredfreeagents/' + value);
   }
 
-  playerForPlayerProfileById(playerId: number) {
-    return this.http.get<CompletePlayer>(this.baseUrl + 'getcompleteplayer/' + playerId);
+  playerForPlayerProfileById(playerIdLeague: GetPlayerIdLeague) {
+    return this.http.get<CompletePlayer>(this.baseUrl + 'getcompleteplayer/' + playerIdLeague);
   }
 
   filterDraftPlayerPool(value: string): Observable<DraftPlayer[]> {
@@ -69,24 +70,24 @@ export class PlayerService {
     return this.http.get<DraftPlayer[]>(this.baseUrl + 'draftpoolfilterbyposition/' + pos);
   }
 
-  getPlayerByPos(pos: number): Observable<Player[]> {
+  getPlayerByPos(pos: GetPlayerIdLeague): Observable<Player[]> {
     console.log('ash2');
     return this.http.get<Player[]>(this.baseUrl + 'filterbyposition/' + pos);
   }
 
-  getCareerStats(playerId: number): Observable<CareerStats[]> {
+  getCareerStats(playerId: GetPlayerIdLeague): Observable<CareerStats[]> {
     return this.http.get<CareerStats[]>(this.baseUrl + 'getcareerstats/' + playerId);
   }
 
-  getPlayerForName(name: string): Observable<Player> {
-    return this.http.get<Player>(this.baseUrl + 'getplayerforname/' + name);
+  getPlayerForName(playerleague: GetPlayerLeague): Observable<Player> {
+    return this.http.get<Player>(this.baseUrl + 'getplayerforname/' + playerleague);
   }
 
-  getContractForPlayer(playerId: number): Observable<PlayerContractQuickView> {
+  getContractForPlayer(playerId: GetPlayerIdLeague): Observable<PlayerContractQuickView> {
     return this.http.get<PlayerContractQuickView>(this.baseUrl + 'getcontractforplayer/' + playerId);
   }
 
-  getPlayerContractForPlayer(playerId: number): Observable<PlayerContract> {
+  getPlayerContractForPlayer(playerId: GetPlayerIdLeague): Observable<PlayerContract> {
     return this.http.get<PlayerContract>(this.baseUrl + 'getfullcontractforplayer/' + playerId);
   }
 

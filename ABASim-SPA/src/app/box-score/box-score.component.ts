@@ -11,6 +11,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { PlayerService } from '../_services/player.service';
 import { Player } from '@angular/core/src/render3/interfaces/player';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
+import { GetGameLeague } from '../_models/getGameLeague';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
 
 @Component({
   selector: 'app-box-score',
@@ -57,26 +61,45 @@ export class BoxScoreComponent implements OnInit {
   home3FGA = 0;
   home3FGM = 0;
 
+  team: Team;
+
   constructor(private alertify: AlertifyService, private authService: AuthService, private leagueService: LeagueService,
               private transferService: TransferService, private engineService: GameEngineService, private spinner: NgxSpinnerService,
-              private router: Router, private playerService: PlayerService) { }
+              private router: Router, private playerService: PlayerService, private teamService: TeamService) { }
 
   ngOnInit() {
     this.gameId = this.transferService.getData();
 
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
-      this.alertify.error('Error getting league');
+      this.alertify.error('Error getting League Details');
     }, () => {
       this.getGameDetails();
     });
   }
 
   getGameDetails() {
+    const gameLeague: GetGameLeague = {
+      gameId: this.gameId,
+      leagueId: this.league.id
+    };
+
     if (this.league.stateId === 6) {
       this.spinner.show();
-      this.leagueService.getGameDetailsPreseason(this.gameId).subscribe(result => {
+      this.leagueService.getGameDetailsPreseason(gameLeague).subscribe(result => {
         this.gameDetails = result;
       }, error => {
         this.alertify.error('Error getting game details');
@@ -87,7 +110,7 @@ export class BoxScoreComponent implements OnInit {
       });
     } else if (this.league.stateId === 7) {
       this.spinner.show();
-      this.leagueService.getGameDetailsSeason(this.gameId).subscribe(result => {
+      this.leagueService.getGameDetailsSeason(gameLeague).subscribe(result => {
         this.gameDetails = result;
       }, error => {
         this.alertify.error('Error getting game details');
@@ -99,7 +122,7 @@ export class BoxScoreComponent implements OnInit {
       });
     } else if (this.league.stateId === 8 || this.league.stateId === 9 || this.league.stateId === 10 || this.league.stateId === 11) {
       this.spinner.show();
-      this.leagueService.getGameDetailsPlayoffs(this.gameId).subscribe(result => {
+      this.leagueService.getGameDetailsPlayoffs(gameLeague).subscribe(result => {
         this.gameDetails = result;
       }, error => {
         this.alertify.error('Error getting game details');
@@ -113,8 +136,13 @@ export class BoxScoreComponent implements OnInit {
   }
 
   retrieveBoxScoreData() {
+    const gameLeague: GetGameLeague = {
+      gameId: this.gameId,
+      leagueId: this.league.id
+    };
+
     if (this.league.stateId === 8 || this.league.stateId === 9 || this.league.stateId === 10 || this.league.stateId === 11) {
-      this.engineService.getBoxScoreForGameIdPlayoffs(this.gameId).subscribe(result => {
+      this.engineService.getBoxScoreForGameIdPlayoffs(gameLeague).subscribe(result => {
         this.boxScores = result;
       }, error => {
         this.alertify.error('Wrror getting box scores');
@@ -125,7 +153,7 @@ export class BoxScoreComponent implements OnInit {
         this.calculateTeamTotals();
       });
     } else {
-      this.engineService.getBoxScoreForGameId(this.gameId).subscribe(result => {
+      this.engineService.getBoxScoreForGameId(gameLeague).subscribe(result => {
         this.boxScores = result;
       }, error => {
         this.alertify.error('Wrror getting box scores');
@@ -181,8 +209,14 @@ export class BoxScoreComponent implements OnInit {
     // Need to get player id for name
     let playerId = 0;
     const playerName = firstName + ' ' + lastName;
-    this.playerService.getPlayerForName(playerName).subscribe(result => {
-      playerId = result.id;
+
+    const playerLeague: GetPlayerLeague = {
+      playerName: playerName,
+      leagueId: this.league.id
+    };
+
+    this.playerService.getPlayerForName(playerLeague).subscribe(result => {
+      playerId = result.playerId;
     }, error => {
       this.alertify.error('Error getting player name');
     }, () => {

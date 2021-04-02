@@ -14,6 +14,8 @@ namespace ABASim.api.Dtos
 
         public string DefensiveStrategyName { get; set; }
 
+        public int LeagueId { get; set; }
+
         public string DefensiveStrategyDesc { get; set; }
     }
 }

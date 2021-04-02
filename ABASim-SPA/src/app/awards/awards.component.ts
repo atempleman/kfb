@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { League } from '../_models/league';
+import { Team } from '../_models/team';
 import { Votes } from '../_models/votes';
 import { AlertifyService } from '../_services/alertify.service';
+import { AuthService } from '../_services/auth.service';
 import { LeagueService } from '../_services/league.service';
+import { TeamService } from '../_services/team.service';
 import { TransferService } from '../_services/transfer.service';
 
 @Component({
@@ -22,36 +25,57 @@ export class AwardsComponent implements OnInit {
   thirdTeam: Votes[] = [];
   allnbateams: Votes[] = [];
 
+  team: Team;
+
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
-              private transferService: TransferService, private spinner: NgxSpinnerService) { }
+              private transferService: TransferService, private spinner: NgxSpinnerService, private teamService: TeamService,
+              private authService: AuthService) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.leagueService.getLeague().subscribe(result => {
+
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
       this.league = result;
     }, error => {
-      this.alertify.error('Error getting league details');
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
     });
+  }
 
-    this.leagueService.getMvpTopFive().subscribe(result => {
+  setupPage() {
+    this.leagueService.getMvpTopFive(this.league.id).subscribe(result => {
       this.mvpList = result;
     }, error => {
       this.alertify.error('Error getting MVP leaders');
     });
 
-    this.leagueService.getDpoyTopFive().subscribe(result => {
+    this.leagueService.getDpoyTopFive(this.league.id).subscribe(result => {
       this.dpoyList = result;
     }, error => {
       this.alertify.error('Error getting DPOY leaders');
     });
 
-    this.leagueService.getSixthManTopFive().subscribe(result => {
+    this.leagueService.getSixthManTopFive(this.league.id).subscribe(result => {
       this.sixthList = result;
     }, error => {
       this.alertify.error('Error getting 6th man leaders');
     });
 
-    this.leagueService.getAllNBATeams().subscribe(result => {
+
+    this.leagueService.getAllNBATeams(this.league.id).subscribe(result => {
       this.allnbateams = result;
       console.log(result);
     }, error => {

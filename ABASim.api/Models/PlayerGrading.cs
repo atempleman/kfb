@@ -27,5 +27,7 @@ namespace ABASim.api.Models
         public string PassingGrade { get; set; }
 
         public string IntangiblesGrade { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

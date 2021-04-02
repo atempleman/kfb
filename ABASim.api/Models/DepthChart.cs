@@ -11,5 +11,7 @@ namespace ABASim.api.Models
         public int Position { get; set; }
 
         public int Depth { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

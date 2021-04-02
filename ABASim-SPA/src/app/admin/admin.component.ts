@@ -14,6 +14,10 @@ import { CheckGame } from '../_models/checkGame';
 import { GameDisplayCurrent } from '../_models/gameDisplayCurrent';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DraftService } from '../_services/draft.service';
+import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetScheduleLeague } from '../_models/getScheduleLeague';
+import { GetGameLeague } from '../_models/getGameLeague';
 
 @Component({
   selector: 'app-admin',
@@ -47,6 +51,7 @@ export class AdminComponent implements OnInit {
   todaysGames: GameDisplayCurrent[] = [];
 
   username = 0;
+  team: Team;
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
               private authService: AuthService, private modalService: BsModalService, private adminService: AdminService,
@@ -54,21 +59,38 @@ export class AdminComponent implements OnInit {
               private draftService: DraftService) { }
 
   ngOnInit() {
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+
+    
+    console.log(this.username);
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
+      this.setupPage();
     });
+  }
 
+  setupPage() {
     this.getTodaysGames();
 
     this.username = +this.authService.decodedToken.nameid;
-    console.log(this.username);
   }
 
   getTodaysGames() {
-    this.adminService.getGamesForReset().subscribe(result => {
+    this.adminService.getGamesForReset(this.league.id).subscribe(result => {
       this.todaysGames = result;
     }, error => {
       this.alertify.error('Error getting todays games');
@@ -81,7 +103,11 @@ export class AdminComponent implements OnInit {
 
   // State 2
   moveToInitialLottery() {
-    this.adminService.updateLeagueStatus(2).subscribe(result => {
+    const summary: LeagueStatusUpdate = {
+      status: 2,
+      leagueId: this.league.id
+    };
+    this.adminService.updateLeagueStatus(summary).subscribe(result => {
     }, error => {
       this.alertify.error('Error saving league status');
     }, () => {
@@ -93,7 +119,7 @@ export class AdminComponent implements OnInit {
 
   // Running lottery and changing to state 3
   runInitialDraftLottery() {
-    this.adminService.runInitialDraftLottery().subscribe(result => {
+    this.adminService.runInitialDraftLottery(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error running initial draft lottery');
     }, () => {
@@ -105,7 +131,7 @@ export class AdminComponent implements OnInit {
 
   // Begin the draft
   beginDraft() {
-    this.draftService.beginInitialDraft().subscribe(result => {
+    this.draftService.beginInitialDraft(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error starting the draft');
     }, () => {
@@ -117,7 +143,11 @@ export class AdminComponent implements OnInit {
 
   // Begin the preseason
   beginPreseason() {
-    this.adminService.updateLeagueStatus(6).subscribe(result => {
+    const summary: LeagueStatusUpdate = {
+      status: 6,
+      leagueId: this.league.id
+    };
+    this.adminService.updateLeagueStatus(summary).subscribe(result => {
     }, error => {
       this.alertify.error('Error saving league status');
     }, () => {
@@ -128,7 +158,11 @@ export class AdminComponent implements OnInit {
   }
 
   beginSeason() {
-    this.adminService.updateLeagueStatus(7).subscribe(result => {
+    const summary: LeagueStatusUpdate = {
+      status: 7,
+      leagueId: this.league.id
+    };
+    this.adminService.updateLeagueStatus(summary).subscribe(result => {
     }, error => {
       this.alertify.error('Error saving league status');
     }, () => {
@@ -142,8 +176,7 @@ export class AdminComponent implements OnInit {
   //#region Super Admin Functions
 
   resetLeague() {
-    this.adminService.resetLeague().subscribe(result => {
-
+    this.adminService.resetLeague(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error resetting the league.');
     }, () => {
@@ -202,8 +235,7 @@ export class AdminComponent implements OnInit {
   }
 
   beginPlayoffs() {
-    this.adminService.beginPlayoffs().subscribe(result => {
-
+    this.adminService.beginPlayoffs(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error beginning the playoffs');
     }, () => {
@@ -215,8 +247,7 @@ export class AdminComponent implements OnInit {
   }
 
   beginConfSemis() {
-    this.adminService.beginConfSemis().subscribe(result => {
-
+    this.adminService.beginConfSemis(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error beginning the playoffs');
     }, () => {
@@ -228,8 +259,7 @@ export class AdminComponent implements OnInit {
   }
 
   beginConfFinals() {
-    this.adminService.beginConfFinals().subscribe(result => {
-
+    this.adminService.beginConfFinals(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error beginning the playoffs');
     }, () => {
@@ -241,8 +271,7 @@ export class AdminComponent implements OnInit {
   }
 
   beginFinals() {
-    this.adminService.beginFinals().subscribe(result => {
-
+    this.adminService.beginFinals(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error beginning the playoffs');
     }, () => {
@@ -254,7 +283,7 @@ export class AdminComponent implements OnInit {
   }
 
   getLeagueStatusData() {
-    this.leagueService.getLeague().subscribe(result => {
+    this.leagueService.getLeague(this.league.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting league');
@@ -270,7 +299,11 @@ export class AdminComponent implements OnInit {
   }
 
   updateLeagueStatus() {
-    this.adminService.updateLeagueStatus(this.statusSelection).subscribe(result => {
+    const summary: LeagueStatusUpdate = {
+      status: this.statusSelection,
+      leagueId: this.league.id
+    };
+    this.adminService.updateLeagueStatus(summary).subscribe(result => {
     }, error => {
       this.alertify.error('Error saving league status');
     }, () => {
@@ -291,7 +324,7 @@ export class AdminComponent implements OnInit {
   }
 
   getRemoveTeamRegoData() {
-    this.teamService.getAllTeams().subscribe(result => {
+    this.teamService.getAllTeams(this.league.id).subscribe(result => {
       this.teams = result;
     }, error => {
       this.alertify.error('Error getting all teams');
@@ -299,8 +332,11 @@ export class AdminComponent implements OnInit {
   }
 
   removeTeamRegistration() {
-    console.log(this.teamSelected);
-    this.adminService.removeTeamRegistration(this.teamSelected).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.teamSelected,
+      leagueId: this.league.id
+    };
+    this.adminService.removeTeamRegistration(summary).subscribe(result => {
     }, error => {
       this.alertify.error('Error updating team registration');
     }, () => {
@@ -312,12 +348,11 @@ export class AdminComponent implements OnInit {
   rollOverDay() {
     // tslint:disable-next-line: prefer-const
     let value = false;
-    this.adminService.checkAllGamesRun().subscribe(result => {
+    this.adminService.checkAllGamesRun(this.league.id).subscribe(result => {
       value = result;
     }, error => {
       this.alertify.error('Error checking if games are run');
     }, () => {
-      console.log(value);
       if (value) {
         // Now run the roll over process
         this.alertify.success('Games are run');
@@ -330,7 +365,7 @@ export class AdminComponent implements OnInit {
 
   confirmRollOverDay() {
     this.run = 1;
-    this.adminService.rolloverDay().subscribe(result => {
+    this.adminService.rolloverDay(this.league.id).subscribe(result => {
       this.rolloverResult = result;
     }, error => {
       this.alertify.error('Error rolling over day');
@@ -348,12 +383,14 @@ export class AdminComponent implements OnInit {
 
   changeDay() {
     this.dayEntered = this.dayForm.controls.updateDay.value;
-    console.log(this.dayEntered);
-
     let value = false;
 
     // Now need to call service to perform the change
-    this.adminService.changeDay(this.dayEntered).subscribe(result => {
+    const summary: GetScheduleLeague = {
+      day: this.dayEntered,
+      leagueId: this.league.id
+    };
+    this.adminService.changeDay(summary).subscribe(result => {
       value = result;
     }, error => {
       this.alertify.error('Error changing the current day');
@@ -369,8 +406,7 @@ export class AdminComponent implements OnInit {
   }
 
   runDraftPicks() {
-    this.adminService.runTeamDraftPicksSetup().subscribe(result => {
-
+    this.adminService.runTeamDraftPicksSetup(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error running team pick setup');
     }, () => {
@@ -380,7 +416,7 @@ export class AdminComponent implements OnInit {
   }
 
   generateControcts() {
-    this.adminService.generateInitalContracts().subscribe(result => {
+    this.adminService.generateInitalContracts(this.league.id).subscribe(result => {
 
     }, error => {
       this.alertify.error('Error generating contracts');
@@ -391,7 +427,7 @@ export class AdminComponent implements OnInit {
   }
 
   generateSalaryCaps() {
-    this.adminService.generateInitialSalaryCaps().subscribe(result => {
+    this.adminService.generateInitialSalaryCaps(this.league.id).subscribe(result => {
 
     }, error => {
       this.alertify.error('Error generating salary caps');
@@ -402,7 +438,7 @@ export class AdminComponent implements OnInit {
   }
 
   generateAutoPick() {
-    this.adminService.generateAutoPicks().subscribe(result => {
+    this.adminService.generateAutoPicks(this.league.id).subscribe(result => {
 
     }, error => {
       this.alertify.error('Error generating auto picks');
@@ -413,7 +449,11 @@ export class AdminComponent implements OnInit {
   }
 
   resetGame(gameId: number) {
-    this.adminService.resetGame(gameId).subscribe(result => {
+    const summary: GetGameLeague = {
+      gameId: gameId,
+      leagueId: this.league.id
+    };
+    this.adminService.resetGame(summary).subscribe(result => {
 
     }, error => {
       this.alertify.error('Error resetting game');
@@ -428,7 +468,7 @@ export class AdminComponent implements OnInit {
   rolloverToNextSeason() {
     this.spinner.show();
 
-    this.adminService.rolloverSeasonStats().subscribe(result => {
+    this.adminService.rolloverSeasonStats(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error rolling over season stats');
     }, () => {
@@ -438,7 +478,7 @@ export class AdminComponent implements OnInit {
   }
 
   rolloverAwardWinners() {
-    this.adminService.rolloverAwardWinners().subscribe(result => {
+    this.adminService.rolloverAwardWinners(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error rolling over historical records and award winners');
     }, () => {
@@ -448,7 +488,7 @@ export class AdminComponent implements OnInit {
   }
 
   rolloverContractUpdates() {
-    this.adminService.rolloverContractUpdates().subscribe(result => {
+    this.adminService.rolloverContractUpdates(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error rolling over contracts');
     }, () => {
@@ -458,7 +498,7 @@ export class AdminComponent implements OnInit {
   }
 
   generateDraft() {
-    this.adminService.generateDraft().subscribe(result => {
+    this.adminService.generateDraft(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error setting up draft');
     }, () => {
@@ -468,28 +508,28 @@ export class AdminComponent implements OnInit {
   }
 
   deleteData() {
-    this.adminService.deletePreseasonAndPlayoffsData().subscribe(result => {
+    this.adminService.deletePreseasonAndPlayoffsData(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error deleting preason and playoff data');
     }, () => {
       this.progress = 50;
-      this.adminService.deleteAwardsData().subscribe(result => {
+      this.adminService.deleteAwardsData(this.league.id).subscribe(result => {
 
       }, error => {
         this.alertify.error('Error saving stats and deleting awards');
       }, () => {
         this.progress = 60;
-        this.adminService.deleteOtherData().subscribe(result => {
+        this.adminService.deleteOtherData(this.league.id).subscribe(result => {
         }, error => {
           this.alertify.error('Error deleting other data');
         }, () => {
           this.progress = 70;
-          this.adminService.deleteTeamSettingsData().subscribe(result => {
+          this.adminService.deleteTeamSettingsData(this.league.id).subscribe(result => {
           }, error => {
             this.alertify.error('Error deleting team settings data');
           }, () => {
             this.progress = 75;
-            this.adminService.deleteSeasonData().subscribe(result => {
+            this.adminService.deleteSeasonData(this.league.id).subscribe(result => {
               this.alertify.error('Error deleting season data');
             }, () => {
               this.progress = 80;
@@ -502,7 +542,7 @@ export class AdminComponent implements OnInit {
   }
 
   resetStandings() {
-    this.adminService.resetStandings().subscribe(result => {
+    this.adminService.resetStandings(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error resetting standings');
     }, () => {
@@ -512,7 +552,7 @@ export class AdminComponent implements OnInit {
   }
 
   endSeason() {
-    this.adminService.endSeason().subscribe(result => {
+    this.adminService.endSeason(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error ending season properly');
     }, () => {
@@ -521,7 +561,7 @@ export class AdminComponent implements OnInit {
   }
 
   rolloverLeague() {
-    this.adminService.rolloverLeague().subscribe(result => {
+    this.adminService.rolloverLeague(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error rolling over league');
     }, () => {

@@ -25,5 +25,7 @@ namespace ABASim.api.Models
         public int YearOne { get; set; }
 
         public int TotalValue { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

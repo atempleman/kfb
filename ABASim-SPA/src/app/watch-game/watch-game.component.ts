@@ -7,6 +7,9 @@ import { GameDetails } from '../_models/gameDetails';
 import { PlayByPlay } from '../_models/playByPlay';
 import { Router } from '@angular/router';
 import { League } from '../_models/league';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
+import { GetGameLeague } from '../_models/getGameLeague';
 
 @Component({
   selector: 'app-watch-game',
@@ -26,37 +29,56 @@ export class WatchGameComponent implements OnInit {
   playNo = 0;
   displayBoxScoresButtons = 0;
 
+  team: Team;
+
   constructor(private alertify: AlertifyService, private authService: AuthService, private leagueService: LeagueService,
-              private transferService: TransferService, private router: Router) { }
+              private transferService: TransferService, private router: Router, private teamService: TeamService) { }
 
   ngOnInit() {
     this.gameId = this.transferService.getData();
     this.state = this.transferService.getState();
 
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
-      this.alertify.error('Error getting league');
+      this.alertify.error('Error getting League Details');
     }, () => {
       this.getGameDetails();
     });
   }
 
   getGameDetails() {
+    const gameLeague: GetGameLeague = {
+      gameId: this.gameId,
+      leagueId: this.league.id
+    };
+
     if (this.state === 0) {
-      this.leagueService.getGameDetailsPreseason(this.gameId).subscribe(result => {
+      this.leagueService.getGameDetailsPreseason(gameLeague).subscribe(result => {
         this.gameDetails = result;
       }, error => {
         this.alertify.error('Error getting game details');
       });
     } else if (this.state === 1) {
-      this.leagueService.getGameDetailsSeason(this.gameId).subscribe(result => {
+      this.leagueService.getGameDetailsSeason(gameLeague).subscribe(result => {
         this.gameDetails = result;
       }, error => {
         this.alertify.error('Error getting game details');
       });
     } else if (this.state === 2) {
-      this.leagueService.getGameDetailsPlayoffs(this.gameId).subscribe(result => {
+      this.leagueService.getGameDetailsPlayoffs(gameLeague).subscribe(result => {
         this.gameDetails = result;
       }, error => {
         this.alertify.error('Error getting game details');
@@ -67,8 +89,13 @@ export class WatchGameComponent implements OnInit {
   beginGame() {
     this.gameBegun = 1;
 
+    const gameLeague: GetGameLeague = {
+      gameId: this.gameId,
+      leagueId: this.league.id
+    };
+
     if (this.state === 1 || this.state === 0) {
-      this.leagueService.getPlayByPlaysForId(this.gameId).subscribe(result => {
+      this.leagueService.getPlayByPlaysForId(gameLeague).subscribe(result => {
         this.playByPlays = result;
         const element = this.playByPlays[this.playByPlays.length - 1];
         this.numberOfPlays = element.ordering;
@@ -93,7 +120,7 @@ export class WatchGameComponent implements OnInit {
         }, 3000);
       });
     } else if (this.state === 2) {
-      this.leagueService.getPlayoffsPlayByPlaysForId(this.gameId).subscribe(result => {
+      this.leagueService.getPlayoffsPlayByPlaysForId(gameLeague).subscribe(result => {
         this.playByPlays = result;
         const element = this.playByPlays[this.playByPlays.length - 1];
         this.numberOfPlays = element.ordering;

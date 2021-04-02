@@ -18,4 +18,5 @@ export interface ContractOffer {
     decision: number;
     playerName: string;
     contractId: number;
+    leagueId: number;
 }

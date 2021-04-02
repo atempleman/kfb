@@ -5,6 +5,7 @@ import { GameEngineService } from '../_services/game-engine.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { BoxScore } from '../_models/boxScore';
+import { GetGameLeague } from '../_models/getGameLeague';
 
 @Component({
   selector: 'app-admintestengine',
@@ -87,6 +88,7 @@ export class AdmintestengineComponent implements OnInit {
       awayId:  +this.gameSetupForm.controls[awayKey].value,
       homeId:  +this.gameSetupForm.controls[homeKey].value,
       gameId:  +this.gameSetupForm.controls[gameKey].value,
+      leagueId: 1
     };
 
     this.homeId = +this.gameSetupForm.controls[homeKey].value;
@@ -105,8 +107,11 @@ export class AdmintestengineComponent implements OnInit {
   }
 
   retrieveBoxScoreData() {
-    console.log('here');
-    this.engineService.getBoxScoreForGameId(this.gameId).subscribe(result => {
+    const summary: GetGameLeague = {
+      gameId: this.gameId,
+      leagueId: 1
+    };
+    this.engineService.getBoxScoreForGameId(summary).subscribe(result => {
       this.boxScores = result;
       console.log(this.boxScores);
       console.log(this.boxScores[0].fga);

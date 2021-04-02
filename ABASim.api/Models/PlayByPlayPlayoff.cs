@@ -11,5 +11,7 @@ namespace ABASim.api.Models
         public int PlayNumber { get; set; }
 
         public string Commentary { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

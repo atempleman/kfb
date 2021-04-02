@@ -45,5 +45,7 @@ namespace ABASim.api.Models
         public int Fouls { get; set; }
 
         public int PlusMinus { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

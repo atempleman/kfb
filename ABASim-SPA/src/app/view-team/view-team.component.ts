@@ -3,12 +3,16 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CompletePlayer } from '../_models/completePlayer';
 import { ExtendedPlayer } from '../_models/extendedPlayer';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { League } from '../_models/league';
 import { PlayerContractDetailed } from '../_models/playerContractDetailed';
 import { PlayerInjury } from '../_models/playerInjury';
 import { Standing } from '../_models/standing';
 import { Team } from '../_models/team';
 import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { AlertifyService } from '../_services/alertify.service';
+import { LeagueService } from '../_services/league.service';
 import { PlayerService } from '../_services/player.service';
 import { TeamService } from '../_services/team.service';
 import { TransferService } from '../_services/transfer.service';
@@ -32,14 +36,31 @@ export class ViewTeamComponent implements OnInit {
   teamContracts: PlayerContractDetailed[] = [];
 
   teamRecord: Standing;
+  league: League;
 
   constructor(private alertify: AlertifyService, private transferService: TransferService, private teamService: TeamService,
-              private router: Router, private playerService: PlayerService, private spinner: NgxSpinnerService) { }
+              private router: Router, private playerService: PlayerService, private spinner: NgxSpinnerService,
+              private leagueService: LeagueService) { }
 
   ngOnInit() {
     this.teamId = this.transferService.getData();
 
-    this.teamService.getTeamForTeamId(this.teamId).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupTeam();
+    });
+  }
+
+  setupTeam() {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamForTeamId(teamleague).subscribe(result => {
       this.spinner.show();
       this.team = result;
     }, error => {
@@ -54,7 +75,12 @@ export class ViewTeamComponent implements OnInit {
   }
 
   getTeamStandings() {
-    this.teamService.getTeamRecord(this.team.id).subscribe(result => {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamRecord(teamleague).subscribe(result => {
       this.teamRecord = result;
     }, error => {
       this.alertify.error('Error getting team record');
@@ -62,7 +88,12 @@ export class ViewTeamComponent implements OnInit {
   }
 
   getTeamContracts() {
-    this.teamService.getTeamContracts(this.team.id).subscribe(result => {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamContracts(teamleague).subscribe(result => {
       this.teamContracts = result;
     }, error => {
       this.alertify.error('Error getting team contracts');
@@ -70,7 +101,12 @@ export class ViewTeamComponent implements OnInit {
   }
 
   getSalaryCapDetails() {
-    this.teamService.getTeamSalaryCapDetails(this.team.id).subscribe(result => {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamSalaryCapDetails(teamleague).subscribe(result => {
       this.teamCap = result;
     }, error => {
       this.alertify.error('Error getting salary cap details');
@@ -80,7 +116,12 @@ export class ViewTeamComponent implements OnInit {
   }
 
   getPlayerInjuries() {
-    this.teamService.getPlayerInjuriesForTeam(this.team.id).subscribe(result => {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getPlayerInjuriesForTeam(teamleague).subscribe(result => {
       this.teamsInjuries = result;
     }, error => {
       this.alertify.error('Error getting teams injuries');
@@ -98,7 +139,12 @@ export class ViewTeamComponent implements OnInit {
   }
 
   getRosterForTeam() {
-    this.teamService.getExtendedRosterForTeam(this.team.id).subscribe(result => {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getExtendedRosterForTeam(teamleague).subscribe(result => {
       this.playingRoster = result;
       this.playerCount = this.playingRoster.length;
     }, error => {
@@ -116,7 +162,13 @@ export class ViewTeamComponent implements OnInit {
   viewPlayerFromContract(name: string) {
     // Need to get player id for name
     let playerId = 0;
-    this.playerService.getPlayerForName(name).subscribe(result => {
+
+    const playerleague: GetPlayerLeague = {
+      playerName: name,
+      leagueId: this.league.id
+    };
+
+    this.playerService.getPlayerForName(playerleague).subscribe(result => {
       playerId = result.id;
     }, error => {
       this.alertify.error('Error getting player name');

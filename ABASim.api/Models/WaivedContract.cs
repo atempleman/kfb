@@ -17,5 +17,7 @@ namespace ABASim.api.Models
         public int YearFour { get; set; }
 
         public int YearFive { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

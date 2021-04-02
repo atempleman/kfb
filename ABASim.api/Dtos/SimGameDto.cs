@@ -7,5 +7,7 @@ namespace ABASim.api.Dtos
         public int HomeId { get; set; }
 
         public int GameId { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

@@ -9,6 +9,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { League } from '../_models/league';
 import { LeagueService } from '../_services/league.service';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
+import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
 
 @Component({
   selector: 'app-players',
@@ -21,30 +24,43 @@ export class PlayersComponent implements OnInit {
   positionFilter = 0;
 
   league: League;
+  team: Team;
 
   constructor(private router: Router, private alertify: AlertifyService, private authService: AuthService,
               private transferService: TransferService, private playerService: PlayerService,
-              private fb: FormBuilder, private spinner: NgxSpinnerService, private leagueService: LeagueService) { }
+              private fb: FormBuilder, private spinner: NgxSpinnerService, private leagueService: LeagueService,
+              private teamService: TeamService) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.getPlayers();
+
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
 
     this.searchForm = this.fb.group({
       filter: ['']
     });
+  }
 
-    // get the league object
-    this.leagueService.getLeague().subscribe(result => {
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
+      this.getPlayers();
     });
   }
 
   getPlayers() {
-    this.playerService.getAllPlayers().subscribe(result => {
+    this.playerService.getAllPlayers(this.league.id).subscribe(result => {
       this.allPlayers = result;
     }, error => {
       this.alertify.error('Error getting players');
@@ -87,7 +103,6 @@ export class PlayersComponent implements OnInit {
 
   filterByPos(pos: number) {
     this.spinner.show();
-    console.log('ash');
     this.positionFilter = pos;
 
     if (pos === 0) {
@@ -96,7 +111,13 @@ export class PlayersComponent implements OnInit {
     } else {
     //   this.displayPaging = 1;
     // Now we need to update the listing appropriately
-    this.playerService.getPlayerByPos(this.positionFilter).subscribe(result => {
+
+    const summary: GetPlayerIdLeague = {
+      playerId: this.positionFilter,
+      leagueId: this.league.id
+    };
+
+    this.playerService.getPlayerByPos(summary).subscribe(result => {
         this.allPlayers = result;
       }, error => {
         this.alertify.error('Error getting filtered players');

@@ -8,6 +8,8 @@ import { Transaction } from '../_models/transaction';
 import { Player } from '@angular/core/src/render3/interfaces/player';
 import { TransferService } from '../_services/transfer.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
 
 @Component({
   selector: 'app-transactions',
@@ -17,13 +19,29 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class TransactionsComponent implements OnInit {
   transactions: Transaction[] = [];
   transCount = 0;
+  team: Team;
+  league: League;
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
-              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService) { }
+              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService,
+              private teamService: TeamService) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.leagueService.getTransactions().subscribe(result => {
+
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getTransactions(this.league.id).subscribe(result => {
       this.transactions = result;
       this.transCount = this.transactions.length;
     }, error => {

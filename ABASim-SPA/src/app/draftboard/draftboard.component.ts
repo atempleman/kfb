@@ -16,6 +16,8 @@ import { AdminService } from '../_services/admin.service';
 import { DraftSelection } from '../_models/draftSelection';
 import { LeagueService } from '../_services/league.service';
 import { League } from '../_models/league';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
 
 @Component({
   selector: 'app-draftboard',
@@ -38,38 +40,43 @@ export class DraftboardComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
 
-    this.leagueService.getLeague().subscribe(result => {
-      this.league = result;
-    }, error => {
-      this.alertify.error('Error getting league details');
-    });
-
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
     }, error => {
-      this.alertify.error('Error getting your team');
+      this.alertify.error('Error getting your Team');
     }, () => {
-      this.getDraftboardPlayers();
+      this.setupLeague();
     });
+  }
 
-    // this.draftService.getDraftTracker().subscribe(result => {
-    //   this.tracker = result;
-    // }, error => {
-    //   this.alertify.error('Error getting draft tracker');
-    // }, () => {
-    //   this.currentRound = this.tracker.round;
-    // });
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      
+    });
+  }
 
-    this.draftService.getCurrentInitialDraftPick().subscribe(result => {
+  setupPage() {
+    this.getDraftboardPlayers();
+
+    this.draftService.getCurrentInitialDraftPick(this.league.id).subscribe(result => {
       this.currentPick = result;
-      console.log(this.currentPick);
     }, error => {
       this.alertify.error('Error getting current draft pick');
     });
   }
 
   getDraftboardPlayers() {
-    this.draftService.getDraftBoardForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.draftService.getDraftBoardForTeam(summary).subscribe(result => {
       this.draftPlayers = result;
     }, error => {
       this.alertify.error('Error getting draftboard');
@@ -82,7 +89,9 @@ export class DraftboardComponent implements OnInit {
   removeDraftRanking(player: DraftPlayer) {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = player.playerId;
-    newRanking.teamId = this.team.id;
+    newRanking.teamId = this.team.teamId;
+    newRanking.leagueId = this.league.id
+
 
     this.draftService.removeDraftPlayerRanking(newRanking).subscribe(result => {
     }, error => {
@@ -97,7 +106,9 @@ export class DraftboardComponent implements OnInit {
   moveUp(player: DraftPlayer) {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = player.playerId;
-    newRanking.teamId = this.team.id;
+    newRanking.teamId = this.team.teamId;
+    newRanking.leagueId = this.league.id
+
     this.draftService.moveRankingUp(newRanking).subscribe(result => {
     }, error => {
       this.alertify.error('Error changing ranking');
@@ -109,7 +120,9 @@ export class DraftboardComponent implements OnInit {
   moveDown(player: DraftPlayer) {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = player.playerId;
-    newRanking.teamId = this.team.id;
+    newRanking.teamId = this.team.teamId;
+    newRanking.leagueId = this.league.id
+
     this.draftService.moveRankingDown(newRanking).subscribe(result => {
     }, error => {
       this.alertify.error('Error changing ranking');
@@ -145,7 +158,8 @@ export class DraftboardComponent implements OnInit {
       pick: this.currentPick.pick,
       playerId: this.selection.playerId,
       round: this.currentPick.round,
-      teamId: this.team.id
+      teamId: this.team.teamId,
+      leagueId: this.league.id
     };
 
     this.draftService.makeDraftPick(selectedPick).subscribe(result => {
@@ -157,14 +171,19 @@ export class DraftboardComponent implements OnInit {
 
       if (this.currentPick.round === 13 && this.currentPick.pick === 30) {
         // Update the leage state here
-        this.adminService.updateLeagueStatus(5).subscribe(result => {
+        const summary: LeagueStatusUpdate = {
+          status: 5,
+          leagueId: this.league.id
+        };
+
+        this.adminService.updateLeagueStatus(summary).subscribe(result => {
         }, error => {
           this.alertify.error('Error changing league state');
         }, () => {
           this.alertify.success('Draft Completed');
         });
       } else {
-        this.draftService.getCurrentInitialDraftPick().subscribe(result => {
+        this.draftService.getCurrentInitialDraftPick(this.league.id).subscribe(result => {
           this.currentPick = result;
           console.log(this.currentPick);
         }, error => {

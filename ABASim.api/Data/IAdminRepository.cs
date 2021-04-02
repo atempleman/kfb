@@ -7,66 +7,66 @@ namespace ABASim.api.Data
 {
     public interface IAdminRepository
     {
-         Task<bool> UpdateLeagueState(int newState);
+         Task<bool> UpdateLeagueState(LeagueStatusDto newState);
 
-         Task<bool> RemoveTeamRegistration(int teamId);
+         Task<bool> RemoveTeamRegistration(GetRosterQuickViewDto dto);
 
-         Task<bool> RunInitialDraftLottery();
+         Task<bool> RunInitialDraftLottery(int leagueId);
 
-         Task<bool> RunDayRollOver();
+         Task<bool> RunDayRollOver(int leagueId);
 
-         Task<bool> CheckGamesRun();
+         Task<bool> CheckGamesRun(int leagueId);
 
-         Task<bool> ChangeDay(int day);
+         Task<bool> ChangeDay(GetScheduleLeagueDto day);
 
-         Task<bool> BeginPlayoffs();
+         Task<bool> BeginPlayoffs(int leagueId);
 
-         Task<bool> BeginConferenceSemis();
+         Task<bool> BeginConferenceSemis(int leagueId);
 
-         Task<bool> BeginConferenceFinals();
+         Task<bool> BeginConferenceFinals(int leagueId);
 
-         Task<bool> BeginFinals();
+         Task<bool> BeginFinals(int leagueId);
 
-         Task<bool> GenerateAutoPickOrder();
+         Task<bool> GenerateAutoPickOrder(int leagueId);
 
-         Task<bool> EndSeason();
+         Task<bool> EndSeason(int leagueId);
 
-         Task<bool> RunTeamDraftPicks();
+         Task<bool> RunTeamDraftPicks(int leagueId);
 
-         Task<bool> GenerateInitialContracts();
+         Task<bool> GenerateInitialContracts(int leagueId);
 
-         Task<bool> ResetGame(int gameId);
+         Task<bool> ResetGame(GameLeagueDto gameId);
 
-         Task<IEnumerable<CurrentDayGamesDto>> GetGamesForRreset();
+         Task<IEnumerable<CurrentDayGamesDto>> GetGamesForRreset(int leagueId);
 
-         Task<bool> RolloverSeasonCareerStats();
+         Task<bool> RolloverSeasonCareerStats(int leagueId);
 
-         Task<bool> SaveSeasonHistoricalRecords();
+         Task<bool> SaveSeasonHistoricalRecords(int leagueId);
 
-         Task<bool> ContractUpdates();
+         Task<bool> ContractUpdates(int leagueId);
 
-         Task<bool> UpdateTeamSalaries();
+         Task<bool> UpdateTeamSalaries(int leagueId);
 
-         Task<bool> GenerateDraftLottery();
+         Task<bool> GenerateDraftLottery(int leagueId);
 
-         Task<bool> DeletePlayoffData();
+         Task<bool> DeletePlayoffData(int leagueId);
 
-         Task<bool> DeletePreseasonData();
+         Task<bool> DeletePreseasonData(int leagueId);
 
-         Task<bool> DeleteTeamSettings();
+         Task<bool> DeleteTeamSettings(int leagueId);
 
-         Task<bool> DeleteAwardsData();
+         Task<bool> DeleteAwardsData(int leagueId);
 
-         Task<bool> DeleteOtherSeasonData();
+         Task<bool> DeleteOtherSeasonData(int leagueId);
 
-         Task<bool> DeleteSeasonData();
+         Task<bool> DeleteSeasonData(int leagueId);
 
-         Task<bool> ResetStandings();
+         Task<bool> ResetStandings(int leagueId);
 
-         Task<bool> RolloverLeague();
+         Task<bool> RolloverLeague(int leagueId);
 
-         Task<bool> ResetLeague();
+         Task<bool> ResetLeague(int leagueId);
 
-         Task<bool> GenerateInitialSalaryCaps();
+         Task<bool> GenerateInitialSalaryCaps(int leagueId);
     }
 }

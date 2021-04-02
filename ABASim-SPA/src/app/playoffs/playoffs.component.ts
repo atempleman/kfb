@@ -5,6 +5,9 @@ import { AlertifyService } from '../_services/alertify.service';
 import { League } from '../_models/league';
 import { AuthService } from '../_services/auth.service';
 import { PlayoffSummary } from '../_models/playoffSummary';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
+import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 
 @Component({
   selector: 'app-playoffs',
@@ -21,14 +24,28 @@ export class PlayoffsComponent implements OnInit {
   statsSelected = 0;
   scheduleSelected = 0;
 
+  team: Team;
+
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
-              private authService: AuthService) { }
+              private authService: AuthService, private teamService: TeamService) { }
 
   ngOnInit() {
     // Check to see if the user is an admin user
     this.isAdmin = this.authService.isAdmin();
 
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
@@ -37,32 +54,42 @@ export class PlayoffsComponent implements OnInit {
   }
 
   playoffRoundSelected() {
-    console.log('test');
-    console.log(this.playoffRoundSelection);
     if (+this.playoffRoundSelection === 1) {
-      this.leagueService.getFirstRoundSummaries(1).subscribe(result => {
-        console.log(result);
+      const summary: GetPlayoffSummary = {
+        round: 1,
+        leagueId: this.league.id
+      };
+      this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
         this.playoffSummaries = result;
       }, error => {
         this.alertify.error('Error getting first round summaries');
       });
     } else if (+this.playoffRoundSelection === 2) {
-        this.leagueService.getFirstRoundSummaries(2).subscribe(result => {
-          console.log(result);
+      const summary: GetPlayoffSummary = {
+        round: 2,
+        leagueId: this.league.id
+      };
+        this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
           this.playoffSummaries = result;
         }, error => {
           this.alertify.error('Error getting first round summaries');
         });
     } else if (+this.playoffRoundSelection === 3) {
-      this.leagueService.getFirstRoundSummaries(3).subscribe(result => {
-        console.log(result);
+      const summary: GetPlayoffSummary = {
+        round: 3,
+        leagueId: this.league.id
+      };
+      this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
         this.playoffSummaries = result;
       }, error => {
         this.alertify.error('Error getting first round summaries');
       });
     } else if (+this.playoffRoundSelection === 4) {
-      this.leagueService.getFirstRoundSummaries(4).subscribe(result => {
-        console.log(result);
+      const summary: GetPlayoffSummary = {
+        round: 4,
+        leagueId: this.league.id
+      };
+      this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
         this.playoffSummaries = result;
       }, error => {
         this.alertify.error('Error getting first round summaries');

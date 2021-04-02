@@ -8,6 +8,9 @@ import { TeamService } from '../_services/team.service';
 import { Team } from '../_models/team';
 import { TransferService } from '../_services/transfer.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { League } from '../_models/league';
+import { GetTeamLeague } from '../_models/getTeamLeague';
+import { GetStandingLeague } from '../_models/getStandingLeague';
 
 @Component({
   selector: 'app-standings',
@@ -31,12 +34,42 @@ export class StandingsComponent implements OnInit {
   pacificStandings: Standing[] = [];
   southwestStandings: Standing[] = [];
 
+  team: Team;
+  league: League;
+
   constructor(private leagueService: LeagueService, private alertify: AlertifyService, private transferService: TransferService,
               private authService: AuthService, private router: Router, private teamService: TeamService,
               private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    this.leagueService.getConferenceStandings(1).subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
+    const summary: GetStandingLeague = {
+      value: 1,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getConferenceStandings(summary).subscribe(result => {
       this.spinner.show();
       // tslint:disable-next-line: max-line-length
       this.eastStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -47,7 +80,12 @@ export class StandingsComponent implements OnInit {
       this.spinner.hide();
     });
 
-    this.leagueService.getConferenceStandings(2).subscribe(result => {
+    const westSummary: GetStandingLeague = {
+      value: 1,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getConferenceStandings(westSummary).subscribe(result => {
       this.spinner.show();
       // tslint:disable-next-line: max-line-length
       this.westStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -60,7 +98,12 @@ export class StandingsComponent implements OnInit {
   }
 
   conferenceClick() {
-    this.leagueService.getConferenceStandings(1).subscribe(result => {
+    const conf1Summary: GetStandingLeague = {
+      value: 1,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getConferenceStandings(conf1Summary).subscribe(result => {
       // this.eastStandings = result;
       // tslint:disable-next-line: max-line-length
       this.eastStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -68,7 +111,12 @@ export class StandingsComponent implements OnInit {
       this.alertify.error('Error getting eastern conference standings');
     });
 
-    this.leagueService.getConferenceStandings(2).subscribe(result => {
+    const conf2Summary: GetStandingLeague = {
+      value: 2,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getConferenceStandings(conf2Summary).subscribe(result => {
       // this.westStandings = result;
       // tslint:disable-next-line: max-line-length
       this.westStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -82,7 +130,12 @@ export class StandingsComponent implements OnInit {
   }
 
   divisionClick() {
-    this.leagueService.getDivisionStandings(1).subscribe(result => {
+    const div1Summary: GetStandingLeague = {
+      value: 1,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getDivisionStandings(div1Summary).subscribe(result => {
       // this.atlanticStandings = result;
       // tslint:disable-next-line: max-line-length
       this.atlanticStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -90,7 +143,12 @@ export class StandingsComponent implements OnInit {
       this.alertify.error('Error getting division standings');
     });
 
-    this.leagueService.getDivisionStandings(2).subscribe(result => {
+    const div2Summary: GetStandingLeague = {
+      value: 2,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getDivisionStandings(div2Summary).subscribe(result => {
       // this.centralstandings = result;
       // tslint:disable-next-line: max-line-length
       this.centralstandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -98,7 +156,12 @@ export class StandingsComponent implements OnInit {
       this.alertify.error('Error getting division standings');
     });
 
-    this.leagueService.getDivisionStandings(3).subscribe(result => {
+    const div3Summary: GetStandingLeague = {
+      value: 3,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getDivisionStandings(div3Summary).subscribe(result => {
       // this.southeastStandings = result;
       // tslint:disable-next-line: max-line-length
       this.southeastStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -106,7 +169,12 @@ export class StandingsComponent implements OnInit {
       this.alertify.error('Error getting division standings');
     });
 
-    this.leagueService.getDivisionStandings(4).subscribe(result => {
+    const div4Summary: GetStandingLeague = {
+      value: 4,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getDivisionStandings(div4Summary).subscribe(result => {
       // this.northwestStandings = result;
       // tslint:disable-next-line: max-line-length
       this.northwestStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -114,7 +182,12 @@ export class StandingsComponent implements OnInit {
       this.alertify.error('Error getting division standings');
     });
 
-    this.leagueService.getDivisionStandings(5).subscribe(result => {
+    const div5Summary: GetStandingLeague = {
+      value: 5,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getDivisionStandings(div5Summary).subscribe(result => {
       // this.pacificStandings = result;
       // tslint:disable-next-line: max-line-length
       this.pacificStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -122,7 +195,12 @@ export class StandingsComponent implements OnInit {
       this.alertify.error('Error getting division standings');
     });
 
-    this.leagueService.getDivisionStandings(6).subscribe(result => {
+    const div6Summary: GetStandingLeague = {
+      value: 6,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getDivisionStandings(div6Summary).subscribe(result => {
       // this.southwestStandings = result;
       // tslint:disable-next-line: max-line-length
       this.southwestStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -136,7 +214,7 @@ export class StandingsComponent implements OnInit {
   }
 
   leagueClick() {
-    this.leagueService.getLeagueStandings().subscribe(result => {
+    this.leagueService.getLeagueStandings(this.league.id).subscribe(result => {
       // this.allStandings = result;
       // tslint:disable-next-line: max-line-length
       this.allStandings = result.sort((a, b) => (a.wins / a.gamesPlayed) < (b.wins / b.gamesPlayed) ? 1 : (a.wins / a.gamesPlayed) > (b.wins / b.gamesPlayed) ? -1 : 0);
@@ -171,9 +249,15 @@ export class StandingsComponent implements OnInit {
 
   viewTeam(name: string) {
     // Need to go a call to get the team id
-    console.log(name);
     let team: Team;
-    this.teamService.getTeamForTeamName(name).subscribe(result => {
+
+    // GetTeamLeague
+    const summary: GetTeamLeague = {
+      teamname: name,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamForTeamName(summary).subscribe(result => {
       team = result;
     }, error => {
       this.alertify.error('Error getting players team');

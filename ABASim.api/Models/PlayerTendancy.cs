@@ -15,5 +15,7 @@ namespace ABASim.api.Models
         public int FouledTendancy { get; set; }
 
         public int TurnoverTendancy { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

@@ -19,212 +19,212 @@ namespace ABASim.api.Controllers
         }
 
         [HttpGet("updateleaguestatus/{newStatus}")]
-        public async Task<bool> UpdateLeagueStatus(int newStatus)
+        public async Task<bool> UpdateLeagueStatus(LeagueStatusDto newStatus)
         {
             var updated = await _repo.UpdateLeagueState(newStatus);
             return updated;
         }
 
         [HttpGet("removeteamrego/{teamId}")]
-        public async Task<bool> RemoveTeamRegistration(int teamId)
+        public async Task<bool> RemoveTeamRegistration(GetRosterQuickViewDto teamId)
         {
             var updated = await _repo.RemoveTeamRegistration(teamId);
             return updated;
         }
 
-        [HttpGet("runinitialdraftlottery")]
-        public async Task<bool> RunInitialDraftLottery()
+        [HttpGet("runinitialdraftlottery/{leagueId}")]
+        public async Task<bool> RunInitialDraftLottery(int leagueId)
         {
-            var runLottery = await _repo.RunInitialDraftLottery();
+            var runLottery = await _repo.RunInitialDraftLottery(leagueId);
 
             // Now need to setup the auto pick rankings
-            var autoPicksSet = await _repo.GenerateAutoPickOrder();
+            var autoPicksSet = await _repo.GenerateAutoPickOrder(leagueId);
 
             return runLottery;
         }
 
-        [HttpGet("checkgamesrun")]
-        public async Task<IActionResult> CheckDaysGamesRun()
+        [HttpGet("checkgamesrun/{leagueId}")]
+        public async Task<IActionResult> CheckDaysGamesRun(int leagueId)
         {
-            var result = await _repo.CheckGamesRun();
+            var result = await _repo.CheckGamesRun(leagueId);
             return Ok(result);
         }
 
-        [HttpGet("rolloverday")]
-        public async Task<bool> RollOverDay()
+        [HttpGet("rolloverday/{leagueId}")]
+        public async Task<bool> RollOverDay(int leagueId)
         {
-            var result = await _repo.RunDayRollOver();
+            var result = await _repo.RunDayRollOver(leagueId);
             return result;
         }
 
         [HttpGet("changeday/{day}")]
-        public async Task<bool> ChangeDay(int day)
+        public async Task<bool> ChangeDay(GetScheduleLeagueDto day)
         {
             var result = await _repo.ChangeDay(day);
             return result;
         }
 
-        [HttpGet("beginplayoffs")]
-        public async Task<bool> BeginPlayoffs()
+        [HttpGet("beginplayoffs/{leagueId}")]
+        public async Task<bool> BeginPlayoffs(int leagueId)
         {
-            var result = await _repo.BeginPlayoffs();
+            var result = await _repo.BeginPlayoffs(leagueId);
             return result;
         }
 
-        [HttpGet("beginconfsemis")]
-        public async Task<bool> BeginConferenceSemis()
+        [HttpGet("beginconfsemis/{leagueId}")]
+        public async Task<bool> BeginConferenceSemis(int leagueId)
         {
-            var result = await _repo.BeginConferenceSemis();
+            var result = await _repo.BeginConferenceSemis(leagueId);
             return result;
         }
 
-        [HttpGet("beginconffinals")]
-        public async Task<bool> BeginConferenceFinals()
+        [HttpGet("beginconffinals/{leagueId}")]
+        public async Task<bool> BeginConferenceFinals(int leagueId)
         {
-            var result = await _repo.BeginConferenceFinals();
+            var result = await _repo.BeginConferenceFinals(leagueId);
             return result;
         }
 
-        [HttpGet("beginfinals")]
-        public async Task<bool> BeginFinals()
+        [HttpGet("beginfinals/{leagueId}")]
+        public async Task<bool> BeginFinals(int leagueId)
         {
-            var result = await _repo.BeginFinals();
+            var result = await _repo.BeginFinals(leagueId);
             return result;
         }
 
-        [HttpGet("endseason")]
-        public async Task<bool> EndSeason()
+        [HttpGet("endseason/{leagueId}")]
+        public async Task<bool> EndSeason(int leagueId)
         {
-            var result = await _repo.EndSeason();
+            var result = await _repo.EndSeason(leagueId);
             return result;
         }
 
-        [HttpGet("runteamdraftpicks")]
-        public async Task<bool> RunTeamDraftPicks()
+        [HttpGet("runteamdraftpicks/{leagueId}")]
+        public async Task<bool> RunTeamDraftPicks(int leagueId)
         {
-            var result = await _repo.RunTeamDraftPicks();
+            var result = await _repo.RunTeamDraftPicks(leagueId);
             return result;
         }
 
-        [HttpGet("generateinitialcontracts")]
-        public async Task<bool> GenerateInitialContracts()
+        [HttpGet("generateinitialcontracts/{leagueId}")]
+        public async Task<bool> GenerateInitialContracts(int leagueId)
         {
-            var result = await _repo.GenerateInitialContracts();
+            var result = await _repo.GenerateInitialContracts(leagueId);
             return result;
         }
 
-        [HttpGet("testautopickordering")]
-        public async Task<bool> TestAutoPickOrder()
+        [HttpGet("testautopickordering/{leagueId}")]
+        public async Task<bool> TestAutoPickOrder(int leagueId)
         {
-            var result = await _repo.GenerateAutoPickOrder();
+            var result = await _repo.GenerateAutoPickOrder(leagueId);
             return result;
         }
 
-        [HttpGet("getgamesforreset")]
-        public async Task<IActionResult> GetGamesForRreset()
+        [HttpGet("getgamesforreset/{leagueId}")]
+        public async Task<IActionResult> GetGamesForRreset(int leagueId)
         {
-            var nextGames = await _repo.GetGamesForRreset();
+            var nextGames = await _repo.GetGamesForRreset(leagueId);
             return Ok(nextGames);
         }
 
         [HttpGet("resetgame/{gameId}")]
-        public async Task<bool> ResetGame(int gameId)
+        public async Task<bool> ResetGame(GameLeagueDto gameId)
         {
             var result = await _repo.ResetGame(gameId);
             return result;
         }
 
-        [HttpGet("rolloverseasonstats")]
-        public async Task<bool> RolloverSeasonStats()
+        [HttpGet("rolloverseasonstats/{leagueId}")]
+        public async Task<bool> RolloverSeasonStats(int leagueId)
         {
-            var result = await _repo.RolloverSeasonCareerStats();
+            var result = await _repo.RolloverSeasonCareerStats(leagueId);
             return result;
         }
 
-        [HttpGet("rolloverawards")]
-        public async Task<bool> RolloverAwards()
+        [HttpGet("rolloverawards/{leagueId}")]
+        public async Task<bool> RolloverAwards(int leagueId)
         {
-            var result = await _repo.SaveSeasonHistoricalRecords();
+            var result = await _repo.SaveSeasonHistoricalRecords(leagueId);
             return result;
         }
 
-        [HttpGet("rollovercontractupdates")]
-        public async Task<bool> RolloverContractUpdates()
+        [HttpGet("rollovercontractupdates/{leagueId}")]
+        public async Task<bool> RolloverContractUpdates(int leagueId)
         {
-            var result = await _repo.ContractUpdates();
-            var result2 = await _repo.UpdateTeamSalaries();
+            var result = await _repo.ContractUpdates(leagueId);
+            var result2 = await _repo.UpdateTeamSalaries(leagueId);
             return result;
         }
 
-        [HttpGet("generatedraft")]
-        public async Task<bool> GenerateDraft()
+        [HttpGet("generatedraft/{leagueId}")]
+        public async Task<bool> GenerateDraft(int leagueId)
         {
-            var result = await _repo.GenerateDraftLottery();
+            var result = await _repo.GenerateDraftLottery(leagueId);
             return result;
         }
 
-        [HttpGet("deletepreseasonplayoffs")]
-        public async Task<bool> DeletePreseasonPlayoffs()
+        [HttpGet("deletepreseasonplayoffs/{leagueId}")]
+        public async Task<bool> DeletePreseasonPlayoffs(int leagueId)
         {
-            var result = await _repo.DeletePlayoffData();
-            result = await _repo.DeletePreseasonData();
+            var result = await _repo.DeletePlayoffData(leagueId);
+            result = await _repo.DeletePreseasonData(leagueId);
             return result;
         }
 
-        [HttpGet("deleteteamsettings")]
-        public async Task<bool> DeleteTeamSettings()
+        [HttpGet("deleteteamsettings/{leagueId}")]
+        public async Task<bool> DeleteTeamSettings(int leagueId)
         {
-            var result = await _repo.DeleteTeamSettings();
+            var result = await _repo.DeleteTeamSettings(leagueId);
             return result;
         }
 
-        [HttpGet("deleteawards")]
-        public async Task<bool> DeleteAwards()
+        [HttpGet("deleteawards/{leagueId}")]
+        public async Task<bool> DeleteAwards(int leagueId)
         {
-            var result = await _repo.SaveSeasonHistoricalRecords();
-            result = await _repo.DeleteAwardsData();
+            var result = await _repo.SaveSeasonHistoricalRecords(leagueId);
+            result = await _repo.DeleteAwardsData(leagueId);
             return result;
         }
 
-        [HttpGet("deleteother")]
-        public async Task<bool> DeleteOther()
+        [HttpGet("deleteother/{leagueId}")]
+        public async Task<bool> DeleteOther(int leagueId)
         {
-            var result = await _repo.DeleteOtherSeasonData();
+            var result = await _repo.DeleteOtherSeasonData(leagueId);
             return result;
         }
 
-        [HttpGet("deleteseason")]
-        public async Task<bool> DeleteSeason()
+        [HttpGet("deleteseason/{leagueId}")]
+        public async Task<bool> DeleteSeason(int leagueId)
         {
-            var result = await _repo.DeleteSeasonData();
+            var result = await _repo.DeleteSeasonData(leagueId);
             return result;
         }
 
-        [HttpGet("resetstandings")]
-        public async Task<bool> ResetStandings()
+        [HttpGet("resetstandings/{leagueId}")]
+        public async Task<bool> ResetStandings(int leagueId)
         {
-            var result = await _repo.ResetStandings();
+            var result = await _repo.ResetStandings(leagueId);
             return result;
         }
 
-        [HttpGet("rolloverleague")]
-        public async Task<bool> RolloverLeague()
+        [HttpGet("rolloverleague/{leagueId}")]
+        public async Task<bool> RolloverLeague(int leagueId)
         {
-            var result = await _repo.RolloverLeague();
+            var result = await _repo.RolloverLeague(leagueId);
             return result;
         }
 
-        [HttpGet("resetleague")]
-        public async Task<bool> ResetLeague()
+        [HttpGet("resetleague/{leagueId}")]
+        public async Task<bool> ResetLeague(int leagueId)
         {
-            var result = await _repo.ResetLeague();
+            var result = await _repo.ResetLeague(leagueId);
             return result;
         }
 
-        [HttpGet("generateinitialsalarycaps")]
-        public async Task<bool> GenerateInitialSalaryCaps()
+        [HttpGet("generateinitialsalarycaps/{leagueId}")]
+        public async Task<bool> GenerateInitialSalaryCaps(int leagueId)
         {
-            var result = await _repo.GenerateInitialSalaryCaps();
+            var result = await _repo.GenerateInitialSalaryCaps(leagueId);
             return result;
         }
     }

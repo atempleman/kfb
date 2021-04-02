@@ -16,6 +16,7 @@ import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { PlayerContractDetailed } from '../_models/playerContractDetailed';
 import { WaivedContract } from '../_models/waivedContract';
 import { Standing } from '../_models/standing';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-team',
@@ -48,26 +49,34 @@ export class TeamComponent implements OnInit {
     // Check to see if the user is an admin user
     this.isAdmin = this.authService.isAdmin();
 
-    // get the league object
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
-    });
-
-    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
-      this.team = result;
-    }, error => {
-      this.alertify.error('Error getting your Team');
-    }, () => {
       this.getTeamStandings();
-      // this.backgroundStyle();
     });
   }
 
   getTeamStandings() {
-    this.teamService.getTeamRecord(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.id,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamRecord(summary).subscribe(result => {
       this.teamRecord = result;
     }, error => {
       this.alertify.error('Error getting team record');

@@ -27,6 +27,8 @@ import { QuickViewPlayer } from '../_models/QuickViewPlayer';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 import { LeagueService } from './league.service';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetTeamLeague } from '../_models/getTeamLeague';
+import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
 
 @Injectable({
   providedIn: 'root'
@@ -48,11 +50,11 @@ export class TeamService {
     return this.http.get<Team[]>(this.baseUrl + 'getavailableteamsprivate/' + leaguecode);
   }
 
-  getRosterForTeam(teamId: number): Observable<Player[]> {
+  getRosterForTeam(teamId: GetRosterQuickView): Observable<Player[]> {
     return this.http.get<Player[]>(this.baseUrl + 'getrosterforteam/' + teamId);
   }
 
-  getExtendedRosterForTeam(teamId: number): Observable<CompletePlayer[]> {
+  getExtendedRosterForTeam(teamId: GetRosterQuickView): Observable<CompletePlayer[]> {
     return this.http.get<CompletePlayer[]>(this.baseUrl + 'getextendedroster/' + teamId);
   }
 
@@ -60,19 +62,19 @@ export class TeamService {
     return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster/' + quickview);
   }
 
-  getInjuriesForTeam(teamId: number): Observable<LeaguePlayerInjury[]> {
-    return this.http.get<LeaguePlayerInjury[]>(this.baseUrl + 'getteaminjuries/' + teamId);
+  getInjuriesForTeam(quickview: GetRosterQuickView): Observable<LeaguePlayerInjury[]> {
+    return this.http.get<LeaguePlayerInjury[]>(this.baseUrl + 'getteaminjuries/' + quickview);
   }
 
   getTeamForUserId(userId: number) {
     return this.http.get<Team>(this.baseUrl + 'getteamforuserid/' + userId);
   }
 
-  getAllTeams(): Observable<Team[]> {
-    return this.http.get<Team[]>(this.baseUrl + 'getallteams');
+  getAllTeams(leagueId: number): Observable<Team[]> {
+    return this.http.get<Team[]>(this.baseUrl + 'getallteams/' + leagueId);
   }
 
-  getTeamForTeamId(teamId: number) {
+  getTeamForTeamId(teamId: GetRosterQuickView) {
     return this.http.get<Team>(this.baseUrl + 'getteamforteamid/' + teamId);
   }
 
@@ -84,20 +86,20 @@ export class TeamService {
     return this.http.post(this.baseUrl + 'savedepthchart', depthCharts);
   }
 
-  getTeamForTeamName(name: string): Observable<Team> {
-    return this.http.get<Team>(this.baseUrl + 'getteamforteamname/' + name);
+  getTeamForTeamName(teamleague: GetTeamLeague): Observable<Team> {
+    return this.http.get<Team>(this.baseUrl + 'getteamforteamname/' + teamleague);
   }
 
-  getTeamForTeamMascot(name: string): Observable<Team> {
+  getTeamForTeamMascot(name: GetTeamLeague): Observable<Team> {
     return this.http.get<Team>(this.baseUrl + 'getteamformascot/' + name);
   }
 
-  rosterSpotCheck(teamId: number) {
+  rosterSpotCheck(teamId: GetRosterQuickView) {
     return this.http.get<boolean>(this.baseUrl + 'rosterSpotCheck/' + teamId);
   }
 
-  getTeamInitialLotteryOrder(): Observable<Team[]> {
-    return this.http.get<Team[]>(this.baseUrl + 'getTeamInitialLotteryOrder');
+  getTeamInitialLotteryOrder(leagueId: number): Observable<Team[]> {
+    return this.http.get<Team[]>(this.baseUrl + 'getTeamInitialLotteryOrder/' + leagueId);
   }
 
   waivePlayer(waivedPlayer: WaivedPlayer) {
@@ -108,7 +110,7 @@ export class TeamService {
     return this.http.post(this.baseUrl + 'signplayer', signedPlayer);
   }
 
-  getCoachingSettings(teamId: number) {
+  getCoachingSettings(teamId: GetRosterQuickView) {
     return this.http.get<CoachSetting>(this.baseUrl + 'getcoachsettings/' + teamId);
   }
 
@@ -116,11 +118,11 @@ export class TeamService {
     return this.http.post(this.baseUrl + 'savecoachsetting', setting);
   }
 
-  getAllTeamsExceptUsers(teamId: number): Observable<Team[]> {
+  getAllTeamsExceptUsers(teamId: GetRosterQuickView): Observable<Team[]> {
     return this.http.get<Team[]>(this.baseUrl + 'getallteamsexceptusers/' + teamId);
   }
 
-  getTradeOffers(teamId: number): Observable<Trade[]> {
+  getTradeOffers(teamId: GetRosterQuickView): Observable<Trade[]> {
     return this.http.get<Trade[]>(this.baseUrl + 'gettradeoffers/' + teamId);
   }
 
@@ -144,27 +146,27 @@ export class TeamService {
     return this.http.get<TradeMessage>(this.baseUrl + 'gettrademessage/' + tradeId);
   }
 
-  getTeamDraftPicks(teamId: number): Observable<TeamDraftPick[]> {
+  getTeamDraftPicks(teamId: GetRosterQuickView): Observable<TeamDraftPick[]> {
     return this.http.get<TeamDraftPick[]>(this.baseUrl + 'getteamsdraftpicks/' + teamId);
   }
 
-  getPlayerInjuriesForTeam(teamId: number): Observable<PlayerInjury[]> {
+  getPlayerInjuriesForTeam(teamId: GetRosterQuickView): Observable<PlayerInjury[]> {
     return this.http.get<PlayerInjury[]>(this.baseUrl + 'getinjuriesforteam/' + teamId);
   }
 
-  getInjruiesForFreeAgents(): Observable<PlayerInjury[]> {
-    return this.http.get<PlayerInjury[]>(this.baseUrl + 'getinjuriesforfreeagents');
+  getInjruiesForFreeAgents(leagueId: number): Observable<PlayerInjury[]> {
+    return this.http.get<PlayerInjury[]>(this.baseUrl + 'getinjuriesforfreeagents/' + leagueId);
   }
 
-  getInjuryForPlayer(playerId: number): Observable<PlayerInjury> {
-    return this.http.get<PlayerInjury>(this.baseUrl + 'getinjuryforplayer/' + playerId);
+  getInjuryForPlayer(playeridleague: GetPlayerIdLeague): Observable<PlayerInjury> {
+    return this.http.get<PlayerInjury>(this.baseUrl + 'getinjuryforplayer/' + playeridleague);
   }
 
-  getTeamSalaryCapDetails(teamId: number): Observable<TeamSalaryCapInfo> {
+  getTeamSalaryCapDetails(teamId: GetRosterQuickView): Observable<TeamSalaryCapInfo> {
     return this.http.get<TeamSalaryCapInfo>(this.baseUrl + 'getteamsalarycapdetails/' + teamId);
   }
 
-  getTeamContracts(teamId: number): Observable<PlayerContractDetailed[]> {
+  getTeamContracts(teamId: GetRosterQuickView): Observable<PlayerContractDetailed[]> {
     return this.http.get<PlayerContractDetailed[]>(this.baseUrl + 'getteamcontracts/' + teamId);
   }
 
@@ -176,7 +178,7 @@ export class TeamService {
     return this.http.get<DefensiveStrategy[]>(this.baseUrl + 'getdefensivestrategies');
   }
 
-  getStrategyForTeam(teamId: number): Observable<Strategy> {
+  getStrategyForTeam(teamId: GetRosterQuickView): Observable<Strategy> {
     return this.http.get<Strategy>(this.baseUrl + 'getstrategyforteam/' + teamId);
   }
 
@@ -184,7 +186,7 @@ export class TeamService {
     return this.http.post(this.baseUrl + 'savestrategy', strategy);
   }
 
-  getContractOffersForTeam(teamId: number): Observable<ContractOffer[]> {
+  getContractOffersForTeam(teamId: GetRosterQuickView): Observable<ContractOffer[]> {
     return this.http.get<ContractOffer[]>(this.baseUrl + 'getcontractoffersforteam/' + teamId);
   }
 
@@ -196,15 +198,15 @@ export class TeamService {
     return this.http.get<boolean>(this.baseUrl + 'deletefreeagentoffer/' + contractId);
   }
 
-  getWaivedContracts(teamId: number): Observable<WaivedContract[]> {
+  getWaivedContracts(teamId: GetRosterQuickView): Observable<WaivedContract[]> {
     return this.http.get<WaivedContract[]>(this.baseUrl + 'getwaivedcontracts/' + teamId);
   }
 
-  getTradePlayerView(teamId: number): Observable<TradePlayerView[]> {
+  getTradePlayerView(teamId: GetRosterQuickView): Observable<TradePlayerView[]> {
     return this.http.get<TradePlayerView[]>(this.baseUrl + 'gettradeplayerviews/' + teamId);
   }
 
-  getTeamRecord(teamId: number): Observable<Standing> {
+  getTeamRecord(teamId: GetRosterQuickView): Observable<Standing> {
     return this.http.get<Standing>(this.baseUrl + 'getteamrecord/' + teamId);
   }
 }

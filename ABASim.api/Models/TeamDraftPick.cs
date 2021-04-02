@@ -11,5 +11,7 @@ namespace ABASim.api.Models
         public int OriginalTeam { get; set; }
 
         public int CurrentTeam { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

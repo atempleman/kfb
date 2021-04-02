@@ -11,6 +11,8 @@ import { DraftPick } from '../_models/draftPick';
 import { environment } from 'src/environments/environment';
 import { DashboardDraftPick } from '../_models/dashboardDraftPick';
 import { InitialPickSalary } from '../_models/initialPickSalary';
+import { GetDashboardPicks } from '../_models/getDashboardPicks';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,7 @@ export class DraftService {
     return this.http.post(this.baseUrl + 'removedraftrank', ranking);
   }
 
-  getDraftBoardForTeam(teamId: number): Observable<DraftPlayer[]> {
+  getDraftBoardForTeam(teamId: GetRosterQuickView): Observable<DraftPlayer[]> {
     return this.http.get<DraftPlayer[]>(this.baseUrl + 'getdraftboard/' + teamId);
   }
 
@@ -40,19 +42,19 @@ export class DraftService {
     return this.http.post(this.baseUrl + 'movedown', player);
   }
 
-  beginInitialDraft() {
-    return this.http.get<boolean>(this.baseUrl + 'beginInitialDraft');
+  beginInitialDraft(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'beginInitialDraft/' + leagueId);
   }
 
-  getDraftTracker() {
-    return this.http.get<DraftTracker>(this.baseUrl + 'getdrafttracker');
+  getDraftTracker(leagueId: number) {
+    return this.http.get<DraftTracker>(this.baseUrl + 'getdrafttracker/' + leagueId);
   }
 
   getInitialDraftPicks(): Observable<InitialDraftPicks[]> {
     return this.http.get<InitialDraftPicks[]>(this.baseUrl + 'getinitialdraftpicks');
   }
 
-  getCurrentInitialDraftPick(): Observable<InitialDraftPicks> {
+  getCurrentInitialDraftPick(leagueId: number): Observable<InitialDraftPicks> {
     return this.http.get<InitialDraftPicks>(this.baseUrl + 'getcurrentinitialdraftpick');
   }
 
@@ -68,7 +70,7 @@ export class DraftService {
     return this.http.get<DraftPick[]>(this.baseUrl + 'getinitialdraftpicksforround/' + page);
   }
 
-  getDashboardPicks(pick: number): Observable<DashboardDraftPick> {
+  getDashboardPicks(pick: GetDashboardPicks): Observable<DashboardDraftPick> {
     return this.http.get<DashboardDraftPick>(this.baseUrl + 'getdashboardcurrentpick/' + pick);
   }
 

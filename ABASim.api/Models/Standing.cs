@@ -23,5 +23,7 @@ namespace ABASim.api.Models
         public int ConfWins { get; set; }
 
         public int ConfLosses { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

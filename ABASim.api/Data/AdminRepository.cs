@@ -19,30 +19,30 @@ namespace ABASim.api.Data
             _context = context;
         }
 
-        public async Task<bool> UpdateLeagueState(int newState)
+        public async Task<bool> UpdateLeagueState(LeagueStatusDto newState)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == 1);
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == newState.LeagueId);
             var currentState = league.StateId;
-            league.StateId = newState;
+            league.StateId = newState.Status;
 
-            if (newState == 2)
+            if (newState.Status == 2)
             {
                 league.Day = 1;
             }
-            else if (newState == 3)
+            else if (newState.Status == 3)
             {
-                var result = GenerateAutoPickOrder();
+                var result = GenerateAutoPickOrder(newState.LeagueId);
                 league.Day = 2;
             }
-            else if (newState == 6)
+            else if (newState.Status == 6)
             {
                 league.Day = 30;
             }
-            else if (newState == 7)
+            else if (newState.Status == 7)
             {
                 league.Day = 45;
             }
-            else if (newState == 8)
+            else if (newState.Status == 8)
             {
                 league.Day = 218;
             }
@@ -51,17 +51,17 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RemoveTeamRegistration(int teamId)
+        public async Task<bool> RemoveTeamRegistration(GetRosterQuickViewDto dto)
         {
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == teamId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == dto.TeamId && x.LeagueId == dto.LeagueId);
             team.UserId = 0;
             _context.Update(team);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RunInitialDraftLottery()
+        public async Task<bool> RunInitialDraftLottery(int leagueId)
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             List<int> teamIds = new List<int>();
             // Now get a list of the TeamIds
@@ -92,40 +92,41 @@ namespace ABASim.api.Data
                         Round = i,
                         Pick = j,
                         TeamId = teamIds[j - 1],
-                        PlayerId = 0
+                        PlayerId = 0,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(draftPick);
                 }
             }
 
             // Now need to update the league status
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             league.StateId = 3;
             _context.Update(league);
 
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RunDayRollOver()
+        public async Task<bool> RunDayRollOver(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
             // Need to update player stats
             if (league.StateId == 7)
             {
-                var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day)).ToListAsync();
+                var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
 
                 foreach (var game in todaysGames)
                 {
                     // Now need to get the boxscores for the game
-                    var boxScores = await _context.GameBoxScores.Where(x => x.GameId == game.Id).ToListAsync();
+                    var boxScores = await _context.GameBoxScores.Where(x => x.GameId == game.Id && x.LeagueId == leagueId).ToListAsync();
 
                     foreach (var bs in boxScores)
                     {
                         if (bs.Minutes != 0)
                         {
                             // Now need to see if the player stat record exists for the player
-                            var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == bs.PlayerId);
+                            var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == bs.PlayerId && x.LeagueId == leagueId);
                             if (playerStats != null)
                             {
                                 // Player already has a player stats record
@@ -196,25 +197,25 @@ namespace ABASim.api.Data
                     }
                 }
                 // Need to check the injuries and update appropriately
-                await DailyInjuriesUpdate(league.StateId, league.Day);
+                await DailyInjuriesUpdate(league.StateId, league.Day, leagueId);
 
                 // league.Day = league.Day + 1;
             }
             else if (league.StateId == 8 || league.StateId == 9 || league.StateId == 10 || league.StateId == 11)
             {
-                var todaysGames = await _context.SchedulesPlayoffs.Where(x => x.GameDay == (league.Day)).ToListAsync();
+                var todaysGames = await _context.SchedulesPlayoffs.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
 
                 foreach (var game in todaysGames)
                 {
                     // Now need to get the boxscores for the game
-                    var boxScores = await _context.PlayoffBoxScores.Where(x => x.GameId == game.Id).ToListAsync();
+                    var boxScores = await _context.PlayoffBoxScores.Where(x => x.GameId == game.Id && x.LeagueId == leagueId).ToListAsync();
 
                     foreach (var bs in boxScores)
                     {
                         if (bs.Minutes != 0)
                         {
                             // Now need to see if the player stat record exists for the player
-                            var playerStats = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == bs.PlayerId);
+                            var playerStats = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == bs.PlayerId && x.LeagueId == leagueId);
                             if (playerStats != null)
                             {
                                 // Player already has a player stats record
@@ -287,7 +288,7 @@ namespace ABASim.api.Data
                 }
 
                 // Need to check the injuries and update appropriately
-                await DailyInjuriesUpdate(league.StateId, league.Day);
+                await DailyInjuriesUpdate(league.StateId, league.Day, leagueId);
 
                 // Need to do the next days schedule
                 league.Day = league.Day + 1;
@@ -295,7 +296,7 @@ namespace ABASim.api.Data
                 if (league.StateId == 8)
                 {
                     // Now get list of all PlayOff series for Round 1
-                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 1).ToListAsync();
+                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 1 && x.LeagueId == leagueId).ToListAsync();
 
                     if (allSeries != null)
                     {
@@ -352,7 +353,8 @@ namespace ABASim.api.Data
                                     AwayTeamId = awayTeamId,
                                     HomeTeamId = homeTeamId,
                                     SeriesId = series.Id,
-                                    GameDay = nextGameDay
+                                    GameDay = nextGameDay,
+                                    LeagueId = leagueId
                                 };
                                 await _context.AddAsync(sched);
                             }
@@ -363,7 +365,7 @@ namespace ABASim.api.Data
                 else if (league.StateId == 9)
                 {
                     // Now get list of all PlayOff series for Round 1
-                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 2).ToListAsync();
+                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 2 && x.LeagueId == leagueId).ToListAsync();
 
                     if (allSeries != null)
                     {
@@ -420,7 +422,8 @@ namespace ABASim.api.Data
                                     AwayTeamId = awayTeamId,
                                     HomeTeamId = homeTeamId,
                                     SeriesId = series.Id,
-                                    GameDay = nextGameDay
+                                    GameDay = nextGameDay,
+                                    LeagueId = leagueId
                                 };
                                 await _context.AddAsync(sched);
                             }
@@ -431,7 +434,7 @@ namespace ABASim.api.Data
                 else if (league.StateId == 10)
                 {
                     // Now get list of all PlayOff series for Round 1
-                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 3).ToListAsync();
+                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 3 && x.LeagueId == leagueId).ToListAsync();
 
                     if (allSeries != null)
                     {
@@ -488,7 +491,8 @@ namespace ABASim.api.Data
                                     AwayTeamId = awayTeamId,
                                     HomeTeamId = homeTeamId,
                                     SeriesId = series.Id,
-                                    GameDay = nextGameDay
+                                    GameDay = nextGameDay,
+                                    LeagueId = leagueId
                                 };
                                 await _context.AddAsync(sched);
                             }
@@ -499,7 +503,7 @@ namespace ABASim.api.Data
                 else if (league.StateId == 11)
                 {
                     // Now get list of all PlayOff series for Round 1
-                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 4).ToListAsync();
+                    var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 4 && x.LeagueId == leagueId).ToListAsync();
 
                     if (allSeries != null)
                     {
@@ -556,7 +560,8 @@ namespace ABASim.api.Data
                                     AwayTeamId = awayTeamId,
                                     HomeTeamId = homeTeamId,
                                     SeriesId = series.Id,
-                                    GameDay = nextGameDay
+                                    GameDay = nextGameDay,
+                                    LeagueId = leagueId
                                 };
                                 await _context.AddAsync(sched);
                             }
@@ -577,7 +582,7 @@ namespace ABASim.api.Data
             }
 
             // Need to do the free agency checks here - TODO
-            await FreeAgentDecisionMaking();
+            await FreeAgentDecisionMaking(leagueId);
 
             // Need to rollover the day to the next day
             _context.Update(league);
@@ -1019,19 +1024,19 @@ namespace ABASim.api.Data
             return true;
         }
 
-        public async Task<bool> CheckGamesRun()
+        public async Task<bool> CheckGamesRun(int leagueId)
         {
             int gameNotRun = 0;
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
             if (league.StateId == 6)
             {
-                var todaysGames = await _context.PreseasonSchedules.Where(x => x.Day == (league.Day)).ToListAsync();
+                var todaysGames = await _context.PreseasonSchedules.Where(x => x.Day == (league.Day) && x.LeagueId == leagueId).ToListAsync();
                 if (todaysGames.Count != 0)
                 {
                     foreach (var game in todaysGames)
                     {
-                        var gameResult = await _context.PreseasonGameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
+                        var gameResult = await _context.PreseasonGameResults.FirstOrDefaultAsync(x => x.GameId == game.Id && x.LeagueId == leagueId);
                         if (gameResult != null)
                         {
                             if (gameResult.Completed == 0)
@@ -1044,12 +1049,12 @@ namespace ABASim.api.Data
             }
             else if (league.StateId == 7)
             {
-                var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day)).ToListAsync();
+                var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
                 if (todaysGames.Count != 0)
                 {
                     foreach (var game in todaysGames)
                     {
-                        var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
+                        var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id && x.LeagueId == leagueId);
                         if (gameResult != null)
                         {
                             if (gameResult.Completed == 0)
@@ -1066,12 +1071,12 @@ namespace ABASim.api.Data
             }
             else if (league.StateId == 8 || league.StateId == 9 || league.StateId == 10 || league.StateId == 11)
             {
-                var todaysGames = await _context.SchedulesPlayoffs.Where(x => x.GameDay == (league.Day)).ToListAsync();
+                var todaysGames = await _context.SchedulesPlayoffs.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
                 if (todaysGames.Count != 0)
                 {
                     foreach (var game in todaysGames)
                     {
-                        var gameResult = await _context.PlayoffResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
+                        var gameResult = await _context.PlayoffResults.FirstOrDefaultAsync(x => x.GameId == game.Id && x.LeagueId == leagueId);
                         if (gameResult != null)
                         {
                             if (gameResult.Completed == 0)
@@ -1097,26 +1102,31 @@ namespace ABASim.api.Data
             }
         }
 
-        public async Task<bool> ChangeDay(int day)
+        public async Task<bool> ChangeDay(GetScheduleLeagueDto day)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
-            league.Day = day;
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == day.LeagueId);
+            league.Day = day.Day;
             _context.Update(league);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> BeginPlayoffs()
+        public async Task<bool> BeginPlayoffs(int leagueId)
         {
+            LeagueStatusDto lsd = new LeagueStatusDto
+            {
+                Status = 8,
+                LeagueId = leagueId
+            };
             // Change the League State Id to 8
-            await UpdateLeagueState(8);
+            await UpdateLeagueState(lsd);
 
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             // Need to check the injuries and update appropriately
-            await DailyInjuriesUpdate(league.StateId, league.Day);
+            await DailyInjuriesUpdate(league.StateId, league.Day, league.Id);
 
             // Create the PlayOff Series for Round 1
             // Get the standings and set up the lists
-            var leagueStandings = await _context.Standings.OrderByDescending(x => x.Wins).ToListAsync();
+            var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Wins).ToListAsync();
             var teams = await _context.Teams.ToListAsync();
 
             int westTeams = 0;
@@ -1126,7 +1136,7 @@ namespace ABASim.api.Data
 
             foreach (var ls in leagueStandings)
             {
-                var team = teams.FirstOrDefault(x => x.Id == ls.TeamId);
+                var team = teams.FirstOrDefault(x => x.Id == ls.TeamId && x.LeagueId == leagueId);
                 if ((team.Division == 1 || team.Division == 2 || team.Division == 3) && eastTeams < 8)
                 {
                     // East
@@ -1179,7 +1189,8 @@ namespace ABASim.api.Data
                     AwayTeamId = awayTeamId,
                     HomeWins = 0,
                     AwayWins = 0,
-                    Conference = 1
+                    Conference = 1,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(ps);
             }
@@ -1217,7 +1228,8 @@ namespace ABASim.api.Data
                     AwayTeamId = awayTeamId,
                     HomeWins = 0,
                     AwayWins = 0,
-                    Conference = 2
+                    Conference = 2,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(ps);
             }
@@ -1226,7 +1238,7 @@ namespace ABASim.api.Data
             await _context.SaveChangesAsync();
 
             // Now get list of all PlayOff series for Round 1
-            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 1).ToListAsync();
+            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 1 && x.LeagueId == leagueId).ToListAsync();
 
             if (allSeries != null)
             {
@@ -1237,7 +1249,8 @@ namespace ABASim.api.Data
                         AwayTeamId = series.AwayTeamId,
                         HomeTeamId = series.HomeTeamId,
                         SeriesId = series.Id,
-                        GameDay = 218
+                        GameDay = 218,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(sched);
                 }
@@ -1246,23 +1259,28 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> BeginConferenceSemis()
+        public async Task<bool> BeginConferenceSemis(int leagueId)
         {
             // Need to check to see if the previous round has been completed
-            var seriesFinished = await _context.PlayoffSerieses.Where(x => x.AwayWins == 4 || x.HomeWins == 4).ToListAsync();
+            var seriesFinished = await _context.PlayoffSerieses.Where(x => (x.AwayWins == 4 || x.HomeWins == 4) && x.LeagueId == leagueId).ToListAsync();
 
             if (seriesFinished.Count == 8)
             {
+                LeagueStatusDto lsd = new LeagueStatusDto
+            {
+                Status = 9,
+                LeagueId = leagueId
+            };
                 // Change the League State Id to 9
-                await UpdateLeagueState(9);
-                var league = await _context.Leagues.FirstOrDefaultAsync();
+                await UpdateLeagueState(lsd);
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
                 league.Day = 235;
                 _context.Update(league);
                 await _context.SaveChangesAsync();
 
                 // Create the PlayOff Series for Round 2 - Semis
                 // Get the standings and set up the lists
-                var leagueStandings = await _context.Standings.OrderByDescending(x => x.Wins).ToListAsync();
+                var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Wins).ToListAsync();
 
                 // First 4 will be east
                 var series1 = seriesFinished[0];
@@ -1303,8 +1321,8 @@ namespace ABASim.api.Data
                         }
 
                         // Need to determine who should get home court
-                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                         if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                         {
@@ -1324,7 +1342,8 @@ namespace ABASim.api.Data
                             AwayTeamId = awayTeamId,
                             HomeWins = 0,
                             AwayWins = 0,
-                            Conference = 1
+                            Conference = 1,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(ps);
                     }
@@ -1349,8 +1368,8 @@ namespace ABASim.api.Data
                         }
 
                         // Need to determine who should get home court
-                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                         if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                         {
@@ -1370,7 +1389,8 @@ namespace ABASim.api.Data
                             AwayTeamId = awayTeamId,
                             HomeWins = 0,
                             AwayWins = 0,
-                            Conference = 1
+                            Conference = 1,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(ps);
                     }
@@ -1404,8 +1424,8 @@ namespace ABASim.api.Data
                         }
 
                         // Need to determine who should get home court
-                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                         if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                         {
@@ -1425,7 +1445,8 @@ namespace ABASim.api.Data
                             AwayTeamId = awayTeamId,
                             HomeWins = 0,
                             AwayWins = 0,
-                            Conference = 2
+                            Conference = 2,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(ps);
                     }
@@ -1450,8 +1471,8 @@ namespace ABASim.api.Data
                         }
 
                         // Need to determine who should get home court
-                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                        var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                        var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                         if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                         {
@@ -1471,7 +1492,8 @@ namespace ABASim.api.Data
                             AwayTeamId = awayTeamId,
                             HomeWins = 0,
                             AwayWins = 0,
-                            Conference = 2
+                            Conference = 2,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(ps);
                     }
@@ -1482,7 +1504,7 @@ namespace ABASim.api.Data
             await _context.SaveChangesAsync();
 
             // Now get list of all PlayOff series for Round 2
-            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 2).ToListAsync();
+            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 2 && x.LeagueId == leagueId).ToListAsync();
 
             if (allSeries != null)
             {
@@ -1493,7 +1515,8 @@ namespace ABASim.api.Data
                         AwayTeamId = series.AwayTeamId,
                         HomeTeamId = series.HomeTeamId,
                         SeriesId = series.Id,
-                        GameDay = 235
+                        GameDay = 235,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(sched);
                 }
@@ -1502,23 +1525,23 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> BeginConferenceFinals()
+        public async Task<bool> BeginConferenceFinals(int leagueId)
         {
             // Need to check to see if the previous round has been completed
-            var seriesFinished = await _context.PlayoffSerieses.Where(x => (x.AwayWins == 4 || x.HomeWins == 4) && x.Round == 2).ToListAsync();
+            var seriesFinished = await _context.PlayoffSerieses.Where(x => (x.AwayWins == 4 || x.HomeWins == 4) && x.Round == 2 && x.LeagueId == leagueId).ToListAsync();
 
             if (seriesFinished.Count == 4)
             {
                 // Change the League State Id to 10
                 await UpdateLeagueState(10);
-                var league = await _context.Leagues.FirstOrDefaultAsync();
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
                 league.Day = 250;
                 _context.Update(league);
                 await _context.SaveChangesAsync();
 
                 // Create the PlayOff Series for Round 3 - Conference Finals
                 // Get the standings and set up the lists
-                var leagueStandings = await _context.Standings.OrderByDescending(x => x.Wins).ToListAsync();
+                var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Wins).ToListAsync();
 
                 // First 2 will be east
                 var series1 = seriesFinished[0];
@@ -1551,8 +1574,8 @@ namespace ABASim.api.Data
                 }
 
                 // Need to determine who should get home court
-                var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                 if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                 {
@@ -1572,7 +1595,8 @@ namespace ABASim.api.Data
                     AwayTeamId = awayTeamId,
                     HomeWins = 0,
                     AwayWins = 0,
-                    Conference = 1
+                    Conference = 1,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(ps);
 
@@ -1600,8 +1624,8 @@ namespace ABASim.api.Data
                 }
 
                 // Need to determine who should get home court
-                teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                 if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                 {
@@ -1621,7 +1645,8 @@ namespace ABASim.api.Data
                     AwayTeamId = awayTeamId,
                     HomeWins = 0,
                     AwayWins = 0,
-                    Conference = 2
+                    Conference = 2,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(psTwo);
             }
@@ -1630,7 +1655,7 @@ namespace ABASim.api.Data
             await _context.SaveChangesAsync();
 
             // Now get list of all PlayOff series for Round 2
-            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 3).ToListAsync();
+            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 3 && x.LeagueId == leagueId).ToListAsync();
 
             if (allSeries != null)
             {
@@ -1641,7 +1666,8 @@ namespace ABASim.api.Data
                         AwayTeamId = series.AwayTeamId,
                         HomeTeamId = series.HomeTeamId,
                         SeriesId = series.Id,
-                        GameDay = 250
+                        GameDay = 250,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(sched);
                 }
@@ -1650,23 +1676,29 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> BeginFinals()
+        public async Task<bool> BeginFinals(int leagueId)
         {
             // Need to check to see if the previous round has been completed
-            var seriesFinished = await _context.PlayoffSerieses.Where(x => (x.AwayWins == 4 || x.HomeWins == 4) && x.Round == 3).ToListAsync();
+            var seriesFinished = await _context.PlayoffSerieses.Where(x => (x.AwayWins == 4 || x.HomeWins == 4) && x.Round == 3 && x.LeagueId == leagueId).ToListAsync();
 
             if (seriesFinished.Count == 2)
             {
+                LeagueStatusDto lsd = new LeagueStatusDto
+                {
+                    Status = 11,
+                    LeagueId = leagueId
+                };
+
                 // Change the League State Id to 10
-                await UpdateLeagueState(11);
-                var league = await _context.Leagues.FirstOrDefaultAsync();
+                await UpdateLeagueState(lsd);
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
                 league.Day = 267;
                 _context.Update(league);
                 await _context.SaveChangesAsync();
 
                 // Create the PlayOff Series for Round 3 - Conference Finals
                 // Get the standings and set up the lists
-                var leagueStandings = await _context.Standings.OrderByDescending(x => x.Wins).ToListAsync();
+                var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Wins).ToListAsync();
 
                 // First 2 will be east
                 var series1 = seriesFinished[0];
@@ -1697,8 +1729,8 @@ namespace ABASim.api.Data
                 }
 
                 // Need to determine who should get home court
-                var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId);
-                var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId);
+                var teamOneStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamOneId && x.LeagueId == leagueId);
+                var teamTwoStandings = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == teamTwoId && x.LeagueId == leagueId);
 
                 if (teamOneStandings.Wins >= teamTwoStandings.Wins)
                 {
@@ -1718,7 +1750,8 @@ namespace ABASim.api.Data
                     AwayTeamId = awayTeamId,
                     HomeWins = 0,
                     AwayWins = 0,
-                    Conference = 0
+                    Conference = 0,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(ps);
             }
@@ -1727,7 +1760,7 @@ namespace ABASim.api.Data
             await _context.SaveChangesAsync();
 
             // Now get list of all PlayOff series for Round 2
-            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 4).ToListAsync();
+            var allSeries = await _context.PlayoffSerieses.Where(x => x.Round == 4 && x.LeagueId == leagueId).ToListAsync();
 
             if (allSeries != null)
             {
@@ -1738,7 +1771,8 @@ namespace ABASim.api.Data
                         AwayTeamId = series.AwayTeamId,
                         HomeTeamId = series.HomeTeamId,
                         SeriesId = series.Id,
-                        GameDay = 267
+                        GameDay = 267,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(sched);
                 }
@@ -1747,13 +1781,13 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> GenerateAutoPickOrder()
+        public async Task<bool> GenerateAutoPickOrder(int leagueId)
         {
             // League league = 
-            var autoCount = await _context.AutoPickOrders.LongCountAsync();
+            var autoCount = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).LongCountAsync();
             if (autoCount == 0)
             {
-                var playerRatings = await _context.PlayerRatings.ToListAsync();
+                var playerRatings = await _context.PlayerRatings.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var player in playerRatings)
                 {
                     int twoRating = (int)player.TwoRating / 3;
@@ -1779,7 +1813,8 @@ namespace ABASim.api.Data
                     AutoPickOrder apo = new AutoPickOrder
                     {
                         PlayerId = player.PlayerId,
-                        Score = finalScore
+                        Score = finalScore,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(apo);
                 }
@@ -1895,10 +1930,10 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RunTeamDraftPicks()
+        public async Task<bool> RunTeamDraftPicks(int leagueId)
         {
-            var teams = await _context.Teams.ToListAsync();
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
             foreach (var team in teams)
             {
@@ -1912,8 +1947,9 @@ namespace ABASim.api.Data
                         {
                             Year = i,
                             Round = j,
-                            OriginalTeam = team.Id,
-                            CurrentTeam = team.Id
+                            OriginalTeam = team.TeamId,
+                            CurrentTeam = team.TeamId,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(dp);
                     }
@@ -1922,9 +1958,9 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> GenerateInitialContracts()
+        public async Task<bool> GenerateInitialContracts(int leagueId)
         {
-            var initialDraftPicks = await _context.InitialDrafts.ToListAsync();
+            var initialDraftPicks = await _context.InitialDrafts.Where(x => x.LeagueId == leagueId).ToListAsync();
             foreach (var dp in initialDraftPicks)
             {
                 int years = 0;
@@ -2164,7 +2200,8 @@ namespace ABASim.api.Data
                     Round = dp.Round,
                     Pick = dp.Pick,
                     Years = years,
-                    SalaryAmount = amount
+                    SalaryAmount = amount,
+                    LeagueId = leagueId
                 };
 
                 await _context.AddAsync(pc);
@@ -2172,17 +2209,17 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 1;
         }
 
-        public async Task<IEnumerable<CurrentDayGamesDto>> GetGamesForRreset()
+        public async Task<IEnumerable<CurrentDayGamesDto>> GetGamesForRreset(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
-            var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day)).ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
 
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId);
-                var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId && x.LeagueId == leagueId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId && x.LeagueId == leagueId);
+                var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id && x.LeagueId == leagueId);
 
                 int awayScore = 0;
                 int homeScore = 0;
@@ -2214,14 +2251,14 @@ namespace ABASim.api.Data
             return nextGamesList;
         }
 
-        public async Task<bool> ResetGame(int gameId)
+        public async Task<bool> ResetGame(GameLeagueDto gameId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == gameId.LeagueId);
             if (league.StateId == 7)
             {
-                var gameresult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == gameId);
-                var boxScores = await _context.GameBoxScores.Where(x => x.GameId == gameId).ToListAsync();
-                var playByPlays = await _context.PlayByPlays.Where(x => x.GameId == gameId).ToListAsync();
+                var gameresult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == gameId.GameId && x.LeagueId == gameId.LeagueId);
+                var boxScores = await _context.GameBoxScores.Where(x => x.GameId == gameId.GameId && x.LeagueId == gameId.LeagueId).ToListAsync();
+                var playByPlays = await _context.PlayByPlays.Where(x => x.GameId == gameId.GameId && x.LeagueId == gameId.LeagueId).ToListAsync();
 
                 // _context.GameResults.Remove(gameresult);
                 gameresult.AwayScore = 0;
@@ -2245,16 +2282,16 @@ namespace ABASim.api.Data
             return true;
         }
 
-        public async Task<bool> SaveSeasonHistoricalRecords()
+        public async Task<bool> SaveSeasonHistoricalRecords(int leagueId)
         {
             // Team Records
-            var teams = await _context.Teams.ToListAsync();
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
             foreach (var team in teams)
             {
                 // Get standings record for the team
-                var teamStanding = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == team.Id);
+                var teamStanding = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == leagueId);
 
                 // Need to determine if the team made the playoffs or not
                 var lottery = 1;
@@ -2266,7 +2303,7 @@ namespace ABASim.api.Data
                 var playoffWins = 0;
                 var playoffLossess = 0;
 
-                var ps = await _context.PlayoffSerieses.Where(x => x.AwayTeamId == team.Id || x.HomeTeamId == team.Id).ToListAsync();
+                var ps = await _context.PlayoffSerieses.Where(x => (x.AwayTeamId == team.TeamId || x.HomeTeamId == team.TeamId) && x.LeagueId == leagueId).ToListAsync();
                 if (ps != null)
                 {
                     // Team made the players
@@ -2287,7 +2324,7 @@ namespace ABASim.api.Data
                         finals = 1;
 
                         // Need to check the if the team won the title
-                        var fs = await _context.PlayoffSerieses.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+                        var fs = await _context.PlayoffSerieses.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Id).FirstOrDefaultAsync();
                         if (fs.AwayTeamId == team.Id)
                         {
                             if (fs.AwayWins == 4)
@@ -2332,27 +2369,28 @@ namespace ABASim.api.Data
                     Finals = finals,
                     Champion = champion,
                     PlayoffWins = playoffWins,
-                    PlayoffLosses = playoffLossess
+                    PlayoffLosses = playoffLossess,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(htr);
             }
             await _context.SaveChangesAsync();
 
             // Awards
-            var mvpVotes = await _context.MvpVoting.OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
-            var dpoyVotes = await _context.DpoyVoting.OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
-            var sixthVotes = await _context.SixthManVoting.OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
+            var mvpVotes = await _context.MvpVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
+            var dpoyVotes = await _context.DpoyVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
+            var sixthVotes = await _context.SixthManVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
 
-            var mvpPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == mvpVotes.PlayerId);
-            var dpoyPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == dpoyVotes.PlayerId);
-            var sixthPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == sixthVotes.PlayerId);
+            var mvpPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == mvpVotes.PlayerId && x.LeagueId == leagueId);
+            var dpoyPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == dpoyVotes.PlayerId && x.LeagueId == leagueId);
+            var sixthPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == sixthVotes.PlayerId && x.LeagueId == leagueId);
 
-            var mvpPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == mvpVotes.PlayerId);
-            var mvpTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == mvpPlayerTeam.TeamId);
-            var dpoyPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == dpoyVotes.PlayerId);
-            var dpoyTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == dpoyPlayerTeam.TeamId);
-            var sixthPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == sixthVotes.PlayerId);
-            var sixthTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == sixthPlayerTeam.TeamId);
+            var mvpPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == mvpVotes.PlayerId && x.LeagueId == leagueId);
+            var mvpTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == mvpPlayerTeam.TeamId && x.LeagueId == leagueId);
+            var dpoyPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == dpoyVotes.PlayerId && x.LeagueId == leagueId);
+            var dpoyTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == dpoyPlayerTeam.TeamId && x.LeagueId == leagueId);
+            var sixthPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == sixthVotes.PlayerId && x.LeagueId == leagueId);
+            var sixthTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == sixthPlayerTeam.TeamId && x.LeagueId == leagueId);
 
             AwardWinner mvpWinner = new AwardWinner
             {
@@ -2362,7 +2400,8 @@ namespace ABASim.api.Data
                 Team = mvpTeam.Teamname + " " + mvpTeam.Mascot,
                 Mvp = 1,
                 Dpoy = 0,
-                Sixth = 0
+                Sixth = 0,
+                LeagueId = leagueId
             };
             await _context.AddAsync(mvpWinner);
 
@@ -2374,7 +2413,8 @@ namespace ABASim.api.Data
                 Team = dpoyTeam.Teamname + " " + dpoyTeam.Mascot,
                 Mvp = 0,
                 Dpoy = 1,
-                Sixth = 0
+                Sixth = 0,
+                LeagueId = leagueId
             };
             await _context.AddAsync(dpoyWinner);
 
@@ -2386,24 +2426,25 @@ namespace ABASim.api.Data
                 Team = sixthTeam.Teamname + " " + sixthTeam.Mascot,
                 Mvp = 0,
                 Dpoy = 0,
-                Sixth = 1
+                Sixth = 1,
+                LeagueId = leagueId
             };
             await _context.AddAsync(sixthWinner);
 
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RolloverSeasonCareerStats()
+        public async Task<bool> RolloverSeasonCareerStats(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
-            var playerStats = await _context.PlayerStats.ToListAsync();
-            var playerStatsPlayoffs = await _context.PlayerStatsPlayoffs.ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var playerStats = await _context.PlayerStats.Where(x => x.LeagueId == leagueId).ToListAsync();
+            var playerStatsPlayoffs = await _context.PlayerStatsPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             // Player Stats
             foreach (var ps in playerStats)
             {
-                var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == pt.TeamId);
+                var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == pt.TeamId && x.LeagueId == leagueId);
 
                 CareerPlayerStat stats = new CareerPlayerStat
                 {
@@ -2434,7 +2475,8 @@ namespace ABASim.api.Data
                     Bpg = ps.Bpg,
                     Mpg = ps.Mpg,
                     Fpg = ps.Fpg,
-                    Tpg = ps.Tpg
+                    Tpg = ps.Tpg,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(stats);
                 _context.PlayerStats.Remove(ps);
@@ -2443,8 +2485,8 @@ namespace ABASim.api.Data
             // Player Stats Playoffs
             foreach (var ps in playerStatsPlayoffs)
             {
-                var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == pt.TeamId);
+                var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == pt.TeamId && x.LeagueId == leagueId);
 
                 CareerPlayerStatsPlayoff stats = new CareerPlayerStatsPlayoff
                 {
@@ -2475,7 +2517,8 @@ namespace ABASim.api.Data
                     Bpg = ps.Bpg,
                     Mpg = ps.Mpg,
                     Fpg = ps.Fpg,
-                    Tpg = ps.Tpg
+                    Tpg = ps.Tpg,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(stats);
                 _context.PlayerStatsPlayoffs.Remove(ps);
@@ -2484,23 +2527,23 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> UpdateTeamSalaries()
+        public async Task<bool> UpdateTeamSalaries(int leagueId)
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var team in teams)
             {
-                var teamSalaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.Id);
-                var teamRoster = await _context.Rosters.Where(x => x.TeamId == team.Id).ToListAsync();
+                var teamSalaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == leagueId);
+                var teamRoster = await _context.Rosters.Where(x => x.TeamId == team.TeamId && x.LeagueId == leagueId).ToListAsync();
 
                 int salaryAmount = 0;
                 foreach (var roster in teamRoster)
                 {
-                    var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == roster.PlayerId);
+                    var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == roster.PlayerId && x.LeagueId == leagueId);
                     salaryAmount = salaryAmount + playerContract.YearOne;
                 }
 
-                var waivedContracts = await _context.WaivedPlayerContracts.Where(x => x.TeamId == team.Id).ToListAsync();
+                var waivedContracts = await _context.WaivedPlayerContracts.Where(x => x.TeamId == team.TeamId && x.LeagueId == leagueId).ToListAsync();
                 foreach (var contract in waivedContracts)
                 {
                     salaryAmount = salaryAmount + contract.YearOne;
@@ -2513,9 +2556,9 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> GenerateDraftLottery()
+        public async Task<bool> GenerateDraftLottery(int leagueId)
         {
-            var existingPicks = await _context.DraftPicks.ToListAsync();
+            var existingPicks = await _context.DraftPicks.Where(x => x.LeagueId == leagueId).ToListAsync();
             if (existingPicks != null)
             {
                 await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftPicks");
@@ -2524,7 +2567,7 @@ namespace ABASim.api.Data
             await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftRankings");
 
             List<int> teamIds = new List<int>();
-            var standings = await _context.Standings.OrderBy(x => x.Wins).ToListAsync();
+            var standings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderBy(x => x.Wins).ToListAsync();
 
             for (int i = 0; i < 14; i++)
             {
@@ -2626,13 +2669,14 @@ namespace ABASim.api.Data
                     int pickNumer = 1;
                     foreach (var selection in draftLotteryOrder)
                     {
-                        var properPick = await _context.TeamDraftPicks.FirstOrDefaultAsync(x => x.Round == i && x.OriginalTeam == selection);
+                        var properPick = await _context.TeamDraftPicks.FirstOrDefaultAsync(x => x.Round == i && x.OriginalTeam == selection && x.LeagueId == leagueId);
                         DraftPick draftPick = new DraftPick
                         {
                             Round = 1,
                             Pick = pickNumer,
                             TeamId = properPick.CurrentTeam,
-                            PlayerId = 0
+                            PlayerId = 0,
+                            LeagueId = leagueId
                         };
                         await _context.DraftPicks.AddAsync(draftPick);
                         pickNumer++;
@@ -2648,13 +2692,14 @@ namespace ABASim.api.Data
                     int pickNumer = 1;
                     foreach (var selection in standings)
                     {
-                        var properPick = await _context.TeamDraftPicks.FirstOrDefaultAsync(x => x.Round == i && x.OriginalTeam == selection.TeamId);
+                        var properPick = await _context.TeamDraftPicks.FirstOrDefaultAsync(x => x.Round == i && x.OriginalTeam == selection.TeamId && x.LeagueId == leagueId);
                         DraftPick draftPick = new DraftPick
                         {
                             Round = 2,
                             Pick = pickNumer,
                             TeamId = properPick.CurrentTeam,
-                            PlayerId = 0
+                            PlayerId = 0,
+                            LeagueId = leagueId
                         };
                         await _context.DraftPicks.AddAsync(draftPick);
 
@@ -2667,14 +2712,13 @@ namespace ABASim.api.Data
                     }
                 }
             }
-
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> ContractUpdates()
+        public async Task<bool> ContractUpdates(int leagueId)
         {
             // Now to update all player contracts
-            var allContracts = await _context.PlayerContracts.ToListAsync();
+            var allContracts = await _context.PlayerContracts.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var contract in allContracts)
             {
@@ -2725,7 +2769,7 @@ namespace ABASim.api.Data
             }
             await _context.SaveChangesAsync();
 
-            var zeroLengthContracts = await _context.PlayerContracts.Where(x => x.YearOne == 0).ToListAsync();
+            var zeroLengthContracts = await _context.PlayerContracts.Where(x => x.YearOne == 0 && x.LeagueId == leagueId).ToListAsync();
             if (zeroLengthContracts != null)
             {
                 foreach (var contract in zeroLengthContracts)
@@ -2736,11 +2780,11 @@ namespace ABASim.api.Data
                     _context.PlayerContracts.Remove(contract);
 
                     // check for roster record
-                    var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.PlayerId == playerId);
+                    var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
                     _context.Rosters.Remove(rosterRecord);
 
                     // Get and update the PlayerTeam
-                    var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId);
+                    var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
                     playerTeam.TeamId = 0;
                     _context.PlayerTeams.Update(playerTeam);
                 }
@@ -2748,7 +2792,7 @@ namespace ABASim.api.Data
             }
 
             // Need to update Waived Contracts!
-            var waivedContracts = await _context.WaivedPlayerContracts.ToListAsync();
+            var waivedContracts = await _context.WaivedPlayerContracts.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var contract in waivedContracts)
             {
@@ -2784,7 +2828,7 @@ namespace ABASim.api.Data
             }
             await _context.SaveChangesAsync();
 
-            var zeroContracts = await _context.WaivedPlayerContracts.Where(x => x.YearOne == 0).ToListAsync();
+            var zeroContracts = await _context.WaivedPlayerContracts.Where(x => x.YearOne == 0 && x.LeagueId == leagueId).ToListAsync();
             if (zeroContracts != null)
             {
                 foreach (var contract in zeroContracts)
@@ -2800,63 +2844,69 @@ namespace ABASim.api.Data
             return true;
         }
 
-        public async Task<bool> DeletePreseasonData()
+        public async Task<bool> DeletePreseasonData(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PreseasonGameResults");
-            return await _context.SaveChangesAsync() > 0;
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PreseasonGameResults");
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> DeletePlayoffData()
+        public async Task<bool> DeletePlayoffData(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlaysPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStatsPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffBoxScores");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffResults");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffSeries");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SchedulePlayoffs");
-            return await _context.SaveChangesAsync() > 0;
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlaysPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStatsPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffBoxScores");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffResults");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffSeries");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SchedulePlayoffs");
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> DeleteTeamSettings()
+        public async Task<bool> DeleteTeamSettings(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CoachSettings");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DepthCharts");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TeamStrategies");
-            return await _context.SaveChangesAsync() > 0;
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CoachSettings");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DepthCharts");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TeamStrategies");
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> DeleteAwardsData()
+        public async Task<bool> DeleteAwardsData(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DpoyVoting");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MvpVoting");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SixthManVoting");
-            return await _context.SaveChangesAsync() > 0;
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DpoyVoting");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MvpVoting");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SixthManVoting");
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> DeleteOtherSeasonData()
+        public async Task<bool> DeleteOtherSeasonData(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE FreeAgencyDecisions");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InboxMessages");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TradeMessages");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Trades");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Transactions");
-            return await _context.SaveChangesAsync() > 0;
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE FreeAgencyDecisions");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InboxMessages");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TradeMessages");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Trades");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Transactions");
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> DeleteSeasonData()
+        public async Task<bool> DeleteSeasonData(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameBoxScores");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameResults");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStats");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlays");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MidLevelExceptions");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE BiAnnualExceptions");
-            return await _context.SaveChangesAsync() > 0;
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameBoxScores");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameResults");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStats");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlays");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MidLevelExceptions");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE BiAnnualExceptions");
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> ResetStandings()
+        public async Task<bool> ResetStandings(int leagueId)
         {
-            var standings = await _context.Standings.ToListAsync();
+            var standings = await _context.Standings.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var s in standings)
             {
@@ -2875,139 +2925,140 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RolloverLeague()
+        public async Task<bool> RolloverLeague(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             league.Year = league.Year + 1;
             league.StateId = 14;
             _context.Leagues.Update(league);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> ResetLeague()
+        public async Task<bool> ResetLeague(int leagueId)
         {
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameBoxScores");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameResults");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStats");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlays");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE FreeAgencyDecisions");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InboxMessages");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TradeMessages");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Trades");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Transactions");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DpoyVoting");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MvpVoting");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SixthManVoting");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CoachSettings");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DepthCharts");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TeamStrategies");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlayPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStatsPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffBoxScores");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffResults");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffSerieses");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SchedulesPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PreseasonGameResults");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameBoxScores");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GameResults");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStats");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlays");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE FreeAgencyDecisions");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InboxMessages");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TradeMessages");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Trades");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Transactions");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DpoyVoting");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MvpVoting");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SixthManVoting");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CoachSettings");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DepthCharts");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TeamStrategies");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayByPlayPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerStatsPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffBoxScores");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffResults");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayoffSerieses");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE SchedulesPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PreseasonGameResults");
 
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MidLevelExceptions");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE MidLevelExceptions");
 
-            // Now the extras for a complete reset to fresh league
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE AutoPickOrders");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE AwardWinners");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CareerPlayerStats");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CareerPlayerStatsPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE ContractOffers");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftPicks");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftRankings");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftTrackers");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GlobalChats");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE HistoricalTeamRecords");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InitialDrafts");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerCareerStats");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerCareerStatsPlayoffs");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerContracts");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerGradings");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerInjuries");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerRatings");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Players");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerTeams");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerTendancies");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Rosters");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TeamDraftPicks");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Users");
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE WaivedPlayerContracts");
+            // // Now the extras for a complete reset to fresh league
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE AutoPickOrders");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE AwardWinners");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CareerPlayerStats");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE CareerPlayerStatsPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE ContractOffers");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftPicks");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftRankings");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftTrackers");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE GlobalChats");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE HistoricalTeamRecords");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InitialDrafts");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerCareerStats");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerCareerStatsPlayoffs");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerContracts");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerGradings");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerInjuries");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerRatings");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Players");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerTeams");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE PlayerTendancies");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Rosters");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE TeamDraftPicks");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE Users");
+            // await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE WaivedPlayerContracts");
 
-            // Update the league
-            var league = await _context.Leagues.FirstOrDefaultAsync();
-            league.Day = 0;
-            league.StateId = 1;
-            league.Year = 1;
-            _context.Leagues.Update(league);
+            // // Update the league
+            // var league = await _context.Leagues.FirstOrDefaultAsync();
+            // league.Day = 0;
+            // league.StateId = 1;
+            // league.Year = 1;
+            // _context.Leagues.Update(league);
 
-            var teams = await _context.Teams.ToListAsync();
-            foreach (var team in teams)
-            {
-                team.UserId = 0;
-                _context.Teams.Update(team);
+            // var teams = await _context.Teams.ToListAsync();
+            // foreach (var team in teams)
+            // {
+            //     team.UserId = 0;
+            //     _context.Teams.Update(team);
 
-                // Need to update the Bi-Annual Exception
-                BiAnnualException bae = new BiAnnualException
-                {
-                    TeamId = team.Id,
-                    AmountRemaining = 3382000,
-                    YearUsed = 0
-                };
-                await _context.BiAnnualExceptions.AddAsync(bae);
+            //     // Need to update the Bi-Annual Exception
+            //     BiAnnualException bae = new BiAnnualException
+            //     {
+            //         TeamId = team.Id,
+            //         AmountRemaining = 3382000,
+            //         YearUsed = 0
+            //     };
+            //     await _context.BiAnnualExceptions.AddAsync(bae);
 
-                // Need to then create the new MLE recrods
-                MidLevelException mle = new MidLevelException
-                {
-                    TeamId = team.Id,
-                    AmountRemaining = 8641000,
-                    AmountUsed = 0
-                };
-                await _context.MidLevelExceptions.AddAsync(mle);
-            }
+            //     // Need to then create the new MLE recrods
+            //     MidLevelException mle = new MidLevelException
+            //     {
+            //         TeamId = team.Id,
+            //         AmountRemaining = 8641000,
+            //         AmountUsed = 0
+            //     };
+            //     await _context.MidLevelExceptions.AddAsync(mle);
+            // }
 
-            var teamSalarycaps = await _context.TeamSalaryCaps.ToListAsync();
-            foreach (var caps in teamSalarycaps)
-            {
-                caps.CurrentCapAmount = 0;
-                _context.TeamSalaryCaps.Update(caps);
-            }
+            // var teamSalarycaps = await _context.TeamSalaryCaps.ToListAsync();
+            // foreach (var caps in teamSalarycaps)
+            // {
+            //     caps.CurrentCapAmount = 0;
+            //     _context.TeamSalaryCaps.Update(caps);
+            // }
 
-            var standings = await _context.Standings.ToListAsync();
-            foreach (var stand in standings)
-            {
-                stand.ConfLosses = 0;
-                stand.ConfWins = 0;
-                stand.GamesPlayed = 0;
-                stand.HomeLosses = 0;
-                stand.HomeWins = 0;
-                stand.Losses = 0;
-                stand.RoadLosses = 0;
-                stand.RoadWins = 0;
-                stand.Wins = 0;
+            // var standings = await _context.Standings.ToListAsync();
+            // foreach (var stand in standings)
+            // {
+            //     stand.ConfLosses = 0;
+            //     stand.ConfWins = 0;
+            //     stand.GamesPlayed = 0;
+            //     stand.HomeLosses = 0;
+            //     stand.HomeWins = 0;
+            //     stand.Losses = 0;
+            //     stand.RoadLosses = 0;
+            //     stand.RoadWins = 0;
+            //     stand.Wins = 0;
 
-                _context.Standings.Update(stand);
-            }
-            return await _context.SaveChangesAsync() > 0;
+            //     _context.Standings.Update(stand);
+            // }
+            // return await _context.SaveChangesAsync() > 0;
+            return false;
         }
 
-        public async Task<bool> GenerateInitialSalaryCaps()
+        public async Task<bool> GenerateInitialSalaryCaps(int leagueId)
         {
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
             foreach (var team in teams)
             {
                 int teamSalary = 0;
-                var contracts = await _context.PlayerContracts.Where(x => x.TeamId == team.Id).ToListAsync();
+                var contracts = await _context.PlayerContracts.Where(x => x.TeamId == team.Id && x.LeagueId == leagueId).ToListAsync();
                 foreach (var contract in contracts)
                 {
                     teamSalary = teamSalary + contract.YearOne;
                 }
 
                 // Now update the TeamSalary Record
-                var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.Id);
+                var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.Id &&  x.LeagueId == leagueId);
                 salaryCap.CurrentCapAmount = teamSalary;
                 _context.TeamSalaryCaps.Update(salaryCap);
             }

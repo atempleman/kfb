@@ -31,5 +31,7 @@ namespace ABASim.api.Models
         public int TeamOption { get; set; }
 
         public int PlayerOption { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

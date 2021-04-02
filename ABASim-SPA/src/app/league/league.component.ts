@@ -11,6 +11,8 @@ import { SimGame } from '../_models/simGame';
 import { GameEngineService } from '../_services/game-engine.service';
 import { TransferService } from '../_services/transfer.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
 
 @Component({
   selector: 'app-league',
@@ -31,35 +33,39 @@ export class LeagueComponent implements OnInit {
   transactionsSelected = 0;
   injuresSelected = 0;
   awardsSelected = 0;
+  team: Team;
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
               private authService: AuthService, private adminService: AdminService, private gameEngine: GameEngineService,
-              private transferService: TransferService, private spinner: NgxSpinnerService) { }
+              private transferService: TransferService, private spinner: NgxSpinnerService,
+              private teamService: TeamService) { }
 
   ngOnInit() {
     // Check to see if the user is an admin user
     this.isAdmin = this.authService.isAdmin();
+    this.spinner.show();
 
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
-      this.spinner.show();
       this.getTodaysEvents();
       this.getUpcomingEvents();
     });
   }
-
-  // eventsSelection() {
-  //   this.transactionsSelected = 0;
-  //   this.awardsSelected = 0;
-  //   this.scheduleSelected = 0;
-  //   this.statsSelected = 0;
-  //   this.standingsSelected = 0;
-  //   this.eventsSelected = 1;
-  //   this.injuresSelected = 0;
-  // }
 
   standingsSelection() {
     this.transactionsSelected = 0;
@@ -123,7 +129,7 @@ export class LeagueComponent implements OnInit {
 
   getTodaysEvents() {
     if (this.league.stateId === 6 && this.league.day !== 0) {
-      this.leagueService.getPreseasonGamesForToday().subscribe(result => {
+      this.leagueService.getPreseasonGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error getting todays events');
@@ -131,7 +137,7 @@ export class LeagueComponent implements OnInit {
         this.spinner.hide();
       });
     } else if (this.league.stateId === 7 && this.league.day !== 0) {
-      this.leagueService.getSeasonGamesForToday().subscribe(result => {
+      this.leagueService.getSeasonGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {
         this.alertify.error('Error getting todays events');
@@ -145,13 +151,13 @@ export class LeagueComponent implements OnInit {
     // Preseason
     if (this.league.stateId === 6) {
       // Need to get the games for the day
-      this.leagueService.getPreseasonGamesForTomorrow().subscribe(result => {
+      this.leagueService.getPreseasonGamesForTomorrow(this.league.id).subscribe(result => {
         this.upcomingGames = result;
       }, error => {
         this.alertify.error('Error getting upcoming games');
       });
     } else if (this.league.stateId === 7) {
-      this.leagueService.getSeasonGamesForTomorrow().subscribe(result => {
+      this.leagueService.getSeasonGamesForTomorrow(this.league.id).subscribe(result => {
         this.upcomingGames = result;
       }, error => {
         this.alertify.error('Error getting upcoming games');
@@ -165,6 +171,7 @@ export class LeagueComponent implements OnInit {
       awayId:  game.awayTeamId,
       homeId:  game.homeTeamId,
       gameId:  game.id,
+      leagueId: this.league.id
     };
 
     this.gameEngine.startPreseasonGame(simGame).subscribe(result => {
@@ -185,6 +192,7 @@ export class LeagueComponent implements OnInit {
       awayId:  game.awayTeamId,
       homeId:  game.homeTeamId,
       gameId:  game.id,
+      leagueId: this.league.id
     };
 
     this.gameEngine.startSeasonGame(simGame).subscribe(result => {
@@ -251,6 +259,7 @@ export class LeagueComponent implements OnInit {
       awayId: game.awayTeamId,
       homeId: game.homeTeamId,
       gameId: game.id,
+      leagueId: this.league.id
     };
 
     console.log(simGame);

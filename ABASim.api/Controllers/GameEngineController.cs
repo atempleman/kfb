@@ -59,6 +59,7 @@ namespace ABASim.api.Controllers
         Player awayPG, awaySG, awaySF, awayPF, awayC;
         Player _playerPassed;
         PlayerRating _playerRatingPassed;
+        int _leagueId;
 
         int _homeFoulBonus = 0;
         int _awayFoulBonus = 0;
@@ -160,6 +161,7 @@ namespace ABASim.api.Controllers
             _quarter = 1;
             _time = 720;
             _shotClock = 24;
+            _leagueId = game.LeagueId;
 
             // Setup the Game
             var result = await SetupTeams();
@@ -264,7 +266,7 @@ namespace ABASim.api.Controllers
             {
                 winningTeamId = _homeTeam.Id;
             }
-            bool savedGame = await _repo.SavePreseasonResult(_awayScore, _homeScore, winningTeamId, game.GameId);
+            bool savedGame = await _repo.SavePreseasonResult(_awayScore, _homeScore, winningTeamId, game.GameId, _leagueId);
 
             return Ok(true);
         }
@@ -297,7 +299,7 @@ namespace ABASim.api.Controllers
                 winningTeamId = _homeTeam.Id;
                 losingTeamId = _awayTeam.Id;
             }
-            bool savedGame = await _repo.SavePlayoffResult(_awayScore, _homeScore, winningTeamId, game.GameId, losingTeamId);
+            bool savedGame = await _repo.SavePlayoffResult(_awayScore, _homeScore, winningTeamId, game.GameId, losingTeamId, _leagueId);
 
             List<PlayerInjury> playerInjuries = new List<PlayerInjury>();
             // end of game injuries
@@ -473,7 +475,7 @@ namespace ABASim.api.Controllers
                 winningTeamId = _homeTeam.Id;
                 losingTeamId = _awayTeam.Id;
             }
-            bool savedGame = await _repo.SaveSeasonResult(_awayScore, _homeScore, winningTeamId, game.GameId, losingTeamId);
+            bool savedGame = await _repo.SaveSeasonResult(_awayScore, _homeScore, winningTeamId, game.GameId, losingTeamId, _leagueId);
 
             List<PlayerInjury> playerInjuries = new List<PlayerInjury>();
             // end of game injuries
@@ -609,8 +611,8 @@ namespace ABASim.api.Controllers
 
         public async Task<IActionResult> SetupTeams()
         {
-            Team at = await _repo.GetTeam(_game.AwayId);
-            Team ht = await _repo.GetTeam(_game.HomeId);
+            Team at = await _repo.GetTeam(_game.AwayId, _leagueId);
+            Team ht = await _repo.GetTeam(_game.HomeId, _leagueId);
 
             _awayTeam = new SimTeamDto
             {
@@ -647,8 +649,8 @@ namespace ABASim.api.Controllers
 
         public async Task<IActionResult> SetupRosters()
         {
-            var ar = await _repo.GetRoster(_awayTeam.Id);
-            var hr = await _repo.GetRoster(_homeTeam.Id);
+            var ar = await _repo.GetRoster(_awayTeam.Id, _leagueId);
+            var hr = await _repo.GetRoster(_homeTeam.Id, _leagueId);
             _awayRoster = (List<Roster>)ar;
             _homeRoster = (List<Roster>)hr;
 
@@ -657,8 +659,8 @@ namespace ABASim.api.Controllers
 
         public async Task<IActionResult> SetupDepthCharts()
         {
-            var adc = await _repo.GetDepthChart(_awayTeam.Id);
-            var hdc = await _repo.GetDepthChart(_homeTeam.Id);
+            var adc = await _repo.GetDepthChart(_awayTeam.Id, _leagueId);
+            var hdc = await _repo.GetDepthChart(_homeTeam.Id, _leagueId);
             _awayDepth = (List<DepthChart>)adc;
             _homeDepth = (List<DepthChart>)hdc;
 
@@ -667,8 +669,8 @@ namespace ABASim.api.Controllers
 
         public async Task<IActionResult> GetTeamStrategies()
         {
-            _homeStrategy = await _repo.GetTeamStrategies(_homeTeam.Id);
-            _awayStrategy = await _repo.GetTeamStrategies(_awayTeam.Id);
+            _homeStrategy = await _repo.GetTeamStrategies(_homeTeam.Id, _leagueId);
+            _awayStrategy = await _repo.GetTeamStrategies(_awayTeam.Id, _leagueId);
 
             if (_homeStrategy != null)
             {
@@ -818,10 +820,10 @@ namespace ABASim.api.Controllers
 
         public async Task<IActionResult> GetCoachSettings()
         {
-            var settings = await _repo.GetCoachSettings(_homeTeam.Id);
+            var settings = await _repo.GetCoachSettings(_homeTeam.Id, _leagueId);
             _homeSettings = (List<CoachSetting>)settings;
 
-            settings = await _repo.GetCoachSettings(_awayTeam.Id);
+            settings = await _repo.GetCoachSettings(_awayTeam.Id, _leagueId);
             _awaySettings = (List<CoachSetting>)settings;
 
             // Now need to setup the variables for go to players
@@ -845,7 +847,7 @@ namespace ABASim.api.Controllers
         {
             for (int i = 0; i < _awayRoster.Count; i++)
             {
-                var injury = await _repo.GetPlayerInjury(_awayRoster[i].PlayerId);
+                var injury = await _repo.GetPlayerInjury(_awayRoster[i].PlayerId, _leagueId);
                 if (injury != null)
                 {
                     InjuryDto dto = new InjuryDto
@@ -867,7 +869,7 @@ namespace ABASim.api.Controllers
 
             for (int i = 0; i < _homeRoster.Count; i++)
             {
-                var injury = await _repo.GetPlayerInjury(_homeRoster[i].PlayerId);
+                var injury = await _repo.GetPlayerInjury(_homeRoster[i].PlayerId, _leagueId);
                 if (injury != null)
                 {
                     InjuryDto dto = new InjuryDto
@@ -895,20 +897,20 @@ namespace ABASim.api.Controllers
             for (int i = 0; i < _awayRoster.Count; i++)
             {
                 // Player
-                var player = await _repo.GetPlayer(_awayRoster[i].PlayerId);
+                var player = await _repo.GetPlayer(_awayRoster[i].PlayerId, _leagueId);
                 _awayPlayers.Add(player);
 
                 // Player Rating
-                var playerRating = await _repo.GetPlayerRating(_awayRoster[i].PlayerId);
+                var playerRating = await _repo.GetPlayerRating(_awayRoster[i].PlayerId, _leagueId);
                 _awayRatings.Add(playerRating);
 
-                var playerTendancy = await _repo.GetPlayerTendancy(_awayRoster[i].PlayerId);
+                var playerTendancy = await _repo.GetPlayerTendancy(_awayRoster[i].PlayerId, _leagueId);
                 _awayTendancies.Add(playerTendancy);
 
                 // Set up the BoxScore
                 BoxScore box = new BoxScore
                 {
-                    Id = player.Id,
+                    Id = player.PlayerId,
                     ScheduleId = 0,
                     TeamId = _awayRoster[i].TeamId,
                     FirstName = player.FirstName,
@@ -929,7 +931,8 @@ namespace ABASim.api.Controllers
                     ORebs = 0,
                     DRebs = 0,
                     Fouls = 0,
-                    PlusMinus = 0
+                    PlusMinus = 0,
+                    LeagueId = _leagueId
                 };
                 _awayBoxScores.Add(box);
 
@@ -947,20 +950,20 @@ namespace ABASim.api.Controllers
             for (int i = 0; i < _homeRoster.Count; i++)
             {
                 // Player
-                var player = await _repo.GetPlayer(_homeRoster[i].PlayerId);
+                var player = await _repo.GetPlayer(_homeRoster[i].PlayerId, _leagueId);
                 _homePlayers.Add(player);
 
                 // Player Rating
-                var playerRating = await _repo.GetPlayerRating(_homeRoster[i].PlayerId);
+                var playerRating = await _repo.GetPlayerRating(_homeRoster[i].PlayerId, _leagueId);
                 _homeRatings.Add(playerRating);
 
-                var playerTendancy = await _repo.GetPlayerTendancy(_homeRoster[i].PlayerId);
+                var playerTendancy = await _repo.GetPlayerTendancy(_homeRoster[i].PlayerId, _leagueId);
                 _homeTendancies.Add(playerTendancy);
 
                 // Set up the BoxScore
                 BoxScore box = new BoxScore
                 {
-                    Id = player.Id,
+                    Id = player.PlayerId,
                     ScheduleId = 0,
                     TeamId = _homeRoster[i].TeamId,
                     FirstName = player.FirstName,
@@ -981,7 +984,8 @@ namespace ABASim.api.Controllers
                     ORebs = 0,
                     DRebs = 0,
                     Fouls = 0,
-                    PlusMinus = 0
+                    PlusMinus = 0,
+                    LeagueId = _leagueId
                 };
                 _homeBoxScores.Add(box);
 
@@ -8551,17 +8555,17 @@ namespace ABASim.api.Controllers
         }
 
         /* REFACTORED */
-        [HttpGet("getboxscoresforgameid/{gameId}")]
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(int gameId)
+        [HttpGet("getboxscoresforgameid/{gameleague}")]
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(GameLeagueDto dto)
         {
-            var boxScores = await _repo.GetBoxScoresForGameId(gameId);
+            var boxScores = await _repo.GetBoxScoresForGameId(dto);
             return boxScores;
         }
 
-        [HttpGet("getboxscoresforgameidplayoffs/{gameId}")]
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(int gameId)
+        [HttpGet("getboxscoresforgameidplayoffs/{gameleague}")]
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(GameLeagueDto dto)
         {
-            var boxScores = await _repo.GetBoxScoresForGameIdPlayoffs(gameId);
+            var boxScores = await _repo.GetBoxScoresForGameIdPlayoffs(dto);
             return boxScores;
         }
 
@@ -8572,7 +8576,8 @@ namespace ABASim.api.Controllers
                 GameId = _game.GameId,
                 Ordering = _ordering,
                 PlayNumber = _playNumber,
-                Commentary = commentary
+                Commentary = commentary,
+                LeagueId = _leagueId
             };
             _playByPlays.Add(pbp);
 

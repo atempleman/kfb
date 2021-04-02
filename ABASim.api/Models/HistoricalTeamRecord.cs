@@ -27,5 +27,7 @@ namespace ABASim.api.Models
         public int PlayoffWins { get; set; }
 
         public int PlayoffLosses { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

@@ -7,5 +7,7 @@ namespace ABASim.api.Models
         public int SeasonId { get; set; }
 
         public int Cap { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

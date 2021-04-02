@@ -8,6 +8,8 @@ import { ContactService } from '../_services/contact.service';
 import { CountOfMessages } from '../_models/countOfMessages';
 import { Team } from '../_models/team';
 import { TeamService } from '../_services/team.service';
+import { GetTeamLeague } from '../_models/getTeamLeague';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-navbar',
@@ -48,23 +50,34 @@ export class NavbarComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
-      this.backgroundStyle();
+      // this.backgroundStyle();
+      this.setupLeague();
     });
+  }
 
-    this.leagueService.getLeague().subscribe(result => {
+  setupLeague() {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
       this.league = result;
     }, error => {
-      this.alertify.error('Error getting league');
-    });
-
-    this.checkMessages();
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.checkMessages();
     this.refresh = setInterval(() => {
       this.checkMessages();
     }, 60000);
+    });
   }
 
   checkMessages() {
-    this.contactService.getCountOfMessages(+localStorage.getItem('teamId')).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.contactService.getCountOfMessages(summary).subscribe(result => {
       this.countOfMessages = result;
     }, error => {
       this.alertify.error('Error getting inbox message count');

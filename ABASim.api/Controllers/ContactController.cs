@@ -38,7 +38,7 @@ namespace ABASim.api.Controllers
         }
 
         [HttpGet("getinboxmessages/{teamId}")]
-        public async Task<IActionResult> GetInboxMessages(int teamId)
+        public async Task<IActionResult> GetInboxMessages(GetRosterQuickViewDto teamId)
         {
             var result = await _repo.GetInboxMessages(teamId);
             return Ok(result);
@@ -59,7 +59,7 @@ namespace ABASim.api.Controllers
         }
         
         [HttpGet("getcountofmessages/{teamId}")]
-        public async Task<IActionResult> GetCountOfMessages(int teamId)
+        public async Task<IActionResult> GetCountOfMessages(GetRosterQuickViewDto teamId)
         {
             var count = await _repo.CountOfMessages(teamId);
             return Ok(count);

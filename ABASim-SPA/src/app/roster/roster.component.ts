@@ -4,6 +4,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CompletePlayer } from '../_models/completePlayer';
 import { ExtendedPlayer } from '../_models/extendedPlayer';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 import { League } from '../_models/league';
 import { PlayerContractDetailed } from '../_models/playerContractDetailed';
 import { PlayerInjury } from '../_models/playerInjury';
@@ -45,23 +47,31 @@ export class RosterComponent implements OnInit {
               private modalService: BsModalService, private playerService: PlayerService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    this.leagueService.getLeague().subscribe(result => {
-      this.spinner.show();
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
+      this.setupPage();
     });
+  }
 
-    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
-      this.team = result;
-    }, error => {
-      this.alertify.error('Error getting your Team');
-    }, () => {
-      this.getPlayerInjuries();
-      this.getRosterForTeam();
-      this.getTeamContracts();
-    });
+  setupPage() {
+    this.getPlayerInjuries();
+    this.getRosterForTeam();
+    this.getTeamContracts();
   }
 
   gradesClick() {
@@ -83,13 +93,17 @@ export class RosterComponent implements OnInit {
   }
 
   getRosterForTeam() {
-    this.teamService.getExtendedRosterForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.id,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getExtendedRosterForTeam(summary).subscribe(result => {
       this.playingRoster = result;
       this.playerCount = this.playingRoster.length;
     }, error => {
       this.alertify.error('Error getting your roster');
     }, () => {
-      // console.log(this.playingRoster);
     });
   }
 
@@ -103,17 +117,16 @@ export class RosterComponent implements OnInit {
   }
 
   getPlayerInjuries() {
-    this.teamService.getPlayerInjuriesForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.id,
+      leagueId: this.league.id
+    };
+    this.teamService.getPlayerInjuriesForTeam(summary).subscribe(result => {
       this.teamsInjuries = result;
     }, error => {
       this.alertify.error('Error getting teams injuries');
     });
   }
-
-  // viewPlayer(player: ExtendedPlayer) {
-  //   this.transferService.setData(player.playerId);
-  //   this.router.navigate(['/view-player']);
-  // }
 
   public openModal(template: TemplateRef<any>, player: PlayerContractDetailed) {
     this.selectedPlayer = player;
@@ -124,22 +137,25 @@ export class RosterComponent implements OnInit {
   confirmedWaived() {
     const waivePlayer: WaivedPlayer = {
       teamId: this.team.id,
-      playerId: this.selectedPlayer.playerId
+      playerId: this.selectedPlayer.playerId,
+      leagueId: this.league.id
     };
 
     this.teamService.waivePlayer(waivePlayer).subscribe(result => {
-
     }, error => {
       this.alertify.error('Error waiving player');
     }, () => {
-      // this.getRosterForTeam();
       this.modalRef.hide();
       window.location.reload();
     });
   }
 
   getTeamContracts() {
-    this.teamService.getTeamContracts(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.id,
+      leagueId: this.league.id
+    };
+    this.teamService.getTeamContracts(summary).subscribe(result => {
       this.teamContracts = result;
     }, error => {
       this.alertify.error('Error getting team contracts');
@@ -147,7 +163,7 @@ export class RosterComponent implements OnInit {
       this.spinner.hide();
     });
 
-    this.teamService.getWaivedContracts(this.team.id).subscribe(result => {
+    this.teamService.getWaivedContracts(summary).subscribe(result => {
       this.waivedContracts = result;
     }, error => {
       this.alertify.error('Error getting waived contracts');
@@ -158,7 +174,13 @@ export class RosterComponent implements OnInit {
     // Need to get player id for name
     let playerId = 0;
     const playerName = firstName + ' ' + lastName;
-    this.playerService.getPlayerForName(playerName).subscribe(result => {
+
+    const summary: GetPlayerLeague = {
+      playerName: playerName,
+      leagueId: this.league.id
+    };
+
+    this.playerService.getPlayerForName(summary).subscribe(result => {
       playerId = result.id;
     }, error => {
       this.alertify.error('Error getting player name');
@@ -171,7 +193,13 @@ export class RosterComponent implements OnInit {
   viewPlayerFromContract(name: string) {
     // Need to get player id for name
     let playerId = 0;
-    this.playerService.getPlayerForName(name).subscribe(result => {
+
+    const summary: GetPlayerLeague = {
+      playerName: name,
+      leagueId: this.league.id
+    };
+
+    this.playerService.getPlayerForName(summary).subscribe(result => {
       playerId = result.id;
     }, error => {
       this.alertify.error('Error getting player name');

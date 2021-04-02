@@ -15,41 +15,41 @@ namespace ABASim.api.Data
 
          Task<Team> GetTeamForUserId(int userId);
 
-         Task<Team> GetTeamForTeamId(int teamId);
+         Task<Team> GetTeamForTeamId(GetRosterQuickViewDto dto);
 
-         Task<IEnumerable<Player>> GetRosterForTeam(int teamId);
+         Task<IEnumerable<Player>> GetRosterForTeam(GetRosterQuickViewDto dto);
 
-         Task<IEnumerable<Team>> GetAllTeams();
+         Task<IEnumerable<Team>> GetAllTeams(int leagueId);
 
-         Task<IEnumerable<Team>> GetTeamInitialLotteryOrder();
+         Task<IEnumerable<Team>> GetTeamInitialLotteryOrder(int leagueId);
 
-         Task<Team> GetTeamForTeamName(string name);
+         Task<Team> GetTeamForTeamName(TeamNameLeagueDto dto);
 
-         Task<Team> GetTeamForTeamMascot(string name);
+         Task<Team> GetTeamForTeamMascot(TeamNameLeagueDto name);
 
          Task<IEnumerable<DepthChart>> GetDepthChartForTeam(int teamId);
 
          Task<bool> SaveDepthChartForTeam(DepthChart[] charts);
 
-         Task<bool> RosterSpotCheck(int teamId);
+         Task<bool> RosterSpotCheck(GetRosterQuickViewDto dto);
 
-         Task<IEnumerable<CompletePlayerDto>> GetExtendPlayersForTeam(int teamId);
+         Task<IEnumerable<CompletePlayerDto>> GetExtendPlayersForTeam(GetRosterQuickViewDto dto);
 
          Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(GetRosterQuickViewDto quickview);
 
-         Task<IEnumerable<LeaguePlayerInjuryDto>> GetTeamInjuries(int teamId);
+         Task<IEnumerable<LeaguePlayerInjuryDto>> GetTeamInjuries(GetRosterQuickViewDto quickview);
 
          Task<bool> WaivePlayer(WaivePlayerDto waived);
 
          Task<bool> SignPlayer(SignedPlayerDto signed);
 
-         Task<CoachSetting> GetCoachSettingForTeamId(int teamId);
+         Task<CoachSetting> GetCoachSettingForTeamId(GetRosterQuickViewDto dto);
 
          Task<bool> SaveCoachingSetting(CoachSetting setting);
 
-         Task<IEnumerable<Team>> GetAllTeamsExceptUsers(int teamId);
+         Task<IEnumerable<Team>> GetAllTeamsExceptUsers(GetRosterQuickViewDto dto);
 
-        Task<IEnumerable<TradeDto>> GetTradeOffers(int teamId);
+        Task<IEnumerable<TradeDto>> GetTradeOffers(GetRosterQuickViewDto dto);
 
          Task<bool> SaveTradeProposal(TradeDto[] trades);
 
@@ -61,23 +61,23 @@ namespace ABASim.api.Data
 
         Task<TradeMessageDto> GetTradeMessage(int tradeId);
 
-        Task<IEnumerable<TeamDraftPickDto>> GetTeamsDraftPicks(int teamId);
+        Task<IEnumerable<TeamDraftPickDto>> GetTeamsDraftPicks(GetRosterQuickViewDto dto);
 
-        Task<IEnumerable<PlayerInjury>> GetPlayerInjuriesForTeam(int teamId);
+        Task<IEnumerable<PlayerInjury>> GetPlayerInjuriesForTeam(GetRosterQuickViewDto dto);
 
-        Task<IEnumerable<PlayerInjury>> GetInjuriesForFreeAgents();
+        Task<IEnumerable<PlayerInjury>> GetInjuriesForFreeAgents(int leagueId);
 
-        Task<PlayerInjury> GetInjuryForPlayer(int playerId);
+        Task<PlayerInjury> GetInjuryForPlayer(PlayerIdLeagueDto dto);
 
-        Task<TeamSalaryCapInfo> GetTeamSalaryCapDetails(int teamId);
+        Task<TeamSalaryCapInfo> GetTeamSalaryCapDetails(GetRosterQuickViewDto dto);
 
-        Task<IEnumerable<PlayerContractDetailedDto>> GetTeamContracts(int teamId);
+        Task<IEnumerable<PlayerContractDetailedDto>> GetTeamContracts(GetRosterQuickViewDto dto);
 
         Task<IEnumerable<OffensiveStrategy>> GetOffensiveStrategies();
 
         Task<IEnumerable<DefensiveStrategy>> GetDefensiveStrategies();
 
-        Task<TeamStrategyDto> GetStrategyForTeam(int teamId);
+        Task<TeamStrategyDto> GetStrategyForTeam(GetRosterQuickViewDto dto);
 
         Task<bool> SaveStrategy(TeamStrategyDto strategy);
 
@@ -87,10 +87,10 @@ namespace ABASim.api.Data
 
         Task<bool> DeleteFreeAgentOffer(int contractId);
 
-        Task<IEnumerable<WaivedContractDto>> GetWaivedContracts(int teamId);
+        Task<IEnumerable<WaivedContractDto>> GetWaivedContracts(GetRosterQuickViewDto dto);
 
-        Task<IEnumerable<TradePlayerViewDto>> GetTradePlayerViews(int teamId);
+        Task<IEnumerable<TradePlayerViewDto>> GetTradePlayerViews(GetRosterQuickViewDto dto);
 
-        Task<StandingsDto> GetTeamRecord(int teamId);
+        Task<StandingsDto> GetTeamRecord(GetRosterQuickViewDto dto);
     }
 }

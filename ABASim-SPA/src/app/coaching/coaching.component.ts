@@ -13,6 +13,9 @@ import { DefensiveStrategy } from '../_models/defensiveStrategyId';
 import { Strategy } from '../_models/strategy';
 import { SaveStrategy } from '../_models/saveStrategy';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { League } from '../_models/league';
+import { LeagueService } from '../_services/league.service';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-coaching',
@@ -30,8 +33,6 @@ export class CoachingComponent implements OnInit {
 
   strategyAccordion = 0;
   isStrategyEdit = 0;
-
-
 
   isAdmin: number;
   team: Team;
@@ -55,8 +56,10 @@ export class CoachingComponent implements OnInit {
   defStrategies: DefensiveStrategy[] = [];
   teamStrategy: Strategy;
 
+  league: League;
+
   constructor(private router: Router, private alertify: AlertifyService, private authService: AuthService,
-              private teamService: TeamService, private spinner: NgxSpinnerService) { }
+              private teamService: TeamService, private spinner: NgxSpinnerService, private leagueService:LeagueService) { }
 
   ngOnInit() {
     // Check to see if the user is an admin user
@@ -64,17 +67,38 @@ export class CoachingComponent implements OnInit {
 
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
-      this.getPlayerInjuries();
-      this.getCoachSettings();
-      this.getStrategies();
+      this.setupLeague();
     });
   }
 
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
+    this.getPlayerInjuries();
+    this.getCoachSettings();
+    this.getStrategies();
+  }
+
   getPlayerInjuries() {
-    this.teamService.getPlayerInjuriesForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getPlayerInjuriesForTeam(summary).subscribe(result => {
       this.teamsInjuries = result;
     }, error => {
       this.alertify.error('Error getting teams injuries');
@@ -82,7 +106,12 @@ export class CoachingComponent implements OnInit {
   }
 
   getCoachSettings() {
-    this.teamService.getRosterForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getRosterForTeam(summary).subscribe(result => {
       this.extendedPlayers = result;
     }, error => {
       this.alertify.error('Error getting players');
@@ -97,7 +126,7 @@ export class CoachingComponent implements OnInit {
       });
     });
 
-    this.teamService.getCoachingSettings(this.team.id).subscribe(result => {
+    this.teamService.getCoachingSettings(summary).subscribe(result => {
       this.coachSetting = result;
     }, error => {
       this.alertify.error('Error getting Coach Settings');
@@ -109,7 +138,12 @@ export class CoachingComponent implements OnInit {
   }
 
   getStrategies() {
-    this.teamService.getStrategyForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getStrategyForTeam(summary).subscribe(result => {
       this.teamStrategy = result;
     }, error => {
       this.alertify.error('Error getting team strategy');
@@ -166,8 +200,10 @@ export class CoachingComponent implements OnInit {
     this.coachSetting.goToPlayerOne = +this.gotoOne;
     this.coachSetting.goToPlayerTwo = +this.gotoTwo;
     this.coachSetting.goToPlayerThree = +this.gotoThree;
+    this.coachSetting.leagueId = this.league.id;
 
     // Now pass this through to ther servie
+
     this.teamService.saveCoachingSettings(this.coachSetting).subscribe(result => {
     }, error => {
       this.alertify.error('Error saving Coaching Settings');
@@ -195,6 +231,7 @@ export class CoachingComponent implements OnInit {
           offensiveStrategyDesc: value.description,
           defensiveStrategyName: '',
           defensiveStrategyDesc: '',
+          leagueId: this.league.id
         };
         this.teamStrategy = ts;
       }
@@ -218,6 +255,7 @@ export class CoachingComponent implements OnInit {
             offensiveStrategyDesc: '',
             defensiveStrategyName: value.name,
             defensiveStrategyDesc: value.description,
+            leagueId: this.league.id
           };
           this.teamStrategy = ts;
         }

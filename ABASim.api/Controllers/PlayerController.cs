@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ABASim.api.Data;
+using ABASim.api.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABASim.api.Controllers
@@ -35,29 +36,29 @@ namespace ABASim.api.Controllers
             return Ok(player);
         }
 
-        [HttpGet("getallplayers")]
-        public async Task<IActionResult> GetAllPlayers()
+        [HttpGet("getallplayers/{leagueId}")]
+        public async Task<IActionResult> GetAllPlayers(int leagueId)
         {
-            var players = await _repo.GetAllPlayers();
+            var players = await _repo.GetAllPlayers(leagueId);
             return Ok(players);
         }
 
-        [HttpGet("getfreeagents")]
-        public async Task<IActionResult> GetFreeAgents()
+        [HttpGet("getfreeagents/{leagueId}")]
+        public async Task<IActionResult> GetFreeAgents(int leagueId)
         {
-            var players = await _repo.GetFreeAgents();
+            var players = await _repo.GetFreeAgents(leagueId);
             return Ok(players);
         }
 
-        [HttpGet("getcompleteplayer/{playerId}")]
-        public async Task<IActionResult> GetCompletePlayer(int playerId)
+        [HttpGet("getcompleteplayer/{playeridleague}")]
+        public async Task<IActionResult> GetCompletePlayer(PlayerIdLeagueDto dto)
         {
-            var player = await _repo.GetCompletePlayer(playerId);
+            var player = await _repo.GetCompletePlayer(dto);
             return Ok(player);
         }
 
         [HttpGet("getcareerstats/{playerId}")]
-        public async Task<IActionResult> GetCareerStats(int playerId)
+        public async Task<IActionResult> GetCareerStats(PlayerIdLeagueDto playerId)
         {
             var player = await _repo.GetCareerStats(playerId);
             return Ok(player);
@@ -92,42 +93,42 @@ namespace ABASim.api.Controllers
         }
 
         [HttpGet("filterbyposition/{pos}")]
-        public async Task<IActionResult> FilterByPosition(int pos)
+        public async Task<IActionResult> FilterByPosition(PlayerIdLeagueDto pos)
         {
             var players = await _repo.FilterByPosition(pos);
             return Ok(players);
         }
 
         [HttpGet("getfreeagentsbypos/{pos}")]
-        public async Task<IActionResult> GetFreeAgentsByPos(int pos)
+        public async Task<IActionResult> GetFreeAgentsByPos(PlayerIdLeagueDto pos)
         {
             var players = await _repo.GetFreeAgentsByPos(pos);
             return Ok(players);
         }
 
         [HttpGet("getfilteredfreeagents/{value}")]
-        public async Task<IActionResult> GetFilteredFreeAgents(string value)
+        public async Task<IActionResult> GetFilteredFreeAgents(PlayerLeagueDto value)
         {
             var players = await _repo.GetFilteredFreeAgents(value);
             return Ok(players);
         }
 
-        [HttpGet("getplayerforname/{name}")]
-        public async Task<IActionResult> GetPlayerForName(string name)
+        [HttpGet("getplayerforname/{playerleague}")]
+        public async Task<IActionResult> GetPlayerForName(PlayerLeagueDto dto)
         {
-            var players = await _repo.GetPlayerForName(name);
+            var players = await _repo.GetPlayerForName(dto);
             return Ok(players);
         }
 
         [HttpGet("getcontractforplayer/{playerId}")]
-        public async Task<IActionResult> GetContractForPlayer(int playerId)
+        public async Task<IActionResult> GetContractForPlayer(PlayerIdLeagueDto playerId)
         {
             var player = await _repo.GetContractForPlayer(playerId);
             return Ok(player);
         }
 
         [HttpGet("getfullcontractforplayer/{playerId}")]
-        public async Task<IActionResult> GetFullContractForPlayer(int playerId)
+        public async Task<IActionResult> GetFullContractForPlayer(PlayerIdLeagueDto playerId)
         {
             var player = await _repo.GetFullContractForPlayer(playerId);
             return Ok(player);

@@ -4,4 +4,5 @@ export interface CoachSetting {
     goToPlayerTwo: number;
     goToPlayerThree: number;
     teamId: number;
+    leagueId: number;
 }

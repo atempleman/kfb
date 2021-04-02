@@ -8,4 +8,6 @@ export interface Player {
     pfPosition: number;
     cPosition: number;
     age: number;
+    playerId: number;
+    leagueId: number;
 }

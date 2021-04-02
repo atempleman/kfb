@@ -6,6 +6,7 @@ import { GlobalChat } from '../_models/globalChat';
 import { InboxMessage } from '../_models/inboxMessage';
 import { Observable } from 'rxjs';
 import { CountOfMessages } from '../_models/countOfMessages';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class ContactService {
     return this.http.get<GlobalChat[]>(this.baseUrl + 'getchatrecords/' + leagueId);
   }
 
-  getInboxMessages(teamId: number): Observable<InboxMessage[]> {
+  getInboxMessages(teamId: GetRosterQuickView): Observable<InboxMessage[]> {
     return this.http.get<InboxMessage[]>(this.baseUrl + 'getinboxmessages/' + teamId);
   }
 
@@ -39,7 +40,7 @@ export class ContactService {
     return this.http.get<boolean>(this.baseUrl + 'deletemessage/' + message);
   }
 
-  getCountOfMessages(teamId: number) {
+  getCountOfMessages(teamId: GetRosterQuickView) {
     return this.http.get<CountOfMessages>(this.baseUrl + 'getcountofmessages/' + teamId);
   }
 

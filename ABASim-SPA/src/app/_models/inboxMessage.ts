@@ -10,4 +10,5 @@ export interface InboxMessage {
     body: string;
     messageDate: string;
     isNew: number;
+    leagueId: number;
 }

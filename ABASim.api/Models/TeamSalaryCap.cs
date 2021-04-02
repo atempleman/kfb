@@ -9,5 +9,7 @@ namespace ABASim.api.Models
         public int TeamId { get; set; }
 
         public int CurrentCapAmount { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

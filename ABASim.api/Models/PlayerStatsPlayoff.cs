@@ -65,5 +65,7 @@ namespace ABASim.api.Models
 
         [Column(TypeName = "decimal(5, 2)")]
         public decimal Tpg { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

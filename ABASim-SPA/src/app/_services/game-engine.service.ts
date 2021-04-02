@@ -5,6 +5,7 @@ import { SimGame } from '../_models/simGame';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BoxScore } from '../_models/boxScore';
+import { GetGameLeague } from '../_models/getGameLeague';
 
 @Injectable({
   providedIn: 'root'
@@ -32,11 +33,11 @@ export class GameEngineService {
     return this.http.post(this.baseUrl + 'startPlayoffGame', game);
   }
 
-  getBoxScoreForGameId(gameId: number): Observable<BoxScore[]> {
-    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameid/' + gameId);
+  getBoxScoreForGameId(gameleague: GetGameLeague): Observable<BoxScore[]> {
+    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameid/' + gameleague);
   }
 
-  getBoxScoreForGameIdPlayoffs(gameId: number): Observable<BoxScore[]> {
-    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameidplayoffs/' + gameId);
+  getBoxScoreForGameIdPlayoffs(gameleague: GetGameLeague): Observable<BoxScore[]> {
+    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameidplayoffs/' + gameleague);
   }
 }

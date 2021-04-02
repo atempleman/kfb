@@ -16,6 +16,9 @@ import { PlayerInjury } from '../_models/playerInjury';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { ContractOffer } from '../_models/contractOffer';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
 
 @Component({
   selector: 'app-freeagents',
@@ -64,31 +67,48 @@ export class FreeagentsComponent implements OnInit {
   constructor(private alertify: AlertifyService, private playerService: PlayerService, private teamService: TeamService,
               private authService: AuthService, private router: Router, private transferService: TransferService,
               private modalService: BsModalService, private spinner: NgxSpinnerService, private fb: FormBuilder,
-              private leagueServie: LeagueService) { }
+              private leagueService: LeagueService) { }
 
   ngOnInit() {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+
+
+
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
     }, error => {
       this.alertify.error('Error getting your team');
     }, () => {
-      // this.backgroundStyle();
-      this.CheckRosterSpots();
-      // this.GetSalaryCapDetails();
-      this.GetContractOffers();
-    });
 
-    this.leagueServie.getLeague().subscribe(result => {
-      this.league = result;
-    }, error => {
-      this.alertify.error('Error getting league details');
     });
-
-    this.GetFreeAgents();
 
     this.searchForm = this.fb.group({
       filter: ['']
     });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
+    this.CheckRosterSpots();
+    this.GetContractOffers();
+    this.GetFreeAgents();
   }
 
   toggleOffersView() {
@@ -101,16 +121,13 @@ export class FreeagentsComponent implements OnInit {
     }
   }
 
-  // toggleFAView(){
-  //   if (this.faView = 0) {
-  //     this.faView = 1;
-  //   } else {
-  //     this.faView = 0;
-  //   }
-  // }
-
   GetContractOffers() {
-    this.teamService.getContractOffersForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getContractOffersForTeam(summary).subscribe(result => {
       this.contractOffers = result;
     }, error => {
       this.alertify.error('Error getting contract offers made');
@@ -134,7 +151,12 @@ export class FreeagentsComponent implements OnInit {
   }
 
   GetSalaryCapDetails() {
-    this.teamService.getTeamSalaryCapDetails(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamSalaryCapDetails(summary).subscribe(result => {
       this.capInfo = result;
     }, error => {
       this.alertify.error('Error getting salary cap details');
@@ -146,7 +168,7 @@ export class FreeagentsComponent implements OnInit {
   GetFreeAgents() {
     this.spinner.show();
 
-    this.playerService.getFreeAgents().subscribe(result => {
+    this.playerService.getFreeAgents(this.league.id).subscribe(result => {
       this.freeAgents = result;
     }, error => {
       this.alertify.error(error);
@@ -157,7 +179,7 @@ export class FreeagentsComponent implements OnInit {
   }
 
   getFreeAgentInjuries() {
-    this.teamService.getInjruiesForFreeAgents().subscribe(result => {
+    this.teamService.getInjruiesForFreeAgents(this.league.id).subscribe(result => {
       this.teamsInjuries = result;
     }, error => {
       this.alertify.error('Error getting teams injuries');
@@ -175,7 +197,12 @@ export class FreeagentsComponent implements OnInit {
   }
 
   CheckRosterSpots() {
-    this.teamService.rosterSpotCheck(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.rosterSpotCheck(summary).subscribe(result => {
       this.rosterSpotAvailable = result;
       console.log(this.rosterSpotAvailable);
     }, error => {
@@ -190,14 +217,14 @@ export class FreeagentsComponent implements OnInit {
 
   signPlayer() {
     const signedPlayer: SignedPlayer = {
-      teamId: this.team.id,
-      playerId: this.selectedPlayer.id
+      teamId: this.team.teamId,
+      playerId: this.selectedPlayer.playerId,
+      leagueId: this.league.id
     };
 
     this.CheckRosterSpots();
 
     this.teamService.signPlayer(signedPlayer).subscribe(result => {
-
     }, error => {
       this.alertify.error('Error signing player');
     }, () => {
@@ -246,7 +273,12 @@ export class FreeagentsComponent implements OnInit {
       // this.displayPaging = 1;
 
       // Now we need to update the listing appropriately
-      this.playerService.getFreeAgentsByPos(this.positionFilter).subscribe(result => {
+      const summary: GetPlayerIdLeague = {
+        playerId: this.positionFilter,
+        leagueId: this.league.id
+      };
+
+      this.playerService.getFreeAgentsByPos(summary).subscribe(result => {
         this.freeAgents = result;
       }, error => {
         this.alertify.error('Error getting filtered players');
@@ -263,7 +295,12 @@ export class FreeagentsComponent implements OnInit {
     const filter = this.searchForm.value.filter;
 
     // Need to call service
-    this.playerService.filterFreeAgents(filter).subscribe(result => {
+    const summary: GetPlayerLeague = {
+      playerName: filter,
+      leagueId: this.league.id
+    };
+
+    this.playerService.filterFreeAgents(summary).subscribe(result => {
       this.freeAgents = result;
     }, error => {
       this.alertify.error('Error getting filtered players');
@@ -365,7 +402,7 @@ export class FreeagentsComponent implements OnInit {
         // Now to create the offer
         const contractOffer: ContractOffer = {
           playerId: this.selectedPlayer.id,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           yearOne: +this.year1Amount,
           guranteedOne: g1,
           yearTwo: +this.year2Amount,
@@ -382,7 +419,8 @@ export class FreeagentsComponent implements OnInit {
           stateSubmitted: this.league.stateId,
           decision: 0,
           playerName: this.selectedPlayer.firstName + ' ' + this.selectedPlayer.surname,
-          contractId: 0
+          contractId: 0,
+          leagueId: this.league.id
         };
 
         this.teamService.saveContractOffer(contractOffer).subscribe(result => {

@@ -36,6 +36,8 @@ import { PlayerInjury } from '../_models/playerInjury';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetDashboardPicks } from '../_models/getDashboardPicks';
+import { GetTeamLeague } from '../_models/getTeamLeague';
 
 @Component({
   selector: 'app-dashboard',
@@ -111,7 +113,7 @@ export class DashboardComponent implements OnInit {
   }
 
   setupLeague() {
-      this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
+      this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
         this.league = result;
       }, error => {
         this.alertify.error('Error getting League Details');
@@ -167,19 +169,19 @@ export class DashboardComponent implements OnInit {
       }
 
       if (this.league.stateId > 7) {
-        this.leagueService.getMvpTopFive().subscribe(result => {
+        this.leagueService.getMvpTopFive(this.league.id).subscribe(result => {
           this.mvp = result;
         }, error => {
           this.alertify.error('Error getting MVP');
         });
 
-        this.leagueService.getSixthManTopFive().subscribe(result => {
+        this.leagueService.getSixthManTopFive(this.league.id).subscribe(result => {
           this.sixth = result;
         }, error => {
           this.alertify.error('Error getting Sixth Man');
         });
 
-        this.leagueService.getDpoyTopFive().subscribe(result => {
+        this.leagueService.getDpoyTopFive(this.league.id).subscribe(result => {
           this.dpoy = result;
         }, error => {
           this.alertify.error('Error getting DPOY');
@@ -325,23 +327,23 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getUpcomingEvents() {
-    // Preseason
-    if (this.league.stateId === 6) {
-      // Need to get the games for the day
-      this.leagueService.getPreseasonGamesForTomorrow(this.league.id).subscribe(result => {
-        this.upcomingGames = result;
-      }, error => {
-        this.alertify.error('Error getting upcoming games');
-      });
-    } else if (this.league.stateId === 7) {
-      this.leagueService.getSeasonGamesForTomorrow(this.league.id).subscribe(result => {
-        this.upcomingGames = result;
-      }, error => {
-        this.alertify.error('Error getting upcoming games');
-      });
-    }
-  }
+  // getUpcomingEvents() {
+  //   // Preseason
+  //   if (this.league.stateId === 6) {
+  //     // Need to get the games for the day
+  //     this.leagueService.getPreseasonGamesForTomorrow(this.league.id).subscribe(result => {
+  //       this.upcomingGames = result;
+  //     }, error => {
+  //       this.alertify.error('Error getting upcoming games');
+  //     });
+  //   } else if (this.league.stateId === 7) {
+  //     this.leagueService.getSeasonGamesForTomorrow(this.league.id).subscribe(result => {
+  //       this.upcomingGames = result;
+  //     }, error => {
+  //       this.alertify.error('Error getting upcoming games');
+  //     });
+  //   }
+  // }
 
   getTeamRoster() {
     const quickView: GetRosterQuickView = {
@@ -357,7 +359,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getTeamInjuries() {
-    this.teamService.getInjuriesForTeam(this.team.id).subscribe(result => {
+    const quickView: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.teamService.getInjuriesForTeam(quickView).subscribe(result => {
       this.quickTeamInjuries = result;
     }, error => {
       this.alertify.error('Error getting injuries');
@@ -390,6 +396,7 @@ export class DashboardComponent implements OnInit {
       awayId: game.awayTeamId,
       homeId: game.homeTeamId,
       gameId: game.id,
+      leagueId: this.league.id
     };
 
     this.gameEngine.startPreseasonGame(simGame).subscribe(result => {
@@ -411,9 +418,8 @@ export class DashboardComponent implements OnInit {
       awayId: game.awayTeamId,
       homeId: game.homeTeamId,
       gameId: game.id,
+      leagueId: this.league.id
     };
-
-    console.log(simGame);
 
     this.gameEngine.startPlayoffGame(simGame).subscribe(result => {
     }, error => {
@@ -433,6 +439,7 @@ export class DashboardComponent implements OnInit {
       awayId: game.awayTeamId,
       homeId: game.homeTeamId,
       gameId: game.id,
+      leagueId: this.league.id
     };
 
     this.gameEngine.startSeasonGame(simGame).subscribe(result => {
@@ -519,7 +526,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getDraftTracker() {
-    this.draftService.getDraftTracker().subscribe(result => {
+    this.draftService.getDraftTracker(this.league.id).subscribe(result => {
       this.tracker = result;
     }, error => {
       this.alertify.error('Error getting draft tracker');
@@ -530,22 +537,35 @@ export class DashboardComponent implements OnInit {
   }
 
   getPicksToDisplay() {
+    const pickleague: GetDashboardPicks = {
+      pick: -1,
+      leagueId: this.league.id
+    };
     // Get the previous pick
-    this.draftService.getDashboardPicks(-1).subscribe(result => {
+    this.draftService.getDashboardPicks(pickleague).subscribe(result => {
       this.previousPick = result;
     }, error => {
       this.alertify.error('Error getting last pick');
     });
 
+    const pickleagueTwo: GetDashboardPicks = {
+      pick: 0,
+      leagueId: this.league.id
+    };
     // Get the Current pick
-    this.draftService.getDashboardPicks(0).subscribe(result => {
+    this.draftService.getDashboardPicks(pickleagueTwo).subscribe(result => {
       this.currentPick = result;
     }, error => {
       this.alertify.error('Error getting current pick');
     });
 
+    const pickleagueThree: GetDashboardPicks = {
+      pick: 1,
+      leagueId: this.league.id
+    };
+
     // Get Next Pick
-    this.draftService.getDashboardPicks(1).subscribe(result => {
+    this.draftService.getDashboardPicks(pickleagueThree).subscribe(result => {
       this.nextPick = result;
     }, error => {
       this.alertify.error('Error getting next pick');
@@ -554,8 +574,14 @@ export class DashboardComponent implements OnInit {
 
   viewTeam(teamMascot: string) {
     let team: Team;
+
+    const teamleague: GetTeamLeague = {
+      teamname: teamMascot,
+      leagueId: this.league.id
+    };
+
     // Need to go a call to get the team id
-    this.teamService.getTeamForTeamMascot(teamMascot).subscribe(result => {
+    this.teamService.getTeamForTeamMascot(teamleague).subscribe(result => {
       team = result;
     }, error => {
       this.alertify.error('Error getting players team');
@@ -566,7 +592,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getYesterdaysTransactions() {
-    this.leagueService.getYesterdaysTransactins().subscribe(result => {
+    this.leagueService.getYesterdaysTransactins(this.league.id).subscribe(result => {
       this.yesterdaysTransactions = result;
     }, error => {
       this.alertify.error('Error getting transactions');

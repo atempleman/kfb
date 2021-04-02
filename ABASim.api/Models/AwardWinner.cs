@@ -17,5 +17,7 @@ namespace ABASim.api.Models
         public int Dpoy { get; set; }
 
         public int Sixth { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

@@ -9,6 +9,7 @@ import { InboxMessage } from '../_models/inboxMessage';
 import { ContactService } from '../_services/contact.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {formatDate} from '@angular/common';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-inbox',
@@ -30,12 +31,6 @@ export class InboxComponent implements OnInit {
               private authService: AuthService, private contactService: ContactService, private modalService: BsModalService) { }
 
   ngOnInit() {
-    this.leagueService.getLeague().subscribe(result => {
-      this.league = result;
-    }, () => {
-      this.alertify.error('Error getting league details');
-    });
-
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
@@ -43,10 +38,24 @@ export class InboxComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
-      this.getMessages();
+      this.setupLeague();
     });
+  }
 
-    this.teamService.getAllTeams().subscribe(result => {
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
+    this.getMessages();
+    
+    this.teamService.getAllTeams(this.league.id).subscribe(result => {
       // find the index of the users team
       const index = result.findIndex(x => x.id === this.team.id);
       result.splice(index, 1);
@@ -57,7 +66,12 @@ export class InboxComponent implements OnInit {
   }
 
   getMessages() {
-    this.contactService.getInboxMessages(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
+    this.contactService.getInboxMessages(summary).subscribe(result => {
       this.messages = result;
     }, error => {
       this.alertify.error('Error getting your messages');
@@ -65,9 +79,7 @@ export class InboxComponent implements OnInit {
   }
 
   deleteMessage(message: number) {
-    console.log(message);
     this.contactService.deleteInboxMessage(message).subscribe(result => {
-
     }, error => {
       this.alertify.error('Error deleting message');
     }, () => {
@@ -87,17 +99,12 @@ export class InboxComponent implements OnInit {
   }
 
   public openModal(template: TemplateRef<any>, message: InboxMessage) {
-    console.log('testing');
-
     this.messageState = 1;
     this.viewedMessage = message;
-    console.log(message.id);
     this.contactService.markMessageRead(message.id).subscribe(result => {
-
     }, error => {
       this.alertify.error('Error marking message read');
     });
-
     this.modalRef = this.modalService.show(template);
   }
 
@@ -111,10 +118,6 @@ export class InboxComponent implements OnInit {
   }
 
   updateMessageForm() {
-    // this.selectedTeam
-    // now need to get the subject and body values
-    // var inputValue = (<HTMLInputElement>document.getElementById('')).value;
-    // const subjectValue = (document.getElementById('subject') as HTMLInputElement).value;
     const bodyValue = (document.getElementById('body') as HTMLInputElement).value;
     const dt = formatDate(new Date(), 'dd/MM/yyyy', 'en');
 
@@ -122,7 +125,7 @@ export class InboxComponent implements OnInit {
 
     const message: InboxMessage = {
       id: 0,
-      senderId: this.team.id,
+      senderId: this.team.teamId,
       senderName: '',
       senderTeam: this.team.mascot,
       receiverId: this.viewedMessage.senderId,
@@ -131,7 +134,8 @@ export class InboxComponent implements OnInit {
       subject: this.replySubject,
       body: bodyValue,
       messageDate: dt,
-      isNew: 1
+      isNew: 1,
+      leagueId: this.league.id
     };
     this.contactService.sendInboxMessage(message).subscribe(result => {
 
@@ -172,7 +176,8 @@ export class InboxComponent implements OnInit {
       subject: subjectValue,
       body: bodyValue,
       messageDate: dt,
-      isNew: 1
+      isNew: 1,
+      leagueId: this.league.id
     };
     this.contactService.sendInboxMessage(message).subscribe(result => {
 

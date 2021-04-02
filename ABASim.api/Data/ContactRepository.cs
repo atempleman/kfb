@@ -17,9 +17,9 @@ namespace ABASim.api.Data
             _context = context;
         }
 
-        public async Task<InboxMessageCountDto> CountOfMessages(int teamId)
+        public async Task<InboxMessageCountDto> CountOfMessages(GetRosterQuickViewDto dto)
         {
-            var messages = await _context.InboxMessages.Where(x => x.ReceiverId == teamId && x.IsNew == 1).ToListAsync();
+            var messages = await _context.InboxMessages.Where(x => x.ReceiverId == dto.TeamId && x.IsNew == 1 && x.LeagueId == dto.LeagueId).ToListAsync();
             InboxMessageCountDto com = new InboxMessageCountDto
             {
                 CountOfMessages = messages.Count
@@ -53,15 +53,15 @@ namespace ABASim.api.Data
             return chatRecords;
         }
 
-        public async Task<IEnumerable<InboxMessageDto>> GetInboxMessages(int teamId)
+        public async Task<IEnumerable<InboxMessageDto>> GetInboxMessages(GetRosterQuickViewDto dto)
         {
             List<InboxMessageDto> messages = new List<InboxMessageDto>();
 
-            var inboxMessages = await _context.InboxMessages.Where(x => x.ReceiverId == teamId).ToListAsync();
+            var inboxMessages = await _context.InboxMessages.Where(x => x.ReceiverId == dto.TeamId && x.LeagueId == dto.LeagueId).ToListAsync();
 
             foreach (var im in inboxMessages)
             {
-                InboxMessageDto dto = new InboxMessageDto
+                InboxMessageDto imdto = new InboxMessageDto
                 {
                     Id = im.Id,
                     SenderId = im.SenderId,
@@ -73,9 +73,10 @@ namespace ABASim.api.Data
                     Subject = im.Subject,
                     Body = im.Body,
                     MessageDate = im.MessageDate,
-                    IsNew = im.IsNew
+                    IsNew = im.IsNew,
+                    LeagueId = dto.LeagueId
                 };
-                messages.Add(dto);
+                messages.Add(imdto);
             }
             return messages;
         }
@@ -134,7 +135,8 @@ namespace ABASim.api.Data
                 Subject = message.Subject,
                 Body = message.Body,
                 MessageDate = message.MessageDate,
-                IsNew = message.IsNew
+                IsNew = message.IsNew,
+                LeagueId = message.LeagueId
             };
             await _context.AddAsync(im);
             return await _context.SaveChangesAsync() > 1;

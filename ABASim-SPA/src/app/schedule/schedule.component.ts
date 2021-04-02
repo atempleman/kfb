@@ -7,6 +7,9 @@ import { AlertifyService } from '../_services/alertify.service';
 import { Schedule } from '../_models/schedule';
 import { TransferService } from '../_services/transfer.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { TeamService } from '../_services/team.service';
+import { Team } from '../_models/team';
+import { GetScheduleLeague } from '../_models/getScheduleLeague';
 
 @Component({
   selector: 'app-schedule',
@@ -18,19 +21,32 @@ export class ScheduleComponent implements OnInit {
   isAdmin = 0;
   schedules: Schedule[] = [];
   gameDayViewing = 0;
+  team: Team;
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
-              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService) { }
+              private authService: AuthService, private transferService: TransferService, private spinner: NgxSpinnerService,
+              private teamService: TeamService) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.leagueService.getLeague().subscribe(result => {
+
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
-      // Now need to get the schedule
-      // console.log(localStorage.getItem('teamId'));
       this.getScheduleForDay(this.league.day);
     });
   }
@@ -42,7 +58,12 @@ export class ScheduleComponent implements OnInit {
       this.gameDayViewing = 150;
     }
 
-    this.leagueService.getScheduleGames(this.gameDayViewing).subscribe(result => {
+    const summary: GetScheduleLeague = {
+      day: this.gameDayViewing,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getScheduleGames(summary).subscribe(result => {
       this.schedules = result;
     }, error => {
       this.alertify.error('Error getting schedule games');
@@ -86,7 +107,12 @@ export class ScheduleComponent implements OnInit {
       this.gameDayViewing = this.gameDayViewing + 3;
     }
 
-    this.leagueService.getScheduleGames(this.gameDayViewing).subscribe(result => {
+    const summary: GetScheduleLeague = {
+      day: this.gameDayViewing,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getScheduleGames(summary).subscribe(result => {
       this.schedules = result;
       console.log(this.schedules);
     }, error => {
@@ -101,7 +127,12 @@ export class ScheduleComponent implements OnInit {
       this.gameDayViewing = this.gameDayViewing - 3;
     }
 
-    this.leagueService.getScheduleGames(this.gameDayViewing).subscribe(result => {
+    const summary: GetScheduleLeague = {
+      day: this.gameDayViewing,
+      leagueId: this.league.id
+    };
+
+    this.leagueService.getScheduleGames(summary).subscribe(result => {
       this.schedules = result;
       console.log(this.schedules);
     }, error => {

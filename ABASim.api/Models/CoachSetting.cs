@@ -11,5 +11,7 @@ namespace ABASim.api.Models
         public int GoToPlayerThree { get; set; }
 
         public int TeamId { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

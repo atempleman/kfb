@@ -16,6 +16,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { PlayerContractDetailed } from '../_models/playerContractDetailed';
 import { TradePlayerView } from '../_models/tradePlayerView';
+import { AuthService } from '../_services/auth.service';
+import { GetTeamLeague } from '../_models/getTeamLeague';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-trades',
@@ -83,18 +86,36 @@ export class TradesComponent implements OnInit {
 
   constructor(private alertify: AlertifyService, private router: Router, private teamService: TeamService,
     private transferService: TransferService, private modalService: BsModalService,
-    private fb: FormBuilder, private spinner: NgxSpinnerService) { }
+    private fb: FormBuilder, private spinner: NgxSpinnerService, private authService: AuthService) { }
 
   ngOnInit() {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
     const teamId = +localStorage.getItem('teamId');
-    this.teamService.getAllTeamsExceptUsers(teamId).subscribe(result => {
+
+    const teamleague: GetRosterQuickView = {
+      teamId: teamId,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getAllTeamsExceptUsers(teamleague).subscribe(result => {
       this.allOtherTeams = result;
       this.teamSelected = this.allOtherTeams[0].id;
     }, error => {
       this.alertify.error('Error gettings teams to trade with');
     });
 
-    this.teamService.getTeamForTeamId(teamId).subscribe(result => {
+    this.teamService.getTeamForTeamId(teamleague).subscribe(result => {
       this.team = result;
     }, error => {
       this.alertify.error('Error getting your team');
@@ -102,13 +123,13 @@ export class TradesComponent implements OnInit {
       this.backgroundStyle();
     });
 
-    this.teamService.getTradePlayerView(teamId).subscribe(result => {
+    this.teamService.getTradePlayerView(teamleague).subscribe(result => {
       this.yourTeamRoster = result;
     }, error => {
       this.alertify.error('Error gett player details');
     });
 
-    this.teamService.getTradeOffers(teamId).subscribe(result => {
+    this.teamService.getTradeOffers(teamleague).subscribe(result => {
       this.offeredTrades = result;
       this.offeredTrades.forEach(element => {
         const value = this.tradeIds.includes(element.tradeId);
@@ -124,7 +145,7 @@ export class TradesComponent implements OnInit {
       this.tradesReady = true;
     });
 
-    this.teamService.getTeamDraftPicks(teamId).subscribe(result => {
+    this.teamService.getTeamDraftPicks(teamleague).subscribe(result => {
       console.log('ash');
       
       this.yourTeamPicks = result;
@@ -135,7 +156,7 @@ export class TradesComponent implements OnInit {
       this.alertify.error('Error getting your teams picks');
     });
 
-    this.teamService.getTeamSalaryCapDetails(teamId).subscribe(result => {
+    this.teamService.getTeamSalaryCapDetails(teamleague).subscribe(result => {
       this.yourSalaryCapSpace = result;
       this.yourDefaultCapSpace = result;
     }, error => {
@@ -179,7 +200,12 @@ export class TradesComponent implements OnInit {
     const temp = this.allOtherTeams.filter(x => x.id == this.teamSelected);
     this.tradeTeam = temp[0];
 
-    this.teamService.getTradePlayerView(this.tradeTeam.id).subscribe(result => {
+    const teamleague: GetRosterQuickView = {
+      teamId: this.tradeTeam.id,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTradePlayerView(teamleague).subscribe(result => {
       this.selectedTeamRoster = result;
     }, error => {
       this.alertify.error('Error get player details');
@@ -187,7 +213,12 @@ export class TradesComponent implements OnInit {
       this.displayTeams = 1;
     });
 
-    this.teamService.getTeamDraftPicks(this.teamSelected).subscribe(result => {
+    const selectedteamleague: GetRosterQuickView = {
+      teamId: this.teamSelected,
+      leagueId: this.league.id
+    };
+
+    this.teamService.getTeamDraftPicks(selectedteamleague).subscribe(result => {
       this.selectedTeamPicks = result;
       // this.masterSelectedTeamPicks = result.map(x => Object.assign({}, x));
       this.selectedTeamPicks.forEach(val => this.masterSelectedTeamPicks.push(Object.assign({}, val)));
@@ -196,7 +227,7 @@ export class TradesComponent implements OnInit {
       this.alertify.error('Error getting selected teams picks');
     });
 
-    this.teamService.getTeamSalaryCapDetails(this.teamSelected).subscribe(result => {
+    this.teamService.getTeamSalaryCapDetails(selectedteamleague).subscribe(result => {
       this.theirSalaryCapSpace = result;
     }, error => {
       this.alertify.error('Error getting selected teams salary cap');
@@ -284,10 +315,12 @@ export class TradesComponent implements OnInit {
       if (this.proposedTradeSending.length !== 0 && this.proposedTradeReceiving.length !== 0) {
         // Now need to create an array to pass through into API
         this.proposedTradeSending.forEach(element => {
+          element.leagueId = this.league.id;
           this.actualTradeOffer.push(element);
         });
 
         this.proposedTradeReceiving.forEach(element => {
+          element.leagueId = this.league.id;
           this.actualTradeOffer.push(element);
         });
 
@@ -520,7 +553,8 @@ export class TradesComponent implements OnInit {
         status: 0,
         yearOne: player.currentSeasonValue,
         totalValue: player.totalValue,
-        years: player.years
+        years: player.years,
+        leagueId: this.league.id
       };
 
       this.proposedTradeSending.push(trade);
@@ -552,7 +586,8 @@ export class TradesComponent implements OnInit {
         status: 0,
         yearOne: player.currentSeasonValue,
         totalValue: player.totalValue,
-        years: player.years
+        years: player.years,
+        leagueId: this.league.id
       };
 
       this.proposedTradeReceiving.push(trade);
@@ -585,7 +620,8 @@ export class TradesComponent implements OnInit {
         status: 0,
         yearOne: 0,
         totalValue: 0,
-        years: 0
+        years: 0,
+        leagueId: this.league.id
       };
       console.log(trade);
       this.proposedTradeSending.push(trade);
@@ -612,7 +648,8 @@ export class TradesComponent implements OnInit {
         status: 0,
         yearOne: 0,
         totalValue: 0,
-        years: 0
+        years: 0,
+        leagueId: this.league.id
       };
 
       this.proposedTradeReceiving.push(trade);
@@ -690,8 +727,8 @@ export class TradesComponent implements OnInit {
     this.tradeDisplay = this.offeredTrades.filter(x => x.tradeId === tradeId);
 
     console.log('TeamId: ' + this.team.id);
-    console.log('Receiving Team Id: ' + this.tradeDisplay[0].receivingTeam);
-    console.log('Trading Team Id: ' + this.tradeDisplay[0].tradingTeam);
+    // console.log('Receiving Team Id: ' + this.tradeDisplay[0].receivingTeam);
+    // console.log('Trading Team Id: ' + this.tradeDisplay[0].tradingTeam);
 
     if (this.team.id !== this.tradeDisplay[0].receivingTeam) {
       this.recevingTeamText = this.tradesToDisplay[0].receivingTeamName;

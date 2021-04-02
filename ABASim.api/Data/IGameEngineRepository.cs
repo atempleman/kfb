@@ -8,17 +8,17 @@ namespace ABASim.api.Data
     public interface IGameEngineRepository
     {
         //  Task<bool> AddDraftRanking(AddDraftRankingDto draftRanking);
-         Task<Team> GetTeam(int teamId);
+         Task<Team> GetTeam(int teamId, int leagueId);
 
-         Task<Player> GetPlayer(int playerId);
+         Task<Player> GetPlayer(int playerId, int leagueId);
 
-         Task<PlayerRating> GetPlayerRating(int playerId);
+         Task<PlayerRating> GetPlayerRating(int playerId, int leagueId);
 
-         Task<PlayerTendancy> GetPlayerTendancy(int playerId);
+         Task<PlayerTendancy> GetPlayerTendancy(int playerId, int leagueId);
 
-         Task<IEnumerable<Roster>> GetRoster(int teamId);
+         Task<IEnumerable<Roster>> GetRoster(int teamId, int leagueId);
 
-         Task<IEnumerable<DepthChart>> GetDepthChart(int teamId);
+         Task<IEnumerable<DepthChart>> GetDepthChart(int teamId, int leagueId);
 
          Task<int> GetLatestGameId();
 
@@ -26,29 +26,29 @@ namespace ABASim.api.Data
 
          Task<bool> SaveTeamsBoxScorePlayoffs(int gameId, List<BoxScore> boxScores);
 
-         Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(int gameId);
+         Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(GameLeagueDto dto);
 
-         Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(int gameId);
+         Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(GameLeagueDto dto);
 
          Task<bool> SavePlayByPlays(List<PlayByPlay> playByPlays);
 
          Task<bool> SavePlayByPlaysPlayoffs(List<PlayByPlay> playByPlays);
 
-         Task<bool> SavePreseasonResult(int awayScore, int homeScore, int winningTeamId, int gameId);
+         Task<bool> SavePreseasonResult(int awayScore, int homeScore, int winningTeamId, int gameId, int leagueId);
 
-         Task<bool> SaveSeasonResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId);
+         Task<bool> SaveSeasonResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId, int leagueId);
 
-         Task<bool> SavePlayoffResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId);
+         Task<bool> SavePlayoffResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId, int leagueId);
 
          List<InjuryType> GetInjuryTypesForSeverity(int severity);
 
          Task<bool> SaveInjury(List<PlayerInjury> injuries);
 
-         Task<PlayerInjury> GetPlayerInjury(int playerId);
+         Task<PlayerInjury> GetPlayerInjury(int playerId, int leagueId);
 
-         Task<IEnumerable<CoachSetting>> GetCoachSettings(int teamId);
+         Task<IEnumerable<CoachSetting>> GetCoachSettings(int teamId, int leagueId);
 
-         Task<TeamStrategy> GetTeamStrategies(int teamId);
+         Task<TeamStrategy> GetTeamStrategies(int teamId, int leagueId);
 
          Task<bool> MvpVotes(List<BoxScore> boxScores);
 

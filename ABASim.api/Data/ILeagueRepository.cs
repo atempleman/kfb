@@ -11,7 +11,7 @@ namespace ABASim.api.Data
 
          Task<League> GetLeagueForUserId(int userId);
          
-         Task<League> GetLeague();
+         Task<League> GetLeague(int leagueId);
 
          Task<bool> CheckLeagueCode(string leagueCode);
 
@@ -29,27 +29,27 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<CurrentDayGamesDto>> GetFirstRoundGamesForToday(int leagueId);
 
-         Task<IEnumerable<StandingsDto>> GetStandingsForLeague();
+         Task<IEnumerable<StandingsDto>> GetStandingsForLeague(int leagueId);
 
-         Task<IEnumerable<StandingsDto>> GetStandingsForConference(int conference);
+         Task<IEnumerable<StandingsDto>> GetStandingsForConference(GetStandingLeagueDto conference);
 
-         Task<IEnumerable<StandingsDto>> GetStandingsForDivision(int division);
+         Task<IEnumerable<StandingsDto>> GetStandingsForDivision(GetStandingLeagueDto division);
 
-         Task<IEnumerable<ScheduleDto>> GetScheduleForDisplay(int day);
+         Task<IEnumerable<ScheduleDto>> GetScheduleForDisplay(GetScheduleLeagueDto day);
 
-         Task<IEnumerable<PlayoffScheduleDto>> GetPlayoffScheduleForDisplay(int day);
+         Task<IEnumerable<PlayoffScheduleDto>> GetPlayoffScheduleForDisplay(GetScheduleLeagueDto day);
 
-         Task<IEnumerable<TransactionDto>> GetTransactions();
+         Task<IEnumerable<TransactionDto>> GetTransactions(int leagueId);
 
-         Task<IEnumerable<PlayByPlay>> GetGamePlayByPlay(int gameId);
+         Task<IEnumerable<PlayByPlay>> GetGamePlayByPlay(GameLeagueDto dto);
 
-         Task<IEnumerable<PlayByPlayPlayoff>> GetGamePlayByPlayPlayoffs(int gameId);
+         Task<IEnumerable<PlayByPlayPlayoff>> GetGamePlayByPlayPlayoffs(GameLeagueDto dto);
 
-         Task<GameDetailsDto> GetPreseasonGameDetails(int gameId);
+         Task<GameDetailsDto> GetPreseasonGameDetails(GameLeagueDto dto);
 
-         Task<GameDetailsDto> GetSeasonGameDetails(int gameId);
+         Task<GameDetailsDto> GetSeasonGameDetails(GameLeagueDto dto);
 
-         Task<GameDetailsDto> GetPlayoffGameDetails(int gameId);
+         Task<GameDetailsDto> GetPlayoffGameDetails(GameLeagueDto dto);
 
          Task<IEnumerable<LeaguePointsDto>> GetLeagueScoring();
 
@@ -59,66 +59,66 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<LeagueOtherDto>> GetLeagueOther();
 
-         Task<IEnumerable<LeagueLeaderPointsDto>> GetPointsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderPointsDto>> GetPointsLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderPointsDto>> GetPlayoffsPointsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderPointsDto>> GetPlayoffsPointsLeagueLeaders(GetStatLeagueDto page);
 
          Task<IEnumerable<LeagueLeaderPointsDto>> GetTopFivePoints(int leagueId);
 
-         Task<IEnumerable<LeagueLeaderAssistsDto>> GetAssistsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderAssistsDto>> GetAssistsLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderAssistsDto>> GetPlayoffAssistsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderAssistsDto>> GetPlayoffAssistsLeagueLeaders(GetStatLeagueDto page);
 
          Task<IEnumerable<LeagueLeaderAssistsDto>> GetTopFiveAssists(int leagueId);
 
-         Task<IEnumerable<LeagueLeaderReboundsDto>> GetReboundsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderReboundsDto>> GetReboundsLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderReboundsDto>> GetPlayoffReboundsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderReboundsDto>> GetPlayoffReboundsLeagueLeaders(GetStatLeagueDto page);
 
          Task<IEnumerable<LeagueLeaderReboundsDto>> GetTopFiveRebounds(int leagueId);
 
-         Task<IEnumerable<LeagueLeaderBlocksDto>> GetBlocksLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderBlocksDto>> GetBlocksLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderBlocksDto>> GetPlayoffBlocksLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderBlocksDto>> GetPlayoffBlocksLeagueLeaders(GetStatLeagueDto page);
 
          Task<IEnumerable<LeagueLeaderBlocksDto>> GetTopFiveBlocks(int leagueId);
 
-         Task<IEnumerable<LeagueLeaderStealsDto>> GetStealsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderStealsDto>> GetStealsLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderStealsDto>> GetPlayoffStealsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderStealsDto>> GetPlayoffStealsLeagueLeaders(GetStatLeagueDto page);
 
          Task<IEnumerable<LeagueLeaderStealsDto>> GetTopFiveSteals(int leagueId);
 
-         Task<IEnumerable<LeagueLeaderMinutesDto>> GetMinutesLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderMinutesDto>> GetMinutesLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderMinutesDto>> GetPlayoffMinutesLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderMinutesDto>> GetPlayoffMinutesLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderFoulsDto>> GetFoulsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderFoulsDto>> GetFoulsLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderFoulsDto>> GetPlayoffFoulsLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderFoulsDto>> GetPlayoffFoulsLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderTurnoversDto>> GetTurnoversLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderTurnoversDto>> GetTurnoversLeagueLeaders(GetStatLeagueDto page);
 
-         Task<IEnumerable<LeagueLeaderTurnoversDto>> GetPlayoffTurnoversLeagueLeaders(int page);
+         Task<IEnumerable<LeagueLeaderTurnoversDto>> GetPlayoffTurnoversLeagueLeaders(GetStatLeagueDto page);
 
-         int GetCountOfPointsLeagueLeaders();
+         int GetCountOfPointsLeagueLeaders(int leagueId);
 
-         int GetCountOfPointsLeagueLeadersPlayoffs();
+         int GetCountOfPointsLeagueLeadersPlayoffs(int leagueId);
 
          Task<IEnumerable<PlayoffSummaryDto>> GetPlayoffSummariesForRound(GetPlayoffSummaryDto round);
 
          Task<Team> GetChampion();
 
-         Task<IEnumerable<TransactionDto>> GetYesterdaysTransactions();
+         Task<IEnumerable<TransactionDto>> GetYesterdaysTransactions(int leagueId);
 
-         Task<IEnumerable<LeaguePlayerInjuryDto>> GetLeaguePlayerInjuries();
+         Task<IEnumerable<LeaguePlayerInjuryDto>> GetLeaguePlayerInjuries(int leagueId);
 
-         Task<IEnumerable<VotesDto>> GetMvpTopFive();
+         Task<IEnumerable<VotesDto>> GetMvpTopFive(int leagueId);
 
-         Task<IEnumerable<VotesDto>> GetSixthManTopFive();
+         Task<IEnumerable<VotesDto>> GetSixthManTopFive(int leagueId);
 
-         Task<IEnumerable<VotesDto>> GetDpoyTopFive();
+         Task<IEnumerable<VotesDto>> GetDpoyTopFive(int leagueId);
 
-         Task<IEnumerable<VotesDto>> GetAllNBATeams();
+         Task<IEnumerable<VotesDto>> GetAllNBATeams(int leagueId);
     }
 }

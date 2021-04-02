@@ -15,15 +15,58 @@ namespace ABASim.api.Data
             _context = context;
         }
 
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(int gameId)
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(GameLeagueDto dto)
         {
             List<BoxScore> boxScores = new List<BoxScore>();
-            var gameBoxScores = await _context.GameBoxScores.Where(x => x.GameId == gameId).ToListAsync();
+            var gameBoxScores = await _context.GameBoxScores.Where(x => x.GameId == dto.GameId && x.LeagueId == dto.LeagueId).ToListAsync();
 
             foreach (var gbs in gameBoxScores)
             {
                 // Need to get player name
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == gbs.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == gbs.PlayerId && x.LeagueId == dto.LeagueId);
+
+                BoxScore bs = new BoxScore
+                {
+                    Id = gbs.PlayerId,
+                    ScheduleId = gbs.GameId,
+                    TeamId = gbs.TeamId,
+                    FirstName = player.FirstName,
+                    LastName = player.Surname,
+                    Minutes = gbs.Minutes,
+                    Points = gbs.Points,
+                    Rebounds = gbs.Rebounds,
+                    Assists = gbs.Assists,
+                    Steals = gbs.Steals,
+                    Blocks = gbs.Blocks,
+                    BlockedAttempts = gbs.BlockedAttempts,
+                    FGM = gbs.FieldGoalsMade,
+                    FGA = gbs.FieldGoalsAttempted,
+                    ThreeFGM = gbs.ThreeFieldGoalsMade,
+                    ThreeFGA = gbs.ThreeFieldGoalsAttempted,
+                    FTM = gbs.FreeThrowsMade,
+                    FTA = gbs.FreeThrowsAttempted,
+                    ORebs = gbs.ORebs,
+                    DRebs = gbs.DRebs,
+                    Turnovers = gbs.Turnovers,
+                    Fouls = gbs.Fouls,
+                    PlusMinus = gbs.PlusMinus,
+                    LeagueId = dto.LeagueId
+                };
+                boxScores.Add(bs);
+            }
+
+            return boxScores;
+        }
+
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(GameLeagueDto dto)
+        {
+            List<BoxScore> boxScores = new List<BoxScore>();
+            var gameBoxScores = await _context.PlayoffBoxScores.Where(x => x.GameId == dto.GameId && x.LeagueId == dto.LeagueId).ToListAsync();
+
+            foreach (var gbs in gameBoxScores)
+            {
+                // Need to get player name
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == gbs.PlayerId && x.LeagueId == dto.LeagueId);
 
                 BoxScore bs = new BoxScore
                 {
@@ -49,7 +92,8 @@ namespace ABASim.api.Data
                     DRebs = gbs.DRebs,
                     Turnovers = gbs.Turnovers,
                     Fouls = gbs.Fouls,
-                    PlusMinus = gbs.PlusMinus
+                    PlusMinus = gbs.PlusMinus,
+                    LeagueId = dto.LeagueId
                 };
                 boxScores.Add(bs);
             }
@@ -57,51 +101,9 @@ namespace ABASim.api.Data
             return boxScores;
         }
 
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(int gameId)
+        public async Task<IEnumerable<DepthChart>> GetDepthChart(int teamId, int leagueId)
         {
-            List<BoxScore> boxScores = new List<BoxScore>();
-            var gameBoxScores = await _context.PlayoffBoxScores.Where(x => x.GameId == gameId).ToListAsync();
-
-            foreach (var gbs in gameBoxScores)
-            {
-                // Need to get player name
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == gbs.PlayerId);
-
-                BoxScore bs = new BoxScore
-                {
-                    Id = gbs.Id,
-                    ScheduleId = gbs.GameId,
-                    TeamId = gbs.TeamId,
-                    FirstName = player.FirstName,
-                    LastName = player.Surname,
-                    Minutes = gbs.Minutes,
-                    Points = gbs.Points,
-                    Rebounds = gbs.Rebounds,
-                    Assists = gbs.Assists,
-                    Steals = gbs.Steals,
-                    Blocks = gbs.Blocks,
-                    BlockedAttempts = gbs.BlockedAttempts,
-                    FGM = gbs.FieldGoalsMade,
-                    FGA = gbs.FieldGoalsAttempted,
-                    ThreeFGM = gbs.ThreeFieldGoalsMade,
-                    ThreeFGA = gbs.ThreeFieldGoalsAttempted,
-                    FTM = gbs.FreeThrowsMade,
-                    FTA = gbs.FreeThrowsAttempted,
-                    ORebs = gbs.ORebs,
-                    DRebs = gbs.DRebs,
-                    Turnovers = gbs.Turnovers,
-                    Fouls = gbs.Fouls,
-                    PlusMinus = gbs.PlusMinus
-                };
-                boxScores.Add(bs);
-            }
-
-            return boxScores;
-        }
-
-        public async Task<IEnumerable<DepthChart>> GetDepthChart(int teamId)
-        {
-            var depthChart = await _context.DepthCharts.Where(x => x.TeamId == teamId).ToListAsync();
+            var depthChart = await _context.DepthCharts.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).ToListAsync();
             return depthChart;
         }
 
@@ -117,33 +119,33 @@ namespace ABASim.api.Data
             return 0;
         }
 
-        public async Task<Player> GetPlayer(int playerId)
+        public async Task<Player> GetPlayer(int playerId, int leagueId)
         {
-            var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId);
+            var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId && x.LeagueId == leagueId);
             return player;
         }
 
-        public async Task<PlayerRating> GetPlayerRating(int playerId)
+        public async Task<PlayerRating> GetPlayerRating(int playerId, int leagueId)
         {
-            var playerRating = await _context.PlayerRatings.FirstOrDefaultAsync(x => x.PlayerId == playerId);
+            var playerRating = await _context.PlayerRatings.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
             return playerRating;
         }
 
-        public async Task<PlayerTendancy> GetPlayerTendancy(int playerId)
+        public async Task<PlayerTendancy> GetPlayerTendancy(int playerId, int leagueId)
         {
-            var playerTendancy = await _context.PlayerTendancies.FirstOrDefaultAsync(x => x.PlayerId == playerId);
+            var playerTendancy = await _context.PlayerTendancies.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
             return playerTendancy;
         }
 
-        public async Task<IEnumerable<Roster>> GetRoster(int teamId)
+        public async Task<IEnumerable<Roster>> GetRoster(int teamId, int leagueId)
         {
-            var roster = await _context.Rosters.Where(x => x.TeamId == teamId).ToListAsync();
+            var roster = await _context.Rosters.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).ToListAsync();
             return roster;
         }
 
-        public async Task<Team> GetTeam(int teamId)
+        public async Task<Team> GetTeam(int teamId, int leagueId)
         {
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == teamId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == teamId && x.LeagueId == leagueId);
             return team;
         }
 
@@ -174,7 +176,7 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SavePreseasonResult(int awayScore, int homeScore, int winningTeamId, int gameId)
+        public async Task<bool> SavePreseasonResult(int awayScore, int homeScore, int winningTeamId, int gameId, int leagueId)
         {
             PreseasonGameResult gr = new PreseasonGameResult
             {
@@ -182,13 +184,14 @@ namespace ABASim.api.Data
                 AwayScore = awayScore,
                 HomeScore = homeScore,
                 WinningTeamId = winningTeamId,
-                Completed = 1
+                Completed = 1,
+                LeagueId = leagueId
             };
             await _context.AddAsync(gr);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SaveSeasonResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId)
+        public async Task<bool> SaveSeasonResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId, int leagueId)
         {
             GameResult gr = new GameResult
             {
@@ -196,12 +199,13 @@ namespace ABASim.api.Data
                 AwayScore = awayScore,
                 HomeScore = homeScore,
                 WinningTeamId = winningTeamId,
-                Completed = 1
+                Completed = 1,
+                LeagueId = leagueId
             };
             await _context.AddAsync(gr);
 
             // Now need to add the win the standings - this is not working
-            var winningStanding = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == winningTeamId);
+            var winningStanding = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == winningTeamId && x.LeagueId == leagueId);
             int wins = winningStanding.Wins;
             wins = wins + 1;
             int gamesPlayed = winningStanding.GamesPlayed;
@@ -210,7 +214,7 @@ namespace ABASim.api.Data
             winningStanding.GamesPlayed = gamesPlayed;
             _context.Update(winningStanding);
 
-            var losingStanding = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == losingTeamId);
+            var losingStanding = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == losingTeamId && x.LeagueId == leagueId);
             int Losses = losingStanding.Losses;
             Losses = Losses + 1;
             int gp = losingStanding.GamesPlayed;
@@ -222,7 +226,7 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> SavePlayoffResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId)
+        public async Task<bool> SavePlayoffResult(int awayScore, int homeScore, int winningTeamId, int gameId, int losingTeamId, int leagueId)
         {
             PlayoffResult gr = new PlayoffResult
             {
@@ -230,13 +234,14 @@ namespace ABASim.api.Data
                 AwayScore = awayScore,
                 HomeScore = homeScore,
                 WinningTeamId = winningTeamId,
-                Completed = 1
+                Completed = 1,
+                LeagueId = leagueId
             };
             await _context.AddAsync(gr);
 
             // Now need to add the win to the playoff result
-            var scheduleGame = await _context.SchedulesPlayoffs.FirstOrDefaultAsync(x => x.Id == gameId);
-            var series = await _context.PlayoffSerieses.FirstOrDefaultAsync(x => x.Id == scheduleGame.SeriesId);
+            var scheduleGame = await _context.SchedulesPlayoffs.FirstOrDefaultAsync(x => x.Id == gameId && x.LeagueId == leagueId);
+            var series = await _context.PlayoffSerieses.FirstOrDefaultAsync(x => x.Id == scheduleGame.SeriesId && x.LeagueId == leagueId);
 
             if (series.HomeTeamId == winningTeamId)
             {
@@ -278,7 +283,8 @@ namespace ABASim.api.Data
                     DRebs = bs.DRebs,
                     Turnovers = bs.Turnovers,
                     Fouls = bs.Fouls,
-                    PlusMinus = bs.PlusMinus
+                    PlusMinus = bs.PlusMinus,
+                    LeagueId = bs.LeagueId
                 };
 
                 await _context.AddAsync(gbs);
@@ -314,7 +320,8 @@ namespace ABASim.api.Data
                     DRebs = bs.DRebs,
                     Turnovers = bs.Turnovers,
                     Fouls = bs.Fouls,
-                    PlusMinus = bs.PlusMinus
+                    PlusMinus = bs.PlusMinus,
+                    LeagueId = bs.LeagueId
                 };
 
                 await _context.AddAsync(gbs);
@@ -344,15 +351,15 @@ namespace ABASim.api.Data
             return true;
         }
 
-        public async Task<PlayerInjury> GetPlayerInjury(int playerId)
+        public async Task<PlayerInjury> GetPlayerInjury(int playerId, int leagueId)
         {
-            var playerInjury = await _context.PlayerInjuries.FirstOrDefaultAsync(x => x.CurrentlyInjured == 1 && x.PlayerId == playerId);
+            var playerInjury = await _context.PlayerInjuries.FirstOrDefaultAsync(x => x.CurrentlyInjured == 1 && x.PlayerId == playerId && x.LeagueId == leagueId);
             return playerInjury;
         }
 
-        public async Task<IEnumerable<CoachSetting>> GetCoachSettings(int teamId)
+        public async Task<IEnumerable<CoachSetting>> GetCoachSettings(int teamId, int leagueId)
         {
-            var coachSettings = await _context.CoachSettings.Where(x => x.TeamId == teamId).ToListAsync();
+            var coachSettings = await _context.CoachSettings.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).ToListAsync();
             return coachSettings;
         }
 
@@ -628,9 +635,9 @@ namespace ABASim.api.Data
             return true;
         }
 
-        public async Task<TeamStrategy> GetTeamStrategies(int teamId)
+        public async Task<TeamStrategy> GetTeamStrategies(int teamId, int leagueId)
         {
-            var strategy = await _context.TeamStrategies.FirstOrDefaultAsync(x => x.TeamId == teamId);
+            var strategy = await _context.TeamStrategies.FirstOrDefaultAsync(x => x.TeamId == teamId && x.LeagueId == leagueId);
             return strategy;
         }
     }

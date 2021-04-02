@@ -13,4 +13,5 @@ export interface Trade {
     years: number;
     yearOne: number;
     totalValue: number;
+    leagueId: number;
 }

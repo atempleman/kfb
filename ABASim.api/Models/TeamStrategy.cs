@@ -9,5 +9,7 @@ namespace ABASim.api.Models
         public int OffensiveStrategyId { get; set; }
 
         public int DefensiveStrategyId { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

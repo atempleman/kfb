@@ -3,4 +3,5 @@ export interface DraftSelection {
     pick: number;
     teamId: number;
     playerId: number;
+    leagueId: number;
 }

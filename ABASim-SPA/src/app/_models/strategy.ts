@@ -6,4 +6,5 @@ export interface Strategy {
     defensiveStrategyId: number;
     defensiveStrategyName: string;
     defensiveStrategyDesc: string;
+    leagueId: number;
 }

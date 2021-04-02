@@ -5,6 +5,10 @@ import { environment } from 'src/environments/environment';
 import { CheckGame } from '../_models/checkGame';
 import { Observable } from 'rxjs';
 import { GameDisplayCurrent } from '../_models/gameDisplayCurrent';
+import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetScheduleLeague } from '../_models/getScheduleLeague';
+import { GetGameLeague } from '../_models/getGameLeague';
 
 @Injectable({
   providedIn: 'root'
@@ -14,119 +18,119 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  updateLeagueStatus(newStatus: number) {
+  updateLeagueStatus(newStatus: LeagueStatusUpdate) {
     return this.http.get<boolean>(this.baseUrl + 'updateleaguestatus/' + newStatus);
   }
 
-  removeTeamRegistration(teamId: number) {
+  removeTeamRegistration(teamId: GetRosterQuickView) {
     return this.http.get<boolean>(this.baseUrl + 'removeteamrego/' + teamId);
   }
 
-  runInitialDraftLottery() {
-    return this.http.get<boolean>(this.baseUrl + 'runinitialdraftlottery');
+  runInitialDraftLottery(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'runinitialdraftlottery/' + leagueId);
   }
 
-  checkAllGamesRun(): Observable<boolean> {
-    return this.http.get<boolean>(this.baseUrl + 'checkgamesrun');
+  checkAllGamesRun(leagueId: number): Observable<boolean> {
+    return this.http.get<boolean>(this.baseUrl + 'checkgamesrun/' + leagueId);
   }
 
-  rolloverDay() {
-    return this.http.get<boolean>(this.baseUrl + 'rolloverday');
+  rolloverDay(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverday/' + leagueId);
   }
 
-  changeDay(day: number) {
+  changeDay(day: GetScheduleLeague) {
     return this.http.get<boolean>(this.baseUrl + 'changeday/' + day);
   }
 
-  beginPlayoffs() {
-    return this.http.get<boolean>(this.baseUrl + 'beginplayoffs');
+  beginPlayoffs(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'beginplayoffs/' + leagueId);
   }
 
-  beginConfSemis() {
-    return this.http.get<boolean>(this.baseUrl + 'beginconfsemis');
+  beginConfSemis(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'beginconfsemis/' + leagueId);
   }
 
-  beginConfFinals() {
-    return this.http.get<boolean>(this.baseUrl + 'beginconffinals');
+  beginConfFinals(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'beginconffinals/' + leagueId);
   }
 
-  beginFinals() {
-    return this.http.get<boolean>(this.baseUrl + 'beginfinals');
+  beginFinals(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'beginfinals/' + leagueId);
   }
 
-  endSeason() {
-    return this.http.get<boolean>(this.baseUrl + 'endseason');
+  endSeason(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'endseason/' + leagueId);
   }
 
-  runTeamDraftPicksSetup() {
-    return this.http.get<boolean>(this.baseUrl + 'runteamdraftpicks');
+  runTeamDraftPicksSetup(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'runteamdraftpicks/' + leagueId);
   }
 
-  generateInitalContracts() {
-    return this.http.get<boolean>(this.baseUrl + 'generateinitialcontracts');
+  generateInitalContracts(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'generateinitialcontracts/' + leagueId);
   }
 
-  generateInitialSalaryCaps() {
-    return this.http.get<boolean>(this.baseUrl + 'generateinitialsalarycaps');
+  generateInitialSalaryCaps(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'generateinitialsalarycaps/' + leagueId);
   }
 
-  generateAutoPicks() {
-    return this.http.get<boolean>(this.baseUrl + 'testautopickordering');
+  generateAutoPicks(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'testautopickordering/' + leagueId);
   }
 
-  getGamesForReset(): Observable<GameDisplayCurrent[]> {
-    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesforreset');
+  getGamesForReset(leagueId: number): Observable<GameDisplayCurrent[]> {
+    return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesforreset/' + leagueId);
   }
 
-  resetGame(gameId: number) {
+  resetGame(gameId: GetGameLeague) {
     return this.http.get<boolean>(this.baseUrl + 'resetgame/' + gameId);
   }
 
-  rolloverSeasonStats() {
-    return this.http.get<boolean>(this.baseUrl + 'rolloverseasonstats');
+  rolloverSeasonStats(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverseasonstats/' + leagueId);
   }
 
-  rolloverAwardWinners() {
-    return this.http.get<boolean>(this.baseUrl + 'rolloverawards');
+  rolloverAwardWinners(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverawards/' + leagueId);
   }
 
-  rolloverContractUpdates() {
-    return this.http.get<boolean>(this.baseUrl + 'rollovercontractupdates');
+  rolloverContractUpdates(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rollovercontractupdates/' + leagueId);
   }
 
-  generateDraft() {
-    return this.http.get<boolean>(this.baseUrl + 'generatedraft');
+  generateDraft(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'generatedraft/' + leagueId);
   }
 
-  deletePreseasonAndPlayoffsData() {
-    return this.http.get<boolean>(this.baseUrl + 'deletepreseasonplayoffs');
+  deletePreseasonAndPlayoffsData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'deletepreseasonplayoffs/' + leagueId);
   }
 
-  deleteTeamSettingsData() {
-    return this.http.get<boolean>(this.baseUrl + 'deleteteamsettings');
+  deleteTeamSettingsData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'deleteteamsettings/' + leagueId);
   }
 
-  deleteAwardsData() {
-    return this.http.get<boolean>(this.baseUrl + 'deleteawards');
+  deleteAwardsData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'deleteawards/' + leagueId);
   }
 
-  deleteOtherData() {
-    return this.http.get<boolean>(this.baseUrl + 'deleteother');
+  deleteOtherData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'deleteother/' + leagueId);
   }
 
-  deleteSeasonData() {
-    return this.http.get<boolean>(this.baseUrl + 'deleteseason');
+  deleteSeasonData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'deleteseason/' + leagueId);
   }
 
-  resetStandings() {
-    return this.http.get<boolean>(this.baseUrl + 'resetstandings');
+  resetStandings(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'resetstandings/' + leagueId);
   }
 
-  rolloverLeague() {
-    return this.http.get<boolean>(this.baseUrl + 'rolloverleague');
+  rolloverLeague(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverleague/' + leagueId);
   }
 
-  resetLeague() {
-    return this.http.get<boolean>(this.baseUrl + 'resetleague');
+  resetLeague(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'resetleague/' + leagueId);
   }
 }
