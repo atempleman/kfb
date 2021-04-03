@@ -101,9 +101,9 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<LeagueLeaderTurnoversDto>> GetPlayoffTurnoversLeagueLeaders(GetStatLeagueDto page);
 
-         int GetCountOfPointsLeagueLeaders(int leagueId);
+         Task<int> GetCountOfPointsLeagueLeaders(int leagueId);
 
-         int GetCountOfPointsLeagueLeadersPlayoffs(int leagueId);
+         Task<int> GetCountOfPointsLeagueLeadersPlayoffs(int leagueId);
 
          Task<IEnumerable<PlayoffSummaryDto>> GetPlayoffSummariesForRound(GetPlayoffSummaryDto round);
 

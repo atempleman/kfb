@@ -590,18 +590,18 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> FreeAgentDecisionMaking()
+        public async Task<bool> FreeAgentDecisionMaking(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             int leageState = league.StateId;
 
-            var freeAgentDecisions = await _context.FreeAgencyDecisions.Where(x => x.DayToDecide <= (league.Day + 1)).ToListAsync();
+            var freeAgentDecisions = await _context.FreeAgencyDecisions.Where(x => (x.DayToDecide <= (league.Day + 1)) && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var fa in freeAgentDecisions)
             {
                 var playerId = fa.PlayerId;
 
-                var offers = await _context.ContractOffers.Where(x => x.PlayerId == playerId && x.Decision == 0).ToListAsync();
+                var offers = await _context.ContractOffers.Where(x => x.PlayerId == playerId && x.Decision == 0 && x.LeagueId == leagueId).ToListAsync();
 
                 ContractOffer acceptedOffer = null;
                 if (offers.Count > 1)
@@ -609,14 +609,14 @@ namespace ABASim.api.Data
                     // We have multiple offers
                     foreach (var off in offers)
                     {
-                        var rosterSpotChk = await _context.Rosters.Where(x => x.TeamId == off.TeamId).ToListAsync();
+                        var rosterSpotChk = await _context.Rosters.Where(x => x.TeamId == off.TeamId && x.LeagueId == leagueId).ToListAsync();
                         int rosterCountChk = rosterSpotChk.Count;
 
                         if (rosterCountChk < 15)
                         {
                             // Now need to check if the team can still afford the player
-                            var teamSalary = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == off.TeamId);
-                            var cap = await _context.SalaryCaps.FirstOrDefaultAsync();
+                            var teamSalary = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == off.TeamId && x.LeagueId == leagueId);
+                            var cap = await _context.SalaryCaps.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
                             if ((teamSalary.CurrentCapAmount - cap.Cap) > 0 || off.YearOne == 1000000)
                             {
                                 // Then can sign
@@ -714,13 +714,13 @@ namespace ABASim.api.Data
 
                 if (acceptedOffer != null)
                 {
-                    var rosterSpot = await _context.Rosters.Where(x => x.TeamId == acceptedOffer.TeamId).ToListAsync();
+                    var rosterSpot = await _context.Rosters.Where(x => x.TeamId == acceptedOffer.TeamId && x.LeagueId == leagueId).ToListAsync();
                     int rosterCount = rosterSpot.Count;
 
                     if (rosterCount < 15)
                     {
-                        var teamSalary = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == acceptedOffer.TeamId);
-                        var cap = await _context.SalaryCaps.FirstOrDefaultAsync();
+                        var teamSalary = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == acceptedOffer.TeamId && x.LeagueId == leagueId);
+                        var cap = await _context.SalaryCaps.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
                         if ((teamSalary.CurrentCapAmount - cap.Cap) > 0 || acceptedOffer.YearOne == 1000000)
                         {
                             // Now setting up the details of the signing
@@ -740,11 +740,12 @@ namespace ABASim.api.Data
                                 YearFive = acceptedOffer.YearFive,
                                 GuranteedFive = acceptedOffer.GuranteedFive,
                                 TeamOption = acceptedOffer.TeamOption,
-                                PlayerOption = acceptedOffer.PlayerOption
+                                PlayerOption = acceptedOffer.PlayerOption,
+                                LeagueId = leagueId
                             };
                             await _context.AddAsync(contract);
 
-                            var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId);
+                            var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
                             pt.TeamId = acceptedOffer.TeamId;
                             _context.Update(pt);
 
@@ -752,7 +753,8 @@ namespace ABASim.api.Data
                             Roster roster = new Roster
                             {
                                 TeamId = acceptedOffer.TeamId,
-                                PlayerId = playerId
+                                PlayerId = playerId,
+                                LeagueId = leagueId
                             };
                             await _context.AddAsync(roster);
 
@@ -764,13 +766,14 @@ namespace ABASim.api.Data
                                 TransactionType = 1,
                                 Day = league.Day,
                                 Pick = 0,
-                                PickText = ""
+                                PickText = "",
+                                LeagueId = leagueId
                             };
                             await _context.AddAsync(trans);
 
                             // Now need to add inbox messages - for successful signing
-                            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == acceptedOffer.TeamId);
-                            var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId);
+                            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == acceptedOffer.TeamId && x.LeagueId == leagueId);
+                            var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId && x.LeagueId == leagueId);
 
                             // Now need to send an inbox message
                             DateTime date = new DateTime();
@@ -789,7 +792,8 @@ namespace ABASim.api.Data
                                 Subject = player.FirstName + " " + player.Surname + " has signed with your team",
                                 Body = player.FirstName + " " + player.Surname + " has signed your offered contract with your team. They are now available on your roster.",
                                 MessageDate = dd + "/" + mm + "/" + yyyy,
-                                IsNew = 1
+                                IsNew = 1,
+                                LeagueId = leagueId
                             };
                             await _context.AddAsync(im);
 
@@ -800,7 +804,7 @@ namespace ABASim.api.Data
                                 {
                                     if (off.TeamId != acceptedOffer.TeamId)
                                     {
-                                        var t = await _context.Teams.FirstOrDefaultAsync(x => x.Id == off.TeamId);
+                                        var t = await _context.Teams.FirstOrDefaultAsync(x => x.Id == off.TeamId && x.LeagueId == leagueId);
                                         InboxMessage rejectMessage = new InboxMessage
                                         {
                                             SenderId = 0,
@@ -812,7 +816,8 @@ namespace ABASim.api.Data
                                             Subject = player.FirstName + " " + player.Surname + " has rejected your offer",
                                             Body = player.FirstName + " " + player.Surname + " has rejected your offer and signed with another team.",
                                             MessageDate = dd + "/" + mm + "/" + yyyy,
-                                            IsNew = 1
+                                            IsNew = 1,
+                                            LeagueId = leagueId
                                         };
                                         await _context.AddAsync(rejectMessage);
                                     }
@@ -934,11 +939,11 @@ namespace ABASim.api.Data
             return count;
         }
 
-        public async Task<bool> DailyInjuriesUpdate(int state, int day)
+        public async Task<bool> DailyInjuriesUpdate(int state, int day, int leagueId)
         {
             // Need to get the lists of injuries first
-            var newInjuries = await _context.PlayerInjuries.Where(x => x.CurrentlyInjured == 0 && x.StartDay == 0).ToListAsync();
-            var existingActiveInjuries = await _context.PlayerInjuries.Where(x => x.CurrentlyInjured == 1).ToListAsync();
+            var newInjuries = await _context.PlayerInjuries.Where(x => x.CurrentlyInjured == 0 && x.StartDay == 0 && x.LeagueId == leagueId).ToListAsync();
+            var existingActiveInjuries = await _context.PlayerInjuries.Where(x => x.CurrentlyInjured == 1 && x.LeagueId == leagueId).ToListAsync();
 
             // Now work out new injuries
             foreach (var injury in newInjuries)
@@ -1533,7 +1538,13 @@ namespace ABASim.api.Data
             if (seriesFinished.Count == 4)
             {
                 // Change the League State Id to 10
-                await UpdateLeagueState(10);
+                LeagueStatusDto lsd = new LeagueStatusDto
+                {
+                    Status = 10,
+                    LeagueId = leagueId
+                };
+
+                await UpdateLeagueState(lsd);
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
                 league.Day = 250;
                 _context.Update(league);
@@ -1822,16 +1833,16 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> EndSeason()
+        public async Task<bool> EndSeason(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             // Update Player Career Stats
-            var playerStats = await _context.PlayerStats.ToListAsync();
+            var playerStats = await _context.PlayerStats.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var ps in playerStats)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
                 CareerPlayerStat stats = new CareerPlayerStat
                 {
                     PlayerId = ps.PlayerId,
@@ -1861,19 +1872,20 @@ namespace ABASim.api.Data
                     Bpg = ps.Bpg,
                     Mpg = ps.Mpg,
                     Tpg = ps.Tpg,
-                    Fpg = ps.Fpg
+                    Fpg = ps.Fpg,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(stats);
             }
             await _context.SaveChangesAsync();
 
             // Update Player Career Playoff Stats
-            var playerStatsPlayoffs = await _context.PlayerStatsPlayoffs.ToListAsync();
+            var playerStatsPlayoffs = await _context.PlayerStatsPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var ps in playerStatsPlayoffs)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
                 CareerPlayerStatsPlayoff stats = new CareerPlayerStatsPlayoff
                 {
                     PlayerId = ps.PlayerId,
@@ -1903,14 +1915,15 @@ namespace ABASim.api.Data
                     Bpg = ps.Bpg,
                     Mpg = ps.Mpg,
                     Tpg = ps.Tpg,
-                    Fpg = ps.Fpg
+                    Fpg = ps.Fpg,
+                    LeagueId = leagueId
                 };
                 await _context.AddAsync(stats);
             }
             await _context.SaveChangesAsync();
 
             // Now need to update the draft picks for the next additional season
-            var teams = await _context.Teams.ToListAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
             int newSeasonForPicks = league.Year + 6;
 
             foreach (var team in teams)
@@ -1922,7 +1935,8 @@ namespace ABASim.api.Data
                         Year = newSeasonForPicks,
                         Round = j,
                         OriginalTeam = team.Id,
-                        CurrentTeam = team.Id
+                        CurrentTeam = team.Id,
+                        LeagueId = leagueId
                     };
                     await _context.AddAsync(dp);
                 }
@@ -2661,7 +2675,7 @@ namespace ABASim.api.Data
             }
 
             // // Now need to go through and save the draft picks
-            int pick = 1;
+            // int pick = 1;
             for (int i = 1; i < 3; i++)
             {
                 if (i == 1)

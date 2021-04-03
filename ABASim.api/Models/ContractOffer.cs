@@ -37,5 +37,7 @@ namespace ABASim.api.Models
         public int StateSubmitted { get; set; }
 
         public int Decision { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

@@ -234,8 +234,7 @@ namespace ABASim.api.Controllers
         [HttpGet("getcountofpointsleaders/{leagueid}")]
         public async Task<IActionResult> GetCountOfLeagueLeaders(int leagueId)
         {
-            // var count = await Task.Run(_repo.GetCountOfPointsLeagueLeaders());
-            var count = _repo.GetCountOfPointsLeagueLeaders(leagueId);
+            var count = await _repo.GetCountOfPointsLeagueLeaders(leagueId);
             return Ok(count);
         }
 
@@ -340,7 +339,7 @@ namespace ABASim.api.Controllers
         [HttpGet("getcountofpointsleadersplayoffs/{leagueId}")]
         public async Task<IActionResult> GetCountOfLeagueLeadersPlayoffs(int leagueId)
         {
-            var count = _repo.GetCountOfPointsLeagueLeadersPlayoffs(leagueId);
+            var count = await _repo.GetCountOfPointsLeagueLeadersPlayoffs(leagueId);
             return Ok(count);
         }
 

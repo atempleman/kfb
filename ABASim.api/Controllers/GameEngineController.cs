@@ -1977,11 +1977,6 @@ namespace ABASim.api.Controllers
                 // Now need to get the current players tendancies
                 PlayerTendancy tendancy = GetCurrentPlayersTendancies();
 
-                if (tendancy.PlayerId == 203)
-                {
-                    string s = "";
-                }
-
                 int foulBonusValue = 0;
                 if (_quarter > 3 && _time <= 48 && _endGameFoulAddition != 0)
                 {
@@ -4074,7 +4069,7 @@ namespace ABASim.api.Controllers
             // Setup fouling objects
             Player playerFouling = new Player();
             int isFreeThrows = 0;
-            int teamWhichFouled = 2;
+            // int teamWhichFouled = 2;
             int numberOfShots = 0;
 
             int foulComm = 0;
@@ -4142,7 +4137,7 @@ namespace ABASim.api.Controllers
                         _homeFinal2Bonus++;
                     }
                     _homeFoulBonus++;
-                    teamWhichFouled = 1;
+                    // teamWhichFouled = 1;
 
                     if (_homeFoulBonus > 4 || _homeFinal2Bonus > 1)
                     {
@@ -4165,7 +4160,7 @@ namespace ABASim.api.Controllers
                         _awayFinal2Bonus++;
                     }
                     _awayFoulBonus++;
-                    teamWhichFouled = 0;
+                    // teamWhichFouled = 0;
 
                     if (_awayFoulBonus > 4 || _awayFinal2Bonus > 1)
                     {
@@ -7121,7 +7116,7 @@ namespace ABASim.api.Controllers
         {
             Player current = new Player();
             Player newPlayer = new Player();
-            int playerSubbed = 0;
+            // int playerSubbed = 0;
 
             // Home team first
             for (int i = 1; i < 6; i++)
@@ -7163,7 +7158,7 @@ namespace ABASim.api.Controllers
                     {
                     SubPlayer(0, i, player);
                     newPlayer = player;
-                    playerSubbed = 1;
+                    // playerSubbed = 1;
 
                     // Commentary
                     string outPlayer = current.FirstName + " " + current.Surname;
@@ -7194,7 +7189,7 @@ namespace ABASim.api.Controllers
                         {
                             SubPlayer(0, i, player);
                         newPlayer = player;
-                        playerSubbed = 1;
+                        // playerSubbed = 1;
 
                         // Commentary
                         string outPlayer = current.FirstName + " " + current.Surname;
@@ -7225,7 +7220,7 @@ namespace ABASim.api.Controllers
                             {
                                 SubPlayer(0, i, player);
                             newPlayer = player;
-                            playerSubbed = 1;
+                            // playerSubbed = 1;
 
                             // Commentary
                             string outPlayer = current.FirstName + " " + current.Surname;
@@ -7285,7 +7280,7 @@ namespace ABASim.api.Controllers
                     {
                     SubPlayer(1, j, player);
                     newPlayer = player;
-                    playerSubbed = 1;
+                    // playerSubbed = 1;
 
                     // Commentary
                     string outPlayer = current.FirstName + " " + current.Surname;
@@ -7316,7 +7311,7 @@ namespace ABASim.api.Controllers
                         {
                         SubPlayer(1, j, player);
                         newPlayer = player;
-                        playerSubbed = 1;
+                        // playerSubbed = 1;
 
                         // Commentary
                         string outPlayer = current.FirstName + " " + current.Surname;
@@ -7347,7 +7342,7 @@ namespace ABASim.api.Controllers
                             {
                             SubPlayer(1, j, player);
                             newPlayer = player;
-                            playerSubbed = 1;
+                            // playerSubbed = 1;
 
                             // Commentary
                             string outPlayer = current.FirstName + " " + current.Surname;
@@ -8848,11 +8843,6 @@ namespace ABASim.api.Controllers
                 {
                     return 3;
                 }
-            }
-
-            if (_quarter == 1 && bs.Fouls == 2)
-            {
-                string t = "";
             }
 
             // Check to see if the player is in foul trouble

@@ -562,15 +562,15 @@ namespace ABASim.api.Data
             return listOfOther;
         }
 
-        public int GetCountOfPointsLeagueLeaders(int leagueId)
+        public async Task<int> GetCountOfPointsLeagueLeaders(int leagueId)
         {
-            var count =  _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.LeagueId == leagueId).Count();
+            var count =  await _context.PlayerStats.Where(x => x.GamesPlayed > 0 && x.LeagueId == leagueId).CountAsync();
             return count;
         }
 
-        public int GetCountOfPointsLeagueLeadersPlayoffs(int leagueId)
+        public async Task<int> GetCountOfPointsLeagueLeadersPlayoffs(int leagueId)
         {
-            var count =  _context.PlayerStatsPlayoffs.Where(x => x.GamesPlayed > 0 && x.LeagueId == leagueId).Count();
+            var count =  await _context.PlayerStatsPlayoffs.Where(x => x.GamesPlayed > 0 && x.LeagueId == leagueId).CountAsync();
             return count;
         }
 
