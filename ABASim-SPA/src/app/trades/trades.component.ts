@@ -86,7 +86,8 @@ export class TradesComponent implements OnInit {
 
   constructor(private alertify: AlertifyService, private router: Router, private teamService: TeamService,
     private transferService: TransferService, private modalService: BsModalService,
-    private fb: FormBuilder, private spinner: NgxSpinnerService, private authService: AuthService) { }
+    private fb: FormBuilder, private spinner: NgxSpinnerService, private authService: AuthService,
+    private leagueService: LeagueService) { }
 
   ngOnInit() {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
@@ -95,6 +96,16 @@ export class TradesComponent implements OnInit {
       localStorage.setItem('teamId', this.team.id.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
     }, () => {
       this.setupPage();
     });
@@ -113,14 +124,6 @@ export class TradesComponent implements OnInit {
       this.teamSelected = this.allOtherTeams[0].id;
     }, error => {
       this.alertify.error('Error gettings teams to trade with');
-    });
-
-    this.teamService.getTeamForTeamId(teamleague).subscribe(result => {
-      this.team = result;
-    }, error => {
-      this.alertify.error('Error getting your team');
-    }, () => {
-      this.backgroundStyle();
     });
 
     this.teamService.getTradePlayerView(teamleague).subscribe(result => {

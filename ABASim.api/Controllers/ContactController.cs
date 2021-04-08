@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ABASim.api.Data;
 using ABASim.api.Dtos;
@@ -37,10 +38,10 @@ namespace ABASim.api.Controllers
             return Ok(records);
         }
 
-        [HttpGet("getinboxmessages/{teamId}")]
-        public async Task<IActionResult> GetInboxMessages(GetRosterQuickViewDto teamId)
+        [HttpGet("getinboxmessages")]
+        public async Task<IActionResult> GetInboxMessages(string teamId, string leagueId)
         {
-            var result = await _repo.GetInboxMessages(teamId);
+            var result = await _repo.GetInboxMessages(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(result);
         }
 
@@ -57,11 +58,11 @@ namespace ABASim.api.Controllers
             var result = await _repo.DeleteInboxMessage(messageId);
             return Ok(result);
         }
-        
-        [HttpGet("getcountofmessages/{teamId}")]
-        public async Task<IActionResult> GetCountOfMessages(GetRosterQuickViewDto teamId)
+
+        [HttpGet("getMessageCount")]
+        public async Task<IActionResult> GetMessageCount(string teamId, string leagueId)
         {
-            var count = await _repo.CountOfMessages(teamId);
+            var count = await _repo.GetCountOfMessages(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(count);
         }
 

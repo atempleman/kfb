@@ -9,7 +9,7 @@ namespace ABASim.api.Data
     {
          Task<bool> AddDraftRanking(AddDraftRankingDto draftRanking);
 
-         Task<IEnumerable<DraftPlayerDto>> GetDraftBoardForTeamId(GetRosterQuickViewDto dto);
+         Task<IEnumerable<DraftPlayerDto>> GetDraftBoardForTeamId(int teamId, int leagueId);
 
          Task<bool> RemoveDraftRanking(RemoveDraftRankingDto draftRanking);
 
@@ -21,15 +21,15 @@ namespace ABASim.api.Data
 
          Task<DraftTracker> GetDraftTracker(int leagueId);
 
-         Task<IEnumerable<InitialDraft>> GetInitialDraftPicks();
+         Task<IEnumerable<InitialDraft>> GetInitialDraftPicks(int leagueId);
 
          Task<bool> MakeDraftPick(InitialDraftPicksDto draftPick);
 
          Task<bool> MakeAutoPick(InitialDraftPicksDto draftPick);
 
-         Task<IEnumerable<DraftPickDto>> GetInitialDraftPicksForPage(int page);
+         Task<IEnumerable<DraftPickDto>> GetInitialDraftPicksForPage(int round, int leagueId);
 
-         Task<DashboardDraftPickDto> GetDashboardDraftPick(GetDashboardPickDto pickSpot);
+         Task<DashboardDraftPickDto> GetDashboardDraftPick(int pick, int leagueId);
 
          Task<InitialDraft> GetCurrentInitialDraftPick(int leagueId);
 

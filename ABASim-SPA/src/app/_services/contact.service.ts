@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ContactForm } from '../_models/contactForm';
 import { environment } from 'src/environments/environment';
 import { GlobalChat } from '../_models/globalChat';
@@ -28,8 +28,12 @@ export class ContactService {
     return this.http.get<GlobalChat[]>(this.baseUrl + 'getchatrecords/' + leagueId);
   }
 
-  getInboxMessages(teamId: GetRosterQuickView): Observable<InboxMessage[]> {
-    return this.http.get<InboxMessage[]>(this.baseUrl + 'getinboxmessages/' + teamId);
+  getInboxMessages(tl: GetRosterQuickView): Observable<InboxMessage[]> {
+    const params = new HttpParams()
+      .set('teamId', tl.teamId.toString())
+      .set('leagueId', tl.leagueId.toString());
+
+    return this.http.get<InboxMessage[]>(this.baseUrl + 'getinboxmessages', { params });
   }
 
   sendInboxMessage(message: InboxMessage) {
@@ -40,8 +44,12 @@ export class ContactService {
     return this.http.get<boolean>(this.baseUrl + 'deletemessage/' + message);
   }
 
-  getCountOfMessages(teamId: GetRosterQuickView) {
-    return this.http.get<CountOfMessages>(this.baseUrl + 'getcountofmessages/' + teamId);
+  getCountOfMessages(tl: GetRosterQuickView) {
+    const params = new HttpParams()
+      .set('teamId', tl.teamId.toString())
+      .set('leagueId', tl.leagueId.toString());
+
+    return this.http.get<CountOfMessages>(this.baseUrl + 'getMessageCount', { params });
   }
 
   markMessageRead(messageId: number) {

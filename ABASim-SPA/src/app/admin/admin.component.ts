@@ -34,11 +34,9 @@ export class AdminComponent implements OnInit {
   statusSelection: number;
   currentStatus = '';
   leagueStates: LeagueState[] = [];
-  // statusForm: FormGroup;
   gamesAllRun = 0;
   rolloverResult = false;
 
-  // removeRegoForm: FormGroup;
   teams: Team[] = [];
   teamSelected: number;
 
@@ -47,7 +45,6 @@ export class AdminComponent implements OnInit {
 
   dayEntered = 0;
   dayForm: FormGroup;
-
   todaysGames: GameDisplayCurrent[] = [];
 
   username = 0;
@@ -68,13 +65,10 @@ export class AdminComponent implements OnInit {
     }, () => {
       this.setupLeague();
     });
-
-    
-    console.log(this.username);
   }
 
   setupLeague() {
-    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
@@ -85,7 +79,6 @@ export class AdminComponent implements OnInit {
 
   setupPage() {
     this.getTodaysGames();
-
     this.username = +this.authService.decodedToken.nameid;
   }
 
@@ -187,27 +180,6 @@ export class AdminComponent implements OnInit {
   }
 
   //#endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

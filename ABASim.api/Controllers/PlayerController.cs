@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ABASim.api.Data;
 using ABASim.api.Dtos;
@@ -15,17 +16,17 @@ namespace ABASim.api.Controllers
             _repo = repo;
         }
 
-        [HttpGet("getinitialdraftplayers/{page}")]
-        public async Task<IActionResult> GetInitialDraftPlayerPool(int page)
+        [HttpGet("getinitialdraftplayerspage")]
+        public async Task<IActionResult> GetInitialDraftPlayerPoolPage(string page, string leagueId)
         {
-            var players = await _repo.GetInitialDraftPlayerPool(page);
+            var players = await _repo.GetInitialDraftPlayerPoolPage(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(players);
         }
 
-        [HttpGet("getinitialdraftplayers")]
-        public async Task<IActionResult> GetInitialDraftPlayerPool()
+        [HttpGet("getinitialdraftplayers/{leagueId}")]
+        public async Task<IActionResult> GetInitialDraftPlayerPool(int leagueId)
         {
-            var players = await _repo.GetInitialDraftPlayerPool();
+            var players = await _repo.GetInitialDraftPlayerPool(leagueId);
             return Ok(players);
         }
 
@@ -50,31 +51,31 @@ namespace ABASim.api.Controllers
             return Ok(players);
         }
 
-        [HttpGet("getcompleteplayer/{playeridleague}")]
-        public async Task<IActionResult> GetCompletePlayer(PlayerIdLeagueDto dto)
+        [HttpGet("getcompleteplayer")]
+        public async Task<IActionResult> GetCompletePlayer(string playerId, string leagueId)
         {
-            var player = await _repo.GetCompletePlayer(dto);
+            var player = await _repo.GetCompletePlayer(Int32.Parse(playerId), Int32.Parse(leagueId));
             return Ok(player);
         }
 
-        [HttpGet("getcareerstats/{playerId}")]
-        public async Task<IActionResult> GetCareerStats(PlayerIdLeagueDto playerId)
+        [HttpGet("getcareerstats")]
+        public async Task<IActionResult> GetCareerStats(string playerId, string leagueId)
         {
-            var player = await _repo.GetCareerStats(playerId);
+            var player = await _repo.GetCareerStats(Int32.Parse(playerId), Int32.Parse(leagueId));
             return Ok(player);
         }
 
-        [HttpGet("getcountofdraftplayers")]
-        public async Task<IActionResult> GetCountOfDraftPlayers()
+        [HttpGet("getcountofdraftplayers/{leagueId}")]
+        public async Task<IActionResult> GetCountOfDraftPlayers(int leagueId)
         {
-            var count = await _repo.GetCountOfDraftPlayers();
+            var count = await _repo.GetCountOfDraftPlayers(leagueId);
             return Ok(count);
         }
 
-        [HttpGet("filterdraftplayers/{value}")]
-        public async Task<IActionResult> FilterInitialDraftPlayers(string value)
+        [HttpGet("filterdraftplayers")]
+        public async Task<IActionResult> FilterInitialDraftPlayers(string filter, string leagueId)
         {
-            var players = await _repo.FilterInitialDraftPlayerPool(value);
+            var players = await _repo.FilterInitialDraftPlayerPool(filter, Int32.Parse(leagueId));
             return Ok(players);
         }
 
@@ -85,17 +86,17 @@ namespace ABASim.api.Controllers
             return Ok(players);
         }
 
-        [HttpGet("draftpoolfilterbyposition/{pos}")]
-        public async Task<IActionResult> DraftPoolFilterByPosition(int pos)
+        [HttpGet("draftpoolfilterbyposition")]
+        public async Task<IActionResult> DraftPoolFilterByPosition(string filter, string leagueId)
         {
-            var players = await _repo.DraftPoolFilterByPosition(pos);
+            var players = await _repo.DraftPoolFilterByPosition(Int32.Parse(filter), Int32.Parse(leagueId));
             return Ok(players);
         }
 
-        [HttpGet("filterbyposition/{pos}")]
-        public async Task<IActionResult> FilterByPosition(PlayerIdLeagueDto pos)
+        [HttpGet("filterbyposition")]
+        public async Task<IActionResult> FilterByPosition(string filter, string leagueId)
         {
-            var players = await _repo.FilterByPosition(pos);
+            var players = await _repo.FilterByPosition(Int32.Parse(filter), Int32.Parse(leagueId));
             return Ok(players);
         }
 
@@ -113,24 +114,24 @@ namespace ABASim.api.Controllers
             return Ok(players);
         }
 
-        [HttpGet("getplayerforname/{playerleague}")]
-        public async Task<IActionResult> GetPlayerForName(PlayerLeagueDto dto)
+        [HttpGet("getplayerforname")]
+        public async Task<IActionResult> GetPlayerForName(string playername, string leagueId)
         {
-            var players = await _repo.GetPlayerForName(dto);
+            var players = await _repo.GetPlayerForName(playername, Int32.Parse(leagueId));
             return Ok(players);
         }
 
-        [HttpGet("getcontractforplayer/{playerId}")]
-        public async Task<IActionResult> GetContractForPlayer(PlayerIdLeagueDto playerId)
+        [HttpGet("getcontractforplayer")]
+        public async Task<IActionResult> GetContractForPlayer(string playerId, string leagueId)
         {
-            var player = await _repo.GetContractForPlayer(playerId);
+            var player = await _repo.GetContractForPlayer(Int32.Parse(playerId), Int32.Parse(leagueId));
             return Ok(player);
         }
 
-        [HttpGet("getfullcontractforplayer/{playerId}")]
-        public async Task<IActionResult> GetFullContractForPlayer(PlayerIdLeagueDto playerId)
+        [HttpGet("getfullcontractforplayer")]
+        public async Task<IActionResult> GetFullContractForPlayer(string playerId, string leagueId)
         {
-            var player = await _repo.GetFullContractForPlayer(playerId);
+            var player = await _repo.GetFullContractForPlayer(Int32.Parse(playerId), Int32.Parse(leagueId));
             return Ok(player);
         }
 

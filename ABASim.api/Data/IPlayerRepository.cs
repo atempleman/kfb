@@ -7,23 +7,23 @@ namespace ABASim.api.Data
 {
     public interface IPlayerRepository
     {
-         Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool(int page);
+         Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPoolPage(int page, int leagueId);
 
-         Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool();
+         Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool(int leagueId);
 
-         Task<IEnumerable<DraftPlayerDto>> DraftPoolFilterByPosition(int pos);
+         Task<IEnumerable<DraftPlayerDto>> DraftPoolFilterByPosition(int pos, int leagueId);
 
-         Task<IEnumerable<DraftPlayerDto>> FilterInitialDraftPlayerPool(string value);
+         Task<IEnumerable<DraftPlayerDto>> FilterInitialDraftPlayerPool(string value, int leagueId);
 
          Task<IEnumerable<Player>> GetFilteredFreeAgents(PlayerLeagueDto value);
 
          Task<IEnumerable<Player>> GetFreeAgentsByPos(PlayerIdLeagueDto pos);
 
-         Task<IEnumerable<CareerStatsDto>> GetCareerStats(PlayerIdLeagueDto dto);
+         Task<IEnumerable<CareerStatsDto>> GetCareerStats(int playerId, int leagueId);
 
          Task<IEnumerable<Player>> FilterPlayers(string value);
 
-         Task<IEnumerable<Player>> FilterByPosition(PlayerIdLeagueDto pos);
+         Task<IEnumerable<Player>> FilterByPosition(int filter, int leagueId);
 
          Task<Player> GetPlayerForId(int playerId);
 
@@ -31,15 +31,15 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<Player>> GetFreeAgents(int leagueId);
 
-         Task<CompletePlayerDto> GetCompletePlayer(PlayerIdLeagueDto dto);
+         Task<CompletePlayerDto> GetCompletePlayer(int playerId, int leagueId);
 
-         Task<int> GetCountOfDraftPlayers();
+         Task<int> GetCountOfDraftPlayers(int leagueId);
 
-         Task<Player> GetPlayerForName(PlayerLeagueDto dto);
+         Task<Player> GetPlayerForName(string playername, int leagueId);
 
-         Task<PlayerContractQuickViewDto> GetContractForPlayer(PlayerIdLeagueDto dto);
+         Task<PlayerContractQuickViewDto> GetContractForPlayer(int playerId, int leagueId);
 
-         Task<PlayerContract> GetFullContractForPlayer(PlayerIdLeagueDto dto);
+         Task<PlayerContract> GetFullContractForPlayer(int playerId, int leagueId);
 
          Task<IEnumerable<RetiredPlayer>> GetRetiredPlayers();
 

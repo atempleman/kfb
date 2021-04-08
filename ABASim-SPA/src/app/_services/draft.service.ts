@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AddDraftRank } from '../_models/addDraftRank';
 import { DraftPlayer } from '../_models/draftPlayer';
 import { DraftTracker } from '../_models/draftTracker';
@@ -13,6 +13,7 @@ import { DashboardDraftPick } from '../_models/dashboardDraftPick';
 import { InitialPickSalary } from '../_models/initialPickSalary';
 import { GetDashboardPicks } from '../_models/getDashboardPicks';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +31,11 @@ export class DraftService {
     return this.http.post(this.baseUrl + 'removedraftrank', ranking);
   }
 
-  getDraftBoardForTeam(teamId: GetRosterQuickView): Observable<DraftPlayer[]> {
-    return this.http.get<DraftPlayer[]>(this.baseUrl + 'getdraftboard/' + teamId);
+  getDraftBoardForTeam(qv: GetRosterQuickView): Observable<DraftPlayer[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+    return this.http.get<DraftPlayer[]>(this.baseUrl + 'getdraftboard', {params});
   }
 
   moveRankingUp(player: AddDraftRank) {
@@ -50,8 +54,8 @@ export class DraftService {
     return this.http.get<DraftTracker>(this.baseUrl + 'getdrafttracker/' + leagueId);
   }
 
-  getInitialDraftPicks(): Observable<InitialDraftPicks[]> {
-    return this.http.get<InitialDraftPicks[]>(this.baseUrl + 'getinitialdraftpicks');
+  getInitialDraftPicks(leagueId: number): Observable<InitialDraftPicks[]> {
+    return this.http.get<InitialDraftPicks[]>(this.baseUrl + 'getinitialdraftpicks/' + leagueId);
   }
 
   getCurrentInitialDraftPick(leagueId: number): Observable<InitialDraftPicks> {
@@ -66,12 +70,18 @@ export class DraftService {
     return this.http.post(this.baseUrl + 'makeautopick', draftPick);
   }
 
-  getDraftPicksForRound(page: number): Observable<DraftPick[]> {
-    return this.http.get<DraftPick[]>(this.baseUrl + 'getinitialdraftpicksforround/' + page);
+  getDraftPicksForRound(page: GetPlayoffSummary): Observable<DraftPick[]> {
+    const params = new HttpParams()
+      .set('round', page.round.toString())
+      .set('leagueId', page.leagueId.toString());
+    return this.http.get<DraftPick[]>(this.baseUrl + 'getinitialdraftpicksforround', {params});
   }
 
   getDashboardPicks(pick: GetDashboardPicks): Observable<DashboardDraftPick> {
-    return this.http.get<DashboardDraftPick>(this.baseUrl + 'getdashboardcurrentpick/' + pick);
+    const params = new HttpParams()
+      .set('pick', pick.pick.toString())
+      .set('leagueId', pick.leagueId.toString());
+    return this.http.get<DashboardDraftPick>(this.baseUrl + 'getdashboardcurrentpick', {params});
   }
 
   getInitialDraftSalaryDetails(): Observable<InitialPickSalary[]> {

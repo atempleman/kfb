@@ -75,7 +75,7 @@ export class StatsComponent implements OnInit {
   }
 
   setupLeague() {
-    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');

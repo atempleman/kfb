@@ -51,9 +51,9 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RemoveTeamRegistration(GetRosterQuickViewDto dto)
+        public async Task<bool> RemoveTeamRegistration(int teamId, int leagueId)
         {
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == dto.TeamId && x.LeagueId == dto.LeagueId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == teamId && x.LeagueId == leagueId);
             team.UserId = 0;
             _context.Update(team);
             return await _context.SaveChangesAsync() > 0;
@@ -1107,10 +1107,10 @@ namespace ABASim.api.Data
             }
         }
 
-        public async Task<bool> ChangeDay(GetScheduleLeagueDto day)
+        public async Task<bool> ChangeDay(int day, int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == day.LeagueId);
-            league.Day = day.Day;
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            league.Day = day;
             _context.Update(league);
             return await _context.SaveChangesAsync() > 0;
         }
@@ -2265,14 +2265,14 @@ namespace ABASim.api.Data
             return nextGamesList;
         }
 
-        public async Task<bool> ResetGame(GameLeagueDto gameId)
+        public async Task<bool> ResetGame(int gameId, int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == gameId.LeagueId);
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             if (league.StateId == 7)
             {
-                var gameresult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == gameId.GameId && x.LeagueId == gameId.LeagueId);
-                var boxScores = await _context.GameBoxScores.Where(x => x.GameId == gameId.GameId && x.LeagueId == gameId.LeagueId).ToListAsync();
-                var playByPlays = await _context.PlayByPlays.Where(x => x.GameId == gameId.GameId && x.LeagueId == gameId.LeagueId).ToListAsync();
+                var gameresult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == gameId && x.LeagueId == leagueId);
+                var boxScores = await _context.GameBoxScores.Where(x => x.GameId == gameId && x.LeagueId == leagueId).ToListAsync();
+                var playByPlays = await _context.PlayByPlays.Where(x => x.GameId == gameId && x.LeagueId == leagueId).ToListAsync();
 
                 // _context.GameResults.Remove(gameresult);
                 gameresult.AwayScore = 0;

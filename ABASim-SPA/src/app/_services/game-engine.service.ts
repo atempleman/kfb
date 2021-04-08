@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SimGame } from '../_models/simGame';
 import { map } from 'rxjs/operators';
@@ -33,11 +33,19 @@ export class GameEngineService {
     return this.http.post(this.baseUrl + 'startPlayoffGame', game);
   }
 
-  getBoxScoreForGameId(gameleague: GetGameLeague): Observable<BoxScore[]> {
-    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameid/' + gameleague);
+  getBoxScoreForGameId(gl: GetGameLeague): Observable<BoxScore[]> {
+    const params = new HttpParams()
+      .set('gameId', gl.gameId.toString())
+      .set('leagueId', gl.leagueId.toString());
+
+    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameid', {params});
   }
 
-  getBoxScoreForGameIdPlayoffs(gameleague: GetGameLeague): Observable<BoxScore[]> {
-    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameidplayoffs/' + gameleague);
+  getBoxScoreForGameIdPlayoffs(gl: GetGameLeague): Observable<BoxScore[]> {
+    const params = new HttpParams()
+      .set('gameId', gl.gameId.toString())
+      .set('leagueId', gl.leagueId.toString());
+
+    return this.http.get<BoxScore[]>(this.baseUrl + 'getboxscoresforgameidplayoffs', {params});
   }
 }

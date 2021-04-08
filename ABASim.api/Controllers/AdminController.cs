@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ABASim.api.Data;
 using ABASim.api.Dtos;
@@ -25,10 +26,10 @@ namespace ABASim.api.Controllers
             return updated;
         }
 
-        [HttpGet("removeteamrego/{teamId}")]
-        public async Task<bool> RemoveTeamRegistration(GetRosterQuickViewDto teamId)
+        [HttpGet("removeteamrego")]
+        public async Task<bool> RemoveTeamRegistration(string teamId, string leagueId)
         {
-            var updated = await _repo.RemoveTeamRegistration(teamId);
+            var updated = await _repo.RemoveTeamRegistration(Int32.Parse(teamId), Int32.Parse(leagueId));
             return updated;
         }
 
@@ -57,10 +58,10 @@ namespace ABASim.api.Controllers
             return result;
         }
 
-        [HttpGet("changeday/{day}")]
-        public async Task<bool> ChangeDay(GetScheduleLeagueDto day)
+        [HttpGet("changeday")]
+        public async Task<bool> ChangeDay(string day, string leagueId)
         {
-            var result = await _repo.ChangeDay(day);
+            var result = await _repo.ChangeDay(Int32.Parse(day), Int32.Parse(leagueId));
             return result;
         }
 
@@ -127,10 +128,10 @@ namespace ABASim.api.Controllers
             return Ok(nextGames);
         }
 
-        [HttpGet("resetgame/{gameId}")]
-        public async Task<bool> ResetGame(GameLeagueDto gameId)
+        [HttpGet("resetgame")]
+        public async Task<bool> ResetGame(string gameId, string leagueId)
         {
-            var result = await _repo.ResetGame(gameId);
+            var result = await _repo.ResetGame(Int32.Parse(gameId), Int32.Parse(leagueId));
             return result;
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ABASim.api.Data;
 using ABASim.api.Dtos;
@@ -45,38 +46,38 @@ namespace ABASim.api.Controllers
             return Ok(team);
         }
 
-        [HttpGet("getteamforteamid/{teamId}")]
-        public async Task<IActionResult> GetTeamForTeamId(GetRosterQuickViewDto teamId)
+        [HttpGet("getteamforteamid")]
+        public async Task<IActionResult> GetTeamForTeamId(string teamId, string leagueId)
         {
-            var team = await _repo.GetTeamForTeamId(teamId);
+            var team = await _repo.GetTeamForTeamId(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(team);
         }
 
-        [HttpGet("getextendedroster/{teamId}")]
-        public async Task<IActionResult> GetExtendedRoster(GetRosterQuickViewDto teamId)
+        [HttpGet("getextendedroster")]
+        public async Task<IActionResult> GetExtendedRoster(string teamId, string leagueId)
         {
-            var team = await _repo.GetExtendPlayersForTeam(teamId);
+            var team = await _repo.GetExtendPlayersForTeam(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(team);
         }
 
-        [HttpGet("getquickviewroster/{quickview}")]
-        public async Task<IActionResult> GetQuickViewRoster(GetRosterQuickViewDto quickview)
+        [HttpGet("getquickviewroster")]
+        public async Task<IActionResult> GetQuickViewRoster(string teamId, string leagueId)
         {
-            var team = await _repo.GetQuickViewRoster(quickview);
+            var team = await _repo.GetQuickViewRoster(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(team);
         }
 
-        [HttpGet("getteaminjuries/{quickview}")]
-        public async Task<IActionResult> GetTeamInjuries(GetRosterQuickViewDto quickview)
+        [HttpGet("getteaminjuries")]
+        public async Task<IActionResult> GetTeamInjuries(string teamId, string leagueId)
         {
-            var team = await _repo.GetTeamInjuries(quickview);
+            var team = await _repo.GetTeamInjuries(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(team);
         }
 
-        [HttpGet("getrosterforteam/{teamId}")]
-        public async Task<IActionResult> GetRosterForTeam(GetRosterQuickViewDto teamId)
+        [HttpGet("getrosterforteam")]
+        public async Task<IActionResult> GetRosterForTeam(string teamId, string leagueId)
         {
-            var players = await _repo.GetRosterForTeam(teamId);
+            var players = await _repo.GetRosterForTeam(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(players);
         }
 
@@ -94,24 +95,24 @@ namespace ABASim.api.Controllers
             return Ok(teams);
         }
 
-        [HttpGet("getteamdepthchart/{teamId}")]
-        public async Task<IActionResult> GetDepthChartForTeam(int teamId)
+        [HttpGet("getteamdepthchart")]
+        public async Task<IActionResult> GetDepthChartForTeam(string teamId, string leagueId)
         {
-            var depthCharts = await _repo.GetDepthChartForTeam(teamId);
+            var depthCharts = await _repo.GetDepthChartForTeam(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(depthCharts);
         }
 
-        [HttpGet("getteamforteamname/{teamleague}")]
-        public async Task<IActionResult> GetTeamForTeamName(TeamNameLeagueDto dto)
+        [HttpGet("getteamforteamname")]
+        public async Task<IActionResult> GetTeamForTeamName(string teamname, string leagueId)
         {
-            var team = await _repo.GetTeamForTeamName(dto);
+            var team = await _repo.GetTeamForTeamName(teamname, Int32.Parse(leagueId));
             return Ok(team);
         }
 
-        [HttpGet("getteamformascot/{name}")]
-        public async Task<IActionResult> GetTeamForTeamMascot(TeamNameLeagueDto name)
+        [HttpGet("getteamformascot")]
+        public async Task<IActionResult> GetTeamForTeamMascot(string teamname, string leagueId)
         {
-            var team = await _repo.GetTeamForTeamMascot(name);
+            var team = await _repo.GetTeamForTeamMascot(teamname, Int32.Parse(leagueId));
             return Ok(team);
         }
 
@@ -143,24 +144,24 @@ namespace ABASim.api.Controllers
             return Ok(added);
         }
 
-        [HttpGet("getcoachsettings/{teamId}")]
-        public async Task<IActionResult> GetCoachSettingsFormTeamId(GetRosterQuickViewDto teamId)
+        [HttpGet("getcoachsettings")]
+        public async Task<IActionResult> GetCoachSettingsFormTeamId(string teamId, string leagueId)
         {
-            var coachSetting = await _repo.GetCoachSettingForTeamId(teamId);
+            var coachSetting = await _repo.GetCoachSettingForTeamId(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(coachSetting);
         }
 
-        [HttpGet("getallteamsexceptusers/{teamId}")]
-        public async Task<IActionResult> GetAllTeamsExceptUsers(GetRosterQuickViewDto teamId)
+        [HttpGet("getallteamsexceptusers")]
+        public async Task<IActionResult> GetAllTeamsExceptUsers(string teamId, string leagueId)
         {
-            var result = await _repo.GetAllTeamsExceptUsers(teamId);
+            var result = await _repo.GetAllTeamsExceptUsers(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(result);
         }
 
-        [HttpGet("gettradeoffers/{teamId}")]
-        public async Task<IActionResult> GetTradeOffers(GetRosterQuickViewDto teamId)
+        [HttpGet("gettradeoffers")]
+        public async Task<IActionResult> GetTradeOffers(string teamId, string leagueId)
         {
-            var trades = await _repo.GetTradeOffers(teamId);
+            var trades = await _repo.GetTradeOffers(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(trades);
         }
 
@@ -198,17 +199,17 @@ namespace ABASim.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getteamsdraftpicks/{teamId}")]
-        public async Task<IActionResult> GetTeamsDraftPicks(GetRosterQuickViewDto teamId)
+        [HttpGet("getteamsdraftpicks")]
+        public async Task<IActionResult> GetTeamsDraftPicks(string teamId, string leagueId)
         {
-            var draftPicks = await _repo.GetTeamsDraftPicks(teamId);
+            var draftPicks = await _repo.GetTeamsDraftPicks(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(draftPicks);
         }
 
-        [HttpGet("getinjuriesforteam/{teamId}")]
-        public async Task<IActionResult> GetInjuriesForTeam(GetRosterQuickViewDto teamId)
+        [HttpGet("getinjuriesforteam")]
+        public async Task<IActionResult> GetInjuriesForTeam(string teamId, string leagueId)
         {
-            var playerInjuries = await _repo.GetPlayerInjuriesForTeam(teamId);
+            var playerInjuries = await _repo.GetPlayerInjuriesForTeam(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(playerInjuries);
         }
 
@@ -219,24 +220,24 @@ namespace ABASim.api.Controllers
             return Ok(playerInjuries);
         }
 
-        [HttpGet("getinjuryforplayer/{playeridleague}")]
-        public async Task<IActionResult> GetInjuryForPlayer(PlayerIdLeagueDto dto)
+        [HttpGet("getinjuryforplayer")]
+        public async Task<IActionResult> GetInjuryForPlayer(string playerId, string teamId)
         {
-            var injury = await _repo.GetInjuryForPlayer(dto);
+            var injury = await _repo.GetInjuryForPlayer(Int32.Parse(playerId), Int32.Parse(teamId));
             return Ok(injury);
         }
 
-        [HttpGet("getteamsalarycapdetails/{teamId}")]
-        public async Task<IActionResult> GetTeamSalaryCapDetails(GetRosterQuickViewDto teamId)
+        [HttpGet("getteamsalarycapdetails")]
+        public async Task<IActionResult> GetTeamSalaryCapDetails(string teamId, string leagueId)
         {
-            var cap = await _repo.GetTeamSalaryCapDetails(teamId);
+            var cap = await _repo.GetTeamSalaryCapDetails(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(cap);
         }
 
-        [HttpGet("getteamcontracts/{teamId}")]
-        public async Task<IActionResult> GetTeamContracts(GetRosterQuickViewDto teamId)
+        [HttpGet("getteamcontracts")]
+        public async Task<IActionResult> GetTeamContracts(string teamId, string leagueId)
         {
-            var contracts = await _repo.GetTeamContracts(teamId);
+            var contracts = await _repo.GetTeamContracts(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(contracts);
         }
 
@@ -254,10 +255,10 @@ namespace ABASim.api.Controllers
             return Ok(strategies);
         }
 
-        [HttpGet("getstrategyforteam/{teamId}")]
-        public async Task<IActionResult> GetStrategyForTeam(GetRosterQuickViewDto teamId)
+        [HttpGet("getstrategyforteam")]
+        public async Task<IActionResult> GetStrategyForTeam(string teamId, string leagueId)
         {
-            var strategy = await _repo.GetStrategyForTeam(teamId);
+            var strategy = await _repo.GetStrategyForTeam(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(strategy);
         }
 
@@ -283,10 +284,10 @@ namespace ABASim.api.Controllers
             return Ok(true);
         }
 
-        [HttpGet("getcontractoffersforteam/{teamId}")]
-        public async Task<IActionResult> GetContractOffersForTeam(int teamId)
+        [HttpGet("getcontractoffersforteam")]
+        public async Task<IActionResult> GetContractOffersForTeam(string teamId, string leagueId)
         {
-            var offers = await _repo.GetContractOffersForTeam(teamId);
+            var offers = await _repo.GetContractOffersForTeam(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(offers);
         }
 
@@ -297,25 +298,25 @@ namespace ABASim.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getwaivedcontracts/{teamId}")]
-        public async Task<IActionResult> GetWaivedContracts(GetRosterQuickViewDto teamId)
+        [HttpGet("getwaivedcontracts")]
+        public async Task<IActionResult> GetWaivedContracts(string teamId, string leagueId)
         {
-            var result = await _repo.GetWaivedContracts(teamId);
+            var result = await _repo.GetWaivedContracts(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(result);
         }
 
         // 
-        [HttpGet("gettradeplayerviews/{teamId}")]
-        public async Task<IActionResult> GetTradePlayerViews(GetRosterQuickViewDto teamId)
+        [HttpGet("gettradeplayerviews")]
+        public async Task<IActionResult> GetTradePlayerViews(string teamId, string leagueId)
         {
-            var result = await _repo.GetTradePlayerViews(teamId);
+            var result = await _repo.GetTradePlayerViews(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(result);
         }
 
-        [HttpGet("getteamrecord/{teamId}")]
-        public async Task<IActionResult> GetTeamRecord(GetRosterQuickViewDto teamId)
+        [HttpGet("getteamrecord")]
+        public async Task<IActionResult> GetTeamRecord(string teamId, string leagueId)
         {
-            var result = await _repo.GetTeamRecord(teamId);
+            var result = await _repo.GetTeamRecord(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(result);
         }
     }

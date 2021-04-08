@@ -17,41 +17,41 @@ namespace ABASim.api.Data
             _context = context;
         }
 
-        public async Task<IEnumerable<DraftPlayerDto>> DraftPoolFilterByPosition(int pos)
+        public async Task<IEnumerable<DraftPlayerDto>> DraftPoolFilterByPosition(int pos, int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
             List<Player> players = new List<Player>();
             // Get players
             if (pos == 1)
             {
-                players = await _context.Players.Where(x => x.PGPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.PGPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
             else if (pos == 2)
             {
-                players = await _context.Players.Where(x => x.SGPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.SGPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
             else if (pos == 3)
             {
-                players = await _context.Players.Where(x => x.SFPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.SFPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
             else if (pos == 4)
             {
-                players = await _context.Players.Where(x => x.PFPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.PFPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
             else if (pos == 5)
             {
-                players = await _context.Players.Where(x => x.CPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.CPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
 
             int total = players.Count;
             foreach (var player in players)
             {
                 // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 if (playerTeamForPlayerId.TeamId == 31)
                 {
-                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
@@ -82,49 +82,49 @@ namespace ABASim.api.Data
             return draftPool;
         }
 
-        public async Task<IEnumerable<Player>> FilterByPosition(PlayerIdLeagueDto pos)
+        public async Task<IEnumerable<Player>> FilterByPosition(int filter, int leagueId)
         {
             List<Player> players = new List<Player>();
 
-            if (pos.PlayerId == 1)
+            if (filter == 1)
             {
-                players = await _context.Players.Where(x => x.PGPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.PGPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
-            else if (pos.PlayerId == 2)
+            else if (filter == 2)
             {
-                players = await _context.Players.Where(x => x.SGPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.SGPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
-            else if (pos.PlayerId == 3)
+            else if (filter == 3)
             {
-                players = await _context.Players.Where(x => x.SFPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.SFPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
-            else if (pos.PlayerId == 4)
+            else if (filter == 4)
             {
-                players = await _context.Players.Where(x => x.PFPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.PFPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
-            else if (pos.PlayerId == 5)
+            else if (filter == 5)
             {
-                players = await _context.Players.Where(x => x.CPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
+                players = await _context.Players.Where(x => x.CPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             }
             return players;
         }
 
-        public async Task<IEnumerable<DraftPlayerDto>> FilterInitialDraftPlayerPool(string value)
+        public async Task<IEnumerable<DraftPlayerDto>> FilterInitialDraftPlayerPool(string value, int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
 
-            var query = String.Format("SELECT * FROM Players where Surname like '%" + value + "%' or FirstName like '%" + value + "%'");
+            var query = String.Format("SELECT * FROM Players where (Surname like '%" + value + "%' or FirstName like '%" + value + "%') and LeagueId = " + leagueId);
             var players = await _context.Players.FromSqlRaw(query).ToListAsync();
 
             for (int i = 0; i < players.Count; i++)
             {
                 var player = players[i];
                 // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 if (playerTeamForPlayerId.TeamId == 31)
                 {
-                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
@@ -169,17 +169,17 @@ namespace ABASim.api.Data
             return players;
         }
 
-        public async Task<IEnumerable<CareerStatsDto>> GetCareerStats(PlayerIdLeagueDto dto)
+        public async Task<IEnumerable<CareerStatsDto>> GetCareerStats(int playerId, int leagueId)
         {
             List<CareerStatsDto> careerStats = new List<CareerStatsDto>();
-            var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == dto.LeagueId);
-            var currentSeasonPlayerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var currentPlayoffStats = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
+            var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+            var currentSeasonPlayerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var currentPlayoffStats = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
 
-            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == dto.LeagueId);
-            var pastSeasonStats = await _context.PlayerCareerStats.Where(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId).ToListAsync();
-            var pastSeasonPlayoffStats = await _context.PlayerCareerStatsPlayoffs.Where(x => x.PlayerId == dto.LeagueId && x.LeagueId == dto.LeagueId).ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var pastSeasonStats = await _context.PlayerCareerStats.Where(x => x.PlayerId == playerId && x.LeagueId == leagueId).ToListAsync();
+            var pastSeasonPlayoffStats = await _context.PlayerCareerStatsPlayoffs.Where(x => x.PlayerId == playerId && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var season in pastSeasonStats)
             {
@@ -362,18 +362,18 @@ namespace ABASim.api.Data
             return careerStats;
         }
 
-        public async Task<CompletePlayerDto> GetCompletePlayer(PlayerIdLeagueDto dto)
+        public async Task<CompletePlayerDto> GetCompletePlayer(int playerId, int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
-            var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.Id == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var playerRatings = await _context.PlayerRatings.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var playerTendancies = await _context.PlayerTendancies.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var playerGrades = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var playerRatings = await _context.PlayerRatings.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var playerTendancies = await _context.PlayerTendancies.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var playerGrades = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
 
             // need to get the players team
-            var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == dto.LeagueId);
+            var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
             string teamname = "Free Agent";
 
             if (team != null)
@@ -386,13 +386,13 @@ namespace ABASim.api.Data
                 PlayerStatsPlayoff psp = new PlayerStatsPlayoff();
                 if (league.StateId > 8 || (league.StateId == 8 && league.StateId > 0))
                 {
-                    psp = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
+                    psp = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
 
                     if (psp == null)
                     {
                         psp = new PlayerStatsPlayoff
                         {
-                            PlayerId = dto.PlayerId,
+                            PlayerId = playerId,
                             GamesPlayed = 0,
                             Minutes = 0,
                             Points = 0,
@@ -423,7 +423,7 @@ namespace ABASim.api.Data
 
                     CompletePlayerDto player = new CompletePlayerDto
                     {
-                        PlayerId = dto.PlayerId,
+                        PlayerId = playerId,
                         FirstName = playerDetails.FirstName,
                         Surname = playerDetails.Surname,
                         PGPosition = playerDetails.PGPosition,
@@ -502,7 +502,7 @@ namespace ABASim.api.Data
                 {
                     CompletePlayerDto player = new CompletePlayerDto
                     {
-                        PlayerId = dto.PlayerId,
+                        PlayerId = playerId,
                         FirstName = playerDetails.FirstName,
                         Surname = playerDetails.Surname,
                         PGPosition = playerDetails.PGPosition,
@@ -582,7 +582,7 @@ namespace ABASim.api.Data
             {
                 CompletePlayerDto player = new CompletePlayerDto
                 {
-                    PlayerId = dto.PlayerId,
+                    PlayerId = playerId,
                     FirstName = playerDetails.FirstName,
                     Surname = playerDetails.Surname,
                     PGPosition = playerDetails.PGPosition,
@@ -659,9 +659,9 @@ namespace ABASim.api.Data
             }
         }
 
-        public async Task<PlayerContractQuickViewDto> GetContractForPlayer(PlayerIdLeagueDto dto)
+        public async Task<PlayerContractQuickViewDto> GetContractForPlayer(int playerId, int leagueId)
         {
-            var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
+            var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
 
             if (playerContract != null)
             {
@@ -686,7 +686,7 @@ namespace ABASim.api.Data
 
                 PlayerContractQuickViewDto contract = new PlayerContractQuickViewDto
                 {
-                    PlayerId = dto.PlayerId,
+                    PlayerId = playerId,
                     Years = years,
                     CurrentYearAmount = playerContract.YearOne,
                     TotalAmount = total
@@ -697,7 +697,7 @@ namespace ABASim.api.Data
             {
                 PlayerContractQuickViewDto contract = new PlayerContractQuickViewDto
                 {
-                    PlayerId = dto.PlayerId,
+                    PlayerId = playerId,
                     Years = 0,
                     CurrentYearAmount = 0,
                     TotalAmount = 0
@@ -706,11 +706,11 @@ namespace ABASim.api.Data
             }
         }
 
-        public async Task<int> GetCountOfDraftPlayers()
+        public async Task<int> GetCountOfDraftPlayers(int leagueId)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             if (league.StateId <= 5) {
-                var count = await _context.PlayerTeams.Where(x => x.TeamId == 31).CountAsync();
+                var count = await _context.PlayerTeams.Where(x => x.TeamId == 31 && x.LeagueId == leagueId).CountAsync();
                 return count;
             } else if (league.StateId > 5) {
                 // var count = await _context.PlayerTeams.Where(x => x.TeamId == 31).CountAsync();
@@ -813,20 +813,20 @@ namespace ABASim.api.Data
             return freeAgents;
         }
 
-        public async Task<PlayerContract> GetFullContractForPlayer(PlayerIdLeagueDto dto)
+        public async Task<PlayerContract> GetFullContractForPlayer(int playerId, int leagueId)
         {
-            var contract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == dto.PlayerId && x.LeagueId == dto.LeagueId);
+            var contract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
             return contract;
         }
 
-        public async Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool(int page)
+        public async Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPoolPage(int page, int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
 
             // Get players
             int start = (page * 50) - 50;
             int end = (page * 50);
-            var players = await _context.Players.OrderBy(x => x.Surname).ToListAsync();
+            var players = await _context.Players.Where(x => x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
             int total = players.Count;
 
             if (end > total)
@@ -839,11 +839,11 @@ namespace ABASim.api.Data
             {
                 var player = players[i];
                 // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                var playerTeamForPlayerId = await _context.PlayerTeams.Where(x => x.LeagueId == leagueId).FirstOrDefaultAsync(x => x.PlayerId == player.Id);
 
                 if (playerTeamForPlayerId.TeamId == 31)
                 {
-                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
@@ -874,21 +874,21 @@ namespace ABASim.api.Data
             return draftPool;
         }
 
-        public async Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool()
+        public async Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool(int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
             // Get players
-            var players = await _context.Players.OrderBy(x => x.Surname).ToListAsync();
+            var players = await _context.Players.Where(x => x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
 
             // foreach (var player in players)- 1;
             foreach (var player in players)
             {
                 // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 if (playerTeamForPlayerId.TeamId == 31)
                 {
-                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
@@ -925,9 +925,9 @@ namespace ABASim.api.Data
             return player;
         }
 
-        public async Task<Player> GetPlayerForName(PlayerLeagueDto dto)
+        public async Task<Player> GetPlayerForName(string playername, int leagueId)
         {
-            string[] components = dto.Name.Split(' ');
+            string[] components = playername.Split(' ');
             int componentCount = components.Length;
 
             string first = "";
@@ -939,7 +939,7 @@ namespace ABASim.api.Data
                 first = components[0];
                 surname = components[1];
 
-                var p = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == first && x.Surname == surname && x.LeagueId == dto.LeagueId);
+                var p = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == first && x.Surname == surname && x.LeagueId == leagueId);
                 return p;
             }
             else

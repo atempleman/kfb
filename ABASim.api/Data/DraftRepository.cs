@@ -30,15 +30,15 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<DraftPlayerDto>> GetDraftBoardForTeamId(GetRosterQuickViewDto dto)
+        public async Task<IEnumerable<DraftPlayerDto>> GetDraftBoardForTeamId(int teamId, int leagueId)
         {
             List<DraftPlayerDto> draftboardPlayers = new List<DraftPlayerDto>();
-            var draftRankings = await _context.DraftRankings.Where(x => x.TeamId == dto.TeamId && x.LeagueId == dto.LeagueId).OrderBy(x => x.Rank).ToListAsync();
+            var draftRankings = await _context.DraftRankings.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).OrderBy(x => x.Rank).ToListAsync();
 
             foreach (var player in draftRankings)
             {
-                var playerRecord = await _context.Players.FirstOrDefaultAsync(x => x.Id == player.PlayerId && x.LeagueId == dto.LeagueId);
-                var playerGrades = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == dto.LeagueId);
+                var playerRecord = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
+                var playerGrades = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 DraftPlayerDto newPlayer = new DraftPlayerDto();
                 newPlayer.PlayerId = playerRecord.Id;
@@ -133,13 +133,13 @@ namespace ABASim.api.Data
 
         public async Task<DraftTracker> GetDraftTracker(int leagueId)
         {
-            var tracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var tracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
             return tracker;
         }
 
-        public async Task<IEnumerable<InitialDraft>> GetInitialDraftPicks()
+        public async Task<IEnumerable<InitialDraft>> GetInitialDraftPicks(int leagueId)
         {
-            var initialDraftPicks = await _context.InitialDrafts.ToListAsync();
+            var initialDraftPicks = await _context.InitialDrafts.Where(x => x.LeagueId == leagueId).ToListAsync();
             return initialDraftPicks;
         }
 
@@ -357,18 +357,18 @@ namespace ABASim.api.Data
             return false;
         }
 
-        public async Task<IEnumerable<DraftPickDto>> GetInitialDraftPicksForPage(int page)
+        public async Task<IEnumerable<DraftPickDto>> GetInitialDraftPicksForPage(int round, int leagueId)
         {
             List<DraftPickDto> draftPicks = new List<DraftPickDto>();
 
-            var initalDraftPicks = await _context.InitialDrafts.Where(x => x.Round == page).OrderBy(x => x.Pick).ToListAsync();
-            var teams = await _context.Teams.ToListAsync();
+            var initalDraftPicks = await _context.InitialDrafts.Where(x => x.Round == round && x.LeagueId == leagueId).OrderBy(x => x.Pick).ToListAsync();
+            var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
 
             foreach (var dp in initalDraftPicks)
             {
-                var currentTeam = teams.FirstOrDefault(x => x.Id == dp.TeamId);
+                var currentTeam = teams.FirstOrDefault(x => x.TeamId == dp.TeamId && x.LeagueId == leagueId);
 
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == dp.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == dp.PlayerId && x.LeagueId == leagueId);
                 var playerName = "";
                 if (player != null)
                 {
@@ -389,23 +389,23 @@ namespace ABASim.api.Data
             return draftPicks;
         }
 
-        public async Task<DashboardDraftPickDto> GetDashboardDraftPick(GetDashboardPickDto pickSpot)
+        public async Task<DashboardDraftPickDto> GetDashboardDraftPick(int pick, int leagueId)
         {
             DashboardDraftPickDto pickDto = new DashboardDraftPickDto();
 
             // Get the draft tracker
-            var draftTracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.LeagueId == pickSpot.LeagueId);
+            var draftTracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
 
             // TODO NEED TO ADD IN END OF ROUND AND DRAFT CHECKS
             int pickNumber = draftTracker.Pick;
             int roundNumber = draftTracker.Round;
 
-            if (pickSpot.Pick == 0)
+            if (pick == 0)
             {
                 // current pick
                 pickDto.Pick = pickNumber;
             }
-            else if (pickSpot.Pick == 1)
+            else if (pick == 1)
             {
                 // next pick
                 if (pickNumber == 30)
@@ -418,7 +418,7 @@ namespace ABASim.api.Data
                     pickDto.Pick = pickNumber + 1;
                 }
             }
-            else if (pickSpot.Pick == -1)
+            else if (pick == -1)
             {
                 // previous pick
                 if (pickNumber == 1)
@@ -433,15 +433,15 @@ namespace ABASim.api.Data
             }
 
             // Now need to get the team for that pick
-            var pick = await _context.InitialDrafts.FirstOrDefaultAsync(x => x.Round == roundNumber && x.Pick == pickDto.Pick && x.LeagueId == pickSpot.Pick);
+            var id_pick = await _context.InitialDrafts.FirstOrDefaultAsync(x => x.Round == roundNumber && x.Pick == pickDto.Pick && x.LeagueId == pick);
 
             // Now need the team
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == pick.TeamId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == id_pick.TeamId);
             pickDto.TeamMascot = team.Mascot;
 
-            if (pickSpot.Pick == -1)
+            if (pick == -1)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == pick.PlayerId && x.LeagueId == pickSpot.LeagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == id_pick.PlayerId && x.LeagueId == leagueId);
                 pickDto.PlayerName = player.FirstName + " " + player.Surname;
             }
             else

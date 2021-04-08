@@ -9,7 +9,7 @@ namespace ABASim.api.Data
     {
          Task<bool> UpdateLeagueState(LeagueStatusDto newState);
 
-         Task<bool> RemoveTeamRegistration(GetRosterQuickViewDto dto);
+         Task<bool> RemoveTeamRegistration(int teamId, int leagueId);
 
          Task<bool> RunInitialDraftLottery(int leagueId);
 
@@ -17,7 +17,7 @@ namespace ABASim.api.Data
 
          Task<bool> CheckGamesRun(int leagueId);
 
-         Task<bool> ChangeDay(GetScheduleLeagueDto day);
+         Task<bool> ChangeDay(int day, int leagueId);
 
          Task<bool> BeginPlayoffs(int leagueId);
 
@@ -35,7 +35,7 @@ namespace ABASim.api.Data
 
          Task<bool> GenerateInitialContracts(int leagueId);
 
-         Task<bool> ResetGame(GameLeagueDto gameId);
+         Task<bool> ResetGame(int gameId, int leagueId);
 
          Task<IEnumerable<CurrentDayGamesDto>> GetGamesForRreset(int leagueId);
 

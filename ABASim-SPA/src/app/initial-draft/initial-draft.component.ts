@@ -13,6 +13,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DraftPlayer } from '../_models/draftPlayer';
 import { DraftSelection } from '../_models/draftSelection';
 import { Player } from '../_models/player';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-initial-draft',
@@ -45,7 +46,32 @@ export class InitialDraftComponent implements OnInit {
               private modalService: BsModalService) { }
 
   ngOnInit() {
-    this.teamService.getAllTeams().subscribe(result => {
+
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.loaded++;
+      this.setupLeague();
+    });
+    this.isAdmin = this.authService.isAdmin();
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
+    this.teamService.getAllTeams(this.league.id).subscribe(result => {
       this.allTeams = result;
     }, error => {
       this.alertify.error('Error getting all teams');
@@ -53,33 +79,9 @@ export class InitialDraftComponent implements OnInit {
       this.loaded++;
     });
 
-    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
-      this.team = result;
-    }, error => {
-      this.alertify.error('Error getting your team');
-    }, () => {
-      this.loaded++;
-    });
+    this.getDraftDetails();
 
-    this.leagueService.getLeague().subscribe(result => {
-      this.league = result;
-    }, error => {
-      this.alertify.error('Error getting league');
-    }, () => {
-      this.getDraftDetails();
-    });
-
-    this.isAdmin = this.authService.isAdmin();
-
-    // this.playerService.getInitialDraftPlayers().subscribe(result => {
-    //   this.draftablePlayers = result;
-    // }, error => {
-    //   this.alertify.error('Error getting available players to draft');
-    // }, () => {
-    //   this.loaded++;
-    // });
-
-    this.playerService.getAllPlayers().subscribe(result => {
+    this.playerService.getAllPlayers(this.league.id).subscribe(result => {
       this.players = result;
     }, error => {
       this.alertify.error('Error getting players');
@@ -100,7 +102,7 @@ export class InitialDraftComponent implements OnInit {
 
   getDraftDetails() {
     // Get the draft tracker
-    this.draftService.getDraftTracker().subscribe(result => {
+    this.draftService.getDraftTracker(this.league.id).subscribe(result => {
       this.tracker = result;
     }, error => {
       this.alertify.error('Error getting draft tracker');
@@ -108,7 +110,7 @@ export class InitialDraftComponent implements OnInit {
     });
 
     // Get the Initial Draft Details
-    this.draftService.getInitialDraftPicks().subscribe(result => {
+    this.draftService.getInitialDraftPicks(this.league.id).subscribe(result => {
       this.allDraftPicks = result;
       console.log(this.allDraftPicks);
     }, error => {
@@ -124,7 +126,11 @@ export class InitialDraftComponent implements OnInit {
 
   getTeamOnTheClock() {
     const draftPick = this.allDraftPicks.find(x => x.pick === this.tracker.pick && x.round === this.tracker.round);
-    this.teamService.getTeamForTeamId(draftPick.teamId).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: draftPick.teamId,
+      leagueId: this.league.id
+    };
+    this.teamService.getTeamForTeamId(summary).subscribe(result => {
       this.teamOnClock = result;
     }, error => {
       this.alertify.error('Error getting team on the clock');
@@ -148,7 +154,11 @@ export class InitialDraftComponent implements OnInit {
 
     if (draftOver !== 1) {
       const draftPick = this.allDraftPicks.find(x => x.pick === pick && x.round === round);
-      this.teamService.getTeamForTeamId(draftPick.teamId).subscribe(result => {
+      const summary: GetRosterQuickView = {
+        teamId: draftPick.teamId,
+        leagueId: this.league.id
+      };
+      this.teamService.getTeamForTeamId(summary).subscribe(result => {
         this.nextTeam = result;
       }, error => {
         this.alertify.error('Error getting team on the clock');
@@ -204,7 +214,8 @@ export class InitialDraftComponent implements OnInit {
     pick: this.tracker.pick,
     playerId: +this.draftSelection,
     round: this.tracker.round,
-    teamId: this.team.id
+    teamId: this.team.teamId,
+    leagueId: this.league.id
   };
 
   this.draftService.makeDraftPick(selectedPick).subscribe(result => {
@@ -223,7 +234,8 @@ export class InitialDraftComponent implements OnInit {
     pick: this.tracker.pick,
     playerId: 0,
     round: this.tracker.round,
-    teamId: 0
+    teamId: 0,
+    leagueId: this.league.id
   };
 
   this.draftService.makeAutoPick(selectedPick).subscribe(result => {

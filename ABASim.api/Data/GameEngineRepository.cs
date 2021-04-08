@@ -15,15 +15,15 @@ namespace ABASim.api.Data
             _context = context;
         }
 
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(GameLeagueDto dto)
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(int gameId, int leagueId)
         {
             List<BoxScore> boxScores = new List<BoxScore>();
-            var gameBoxScores = await _context.GameBoxScores.Where(x => x.GameId == dto.GameId && x.LeagueId == dto.LeagueId).ToListAsync();
+            var gameBoxScores = await _context.GameBoxScores.Where(x => x.GameId == gameId && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var gbs in gameBoxScores)
             {
                 // Need to get player name
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == gbs.PlayerId && x.LeagueId == dto.LeagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == gbs.PlayerId && x.LeagueId == leagueId);
 
                 BoxScore bs = new BoxScore
                 {
@@ -50,7 +50,7 @@ namespace ABASim.api.Data
                     Turnovers = gbs.Turnovers,
                     Fouls = gbs.Fouls,
                     PlusMinus = gbs.PlusMinus,
-                    LeagueId = dto.LeagueId
+                    LeagueId = leagueId
                 };
                 boxScores.Add(bs);
             }
@@ -58,15 +58,15 @@ namespace ABASim.api.Data
             return boxScores;
         }
 
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(GameLeagueDto dto)
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(int gameId, int leagueId)
         {
             List<BoxScore> boxScores = new List<BoxScore>();
-            var gameBoxScores = await _context.PlayoffBoxScores.Where(x => x.GameId == dto.GameId && x.LeagueId == dto.LeagueId).ToListAsync();
+            var gameBoxScores = await _context.PlayoffBoxScores.Where(x => x.GameId == gameId && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var gbs in gameBoxScores)
             {
                 // Need to get player name
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == gbs.PlayerId && x.LeagueId == dto.LeagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == gbs.PlayerId && x.LeagueId == leagueId);
 
                 BoxScore bs = new BoxScore
                 {
@@ -93,7 +93,7 @@ namespace ABASim.api.Data
                     Turnovers = gbs.Turnovers,
                     Fouls = gbs.Fouls,
                     PlusMinus = gbs.PlusMinus,
-                    LeagueId = dto.LeagueId
+                    LeagueId = leagueId
                 };
                 boxScores.Add(bs);
             }

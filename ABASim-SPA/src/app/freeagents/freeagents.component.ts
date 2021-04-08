@@ -80,23 +80,13 @@ export class FreeagentsComponent implements OnInit {
       this.setupLeague();
     });
 
-
-
-    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
-      this.team = result;
-    }, error => {
-      this.alertify.error('Error getting your team');
-    }, () => {
-
-    });
-
     this.searchForm = this.fb.group({
       filter: ['']
     });
   }
 
   setupLeague() {
-    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
@@ -113,10 +103,8 @@ export class FreeagentsComponent implements OnInit {
 
   toggleOffersView() {
     if (this.faOffers == 0) {
-      console.log('ash');
       this.faOffers = 1;
     } else {
-      console.log('ash2');
       this.faOffers = 0;
     }
   }

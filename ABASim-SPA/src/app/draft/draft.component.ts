@@ -17,6 +17,9 @@ import { DraftSelection } from '../_models/draftSelection';
 import { AdminService } from '../_services/admin.service';
 import { TransferService } from '../_services/transfer.service';
 import { InitialPickSalary } from '../_models/initialPickSalary';
+import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
+import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-draft',
@@ -74,7 +77,19 @@ export class DraftComponent implements OnInit {
 
     this.rounds = Array(13).fill(0).map((x, i) => i);
 
-    this.leagueService.getLeague().subscribe(result => {
+    this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
+    }, error => {
+      this.alertify.error('Error getting your Team');
+    }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
@@ -85,30 +100,23 @@ export class DraftComponent implements OnInit {
       } else if (this.league.stateId === 4) {
         this.getDraftTracker();
       }
-    });
 
-    this.teamService.getTeamForTeamId(this.teamId).subscribe(result => {
-      this.team = result;
-    }, error => {
-      this.alertify.error('Error getting your team');
-    });
+      this.playerService.getAllInitialDraftPlayers(this.league.id).subscribe(result => {
+        this.draftablePlayers = result;
+      }, error => {
+        this.alertify.error('Error getting available players to draft');
+      }, () => {
+      });
 
-    console.log('getting initial players');
-    this.playerService.getAllInitialDraftPlayers().subscribe(result => {
-      this.draftablePlayers = result;
-    }, error => {
-      this.alertify.error('Error getting available players to draft');
-    }, () => {
-    });
-
-    this.pageInterval = setInterval(() => {
-      this.getDraftTracker();
-    }, 10000);
-
-    this.draftService.getInitialDraftSalaryDetails().subscribe(result => {
-      this.initialPickSalary = result;
-    }, error => {
-      this.alertify.error('Error getting salary details');
+      this.pageInterval = setInterval(() => {
+        this.getDraftTracker();
+      }, 10000);
+  
+      this.draftService.getInitialDraftSalaryDetails().subscribe(result => {
+        this.initialPickSalary = result;
+      }, error => {
+        this.alertify.error('Error getting salary details');
+      });
     });
   }
 
@@ -154,7 +162,7 @@ export class DraftComponent implements OnInit {
 
   getDraftTracker() {
     // Get the draft tracker
-    this.draftService.getDraftTracker().subscribe(result => {
+    this.draftService.getDraftTracker(this.league.id).subscribe(result => {
       this.tracker = result;
     }, error => {
       this.alertify.error('Error getting draft tracker');
@@ -167,8 +175,12 @@ export class DraftComponent implements OnInit {
   }
 
   getDraftDetails() {
+    const summary: GetPlayoffSummary = {
+      round: this.currentRound,
+      leagueId: this.league.id
+    };
     // Get the Initial Draft Details
-    this.draftService.getDraftPicksForRound(this.currentRound).subscribe(result => {
+    this.draftService.getDraftPicksForRound(summary).subscribe(result => {
       this.draftPicks = result;
     }, error => {
       this.alertify.error('Error getting Draft Picks');
@@ -178,7 +190,7 @@ export class DraftComponent implements OnInit {
   }
 
   beginDraft() {
-    this.draftService.beginInitialDraft().subscribe(result => {
+    this.draftService.beginInitialDraft(this.league.id).subscribe(result => {
     }, error => {
       this.alertify.error('Error starting the draft');
     }, () => {
@@ -197,7 +209,8 @@ export class DraftComponent implements OnInit {
       pick: this.tracker.pick,
       playerId: +this.draftSelection,
       round: this.tracker.round,
-      teamId: this.team.id
+      teamId: this.team.id,
+      leagueId: this.league.id
     };
 
     this.draftService.makeDraftPick(selectedPick).subscribe(result => {
@@ -210,7 +223,11 @@ export class DraftComponent implements OnInit {
 
       if (this.tracker.round === 13 && this.tracker.pick === 30) {
         // Update the leage state here
-        this.adminService.updateLeagueStatus(5).subscribe(result => {
+        const summary: LeagueStatusUpdate = {
+          status: 5,
+          leagueId: this.league.id
+        };
+        this.adminService.updateLeagueStatus(summary).subscribe(result => {
         }, error => {
           this.alertify.error('Error changing league state');
         }, () => {
@@ -224,8 +241,13 @@ export class DraftComponent implements OnInit {
 
   viewTeam(teamId: number) {
     let team: Team;
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+
     // Need to go a call to get the team id
-    this.teamService.getTeamForTeamId(teamId).subscribe(result => {
+    this.teamService.getTeamForTeamId(summary).subscribe(result => {
       team = result;
     }, error => {
       this.alertify.error('Error getting players team');
@@ -241,7 +263,8 @@ export class DraftComponent implements OnInit {
       pick: this.tracker.pick,
       playerId: 0,
       round: this.tracker.round,
-      teamId: 0
+      teamId: 0,
+      leagueId: this.league.id
     };
 
     this.draftService.makeAutoPick(selectedPick).subscribe(result => {
@@ -252,7 +275,11 @@ export class DraftComponent implements OnInit {
 
       if (this.tracker.round === 13 && this.tracker.pick === 30) {
         // Update the leage state here
-        this.adminService.updateLeagueStatus(5).subscribe(result => {
+        const summary: LeagueStatusUpdate = {
+          status: 5,
+          leagueId: this.league.id
+        };
+        this.adminService.updateLeagueStatus(summary).subscribe(result => {
         }, error => {
           this.alertify.error('Error changing league state');
         }, () => {

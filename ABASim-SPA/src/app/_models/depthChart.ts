@@ -4,4 +4,5 @@ export interface DepthChart {
     playerId: number;
     position: number;
     depth: number;
+    leagueId: number;
 }

@@ -9,6 +9,7 @@ import { Player } from '../_models/player';
 import { DepthChart } from '../_models/depthChart';
 import { Router } from '@angular/router';
 import { PlayerInjury } from '../_models/playerInjury';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
 
 @Component({
   selector: 'app-depthchart',
@@ -56,8 +57,10 @@ export class DepthchartComponent implements OnInit {
 
   rosterSet = 0;
 
+  league: League;
+
   constructor(private alertify: AlertifyService, private teamService: TeamService, private authService: AuthService,
-              private router: Router) { }
+              private router: Router, private leagueService: LeagueService) { }
 
   ngOnInit() {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
@@ -65,13 +68,26 @@ export class DepthchartComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting your team');
     }, () => {
+      this.setupLeague();
+    });
+  }
+
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
       this.getPlayerInjuries();
-      
     });
   }
 
   getPlayerInjuries() {
-    this.teamService.getPlayerInjuriesForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.teamService.getPlayerInjuriesForTeam(summary).subscribe(result => {
       this.teamsInjuries = result;
     }, error => {
       this.alertify.error('Error getting teams injuries');
@@ -105,7 +121,11 @@ export class DepthchartComponent implements OnInit {
   }
 
   getRosterForTeam() {
-    this.teamService.getRosterForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.teamService.getRosterForTeam(summary).subscribe(result => {
       this.playingRoster = result;
     }, error => {
       this.alertify.error('Error getting your roster');
@@ -123,7 +143,11 @@ export class DepthchartComponent implements OnInit {
   }
 
   getDepthCharts() {
-    this.teamService.getDepthChartForTeamId(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.teamService.getDepthChartForTeamId(summary).subscribe(result => {
       this.depthCharts = result;
     }, error => {
       this.alertify.error('Error getting depth charts');
@@ -135,7 +159,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 1,
-          depth: 1
+          depth: 1,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc101);
 
@@ -144,7 +169,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 1,
-          depth: 2
+          depth: 2,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc102);
 
@@ -153,7 +179,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 1,
-          depth: 3
+          depth: 3,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc103);
 
@@ -162,7 +189,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 2,
-          depth: 1
+          depth: 1,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc201);
 
@@ -171,7 +199,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 2,
-          depth: 2
+          depth: 2,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc202);
 
@@ -180,7 +209,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 2,
-          depth: 3
+          depth: 3,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc203);
 
@@ -189,7 +219,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 3,
-          depth: 1
+          depth: 1,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc301);
 
@@ -198,7 +229,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 3,
-          depth: 2
+          depth: 2,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc302);
 
@@ -207,7 +239,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 3,
-          depth: 3
+          depth: 3,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc303);
 
@@ -216,7 +249,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 4,
-          depth: 1
+          depth: 1,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc401);
 
@@ -225,7 +259,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 4,
-          depth: 2
+          depth: 2,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc402);
 
@@ -234,7 +269,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 4,
-          depth: 3
+          depth: 3,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc403);
 
@@ -243,7 +279,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 5,
-          depth: 1
+          depth: 1,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc501);
 
@@ -252,7 +289,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 5,
-          depth: 2
+          depth: 2,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc502);
 
@@ -261,7 +299,8 @@ export class DepthchartComponent implements OnInit {
           teamId: this.team.id,
           playerId: 0,
           position: 5,
-          depth: 3
+          depth: 3,
+          leagueId: this.league.id
         };
         this.depthCharts.push(dc503);
       } else {

@@ -3,6 +3,7 @@ using ABASim.api.Data;
 using Microsoft.AspNetCore.Mvc;
 using ABASim.api.Dtos;
 using ABASim.api.Models;
+using System;
 
 namespace ABASim.api.Controllers
 {
@@ -24,10 +25,10 @@ namespace ABASim.api.Controllers
             return Ok(added);
         }
 
-        [HttpGet("getdraftboard/{teamId}")]
-        public async Task<IActionResult> GetDraftBoardForTeam(GetRosterQuickViewDto teamId)
+        [HttpGet("getdraftboard")]
+        public async Task<IActionResult> GetDraftBoardForTeam(string teamId, string leagueId)
         {
-            var draftBoard = await _repo.GetDraftBoardForTeamId(teamId);
+            var draftBoard = await _repo.GetDraftBoardForTeamId(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(draftBoard);
         }
 
@@ -87,10 +88,10 @@ namespace ABASim.api.Controllers
             return Ok(tracker);
         }
 
-        [HttpGet("getinitialdraftpicks")]
-        public async Task<IActionResult> GetInitialDraftPicks()
+        [HttpGet("getinitialdraftpicks/{leagueId}")]
+        public async Task<IActionResult> GetInitialDraftPicks(int leagueId)
         {
-            var draftPicks = await _repo.GetInitialDraftPicks();
+            var draftPicks = await _repo.GetInitialDraftPicks(leagueId);
             return Ok(draftPicks);
         }
 
@@ -101,17 +102,17 @@ namespace ABASim.api.Controllers
             return Ok(draftPick);
         }
 
-        [HttpGet("getinitialdraftpicksforround/{page}")]
-        public async Task<IActionResult> GetInitialDraftPicksForRound(int page)
+        [HttpGet("getinitialdraftpicksforround")]
+        public async Task<IActionResult> GetInitialDraftPicksForRound(string round, string leagueId)
         {
-            var draftPicks = await _repo.GetInitialDraftPicksForPage(page);
+            var draftPicks = await _repo.GetInitialDraftPicksForPage(Int32.Parse(round), Int32.Parse(leagueId));
             return Ok(draftPicks);
         }
 
-        [HttpGet("getdashboardcurrentpick/{pick}")]
-        public async Task<IActionResult> GetDashboardCurrentPick(GetDashboardPickDto pick)
+        [HttpGet("getdashboardcurrentpick")]
+        public async Task<IActionResult> GetDashboardCurrentPick(string pick, string leagueId)
         {
-            var draftPicks = await _repo.GetDashboardDraftPick(pick);
+            var draftPicks = await _repo.GetDashboardDraftPick(Int32.Parse(pick), Int32.Parse(leagueId));
             return Ok(draftPicks);
         }
 

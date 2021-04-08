@@ -52,7 +52,7 @@ export class DraftboardComponent implements OnInit {
   }
 
   setupLeague() {
-    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
@@ -91,7 +91,6 @@ export class DraftboardComponent implements OnInit {
     newRanking.playerId = player.playerId;
     newRanking.teamId = this.team.teamId;
     newRanking.leagueId = this.league.id
-
 
     this.draftService.removeDraftPlayerRanking(newRanking).subscribe(result => {
     }, error => {

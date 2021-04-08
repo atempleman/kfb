@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { LeagueState } from '../_models/leagueState';
 import { environment } from 'src/environments/environment';
 import { CheckGame } from '../_models/checkGame';
@@ -19,11 +19,18 @@ export class AdminService {
   constructor(private http: HttpClient) { }
 
   updateLeagueStatus(newStatus: LeagueStatusUpdate) {
-    return this.http.get<boolean>(this.baseUrl + 'updateleaguestatus/' + newStatus);
+    const params = new HttpParams()
+      .set('status', newStatus.status.toString())
+      .set('leagueId', newStatus.leagueId.toString());
+    return this.http.get<boolean>(this.baseUrl + 'updateleaguestatus', {params});
   }
 
-  removeTeamRegistration(teamId: GetRosterQuickView) {
-    return this.http.get<boolean>(this.baseUrl + 'removeteamrego/' + teamId);
+  removeTeamRegistration(qv: GetRosterQuickView) {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<boolean>(this.baseUrl + 'removeteamrego', {params});
   }
 
   runInitialDraftLottery(leagueId: number) {
@@ -39,7 +46,10 @@ export class AdminService {
   }
 
   changeDay(day: GetScheduleLeague) {
-    return this.http.get<boolean>(this.baseUrl + 'changeday/' + day);
+    const params = new HttpParams()
+      .set('day', day.day.toString())
+      .set('leagueId', day.leagueId.toString());
+    return this.http.get<boolean>(this.baseUrl + 'changeday', {params});
   }
 
   beginPlayoffs(leagueId: number) {
@@ -82,8 +92,11 @@ export class AdminService {
     return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesforreset/' + leagueId);
   }
 
-  resetGame(gameId: GetGameLeague) {
-    return this.http.get<boolean>(this.baseUrl + 'resetgame/' + gameId);
+  resetGame(gl: GetGameLeague) {
+    const params = new HttpParams()
+      .set('gameId', gl.gameId.toString())
+      .set('leagueId', gl.leagueId.toString());
+    return this.http.get<boolean>(this.baseUrl + 'resetgame', {params});
   }
 
   rolloverSeasonStats(leagueId: number) {

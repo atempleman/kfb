@@ -12,6 +12,7 @@ import { Standing } from '../_models/standing';
 import { Team } from '../_models/team';
 import { TeamSalaryCapInfo } from '../_models/teamSalaryCapInfo';
 import { AlertifyService } from '../_services/alertify.service';
+import { AuthService } from '../_services/auth.service';
 import { LeagueService } from '../_services/league.service';
 import { PlayerService } from '../_services/player.service';
 import { TeamService } from '../_services/team.service';
@@ -40,12 +41,12 @@ export class ViewTeamComponent implements OnInit {
 
   constructor(private alertify: AlertifyService, private transferService: TransferService, private teamService: TeamService,
               private router: Router, private playerService: PlayerService, private spinner: NgxSpinnerService,
-              private leagueService: LeagueService) { }
+              private leagueService: LeagueService, private authService: AuthService) { }
 
   ngOnInit() {
     this.teamId = this.transferService.getData();
 
-    this.leagueService.getLeagueForUserId(this.team.id).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');

@@ -56,11 +56,7 @@ export class NavbarComponent implements OnInit {
   }
 
   setupLeague() {
-    const summary: GetRosterQuickView = {
-      teamId: this.team.teamId,
-      leagueId: this.league.id
-    };
-    this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');

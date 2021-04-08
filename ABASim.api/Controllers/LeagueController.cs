@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace ABASim.api.Controllers
             return Ok(exists);
         }
 
-        [HttpGet("getleagueforuser")]
+        [HttpGet("getleagueforuser/{userId}")]
         public async Task<IActionResult> GetLeagueForUserId(int userId)
         {
             var league = await _repo.GetLeagueForUserId(userId);
@@ -105,31 +106,31 @@ namespace ABASim.api.Controllers
             return Ok(standings);
         }
 
-        [HttpGet("getstandingsforconference/{conference}")]
-        public async Task<IActionResult> GetStandingsForConference(GetStandingLeagueDto conference)
+        [HttpGet("getstandingsforconference")]
+        public async Task<IActionResult> GetStandingsForConference(string value, string leagueId)
         {
-            var standings = await _repo.GetStandingsForConference(conference);
+            var standings = await _repo.GetStandingsForConference(Int32.Parse(value), Int32.Parse(leagueId));
             return Ok(standings);
         }
 
-        [HttpGet("getstandingsfordivision/{division}")]
-        public async Task<IActionResult> GetStandingsForDivision(GetStandingLeagueDto division)
+        [HttpGet("getstandingsfordivision")]
+        public async Task<IActionResult> GetStandingsForDivision(string value, string leagueId)
         {
-            var standings = await _repo.GetStandingsForDivision(division);
+            var standings = await _repo.GetStandingsForDivision(Int32.Parse(value), Int32.Parse(leagueId));
             return Ok(standings);
         }
 
-        [HttpGet("getscheduledisplay/{day}")]
-        public async Task<IActionResult> GetScheduleForDisplay(GetScheduleLeagueDto day)
+        [HttpGet("getscheduledisplay")]
+        public async Task<IActionResult> GetScheduleForDisplay(string day, string leagueId)
         {
-            var schedules = await _repo.GetScheduleForDisplay(day);
+            var schedules = await _repo.GetScheduleForDisplay(Int32.Parse(day), Int32.Parse(leagueId));
             return Ok(schedules);
         }
 
-        [HttpGet("getplayoffdisplay/{day}")]
-        public async Task<IActionResult> GetPlayoffScheduleForDisplay(GetScheduleLeagueDto day)
+        [HttpGet("getplayoffdisplay")]
+        public async Task<IActionResult> GetPlayoffScheduleForDisplay(string day, string leagueId)
         {
-            var schedules = await _repo.GetPlayoffScheduleForDisplay(day);
+            var schedules = await _repo.GetPlayoffScheduleForDisplay(Int32.Parse(day), Int32.Parse(leagueId));
             return Ok(schedules);
         }
 
@@ -140,38 +141,38 @@ namespace ABASim.api.Controllers
             return Ok(transactions);
         }
 
-        [HttpGet("getgameplaybyplay/{gameleague}")]
-        public async Task<IActionResult> GetGamePlayByPlay(GameLeagueDto dto)
+        [HttpGet("getgameplaybyplay")]
+        public async Task<IActionResult> GetGamePlayByPlay(string gameId, string leagueId)
         {
-            var playByPlay = await _repo.GetGamePlayByPlay(dto);
+            var playByPlay = await _repo.GetGamePlayByPlay(Int32.Parse(gameId), Int32.Parse(leagueId));
             return Ok(playByPlay);
         }
 
-        [HttpGet("getgameplaybyplayplayoffs/{gameleague}")]
-        public async Task<IActionResult> GetGamePlayByPlayPlayoff(GameLeagueDto dto)
+        [HttpGet("getgameplaybyplayplayoffs")]
+        public async Task<IActionResult> GetGamePlayByPlayPlayoff(string gameId, string leagueId)
         {
-            var playByPlay = await _repo.GetGamePlayByPlayPlayoffs(dto);
+            var playByPlay = await _repo.GetGamePlayByPlayPlayoffs(Int32.Parse(gameId), Int32.Parse(leagueId));
             return Ok(playByPlay);
         }
 
-        [HttpGet("getpreseasongamedetails/{gameleague}")]
-        public async Task<IActionResult> GetPreseasonGameDetails(GameLeagueDto dto)
+        [HttpGet("getpreseasongamedetails")]
+        public async Task<IActionResult> GetPreseasonGameDetails(string gameId, string leagueId)
         {
-            var details = await _repo.GetPreseasonGameDetails(dto);
+            var details = await _repo.GetPreseasonGameDetails(Int32.Parse(gameId), Int32.Parse(leagueId));
             return Ok(details);
         }
 
-        [HttpGet("getseasongamedetails/{gameleague}")]
-        public async Task<IActionResult> GetSeasonGameDetails(GameLeagueDto dto)
+        [HttpGet("getseasongamedetails")]
+        public async Task<IActionResult> GetSeasonGameDetails(string gameId, string leagueId)
         {
-            var details = await _repo.GetSeasonGameDetails(dto);
+            var details = await _repo.GetSeasonGameDetails(Int32.Parse(gameId), Int32.Parse(leagueId));
             return Ok(details);
         }
 
-        [HttpGet("getplayoffgamedetails/{gameleague}")]
-        public async Task<IActionResult> GetPlayoffGameDetails(GameLeagueDto dto)
+        [HttpGet("getplayoffgamedetails")]
+        public async Task<IActionResult> GetPlayoffGameDetails(string gameId, string leagueId)
         {
-            var details = await _repo.GetPlayoffGameDetails(dto);
+            var details = await _repo.GetPlayoffGameDetails(Int32.Parse(gameId), Int32.Parse(leagueId));
             return Ok(details);
         }
 
@@ -224,10 +225,10 @@ namespace ABASim.api.Controllers
             return Ok(rebounding);
         }
 
-        [HttpGet("leagueleaderspoints/{page}")]
-        public async Task<IActionResult> GetPointLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleaderspoints")]
+        public async Task<IActionResult> GetPointLeagueLeaders(string page, string leagueId)
         {
-            var points = await _repo.GetPointsLeagueLeaders(page);
+            var points = await _repo.GetPointsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(points);
         }
 
@@ -238,52 +239,52 @@ namespace ABASim.api.Controllers
             return Ok(count);
         }
 
-        [HttpGet("leagueleadersassists/{page}")]
-        public async Task<IActionResult> GetAssistLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleadersassists")]
+        public async Task<IActionResult> GetAssistLeagueLeaders(string page, string leagueId)
         {
-            var assists = await _repo.GetAssistsLeagueLeaders(page);
+            var assists = await _repo.GetAssistsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(assists);
         }
 
-        [HttpGet("leagueleadersrebounds/{page}")]
-        public async Task<IActionResult> GetReboundLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleadersrebounds")]
+        public async Task<IActionResult> GetReboundLeagueLeaders(string page, string leagueId)
         {
-            var rebounds = await _repo.GetReboundsLeagueLeaders(page);
+            var rebounds = await _repo.GetReboundsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(rebounds);
         }
 
-        [HttpGet("leagueleadersblocks/{page}")]
-        public async Task<IActionResult> GetBlockLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleadersblocks")]
+        public async Task<IActionResult> GetBlockLeagueLeaders(string page, string leagueId)
         {
-            var blocks = await _repo.GetBlocksLeagueLeaders(page);
+            var blocks = await _repo.GetBlocksLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(blocks);
         }
 
-        [HttpGet("leagueleaderssteals/{page}")]
-        public async Task<IActionResult> GetStealLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleaderssteals")]
+        public async Task<IActionResult> GetStealLeagueLeaders(string page, string leagueId)
         {
-            var steals = await _repo.GetStealsLeagueLeaders(page);
+            var steals = await _repo.GetStealsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(steals);
         }
 
-        [HttpGet("leagueleadersfouls/{page}")]
-        public async Task<IActionResult> GetFoulLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleadersfouls")]
+        public async Task<IActionResult> GetFoulLeagueLeaders(string page, string leagueId)
         {
-            var fouls = await _repo.GetFoulsLeagueLeaders(page);
+            var fouls = await _repo.GetFoulsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(fouls);
         }
 
-        [HttpGet("leagueleadersminutes/{page}")]
-        public async Task<IActionResult> GetMinutesLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleadersminutes")]
+        public async Task<IActionResult> GetMinutesLeagueLeaders(string page, string leagueId)
         {
-            var minutes = await _repo.GetMinutesLeagueLeaders(page);
+            var minutes = await _repo.GetMinutesLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(minutes);
         }
 
-        [HttpGet("leagueleadersturnovers/{page}")]
-        public async Task<IActionResult> GetTurnoversLeagueLeaders(GetStatLeagueDto page)
+        [HttpGet("leagueleadersturnovers")]
+        public async Task<IActionResult> GetTurnoversLeagueLeaders(string page, string leagueId)
         {
-            var tos = await _repo.GetTurnoversLeagueLeaders(page);
+            var tos = await _repo.GetTurnoversLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(tos);
         }
 
@@ -308,7 +309,7 @@ namespace ABASim.api.Controllers
             return Ok(results);
         }
 
-        [HttpGet("gettopfivesteals/{leagueId")]
+        [HttpGet("gettopfivesteals/{leagueId}")]
         public async Task<IActionResult> GetTopFiveSteals(int leagueId)
         {
             var results = await _repo.GetTopFiveSteals(leagueId);
@@ -322,17 +323,17 @@ namespace ABASim.api.Controllers
             return Ok(results);
         }
 
-        [HttpGet("getplayoffsummariesforround/{summary}")]
-        public async Task<IActionResult> GetPlayoffSummariesForRound(GetPlayoffSummaryDto round)
+        [HttpGet("getplayoffsummariesforround")]
+        public async Task<IActionResult> GetPlayoffSummariesForRound(string round, string leagueId)
         {
-            var results = await _repo.GetPlayoffSummariesForRound(round);
+            var results = await _repo.GetPlayoffSummariesForRound(Int32.Parse(round), Int32.Parse(leagueId));
             return Ok(results);
         }
 
-         [HttpGet("playoffleagueleaderspoints/{page}")]
-        public async Task<IActionResult> GetPointLeagueLeadersPlayoffs(GetStatLeagueDto page)
+         [HttpGet("playoffleagueleaderspoints")]
+        public async Task<IActionResult> GetPointLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var points = await _repo.GetPlayoffsPointsLeagueLeaders(page);
+            var points = await _repo.GetPlayoffsPointsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(points);
         }
 
@@ -343,59 +344,59 @@ namespace ABASim.api.Controllers
             return Ok(count);
         }
 
-        [HttpGet("leagueleadersassistsplayoffs/{page}")]
-        public async Task<IActionResult> GetAssistLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersassistsplayoffs")]
+        public async Task<IActionResult> GetAssistLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var assists = await _repo.GetPlayoffAssistsLeagueLeaders(page);
+            var assists = await _repo.GetPlayoffAssistsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(assists);
         }
 
-        [HttpGet("leagueleadersreboundsplayoffs/{page}")]
-        public async Task<IActionResult> GetReboundLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersreboundsplayoffs")]
+        public async Task<IActionResult> GetReboundLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var rebounds = await _repo.GetPlayoffReboundsLeagueLeaders(page);
+            var rebounds = await _repo.GetPlayoffReboundsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(rebounds);
         }
 
-        [HttpGet("leagueleadersblocksplayoffs/{page}")]
-        public async Task<IActionResult> GetBlockLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersblocksplayoffs")]
+        public async Task<IActionResult> GetBlockLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var blocks = await _repo.GetPlayoffBlocksLeagueLeaders(page);
+            var blocks = await _repo.GetPlayoffBlocksLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(blocks);
         }
 
-        [HttpGet("leagueleadersstealsplayoffs/{page}")]
-        public async Task<IActionResult> GetStealLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersstealsplayoffs")]
+        public async Task<IActionResult> GetStealLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var steals = await _repo.GetPlayoffStealsLeagueLeaders(page);
+            var steals = await _repo.GetPlayoffStealsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(steals);
         }
 
-        [HttpGet("leagueleadersminutesplayoffs/{page}")]
-        public async Task<IActionResult> GetMinutesLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersminutesplayoffs")]
+        public async Task<IActionResult> GetMinutesLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var minutes = await _repo.GetPlayoffMinutesLeagueLeaders(page);
+            var minutes = await _repo.GetPlayoffMinutesLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(minutes);
         }
 
-        [HttpGet("leagueleadersturnoversplayoffs/{page}")]
-        public async Task<IActionResult> GetTurnoversLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersturnoversplayoffs")]
+        public async Task<IActionResult> GetTurnoversLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var tos = await _repo.GetPlayoffTurnoversLeagueLeaders(page);
+            var tos = await _repo.GetPlayoffTurnoversLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(tos);
         }
 
-        [HttpGet("leagueleadersfoulsplayoffs/{page}")]
-        public async Task<IActionResult> GetFoulLeagueLeadersPlayoffs(GetStatLeagueDto page)
+        [HttpGet("leagueleadersfoulsplayoffs")]
+        public async Task<IActionResult> GetFoulLeagueLeadersPlayoffs(string page, string leagueId)
         {
-            var fouls = await _repo.GetPlayoffFoulsLeagueLeaders(page);
+            var fouls = await _repo.GetPlayoffFoulsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));
             return Ok(fouls);
         }
 
-        [HttpGet("getchampion")]
-        public async Task<IActionResult> GetChampion()
+        [HttpGet("getchampion/{leagueId}")]
+        public async Task<IActionResult> GetChampion(int leagueId)
         {
-            var team = await _repo.GetChampion();
+            var team = await _repo.GetChampion(leagueId);
             return Ok(team);
         }
 

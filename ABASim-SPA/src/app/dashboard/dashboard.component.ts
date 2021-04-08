@@ -87,6 +87,9 @@ export class DashboardComponent implements OnInit {
 
   primaryColor: string = '22, 24, 100';
   secondaryColor: string = '12,126,120';
+  primaryTextColor: string;
+  secondaryTextColor: string;
+
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
     private authService: AuthService, private teamService: TeamService, private adminService: AdminService,
@@ -113,80 +116,80 @@ export class DashboardComponent implements OnInit {
   }
 
   setupLeague() {
-      this.leagueService.getLeagueForUserId(this.team.teamId).subscribe(result => {
-        this.league = result;
-      }, error => {
-        this.alertify.error('Error getting League Details');
-      }, () => {
-        this.setupDashboard();
-        this.createChatForm();
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupDashboard();
+      this.createChatForm();
+      this.refreshChat();
+      this.interval = setInterval(() => {
         this.refreshChat();
-        this.interval = setInterval(() => {
-          this.refreshChat();
-        }, 600000);
-      });
+      }, 600000);
+    });
   }
 
   setupDashboard() {
     this.getTeamRoster();
-      this.getTeamInjuries();
+    this.getTeamInjuries();
 
-      if (this.league.stateId === 4) {
-        this.getDraftTracker();
-      } else if (this.league.stateId === 7) {
-        this.getLeagueLeaders();
-      } else if (this.league.stateId === 8) {
-        // get the playoff series
-        this.getRoundOneSummaries();
-      } else if (this.league.stateId === 9) {
-        // get playoff series
-        this.getConfSemiSummaries();
-      } else if (this.league.stateId === 10) {
-        this.getConfFinalsSummaries();
-      } else if (this.league.stateId === 11) {
-        this.getFinalsSummaries();
-      }
+    if (this.league.stateId === 4) {
+      this.getDraftTracker();
+    } else if (this.league.stateId === 7) {
+      this.getLeagueLeaders();
+    } else if (this.league.stateId === 8) {
+      // get the playoff series
+      this.getRoundOneSummaries();
+    } else if (this.league.stateId === 9) {
+      // get playoff series
+      this.getConfSemiSummaries();
+    } else if (this.league.stateId === 10) {
+      this.getConfFinalsSummaries();
+    } else if (this.league.stateId === 11) {
+      this.getFinalsSummaries();
+    }
 
-      if (this.league.stateId === 3 || this.league.stateId === 4) {
-        this.interval = setInterval(() => {
-          this.getPicksToDisplay();
-        }, 210000);
-      }
+    if (this.league.stateId === 3 || this.league.stateId === 4) {
+      this.interval = setInterval(() => {
+        this.getPicksToDisplay();
+      }, 210000);
+    }
 
-      this.getTodaysEvents();
-      this.getYesterdaysTransactions();
+    this.getTodaysEvents();
+    this.getYesterdaysTransactions();
 
-      if (this.league.stateId === 11 && this.league.day > 28) {
-        this.leagueService.getChampion().subscribe(result => {
-          this.champion = result;
-        }, error => {
-          this.alertify.error('Error getting the champion');
-        }, () => {
-          this.spinner.hide();
-        });
-      } else {
+    if (this.league.stateId === 11 && this.league.day > 28) {
+      this.leagueService.getChampion(this.league.id).subscribe(result => {
+        this.champion = result;
+      }, error => {
+        this.alertify.error('Error getting the champion');
+      }, () => {
         this.spinner.hide();
-      }
+      });
+    } else {
+      this.spinner.hide();
+    }
 
-      if (this.league.stateId > 7) {
-        this.leagueService.getMvpTopFive(this.league.id).subscribe(result => {
-          this.mvp = result;
-        }, error => {
-          this.alertify.error('Error getting MVP');
-        });
+    if (this.league.stateId > 7) {
+      this.leagueService.getMvpTopFive(this.league.id).subscribe(result => {
+        this.mvp = result;
+      }, error => {
+        this.alertify.error('Error getting MVP');
+      });
 
-        this.leagueService.getSixthManTopFive(this.league.id).subscribe(result => {
-          this.sixth = result;
-        }, error => {
-          this.alertify.error('Error getting Sixth Man');
-        });
+      this.leagueService.getSixthManTopFive(this.league.id).subscribe(result => {
+        this.sixth = result;
+      }, error => {
+        this.alertify.error('Error getting Sixth Man');
+      });
 
-        this.leagueService.getDpoyTopFive(this.league.id).subscribe(result => {
-          this.dpoy = result;
-        }, error => {
-          this.alertify.error('Error getting DPOY');
-        });
-      }
+      this.leagueService.getDpoyTopFive(this.league.id).subscribe(result => {
+        this.dpoy = result;
+      }, error => {
+        this.alertify.error('Error getting DPOY');
+      });
+    }
   }
 
   viewPlayer(player: number) {
@@ -412,7 +415,6 @@ export class DashboardComponent implements OnInit {
   }
 
   runGamePlayoffs(game: GameDisplayCurrent) {
-    console.log('ashley testing here');
     this.noRun = 1;
     const simGame: SimGame = {
       awayId: game.awayTeamId,
@@ -600,9 +602,10 @@ export class DashboardComponent implements OnInit {
   }
 
   backgroundStyle() {
-    switch (this.team.id) {
+    switch (this.team.teamId) {
       case 2:
         // Toronto
+        console.log('ash test#1');
         this.primaryColor = '206,17,65';
         this.secondaryColor = '6,25,34';
         break;

@@ -11,5 +11,7 @@ namespace ABASim.api.Models
         public int GameDay { get; set; }
 
         public int LeagueId { get; set; }
+
+        public int GameId { get; set; }
     }
 }

@@ -17,16 +17,6 @@ namespace ABASim.api.Data
             _context = context;
         }
 
-        public async Task<InboxMessageCountDto> CountOfMessages(GetRosterQuickViewDto dto)
-        {
-            var messages = await _context.InboxMessages.Where(x => x.ReceiverId == dto.TeamId && x.IsNew == 1 && x.LeagueId == dto.LeagueId).ToListAsync();
-            InboxMessageCountDto com = new InboxMessageCountDto
-            {
-                CountOfMessages = messages.Count
-            };
-            return com;
-        }
-
         public async Task<bool> DeleteInboxMessage(int messageId)
         {
             var msg = await _context.InboxMessages.FirstOrDefaultAsync(x => x.Id == messageId);
@@ -53,11 +43,21 @@ namespace ABASim.api.Data
             return chatRecords;
         }
 
-        public async Task<IEnumerable<InboxMessageDto>> GetInboxMessages(GetRosterQuickViewDto dto)
+        public async Task<InboxMessageCountDto> GetCountOfMessages(int teamId, int leagueId)
+        {
+            var messages = await _context.InboxMessages.Where(x => x.ReceiverId == teamId && x.IsNew == 1 && x.LeagueId == leagueId).ToListAsync();
+            InboxMessageCountDto com = new InboxMessageCountDto
+            {
+                CountOfMessages = messages.Count
+            };
+            return com;
+        }
+
+        public async Task<IEnumerable<InboxMessageDto>> GetInboxMessages(int teamId, int leagueId)
         {
             List<InboxMessageDto> messages = new List<InboxMessageDto>();
 
-            var inboxMessages = await _context.InboxMessages.Where(x => x.ReceiverId == dto.TeamId && x.LeagueId == dto.LeagueId).ToListAsync();
+            var inboxMessages = await _context.InboxMessages.Where(x => x.ReceiverId == teamId && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var im in inboxMessages)
             {
@@ -74,7 +74,7 @@ namespace ABASim.api.Data
                     Body = im.Body,
                     MessageDate = im.MessageDate,
                     IsNew = im.IsNew,
-                    LeagueId = dto.LeagueId
+                    LeagueId = leagueId
                 };
                 messages.Add(imdto);
             }

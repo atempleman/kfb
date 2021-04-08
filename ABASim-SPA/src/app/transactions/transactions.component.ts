@@ -41,6 +41,16 @@ export class TransactionsComponent implements OnInit {
   }
 
   setupLeague() {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
     this.leagueService.getTransactions(this.league.id).subscribe(result => {
       this.transactions = result;
       this.transCount = this.transactions.length;

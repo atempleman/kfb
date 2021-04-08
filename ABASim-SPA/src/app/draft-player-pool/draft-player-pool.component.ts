@@ -13,6 +13,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LeagueService } from '../_services/league.service';
 import { League } from '../_models/league';
+import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
+import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
+import { GetPlayerLeague } from '../_models/getPlayerLeague';
 
 @Component({
   selector: 'app-draft-player-pool',
@@ -43,21 +47,14 @@ export class DraftPlayerPoolComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
 
-    this.leagueService.getLeague().subscribe(result => {
-      this.league = result;
-    }, error => {
-      this.alertify.error('Error getting league details');
-    }, () => {
-      
-    });
-
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
+      // Need to persist the team to cookie
+      localStorage.setItem('teamId', this.team.id.toString());
     }, error => {
-      this.alertify.error('Error getting your team');
+      this.alertify.error('Error getting your Team');
     }, () => {
-      this.getDraftboardPlayers();
-      this.getCountOfAvailablePlayers();
+      this.setupLeague();
     });
 
     this.searchForm = this.fb.group({
@@ -65,8 +62,23 @@ export class DraftPlayerPoolComponent implements OnInit {
     });
   }
 
+  setupLeague() {
+    this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
+      this.league = result;
+    }, error => {
+      this.alertify.error('Error getting League Details');
+    }, () => {
+      this.setupPage();
+    });
+  }
+
+  setupPage() {
+    this.getDraftboardPlayers();
+    this.getCountOfAvailablePlayers();
+  }
+
   getCountOfAvailablePlayers() {
-    this.playerService.getCountOfAvailableDraftPlayers().subscribe(result => {
+    this.playerService.getCountOfAvailableDraftPlayers(this.league.id).subscribe(result => {
       this.recordTotal = result;
     }, error => {
       this.alertify.error('Error getting count of available players');
@@ -77,7 +89,11 @@ export class DraftPlayerPoolComponent implements OnInit {
 
   getDraftboardPlayers() {
     // Need to get the draftboard players
-    this.draftService.getDraftBoardForTeam(this.team.id).subscribe(result => {
+    const summary: GetRosterQuickView = {
+      teamId: this.team.teamId,
+      leagueId: this.league.id
+    };
+    this.draftService.getDraftBoardForTeam(summary).subscribe(result => {
       this.draftboardPlayers = result;
     }, error => {
       this.alertify.error('Error getting draftboard');
@@ -88,7 +104,11 @@ export class DraftPlayerPoolComponent implements OnInit {
 
   getDraftPlayers() {
     // Get all draft players
-    this.playerService.getInitialDraftPlayers(this.pager).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: this.pager,
+      leagueId: this.league.id
+    };
+    this.playerService.getInitialDraftPlayers(summary).subscribe(result => {
       this.draftPlayers = result;
       this.masterList = result;
       // this.setPageArray();
@@ -125,7 +145,11 @@ export class DraftPlayerPoolComponent implements OnInit {
       this.pager = this.pager - 1;
     }
 
-    this.playerService.getInitialDraftPlayers(this.pager).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: this.pager,
+      leagueId: this.league.id
+    };
+    this.playerService.getInitialDraftPlayers(summary).subscribe(result => {
       this.draftPlayers = result;
       this.masterList = result;
     }, error => {
@@ -144,7 +168,12 @@ export class DraftPlayerPoolComponent implements OnInit {
       this.pager = this.pager + 1;
     }
 
-    this.playerService.getInitialDraftPlayers(this.pager).subscribe(result => {
+    const summary: GetPlayoffSummary = {
+      round: this.pager,
+      leagueId: this.league.id
+    };
+
+    this.playerService.getInitialDraftPlayers(summary).subscribe(result => {
       this.draftPlayers = result;
       this.masterList = result;
     }, error => {
@@ -159,8 +188,12 @@ export class DraftPlayerPoolComponent implements OnInit {
     this.spinner.show();
 
     this.pager = page;
+    const summary: GetPlayoffSummary = {
+      round: this.pager,
+      leagueId: this.league.id
+    };
 
-    this.playerService.getInitialDraftPlayers(this.pager).subscribe(result => {
+    this.playerService.getInitialDraftPlayers(summary).subscribe(result => {
       this.draftPlayers = result;
       this.masterList = result;
     }, error => {
@@ -175,6 +208,7 @@ export class DraftPlayerPoolComponent implements OnInit {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = selectedPlayer.playerId;
     newRanking.teamId = this.team.id;
+    newRanking.leagueId = this.league.id;
 
     this.draftService.addDraftPlayerRanking(newRanking).subscribe(result => {
     }, error => {
@@ -190,6 +224,7 @@ export class DraftPlayerPoolComponent implements OnInit {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = selectedPlayer.playerId;
     newRanking.teamId = this.team.id;
+    newRanking.leagueId = this.league.id;
 
     this.draftService.removeDraftPlayerRanking(newRanking).subscribe(result => {
 
@@ -225,7 +260,11 @@ export class DraftPlayerPoolComponent implements OnInit {
       this.displayPaging = 1;
 
       // Now we need to update the listing appropriately
-      this.playerService.getDraftPlayerPoolByPos(this.positionFilter).subscribe(result => {
+      const summary: GetPlayerIdLeague = {
+        playerId: this.positionFilter,
+        leagueId: this.league.id
+      };
+      this.playerService.getDraftPlayerPoolByPos(summary).subscribe(result => {
         this.draftPlayers = result;
       }, error => {
         this.alertify.error('Error getting filtered players');
@@ -242,7 +281,11 @@ export class DraftPlayerPoolComponent implements OnInit {
     const filter = this.searchForm.value.filter;
 
     // Need to call service
-    this.playerService.filterDraftPlayerPool(filter).subscribe(result => {
+    const summary: GetPlayerLeague = {
+      playerName: filter,
+      leagueId: this.league.id
+    };
+    this.playerService.filterDraftPlayerPool(summary).subscribe(result => {
       this.draftPlayers = result;
     }, error => {
       this.alertify.error('Error getting filtered players');

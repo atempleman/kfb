@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Player } from '../_models/player';
 import { Observable } from 'rxjs';
 import { Team } from '../_models/team';
@@ -50,20 +50,36 @@ export class TeamService {
     return this.http.get<Team[]>(this.baseUrl + 'getavailableteamsprivate/' + leaguecode);
   }
 
-  getRosterForTeam(teamId: GetRosterQuickView): Observable<Player[]> {
-    return this.http.get<Player[]>(this.baseUrl + 'getrosterforteam/' + teamId);
+  getRosterForTeam(quickview: GetRosterQuickView): Observable<Player[]> {
+    const params = new HttpParams()
+      .set('teamId', quickview.teamId.toString())
+      .set('leagueId', quickview.leagueId.toString());
+
+    return this.http.get<Player[]>(this.baseUrl + 'getrosterforteam', {params});
   }
 
-  getExtendedRosterForTeam(teamId: GetRosterQuickView): Observable<CompletePlayer[]> {
-    return this.http.get<CompletePlayer[]>(this.baseUrl + 'getextendedroster/' + teamId);
+  getExtendedRosterForTeam(quickview: GetRosterQuickView): Observable<CompletePlayer[]> {
+    const params = new HttpParams()
+      .set('teamId', quickview.teamId.toString())
+      .set('leagueId', quickview.leagueId.toString());
+
+    return this.http.get<CompletePlayer[]>(this.baseUrl + 'getextendedroster', {params});
   }
 
   getQuickViewRosterForTeam(quickview: GetRosterQuickView): Observable<QuickViewPlayer[]> {
-    return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster/' + quickview);
+    const params = new HttpParams()
+      .set('teamId', quickview.teamId.toString())
+      .set('leagueId', quickview.leagueId.toString());
+
+    return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster', { params });
   }
 
   getInjuriesForTeam(quickview: GetRosterQuickView): Observable<LeaguePlayerInjury[]> {
-    return this.http.get<LeaguePlayerInjury[]>(this.baseUrl + 'getteaminjuries/' + quickview);
+    const params = new HttpParams()
+      .set('teamId', quickview.teamId.toString())
+      .set('leagueId', quickview.leagueId.toString());
+
+    return this.http.get<LeaguePlayerInjury[]>(this.baseUrl + 'getteaminjuries', { params });
   }
 
   getTeamForUserId(userId: number) {
@@ -74,24 +90,38 @@ export class TeamService {
     return this.http.get<Team[]>(this.baseUrl + 'getallteams/' + leagueId);
   }
 
-  getTeamForTeamId(teamId: GetRosterQuickView) {
-    return this.http.get<Team>(this.baseUrl + 'getteamforteamid/' + teamId);
+  getTeamForTeamId(qv: GetRosterQuickView) {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<Team>(this.baseUrl + 'getteamforteamid', {params});
   }
 
-  getDepthChartForTeamId(teamId: number): Observable<DepthChart[]> {
-    return this.http.get<DepthChart[]>(this.baseUrl + 'getteamdepthchart/' + teamId);
+  getDepthChartForTeamId(qv: GetRosterQuickView): Observable<DepthChart[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+    return this.http.get<DepthChart[]>(this.baseUrl + 'getteamdepthchart', {params});
   }
 
   saveDepthCharts(depthCharts: DepthChart[]) {
     return this.http.post(this.baseUrl + 'savedepthchart', depthCharts);
   }
 
-  getTeamForTeamName(teamleague: GetTeamLeague): Observable<Team> {
-    return this.http.get<Team>(this.baseUrl + 'getteamforteamname/' + teamleague);
+  getTeamForTeamName(tl: GetTeamLeague): Observable<Team> {
+    const params = new HttpParams()
+      .set('teamname', tl.teamname.toString())
+      .set('leagueId', tl.leagueId.toString());
+
+    return this.http.get<Team>(this.baseUrl + 'getteamforteamname', {params});
   }
 
-  getTeamForTeamMascot(name: GetTeamLeague): Observable<Team> {
-    return this.http.get<Team>(this.baseUrl + 'getteamformascot/' + name);
+  getTeamForTeamMascot(tl: GetTeamLeague): Observable<Team> {
+    const params = new HttpParams()
+      .set('teamname', tl.teamname.toString())
+      .set('leagueId', tl.leagueId.toString());
+    return this.http.get<Team>(this.baseUrl + 'getteamformascot', {params});
   }
 
   rosterSpotCheck(teamId: GetRosterQuickView) {
@@ -110,20 +140,31 @@ export class TeamService {
     return this.http.post(this.baseUrl + 'signplayer', signedPlayer);
   }
 
-  getCoachingSettings(teamId: GetRosterQuickView) {
-    return this.http.get<CoachSetting>(this.baseUrl + 'getcoachsettings/' + teamId);
+  getCoachingSettings(qv: GetRosterQuickView) {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+    return this.http.get<CoachSetting>(this.baseUrl + 'getcoachsettings', {params});
   }
 
   saveCoachingSettings(setting: CoachSetting) {
     return this.http.post(this.baseUrl + 'savecoachsetting', setting);
   }
 
-  getAllTeamsExceptUsers(teamId: GetRosterQuickView): Observable<Team[]> {
-    return this.http.get<Team[]>(this.baseUrl + 'getallteamsexceptusers/' + teamId);
+  getAllTeamsExceptUsers(qv: GetRosterQuickView): Observable<Team[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<Team[]>(this.baseUrl + 'getallteamsexceptusers', {params});
   }
 
-  getTradeOffers(teamId: GetRosterQuickView): Observable<Trade[]> {
-    return this.http.get<Trade[]>(this.baseUrl + 'gettradeoffers/' + teamId);
+  getTradeOffers(qv: GetRosterQuickView): Observable<Trade[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<Trade[]>(this.baseUrl + 'gettradeoffers', {params});
   }
 
   saveTradeProposal(trade: Trade[]) {
@@ -146,28 +187,48 @@ export class TeamService {
     return this.http.get<TradeMessage>(this.baseUrl + 'gettrademessage/' + tradeId);
   }
 
-  getTeamDraftPicks(teamId: GetRosterQuickView): Observable<TeamDraftPick[]> {
-    return this.http.get<TeamDraftPick[]>(this.baseUrl + 'getteamsdraftpicks/' + teamId);
+  getTeamDraftPicks(qv: GetRosterQuickView): Observable<TeamDraftPick[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<TeamDraftPick[]>(this.baseUrl + 'getteamsdraftpicks', {params});
   }
 
-  getPlayerInjuriesForTeam(teamId: GetRosterQuickView): Observable<PlayerInjury[]> {
-    return this.http.get<PlayerInjury[]>(this.baseUrl + 'getinjuriesforteam/' + teamId);
+  getPlayerInjuriesForTeam(qv: GetRosterQuickView): Observable<PlayerInjury[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<PlayerInjury[]>(this.baseUrl + 'getinjuriesforteam', {params});
   }
 
   getInjruiesForFreeAgents(leagueId: number): Observable<PlayerInjury[]> {
     return this.http.get<PlayerInjury[]>(this.baseUrl + 'getinjuriesforfreeagents/' + leagueId);
   }
 
-  getInjuryForPlayer(playeridleague: GetPlayerIdLeague): Observable<PlayerInjury> {
-    return this.http.get<PlayerInjury>(this.baseUrl + 'getinjuryforplayer/' + playeridleague);
+  getInjuryForPlayer(pil: GetPlayerIdLeague): Observable<PlayerInjury> {
+    const params = new HttpParams()
+      .set('playerId', pil.playerId.toString())
+      .set('leagueId', pil.leagueId.toString());
+
+    return this.http.get<PlayerInjury>(this.baseUrl + 'getinjuryforplayer', {params});
   }
 
-  getTeamSalaryCapDetails(teamId: GetRosterQuickView): Observable<TeamSalaryCapInfo> {
-    return this.http.get<TeamSalaryCapInfo>(this.baseUrl + 'getteamsalarycapdetails/' + teamId);
+  getTeamSalaryCapDetails(qv: GetRosterQuickView): Observable<TeamSalaryCapInfo> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<TeamSalaryCapInfo>(this.baseUrl + 'getteamsalarycapdetails', {params});
   }
 
-  getTeamContracts(teamId: GetRosterQuickView): Observable<PlayerContractDetailed[]> {
-    return this.http.get<PlayerContractDetailed[]>(this.baseUrl + 'getteamcontracts/' + teamId);
+  getTeamContracts(qv: GetRosterQuickView): Observable<PlayerContractDetailed[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<PlayerContractDetailed[]>(this.baseUrl + 'getteamcontracts', {params});
   }
 
   getOffensiveStrategies(): Observable<OffensiveStrategy[]> {
@@ -178,16 +239,24 @@ export class TeamService {
     return this.http.get<DefensiveStrategy[]>(this.baseUrl + 'getdefensivestrategies');
   }
 
-  getStrategyForTeam(teamId: GetRosterQuickView): Observable<Strategy> {
-    return this.http.get<Strategy>(this.baseUrl + 'getstrategyforteam/' + teamId);
+  getStrategyForTeam(qv: GetRosterQuickView): Observable<Strategy> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<Strategy>(this.baseUrl + 'getstrategyforteam', {params});
   }
 
   saveStrategy(strategy: Strategy) {
     return this.http.post(this.baseUrl + 'savestrategy', strategy);
   }
 
-  getContractOffersForTeam(teamId: GetRosterQuickView): Observable<ContractOffer[]> {
-    return this.http.get<ContractOffer[]>(this.baseUrl + 'getcontractoffersforteam/' + teamId);
+  getContractOffersForTeam(qv: GetRosterQuickView): Observable<ContractOffer[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<ContractOffer[]>(this.baseUrl + 'getcontractoffersforteam', {params});
   }
 
   saveContractOffer(offer: ContractOffer) {
@@ -198,15 +267,27 @@ export class TeamService {
     return this.http.get<boolean>(this.baseUrl + 'deletefreeagentoffer/' + contractId);
   }
 
-  getWaivedContracts(teamId: GetRosterQuickView): Observable<WaivedContract[]> {
-    return this.http.get<WaivedContract[]>(this.baseUrl + 'getwaivedcontracts/' + teamId);
+  getWaivedContracts(qv: GetRosterQuickView): Observable<WaivedContract[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<WaivedContract[]>(this.baseUrl + 'getwaivedcontracts', {params});
   }
 
-  getTradePlayerView(teamId: GetRosterQuickView): Observable<TradePlayerView[]> {
-    return this.http.get<TradePlayerView[]>(this.baseUrl + 'gettradeplayerviews/' + teamId);
+  getTradePlayerView(qv: GetRosterQuickView): Observable<TradePlayerView[]> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<TradePlayerView[]>(this.baseUrl + 'gettradeplayerviews', {params});
   }
 
-  getTeamRecord(teamId: GetRosterQuickView): Observable<Standing> {
-    return this.http.get<Standing>(this.baseUrl + 'getteamrecord/' + teamId);
+  getTeamRecord(qv: GetRosterQuickView): Observable<Standing> {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<Standing>(this.baseUrl + 'getteamrecord/', {params});
   }
 }

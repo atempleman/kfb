@@ -8550,17 +8550,17 @@ namespace ABASim.api.Controllers
         }
 
         /* REFACTORED */
-        [HttpGet("getboxscoresforgameid/{gameleague}")]
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(GameLeagueDto dto)
+        [HttpGet("getboxscoresforgameid")]
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameId(string gameId, string leagueId)
         {
-            var boxScores = await _repo.GetBoxScoresForGameId(dto);
+            var boxScores = await _repo.GetBoxScoresForGameId(Int32.Parse(gameId), Int32.Parse(leagueId));
             return boxScores;
         }
 
-        [HttpGet("getboxscoresforgameidplayoffs/{gameleague}")]
-        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(GameLeagueDto dto)
+        [HttpGet("getboxscoresforgameidplayoffs")]
+        public async Task<IEnumerable<BoxScore>> GetBoxScoresForGameIdPlayoffs(string gameId, string leagueId)
         {
-            var boxScores = await _repo.GetBoxScoresForGameIdPlayoffs(dto);
+            var boxScores = await _repo.GetBoxScoresForGameIdPlayoffs(Int32.Parse(gameId), Int32.Parse(leagueId));
             return boxScores;
         }
 

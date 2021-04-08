@@ -1,7 +1,8 @@
 <section class="py-sm-0 text-center" id="header-12">
 	<br />
 	<br />
-	<div class="background-holder overlay overlay-0" style="background-image:url(./../assets/images/branding/boardroom001.jpg);">
+	<div class="background-holder overlay overlay-0"
+		style="background-image:url(./../assets/images/branding/boardroom001.jpg);">
 	</div>
 	<!--/.background-holder-->
 	<div class="container">
@@ -576,12 +577,12 @@
 					</div>
 				</div>
 				<br />
-				<div class="form-group">
-					<form [formGroup]="chatForm" accept-charset="UTF-8" role="form" (ngSubmit)="sendChat()">
+				<div>
+					<form [formGroup]="this.chatForm" accept-charset="UTF-8" role="form" (ngSubmit)="sendChat()">
 						<fieldset>
 							<div class="form-group">
 								<label for="exampleTextarea">Your Message</label>
-								<textarea class="form-control" id="message" rows="2" name="message"
+								<textarea class="form-control background-white" id="message" rows="2" name="message"
 									formControlName="message"></textarea>
 							</div>
 							<input class="btn btn-primary mt-1" type="submit" value="Post">
