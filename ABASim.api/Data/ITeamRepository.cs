@@ -31,7 +31,7 @@ namespace ABASim.api.Data
 
          Task<bool> SaveDepthChartForTeam(DepthChart[] charts);
 
-         Task<bool> RosterSpotCheck(GetRosterQuickViewDto dto);
+         Task<bool> RosterSpotCheck(int teamId, int leagueId);
 
          Task<IEnumerable<CompletePlayerDto>> GetExtendPlayersForTeam(int teamId, int leagueId);
 

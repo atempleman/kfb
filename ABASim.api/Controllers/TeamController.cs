@@ -123,10 +123,10 @@ namespace ABASim.api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("rosterSpotCheck/{teamId}")]
-        public async Task<IActionResult> RosterSpotCheck(GetRosterQuickViewDto teamId)
+        [HttpGet("rosterSpotCheck")]
+        public async Task<IActionResult> RosterSpotCheck(string teamId, string leagueId)
         {
-            var result = await _repo.RosterSpotCheck(teamId);
+            var result = await _repo.RosterSpotCheck(Int32.Parse(teamId), Int32.Parse(leagueId));
             return Ok(result);
         }
 

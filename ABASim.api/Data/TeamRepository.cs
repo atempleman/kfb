@@ -1433,9 +1433,9 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<bool> RosterSpotCheck(GetRosterQuickViewDto dto)
+        public async Task<bool> RosterSpotCheck(int teamId, int leagueId)
         {
-            var rosterSpotsUsed = await _context.Rosters.Where(x => x.TeamId == dto.TeamId && x.LeagueId == dto.LeagueId).ToListAsync();
+            var rosterSpotsUsed = await _context.Rosters.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).ToListAsync();
             if (rosterSpotsUsed.Count < 15)
             {
                 return true;

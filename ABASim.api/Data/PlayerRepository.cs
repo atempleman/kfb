@@ -737,15 +737,15 @@ namespace ABASim.api.Data
             return dto;
         }
 
-        public async Task<IEnumerable<Player>> GetFilteredFreeAgents(PlayerLeagueDto value)
+        public async Task<IEnumerable<Player>> GetFilteredFreeAgents(string filter, int leagueId)
         {
             List<Player> freeAgents = new List<Player>();
-            var query = String.Format("SELECT * FROM Players where Surname like '%" + value.Name + "%' or FirstName like '%" + value.Name + "%' and LeagueId = " + value.LeagueId);
+            var query = String.Format("SELECT * FROM Players where Surname like '%" + filter + "%' or FirstName like '%" + filter + "%' and LeagueId = " + leagueId);
             var players = await _context.Players.FromSqlRaw(query).ToListAsync();
 
             foreach (var player in players)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == value.LeagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == leagueId);
 
                 if (playerTeam.TeamId == 0)
                 {

@@ -124,8 +124,12 @@ export class TeamService {
     return this.http.get<Team>(this.baseUrl + 'getteamformascot', {params});
   }
 
-  rosterSpotCheck(teamId: GetRosterQuickView) {
-    return this.http.get<boolean>(this.baseUrl + 'rosterSpotCheck/' + teamId);
+  rosterSpotCheck(qv: GetRosterQuickView) {
+    const params = new HttpParams()
+      .set('teamId', qv.teamId.toString())
+      .set('leagueId', qv.leagueId.toString());
+
+    return this.http.get<boolean>(this.baseUrl + 'rosterSpotCheck', {params});
   }
 
   getTeamInitialLotteryOrder(leagueId: number): Observable<Team[]> {

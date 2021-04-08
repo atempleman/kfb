@@ -15,7 +15,7 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<DraftPlayerDto>> FilterInitialDraftPlayerPool(string value, int leagueId);
 
-         Task<IEnumerable<Player>> GetFilteredFreeAgents(PlayerLeagueDto value);
+         Task<IEnumerable<Player>> GetFilteredFreeAgents(string filter, int leagueId);
 
          Task<IEnumerable<Player>> GetFreeAgentsByPos(PlayerIdLeagueDto pos);
 

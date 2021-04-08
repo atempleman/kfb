@@ -59,7 +59,11 @@ export class PlayerService {
   }
 
   filterFreeAgents(value: GetPlayerLeague): Observable<Player[]> {
-    return this.http.get<Player[]>(this.baseUrl + 'getfilteredfreeagents/' + value);
+    const params = new HttpParams()
+      .set('filter', value.playerName.toString())
+      .set('leagueId', value.leagueId.toString());
+
+    return this.http.get<Player[]>(this.baseUrl + 'getfilteredfreeagents', {params});
   }
 
   playerForPlayerProfileById(pil: GetPlayerIdLeague) {
