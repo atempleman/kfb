@@ -26,24 +26,24 @@ export class ViewRetiredPlayerComponent implements OnInit {
               private playerService: PlayerService) { }
 
   ngOnInit() {
-    this.leagueService.getLeague().subscribe(result => {
-      this.league = result;
-    }, error => {
-      this.alertify.error('Error getting league');
-    });
-    this.playerId = this.transferService.getData();
+    // this.leagueService.getLeague().subscribe(result => {
+    //   this.league = result;
+    // }, error => {
+    //   this.alertify.error('Error getting league');
+    // });
+    // this.playerId = this.transferService.getData();
 
-    this.playerService.getDetailedRetiredPlayer(this.playerId).subscribe(result => {
-      this.detailedPlayer = result;
-    }, error => {
-      this.alertify.error('Error getting player profile');
-    });
+    // this.playerService.getDetailedRetiredPlayer(this.playerId).subscribe(result => {
+    //   this.detailedPlayer = result;
+    // }, error => {
+    //   this.alertify.error('Error getting player profile');
+    // });
 
-    this.playerService.getCareerStats(this.playerId).subscribe(result => {
-      this.careerStats = result;
-    }, error => {
-      this.alertify.error('Error getting career stats');
-    });
+    // this.playerService.getCareerStats(this.playerId).subscribe(result => {
+    //   this.careerStats = result;
+    // }, error => {
+    //   this.alertify.error('Error getting career stats');
+    // });
   }
 
   getMinutesAverageForCareer(stats: CareerStats) {
