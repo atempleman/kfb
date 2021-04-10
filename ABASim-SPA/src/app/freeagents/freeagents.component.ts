@@ -73,7 +73,7 @@ export class FreeagentsComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -199,7 +199,7 @@ export class FreeagentsComponent implements OnInit {
   }
 
   viewPlayer(player: Player) {
-    this.transferService.setData(player.id);
+    this.transferService.setData(player.playerId);
     this.router.navigate(['/view-player']);
   }
 
@@ -389,7 +389,7 @@ export class FreeagentsComponent implements OnInit {
 
         // Now to create the offer
         const contractOffer: ContractOffer = {
-          playerId: this.selectedPlayer.id,
+          playerId: this.selectedPlayer.playerId,
           teamId: this.team.teamId,
           yearOne: +this.year1Amount,
           guranteedOne: g1,
@@ -489,7 +489,7 @@ export class FreeagentsComponent implements OnInit {
   }
 
   backgroundStyle() {
-    switch (this.team.id) {
+    switch (this.team.teamId) {
       case 2:
         // Toronto
         this.primaryColor = '206,17,65';

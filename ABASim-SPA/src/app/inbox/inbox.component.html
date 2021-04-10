@@ -159,7 +159,7 @@
       <div class="form-group row">
         <label class="col-md-6 control-label color-8" for="textinput">To: </label>
         <select name="teamsOption" [(ngModel)]="selectedTeam">
-          <option *ngFor="let team of this.teams" [value]="team.id">{{ team.mascot }}</option>
+          <option *ngFor="let team of this.teams" [value]="team.teamId">{{ team.mascot }}</option>
         </select>
       </div>
       <div class="form-group row">

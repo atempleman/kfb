@@ -7,7 +7,7 @@ namespace ABASim.api.Data
 {
     public interface IAdminRepository
     {
-         Task<bool> UpdateLeagueState(LeagueStatusDto newState);
+         Task<bool> UpdateLeagueState(int status, int leagueId);
 
          Task<bool> RemoveTeamRegistration(int teamId, int leagueId);
 

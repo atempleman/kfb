@@ -41,7 +41,7 @@ namespace ABASim.api.Data
                 var playerGrades = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 DraftPlayerDto newPlayer = new DraftPlayerDto();
-                newPlayer.PlayerId = playerRecord.Id;
+                newPlayer.PlayerId = playerRecord.PlayerId;
                 newPlayer.BlockGrade = playerGrades.BlockGrade;
                 newPlayer.CPosition = playerRecord.CPosition;
                 newPlayer.Age = playerRecord.Age;
@@ -274,7 +274,7 @@ namespace ABASim.api.Data
                     foreach (var team in teams)
                     {
                         int teamSalary = 0;
-                        var contracts = await _context.PlayerContracts.Where(x => x.TeamId == team.Id && x.LeagueId == draftPick.LeagueId).ToListAsync();
+                        var contracts = await _context.PlayerContracts.Where(x => x.TeamId == team.TeamId && x.LeagueId == draftPick.LeagueId).ToListAsync();
                         foreach (var contract in contracts)
                         {
                             teamSalary = teamSalary + contract.YearOne;
@@ -441,7 +441,7 @@ namespace ABASim.api.Data
 
             if (pick == -1)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == id_pick.PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == id_pick.PlayerId && x.LeagueId == leagueId);
                 pickDto.PlayerName = player.FirstName + " " + player.Surname;
             }
             else

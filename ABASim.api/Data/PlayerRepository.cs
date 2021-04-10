@@ -55,7 +55,7 @@ namespace ABASim.api.Data
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
-                    newPlayer.PlayerId = player.Id;
+                    newPlayer.PlayerId = player.PlayerId;
                     newPlayer.BlockGrade = playerGrade.BlockGrade;
                     newPlayer.CPosition = player.CPosition;
                     newPlayer.Age = player.Age;
@@ -128,7 +128,7 @@ namespace ABASim.api.Data
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
-                    newPlayer.PlayerId = player.Id;
+                    newPlayer.PlayerId = player.PlayerId;
                     newPlayer.BlockGrade = playerGrade.BlockGrade;
                     newPlayer.CPosition = player.CPosition;
                     newPlayer.Age = player.Age;
@@ -373,7 +373,7 @@ namespace ABASim.api.Data
 
             // need to get the players team
             var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
             string teamname = "Free Agent";
 
             if (team != null)
@@ -721,7 +721,7 @@ namespace ABASim.api.Data
 
         public async Task<DetailedRetiredPlayerDto> GetDetailRetiredPlayer(int playerId)
         {
-            var retiredPlayer = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId);
+            var retiredPlayer = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == playerId);
 
             DetailedRetiredPlayerDto dto = new DetailedRetiredPlayerDto
             {
@@ -745,7 +745,7 @@ namespace ABASim.api.Data
 
             foreach (var player in players)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 if (playerTeam.TeamId == 0)
                 {
@@ -763,7 +763,7 @@ namespace ABASim.api.Data
 
             foreach (var player in players)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 if (playerTeam.TeamId == 0)
                 {
@@ -802,7 +802,7 @@ namespace ABASim.api.Data
 
             foreach (var player in players)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == pos.LeagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == pos.LeagueId);
 
                 if (playerTeam.TeamId == 0)
                 {
@@ -839,7 +839,7 @@ namespace ABASim.api.Data
             {
                 var player = players[i];
                 // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.Where(x => x.LeagueId == leagueId).FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                var playerTeamForPlayerId = await _context.PlayerTeams.Where(x => x.LeagueId == leagueId).FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
 
                 if (playerTeamForPlayerId.TeamId == 31)
                 {
@@ -847,7 +847,7 @@ namespace ABASim.api.Data
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
-                    newPlayer.PlayerId = player.Id;
+                    newPlayer.PlayerId = player.PlayerId;
                     newPlayer.BlockGrade = playerGrade.BlockGrade;
                     newPlayer.CPosition = player.CPosition;
                     newPlayer.Age = player.Age;
@@ -892,7 +892,7 @@ namespace ABASim.api.Data
 
                     // Now create the Dto
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
-                    newPlayer.PlayerId = player.Id;
+                    newPlayer.PlayerId = player.PlayerId;
                     newPlayer.BlockGrade = playerGrade.BlockGrade;
                     newPlayer.CPosition = player.CPosition;
                     newPlayer.Age = player.Age;
@@ -921,7 +921,7 @@ namespace ABASim.api.Data
 
         public async Task<Player> GetPlayerForId(int playerId)
         {
-            var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId);
+            var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == playerId);
             return player;
         }
 

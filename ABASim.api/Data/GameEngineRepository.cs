@@ -66,7 +66,7 @@ namespace ABASim.api.Data
             foreach (var gbs in gameBoxScores)
             {
                 // Need to get player name
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == gbs.PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == gbs.PlayerId && x.LeagueId == leagueId);
 
                 BoxScore bs = new BoxScore
                 {
@@ -121,7 +121,7 @@ namespace ABASim.api.Data
 
         public async Task<Player> GetPlayer(int playerId, int leagueId)
         {
-            var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == playerId && x.LeagueId == leagueId);
+            var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
             return player;
         }
 
@@ -145,7 +145,7 @@ namespace ABASim.api.Data
 
         public async Task<Team> GetTeam(int teamId, int leagueId)
         {
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == teamId && x.LeagueId == leagueId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == teamId && x.LeagueId == leagueId);
             return team;
         }
 
@@ -382,14 +382,14 @@ namespace ABASim.api.Data
                 var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName);
                 GameVotes gv = new GameVotes
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     Score = score
                 };
                 votes.Add(gv);
 
                 GameVotes gvPM = new GameVotes
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     Score = bs.PlusMinus
                 };
                 plusMinus.Add(gvPM);
@@ -482,7 +482,7 @@ namespace ABASim.api.Data
                 var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName);
                 GameVotes gv = new GameVotes
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     Score = score
                 };
                 votes.Add(gv);
@@ -536,7 +536,7 @@ namespace ABASim.api.Data
             {
                 var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName);
 
-                if (!homeStarters.Contains(player.Id) && !awayStarters.Contains(player.Id))
+                if (!homeStarters.Contains(player.PlayerId) && !awayStarters.Contains(player.PlayerId))
                 {
                     int points = bs.Points * 100;
                     int rebs = bs.Rebounds * 75;
@@ -549,14 +549,14 @@ namespace ABASim.api.Data
 
                     GameVotes gv = new GameVotes
                     {
-                        PlayerId = player.Id,
+                        PlayerId = player.PlayerId,
                         Score = score
                     };
                     votes.Add(gv);
 
                     GameVotes gvPM = new GameVotes
                     {
-                        PlayerId = player.Id,
+                        PlayerId = player.PlayerId,
                         Score = bs.PlusMinus
                     };
                     plusMinus.Add(gvPM);

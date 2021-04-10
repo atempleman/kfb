@@ -34,8 +34,8 @@
 					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerOne, 1) }}</p>
 				<select [(ngModel)]="gotoOne" *ngIf="this.isGoToEdit == 1">
 					<option [value]="0"></option>
-					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
-						{{ this.getPlayerName(player.id) }}
+					<option *ngFor="let player of this.extendedPlayers" [value]="player.playerId">
+						{{ this.getPlayerName(player.playerId) }}
 					</option>
 				</select>
 			</div>
@@ -52,8 +52,8 @@
 					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerTwo, 2) }}</p>
 				<select [(ngModel)]="gotoTwo" *ngIf="this.isGoToEdit == 1">
 					<option [value]="0"></option>
-					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
-						{{ this.getPlayerName(player.id) }}
+					<option *ngFor="let player of this.extendedPlayers" [value]="player.playerId">
+						{{ this.getPlayerName(player.playerId) }}
 					</option>
 				</select>
 			</div>
@@ -69,8 +69,8 @@
 					this.getPlayerNameWithInjuredCheck(this.coachSetting?.goToPlayerThree, 3) }}</p>
 				<select [(ngModel)]="gotoThree" *ngIf="this.isGoToEdit == 1">
 					<option [value]="0"></option>
-					<option *ngFor="let player of this.extendedPlayers" [value]="player.id">
-						{{ this.getPlayerName(player.id) }}
+					<option *ngFor="let player of this.extendedPlayers" [value]="player.playerId">
+						{{ this.getPlayerName(player.playerId) }}
 					</option>
 				</select>
 			</div>

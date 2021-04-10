@@ -50,7 +50,7 @@ export class InitialDraftComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -193,7 +193,7 @@ export class InitialDraftComponent implements OnInit {
 
  getTeamNameForSelection(round: number, pick: number) {
     const selection = this.allDraftPicks.find(x => x.pick === pick && x.round === round);
-    const teamSelecting = this.allTeams.find(x => x.id === selection.teamId);
+    const teamSelecting = this.allTeams.find(x => x.teamId === selection.teamId);
     return teamSelecting.teamname + ' ' + teamSelecting.mascot;
  }
 
@@ -201,7 +201,7 @@ export class InitialDraftComponent implements OnInit {
   const selection = this.allDraftPicks.find(x => x.pick === pick && x.round === round);
 
   if (selection.playerId !== 0) {
-    const player = this.players.find(x => x.id === selection.playerId);
+    const player = this.players.find(x => x.playerId === selection.playerId);
     return player.firstName + ' ' + player.surname;
   } else {
     return '';

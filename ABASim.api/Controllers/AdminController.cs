@@ -19,10 +19,10 @@ namespace ABASim.api.Controllers
             _gameRepo = gameRepo;
         }
 
-        [HttpGet("updateleaguestatus/{newStatus}")]
-        public async Task<bool> UpdateLeagueStatus(LeagueStatusDto newStatus)
+        [HttpGet("updateleaguestatus")]
+        public async Task<bool> UpdateLeagueStatus(string status, string leagueId)
         {
-            var updated = await _repo.UpdateLeagueState(newStatus);
+            var updated = await _repo.UpdateLeagueState(Int32.Parse(status), Int32.Parse(leagueId));
             return updated;
         }
 

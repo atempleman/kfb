@@ -52,7 +52,7 @@ export class TeamComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -72,7 +72,7 @@ export class TeamComponent implements OnInit {
 
   getTeamStandings() {
     const summary: GetRosterQuickView = {
-      teamId: this.team.id,
+      teamId: this.team.teamId,
       leagueId: this.league.id
     };
 
@@ -140,7 +140,7 @@ export class TeamComponent implements OnInit {
   }
 
   backgroundStyle() {
-    switch (this.team.id) {
+    switch (this.team.teamId) {
       case 2:
         // Toronto
         this.primaryColor = '206,17,65';

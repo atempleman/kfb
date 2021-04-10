@@ -330,7 +330,7 @@ namespace ABASim.api.Controllers
             return Ok(results);
         }
 
-         [HttpGet("playoffleagueleaderspoints")]
+        [HttpGet("playoffleagueleaderspoints")]
         public async Task<IActionResult> GetPointLeagueLeadersPlayoffs(string page, string leagueId)
         {
             var points = await _repo.GetPlayoffsPointsLeagueLeaders(Int32.Parse(page), Int32.Parse(leagueId));

@@ -108,15 +108,15 @@ namespace ABASim.api.Data
             List<NextDaysGameDto> nextGamesList = new List<NextDaysGameDto>();
             foreach (var game in nextGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeId);
                 
                 NextDaysGameDto ng = new NextDaysGameDto
                 {
                     Id = game.Id,
-                    AwayTeamId = awayTeam.Id,
+                    AwayTeamId = awayTeam.TeamId,
                     AwayTeamName = awayTeam.Teamname + " " + awayTeam.Mascot,
-                    HomeTeamId = homeTeam.Id,
+                    HomeTeamId = homeTeam.TeamId,
                     HomeTeamName = homeTeam.Teamname + " " + homeTeam.Mascot,
                     Day = league.Day + 1
                 };
@@ -134,15 +134,15 @@ namespace ABASim.api.Data
             List<NextDaysGameDto> nextGamesList = new List<NextDaysGameDto>();
             foreach (var game in nextGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId);
                 
                 NextDaysGameDto ng = new NextDaysGameDto
                 {
                     Id = game.Id,
-                    AwayTeamId = awayTeam.Id,
+                    AwayTeamId = awayTeam.TeamId,
                     AwayTeamName = awayTeam.Teamname + " " + awayTeam.Mascot,
-                    HomeTeamId = homeTeam.Id,
+                    HomeTeamId = homeTeam.TeamId,
                     HomeTeamName = homeTeam.Teamname + " " + homeTeam.Mascot,
                     Day = league.Day + 1
                 };
@@ -184,8 +184,8 @@ namespace ABASim.api.Data
                     }
                 }
 
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId && x.LeagueId == leagueId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId && x.LeagueId == leagueId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId && x.LeagueId == leagueId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId && x.LeagueId == leagueId);
 
                 ScheduleDto scheduleGame = new ScheduleDto {
                     GameId = game.Id,
@@ -217,7 +217,7 @@ namespace ABASim.api.Data
             {
                 foreach (var ls in leagueStandings)
                 {
-                    if (ls.TeamId == team.Id) 
+                    if (ls.TeamId == team.TeamId) 
                     {
                         StandingsDto standing = new StandingsDto
                         {
@@ -252,7 +252,7 @@ namespace ABASim.api.Data
             {
                 foreach (var ls in leagueStandings)
                 {
-                    if (ls.TeamId == team.Id) 
+                    if (ls.TeamId == team.TeamId) 
                     {
                         StandingsDto standing = new StandingsDto
                         {
@@ -285,7 +285,7 @@ namespace ABASim.api.Data
             foreach (var ls in leagueStandings)
             {
                 var teamId = ls.TeamId;
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == teamId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == teamId && x.LeagueId == leagueId);
                 StandingsDto standing = new StandingsDto
                 {
                     Team = team.Teamname + " " + team.Mascot,
@@ -314,8 +314,8 @@ namespace ABASim.api.Data
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeId);
                 var gameResult = await _context.PreseasonGameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
 
                 int awayScore = 0;
@@ -332,9 +332,9 @@ namespace ABASim.api.Data
                 CurrentDayGamesDto ng = new CurrentDayGamesDto
                 {
                     Id = game.Id,
-                    AwayTeamId = awayTeam.Id,
+                    AwayTeamId = awayTeam.TeamId,
                     AwayTeamName = awayTeam.Teamname + " " + awayTeam.Mascot,
-                    HomeTeamId = homeTeam.Id,
+                    HomeTeamId = homeTeam.TeamId,
                     HomeTeamName = homeTeam.Teamname + " " + homeTeam.Mascot,
                     Day = league.Day + 1,
                     awayScore = awayScore,
@@ -355,8 +355,8 @@ namespace ABASim.api.Data
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId);
                 var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
 
                 int awayScore = 0;
@@ -373,9 +373,9 @@ namespace ABASim.api.Data
                 CurrentDayGamesDto ng = new CurrentDayGamesDto
                 {
                     Id = game.Id,
-                    AwayTeamId = awayTeam.Id,
+                    AwayTeamId = awayTeam.TeamId,
                     AwayTeamName = awayTeam.Teamname + " " + awayTeam.Mascot,
-                    HomeTeamId = homeTeam.Id,
+                    HomeTeamId = homeTeam.TeamId,
                     HomeTeamName = homeTeam.Teamname + " " + homeTeam.Mascot,
                     Day = league.Day + 1,
                     awayScore = awayScore,
@@ -396,8 +396,8 @@ namespace ABASim.api.Data
 
             foreach (var tran in trans)
             {
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == tran.TeamId && x.LeagueId == leagueId);
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == tran.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == tran.TeamId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == tran.PlayerId && x.LeagueId == leagueId);
                 var type = "";
                 if (tran.TransactionType == 1) {
                     type = "Signed";
@@ -443,7 +443,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderPointsDto points = new LeagueLeaderPointsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -461,9 +461,9 @@ namespace ABASim.api.Data
 
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
                 
                 LeaguePointsDto lpDto = new LeaguePointsDto
                 {
@@ -492,9 +492,9 @@ namespace ABASim.api.Data
 
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
                 
                 LeagueReboundingDto rebDto = new LeagueReboundingDto
                 {
@@ -518,9 +518,9 @@ namespace ABASim.api.Data
 
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
                 
                 LeagueDefenceDto defDto = new LeagueDefenceDto
                 {
@@ -543,9 +543,9 @@ namespace ABASim.api.Data
 
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
                 
                 LeagueOtherDto otherDto = new LeagueOtherDto
                 {
@@ -589,7 +589,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderAssistsDto assist = new LeagueLeaderAssistsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -615,7 +615,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderReboundsDto rebound = new LeagueLeaderReboundsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -641,7 +641,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderBlocksDto block = new LeagueLeaderBlocksDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -667,7 +667,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderStealsDto steal = new LeagueLeaderStealsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -693,7 +693,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderMinutesDto minutes = new LeagueLeaderMinutesDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -719,7 +719,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderFoulsDto foul = new LeagueLeaderFoulsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -745,7 +745,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderTurnoversDto to = new LeagueLeaderTurnoversDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -765,13 +765,13 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
 
                 LeagueLeaderPointsDto points = new LeagueLeaderPointsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -790,13 +790,13 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
 
                 LeagueLeaderAssistsDto assist = new LeagueLeaderAssistsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -815,13 +815,13 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
 
                 LeagueLeaderReboundsDto rebound = new LeagueLeaderReboundsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -840,13 +840,13 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
 
                 LeagueLeaderBlocksDto block = new LeagueLeaderBlocksDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -865,13 +865,13 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == ps.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
 
                 LeagueLeaderStealsDto steal = new LeagueLeaderStealsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -890,8 +890,8 @@ namespace ABASim.api.Data
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId);
                 var gameResult = await _context.PlayoffResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
 
                 int awayScore = 0;
@@ -908,9 +908,9 @@ namespace ABASim.api.Data
                 CurrentDayGamesDto ng = new CurrentDayGamesDto
                 {
                     Id = game.Id,
-                    AwayTeamId = awayTeam.Id,
+                    AwayTeamId = awayTeam.TeamId,
                     AwayTeamName = awayTeam.Teamname + " " + awayTeam.Mascot,
-                    HomeTeamId = homeTeam.Id,
+                    HomeTeamId = homeTeam.TeamId,
                     HomeTeamName = homeTeam.Teamname + " " + homeTeam.Mascot,
                     Day = league.Day + 1,
                     awayScore = awayScore,
@@ -965,7 +965,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderPointsDto points = new LeagueLeaderPointsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -991,7 +991,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderAssistsDto assist = new LeagueLeaderAssistsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1017,7 +1017,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderReboundsDto rebound = new LeagueLeaderReboundsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1043,7 +1043,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderBlocksDto block = new LeagueLeaderBlocksDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1069,7 +1069,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderStealsDto steal = new LeagueLeaderStealsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1095,7 +1095,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderMinutesDto minutes = new LeagueLeaderMinutesDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1121,7 +1121,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderTurnoversDto to = new LeagueLeaderTurnoversDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1147,7 +1147,7 @@ namespace ABASim.api.Data
 
                 LeagueLeaderFoulsDto foul = new LeagueLeaderFoulsDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     PlayerName = player.FirstName + " " + player.Surname,
                     TeamShortCode = team.ShortCode,
                     GamesPlayed = ps.GamesPlayed,
@@ -1190,8 +1190,8 @@ namespace ABASim.api.Data
                     }
                 }
 
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.AwayTeamId && x.LeagueId == leagueId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == game.HomeTeamId && x.LeagueId == leagueId);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId && x.LeagueId == leagueId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId && x.LeagueId == leagueId);
 
                 PlayoffScheduleDto scheduleGame = new PlayoffScheduleDto {
                     GameId = game.Id,
@@ -1230,8 +1230,8 @@ namespace ABASim.api.Data
 
             foreach (var tran in trans)
             {
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == tran.TeamId && x.LeagueId == leagueId);
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == tran.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == tran.TeamId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == tran.PlayerId && x.LeagueId == leagueId);
                 var type = "";
                 if (tran.TransactionType == 1) {
                     type = "Signed";
@@ -1270,9 +1270,9 @@ namespace ABASim.api.Data
 
             foreach (var injury in playerInjuries)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == injury.PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId && x.LeagueId == leagueId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId && x.LeagueId == leagueId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 LeaguePlayerInjuryDto dto = new LeaguePlayerInjuryDto
                 {
@@ -1303,9 +1303,9 @@ namespace ABASim.api.Data
             }
             for (int i = 0; i < count; i++)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == votes[i].PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == votes[i].PlayerId && x.LeagueId == leagueId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == votes[i].PlayerId && x.LeagueId == leagueId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 VotesDto dto = new VotesDto
                 {
@@ -1329,9 +1329,9 @@ namespace ABASim.api.Data
             }
             for (int i = 0; i < count; i++)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == votes[i].PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == votes[i].PlayerId && x.LeagueId == leagueId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == votes[i].PlayerId && x.LeagueId == leagueId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 VotesDto dto = new VotesDto
                 {
@@ -1355,9 +1355,9 @@ namespace ABASim.api.Data
             }
             for (int i = 0; i < count; i++)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == votes[i].PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == votes[i].PlayerId && x.LeagueId == leagueId);
                 var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == votes[i].PlayerId && x.LeagueId == leagueId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == playerTeam.TeamId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 VotesDto dto = new VotesDto
                 {

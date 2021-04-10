@@ -68,7 +68,7 @@ export class CoachingComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -117,7 +117,7 @@ export class CoachingComponent implements OnInit {
       this.alertify.error('Error getting players');
     }, () => {
       this.extendedPlayers.forEach(element => {
-        const injured = this.teamsInjuries.find(x => x.playerId === element.id);
+        const injured = this.teamsInjuries.find(x => x.playerId === element.playerId);
 
         if (injured) {
           const index = this.extendedPlayers.indexOf(element, 0);
@@ -177,13 +177,13 @@ export class CoachingComponent implements OnInit {
         this.injuredThree = 1;
       }
     } else {
-      const player = this.extendedPlayers.find(x => x.id === playerId);
+      const player = this.extendedPlayers.find(x => playerId === playerId);
       return player.firstName + ' ' + player.surname;
     }
   }
 
   getPlayerName(playerId: number) {
-    const player = this.extendedPlayers.find(x => x.id === playerId);
+    const player = this.extendedPlayers.find(x => x.playerId === playerId);
     return player.firstName + ' ' + player.surname;
   }
 
@@ -224,7 +224,7 @@ export class CoachingComponent implements OnInit {
         this.teamStrategy.offensiveStrategyDesc = value.description;
       } else {
         const ts: Strategy = {
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           offensiveStrategyId: +this.offStrategySelection,
           defensiveStrategyId: 0,
           offensiveStrategyName: value.name,
@@ -248,7 +248,7 @@ export class CoachingComponent implements OnInit {
           this.teamStrategy.defensiveStrategyDesc = value.description;
         } else {
           const ts: Strategy = {
-            teamId: this.team.id,
+            teamId: this.team.teamId,
             offensiveStrategyId: 0,
             defensiveStrategyId: +this.defStrategySelection,
             offensiveStrategyName: '',

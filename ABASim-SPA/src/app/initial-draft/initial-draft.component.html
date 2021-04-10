@@ -5,7 +5,7 @@
             <div class="teksti-home"><h3 class="title">Current Pick - Round #{{ tracker?.round }}, Pick #{{ tracker?.pick }}</h3>
                   <p class="text">Time Remaining: {{ this.timeDisplay }}</p>
                   <br />
-                  <div *ngIf="this.team?.id == this.teamOnClock?.id">
+                  <div *ngIf="this.team?.teamId == this.teamOnClock?.teamId">
                         <form #draftPlayerForm>
                               <div class="modal-body">
                                     <p>The {{ this.team.teamname }} {{ this.team.mascot }} select:</p>

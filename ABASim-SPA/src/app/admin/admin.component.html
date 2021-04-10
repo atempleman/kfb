@@ -570,7 +570,7 @@
 				<label class="col-md-6 control-label color-7" for="textinput">Teams: </label>
 				<span>
 					<select name="leagueStatus" [(ngModel)]="this.teamSelected">
-						<option *ngFor="let team of this.teams" [value]="team.id">{{ team.teamname }}
+						<option *ngFor="let team of this.teams" [value]="team.teamId">{{ team.teamname }}
 							{{ team.mascot }}</option>
 					</select>
 				</span>

@@ -50,7 +50,7 @@ export class RosterComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -94,7 +94,7 @@ export class RosterComponent implements OnInit {
 
   getRosterForTeam() {
     const summary: GetRosterQuickView = {
-      teamId: this.team.id,
+      teamId: this.team.teamId,
       leagueId: this.league.id
     };
 
@@ -118,7 +118,7 @@ export class RosterComponent implements OnInit {
 
   getPlayerInjuries() {
     const summary: GetRosterQuickView = {
-      teamId: this.team.id,
+      teamId: this.team.teamId,
       leagueId: this.league.id
     };
     this.teamService.getPlayerInjuriesForTeam(summary).subscribe(result => {
@@ -136,7 +136,7 @@ export class RosterComponent implements OnInit {
 
   confirmedWaived() {
     const waivePlayer: WaivedPlayer = {
-      teamId: this.team.id,
+      teamId: this.team.teamId,
       playerId: this.selectedPlayer.playerId,
       leagueId: this.league.id
     };
@@ -152,7 +152,7 @@ export class RosterComponent implements OnInit {
 
   getTeamContracts() {
     const summary: GetRosterQuickView = {
-      teamId: this.team.id,
+      teamId: this.team.teamId,
       leagueId: this.league.id
     };
     this.teamService.getTeamContracts(summary).subscribe(result => {
@@ -181,7 +181,7 @@ export class RosterComponent implements OnInit {
     };
 
     this.playerService.getPlayerForName(summary).subscribe(result => {
-      playerId = result.id;
+      playerId = result.playerId;
     }, error => {
       this.alertify.error('Error getting player name');
     }, () => {
@@ -200,7 +200,7 @@ export class RosterComponent implements OnInit {
     };
 
     this.playerService.getPlayerForName(summary).subscribe(result => {
-      playerId = result.id;
+      playerId = result.playerId;
     }, error => {
       this.alertify.error('Error getting player name');
     }, () => {

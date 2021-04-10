@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -588,7 +588,7 @@ export class DashboardComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting players team');
     }, () => {
-      this.transferService.setData(team.id);
+      this.transferService.setData(team.teamId);
       this.router.navigate(['/view-team']);
     });
   }

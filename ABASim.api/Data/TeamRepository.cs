@@ -37,7 +37,7 @@ namespace ABASim.api.Data
                 if (tradeTeamSet == 0)
                 {
                     tradingTeam = tp.TradingTeam;
-                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == tradingTeam);
+                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == tradingTeam);
                     tradingTeamName = team.Mascot;
                     tradeTeamSet = 1;
                 }
@@ -45,7 +45,7 @@ namespace ABASim.api.Data
                 if (receivingTeamSet == 0)
                 {
                     receivingTeam = tp.ReceivingTeam;
-                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == receivingTeam);
+                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == receivingTeam);
                     receivingTeamName = team.Mascot;
                     receivingTeamSet = 1;
                 }
@@ -129,7 +129,7 @@ namespace ABASim.api.Data
                     pickToUpdate.CurrentTeam = newTeamId;
                     _context.Update(pickToUpdate);
 
-                    var origTeamName = await _context.Teams.FirstOrDefaultAsync(x => x.Id == tp.OriginalTeam);
+                    var origTeamName = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == tp.OriginalTeam);
 
                     // Now need to record a transaction
                     var league = await _context.Leagues.FirstOrDefaultAsync();
@@ -224,8 +224,8 @@ namespace ABASim.api.Data
 
             foreach (var trade in trades)
             {
-                var tradingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == trade.TradingTeam);
-                var receivingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == trade.ReceivingTeam);
+                var tradingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == trade.TradingTeam);
+                var receivingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == trade.ReceivingTeam);
 
                 var playerName = "";
                 int years = 0;
@@ -233,10 +233,10 @@ namespace ABASim.api.Data
                 int current = 0;
                 if (trade.PlayerId != 0)
                 {
-                    var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == trade.PlayerId);
+                    var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == trade.PlayerId);
                     playerName = player.FirstName + " " + player.Surname;
 
-                    var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                    var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
                     if (playerContract != null)
                     {
                         if (playerContract.YearFive > 0)
@@ -294,8 +294,8 @@ namespace ABASim.api.Data
 
             foreach (var trade in trades)
             {
-                var tradingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == trade.TradingTeam);
-                var receivingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.Id == trade.ReceivingTeam);
+                var tradingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == trade.TradingTeam);
+                var receivingTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == trade.ReceivingTeam);
 
                 var playerName = "";
                 int total = 0;
@@ -304,10 +304,10 @@ namespace ABASim.api.Data
 
                 if (trade.PlayerId != 0)
                 {
-                    var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == trade.PlayerId);
+                    var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == trade.PlayerId);
                     playerName = player.FirstName + " " + player.Surname;
 
-                    var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id);
+                    var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
                     if (playerContract != null)
                     {
                         if (playerContract.YearFive > 0)
@@ -911,7 +911,7 @@ namespace ABASim.api.Data
             // Now need to get the player details
             foreach (var rosterPlayer in teamsRosteredPlayers)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.Id == rosterPlayer.PlayerId && x.LeagueId == leagueId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId && x.LeagueId == leagueId);
                 players.Add(player);
             }
             return players;
@@ -978,7 +978,7 @@ namespace ABASim.api.Data
                     PlayerContractDetailedDto pcddto = new PlayerContractDetailedDto
                     {
                         PlayerName = player.FirstName + " " + player.Surname,
-                        PlayerId = player.Id,
+                        PlayerId = player.PlayerId,
                         Age = player.Age,
                         TeamId = teamId,
                         YearOne = pc.YearOne,
@@ -1001,7 +1001,7 @@ namespace ABASim.api.Data
                     PlayerContractDetailedDto pcddto = new PlayerContractDetailedDto
                     {
                         PlayerName = player.FirstName + " " + player.Surname,
-                        PlayerId = player.Id,
+                        PlayerId = player.PlayerId,
                         Age = player.Age,
                         TeamId = teamId,
                         YearOne = 1000000,
@@ -1090,7 +1090,7 @@ namespace ABASim.api.Data
             foreach (var dp in dps)
             {
                 // Need to get the team and add to list
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == dp.TeamId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == dp.TeamId && x.LeagueId == leagueId);
                 teams.Add(team);
             }
             return teams;
@@ -1189,7 +1189,7 @@ namespace ABASim.api.Data
                         var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == trade.PlayerId && x.LeagueId == leagueId);
                         playerName = player.FirstName + " " + player.Surname;
 
-                        var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == leagueId);
+                        var playerContract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
                         if (playerContract != null)
                         {
                             if (playerContract.YearFive > 0)
@@ -1252,7 +1252,7 @@ namespace ABASim.api.Data
                 var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId && x.LeagueId == leagueId);
 
                 // Now we have all of the players for the team, we now need to get some contract details
-                var contract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.Id && x.LeagueId == leagueId);
+                var contract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
 
                 // Get the number of years on the contract
                 int years = 0;
@@ -1294,7 +1294,7 @@ namespace ABASim.api.Data
 
                 TradePlayerViewDto tpvdto = new TradePlayerViewDto
                 {
-                    PlayerId = player.Id,
+                    PlayerId = player.PlayerId,
                     Fisrtname = player.FirstName,
                     Surname = player.FirstName + " " + player.Surname,
                     PGPosition = player.PGPosition,
@@ -1350,7 +1350,7 @@ namespace ABASim.api.Data
                 _context.Remove(trade);
             }
 
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == receivingTeam);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == receivingTeam);
             receivingTeamName = team.Mascot;
 
             // Now need to send an inbox message
@@ -1391,7 +1391,7 @@ namespace ABASim.api.Data
                 receivingTeam = tr.ReceivingTeam;
             }
 
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.Id == receivingTeam);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == receivingTeam);
             receivingTeamName = team.Mascot;
 
             var messageString = "";

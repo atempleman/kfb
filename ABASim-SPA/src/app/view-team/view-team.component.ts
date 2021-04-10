@@ -170,7 +170,7 @@ export class ViewTeamComponent implements OnInit {
     };
 
     this.playerService.getPlayerForName(playerleague).subscribe(result => {
-      playerId = result.id;
+      playerId = result.playerId;
     }, error => {
       this.alertify.error('Error getting player name');
     }, () => {

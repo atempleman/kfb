@@ -131,7 +131,7 @@ export class DepthchartComponent implements OnInit {
       this.alertify.error('Error getting your roster');
     }, () => {
       this.playingRoster.forEach(element => {
-        const injured = this.teamsInjuries.find(x => x.playerId === element.id && x.severity > 2);
+        const injured = this.teamsInjuries.find(x => x.playerId === element.playerId && x.severity > 2);
 
         if (injured) {
           const index = this.playingRoster.indexOf(element, 0);
@@ -156,7 +156,7 @@ export class DepthchartComponent implements OnInit {
         // Depth Chart is new
         const dc101: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 1,
           depth: 1,
@@ -166,7 +166,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc102: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 1,
           depth: 2,
@@ -176,7 +176,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc103: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 1,
           depth: 3,
@@ -186,7 +186,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc201: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 2,
           depth: 1,
@@ -196,7 +196,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc202: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 2,
           depth: 2,
@@ -206,7 +206,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc203: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 2,
           depth: 3,
@@ -216,7 +216,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc301: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 3,
           depth: 1,
@@ -226,7 +226,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc302: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 3,
           depth: 2,
@@ -236,7 +236,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc303: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 3,
           depth: 3,
@@ -246,7 +246,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc401: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 4,
           depth: 1,
@@ -256,7 +256,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc402: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 4,
           depth: 2,
@@ -266,7 +266,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc403: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 4,
           depth: 3,
@@ -276,7 +276,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc501: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 5,
           depth: 1,
@@ -286,7 +286,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc502: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 5,
           depth: 2,
@@ -296,7 +296,7 @@ export class DepthchartComponent implements OnInit {
 
         const dc503: DepthChart = {
           id: 0,
-          teamId: this.team.id,
+          teamId: this.team.teamId,
           playerId: 0,
           position: 5,
           depth: 3,
@@ -445,7 +445,7 @@ export class DepthchartComponent implements OnInit {
     if (isSet === 1 || dc.playerId === 0) {
       return 'N/A';
     } else {
-      const player = this.playingRoster.find(x => x.id === dc.playerId);
+      const player = this.playingRoster.find(x => x.playerId === dc.playerId);
       if (player === undefined) {
         return 'N/A';
       }
@@ -456,7 +456,7 @@ export class DepthchartComponent implements OnInit {
   }
 
   getPlayerName(playerId: number) {
-    const player = this.playingRoster.find(x => x.id === playerId);
+    const player = this.playingRoster.find(x => x.playerId === playerId);
     return player.firstName + ' ' + player.surname;
   }
 
@@ -496,7 +496,7 @@ export class DepthchartComponent implements OnInit {
         this.injuryC03Id = 1;
       }
     } else {
-      const player = this.playingRoster.find(x => x.id === playerId);
+      const player = this.playingRoster.find(x => x.playerId === playerId);
       return player.firstName + ' ' + player.surname;
     }
   }

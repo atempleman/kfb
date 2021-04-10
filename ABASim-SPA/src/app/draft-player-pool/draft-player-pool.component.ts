@@ -50,7 +50,7 @@ export class DraftPlayerPoolComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -207,7 +207,7 @@ export class DraftPlayerPoolComponent implements OnInit {
   addPlayerToDraftRank(selectedPlayer: DraftPlayer) {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = selectedPlayer.playerId;
-    newRanking.teamId = this.team.id;
+    newRanking.teamId = this.team.teamId;
     newRanking.leagueId = this.league.id;
 
     this.draftService.addDraftPlayerRanking(newRanking).subscribe(result => {
@@ -223,7 +223,7 @@ export class DraftPlayerPoolComponent implements OnInit {
   removePlayerDraftRank(selectedPlayer: DraftPlayer) {
     const newRanking = {} as AddDraftRank;
     newRanking.playerId = selectedPlayer.playerId;
-    newRanking.teamId = this.team.id;
+    newRanking.teamId = this.team.teamId;
     newRanking.leagueId = this.league.id;
 
     this.draftService.removeDraftPlayerRanking(newRanking).subscribe(result => {

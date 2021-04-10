@@ -34,7 +34,7 @@ export class InboxComponent implements OnInit {
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
-      localStorage.setItem('teamId', this.team.id.toString());
+      localStorage.setItem('teamId', this.team.teamId.toString());
     }, error => {
       this.alertify.error('Error getting your Team');
     }, () => {
@@ -57,7 +57,7 @@ export class InboxComponent implements OnInit {
     
     this.teamService.getAllTeams(this.league.id).subscribe(result => {
       // find the index of the users team
-      const index = result.findIndex(x => x.id === this.team.id);
+      const index = result.findIndex(x => x.teamId === this.team.teamId);
       result.splice(index, 1);
       this.teams = result;
     }, error => {
@@ -121,7 +121,7 @@ export class InboxComponent implements OnInit {
     const bodyValue = (document.getElementById('body') as HTMLInputElement).value;
     const dt = formatDate(new Date(), 'dd/MM/yyyy', 'en');
 
-    const receivingTeam = this.teams.find(x => x.id === +this.selectedTeam);
+    const receivingTeam = this.teams.find(x => x.teamId === +this.selectedTeam);
 
     const message: InboxMessage = {
       id: 0,
@@ -156,7 +156,7 @@ export class InboxComponent implements OnInit {
 
     const bodyValue = (document.getElementById('body') as HTMLInputElement).value;
     const dt = formatDate(new Date(), 'dd/MM/yyyy', 'en');
-    const receivingTeam = this.teams.find(x => x.id === +this.selectedTeam);
+    const receivingTeam = this.teams.find(x => x.teamId === +this.selectedTeam);
 
     let sender = this.team.mascot;
     let receiver = receivingTeam.mascot;
@@ -167,7 +167,7 @@ export class InboxComponent implements OnInit {
 
     const message: InboxMessage = {
       id: 0,
-      senderId: this.team.id,
+      senderId: this.team.teamId,
       senderName: '',
       senderTeam: sender,
       receiverId: +this.selectedTeam,
