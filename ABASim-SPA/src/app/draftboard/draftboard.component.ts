@@ -39,7 +39,6 @@ export class DraftboardComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
-
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
@@ -52,23 +51,31 @@ export class DraftboardComponent implements OnInit {
   }
 
   setupLeague() {
+    console.log('b');
     this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
       this.alertify.error('Error getting League Details');
     }, () => {
-      
+      this.setupPage();
     });
   }
 
   setupPage() {
     this.getDraftboardPlayers();
 
-    this.draftService.getCurrentInitialDraftPick(this.league.id).subscribe(result => {
-      this.currentPick = result;
-    }, error => {
-      this.alertify.error('Error getting current draft pick');
-    });
+    if (this.league.stateId < 3) {
+      // this.currentPick.round = 0;
+      // this.currentPick.teamId = -1;
+    } else {
+      this.draftService.getCurrentInitialDraftPick(this.league.id).subscribe(result => {
+        this.currentPick = result;
+      }, error => {
+        this.alertify.error('Error getting current draft pick');
+      });
+    }
+
+    
   }
 
   getDraftboardPlayers() {

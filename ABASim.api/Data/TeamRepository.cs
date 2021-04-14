@@ -374,7 +374,11 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<Team>> GetAvailableTeams()
         {
             List<Team> teams = new List<Team>();
-            var availableTeams = await _context.Teams.Where(x => x.UserId == 0).ToListAsync();
+
+            // Need to limit this to just the current public league
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.LeagueCode == "000000");
+
+            var availableTeams = await _context.Teams.Where(x => x.UserId == 0 && x.LeagueId == league.Id).ToListAsync();
 
             if (availableTeams != null)
             {

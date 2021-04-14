@@ -135,7 +135,7 @@ namespace ABASim.api.Data
             // Need to update player stats
             if (league.StateId == 7)
             {
-                var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
+                var todaysGames = await _context.Schedules.Where(x => x.GameDay == league.Day).ToListAsync();
 
                 foreach (var game in todaysGames)
                 {
@@ -1075,7 +1075,7 @@ namespace ABASim.api.Data
             }
             else if (league.StateId == 7)
             {
-                var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
+                var todaysGames = await _context.Schedules.Where(x => x.GameDay == league.Day).ToListAsync();
                 if (todaysGames.Count != 0)
                 {
                     foreach (var game in todaysGames)
@@ -2214,7 +2214,6 @@ namespace ABASim.api.Data
                     Pick = dp.Pick,
                     Years = years,
                     SalaryAmount = amount,
-                    LeagueId = leagueId
                 };
 
                 await _context.AddAsync(pc);
@@ -2225,7 +2224,7 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<CurrentDayGamesDto>> GetGamesForRreset(int leagueId)
         {
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-            var todaysGames = await _context.Schedules.Where(x => x.GameDay == (league.Day) && x.LeagueId == leagueId).ToListAsync();
+            var todaysGames = await _context.Schedules.Where(x => x.GameDay == league.Day).ToListAsync();
 
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)

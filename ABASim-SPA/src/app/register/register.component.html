@@ -17,7 +17,7 @@
 
           <div class="col-lg-10 mt-4">
             <form [formGroup]="registerForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2"
-              (ngSubmit)="register()" *ngIf="this.availableTeams">
+              (ngSubmit)="register()" *ngIf="this.availableTeams || this.availablePrivateTeams">
               <div class="row justify-content-center">
                 <h2 class="color-10 justify-content-center">Register your Klutch Fantasy Basketball Team.</h2>
                 <!-- <p class="color-8 justify-content-center">If there are available teams in an open league you will be able to register and begin playing.</p> -->
@@ -118,7 +118,7 @@
             </form>
 
             <form [formGroup]="contactForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2"
-              (ngSubmit)="submitContactForm()" *ngIf="!this.availableTeams">
+              (ngSubmit)="submitContactForm()" *ngIf="!this.availableTeams && !this.availablePrivateTeams">
               <div class="row justify-content-center">
                 <h4 class="color-10 justify-content-center">No teams are available. Please register your interest and
                   you will be notified when a team is available</h4>

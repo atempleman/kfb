@@ -40,7 +40,7 @@ namespace ABASim.api.Data
 
         public async Task<GameDetailsDto> GetSeasonGameDetails(int gameId, int leagueId)
         {
-            var game = await _context.Schedules.FirstOrDefaultAsync(x => x.Id == gameId && x.LeagueId == leagueId); 
+            var game = await _context.Schedules.FirstOrDefaultAsync(x => x.Id == gameId); 
             var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId && x.LeagueId == leagueId);
             var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId && x.LeagueId == leagueId);
             GameDetailsDto details = new GameDetailsDto
@@ -166,7 +166,7 @@ namespace ABASim.api.Data
                 endDay = 150;
 
             // Get all of the games for the period passed in
-            var scheduledGames = await _context.Schedules.Where(x => x.GameDay >= startDay && x.GameDay <= endDay && x.LeagueId == leagueId).ToListAsync();
+            var scheduledGames = await _context.Schedules.Where(x => x.GameDay >= startDay && x.GameDay <= endDay).ToListAsync();
 
             // Now need to massage to the correct structure
             foreach (var game in scheduledGames)

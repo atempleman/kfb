@@ -136,23 +136,27 @@ export class DraftComponent implements OnInit {
   }
 
   timerDisplay() {
-    this.interval = setInterval(() => {
-      const time = this.tracker.dateTimeOfLastPick + ' UTC';
-      const dtPick = new Date(time);
-      const currentTime = new Date();
+    if (this.league.stateId < 3) {
 
-      this.timeRemaining = dtPick.getTime() - currentTime.getTime();
-      const value = (this.timeRemaining / 1000).toFixed(0);
-      this.timeRemaining = +value;
+    } else {
+      this.interval = setInterval(() => {
+        const time = this.tracker.dateTimeOfLastPick + ' UTC';
+        const dtPick = new Date(time);
+        const currentTime = new Date();
 
-      if (this.timeRemaining > 0) {
-        this.timeRemaining--;
-        this.timeDisplay = this.transform(this.timeRemaining);
-      } else {
-        this.timeRemaining = 0;
-        this.timeDisplay = 'Time Expired';
-      }
-    }, 1000);
+        this.timeRemaining = dtPick.getTime() - currentTime.getTime();
+        const value = (this.timeRemaining / 1000).toFixed(0);
+        this.timeRemaining = +value;
+
+        if (this.timeRemaining > 0) {
+          this.timeRemaining--;
+          this.timeDisplay = this.transform(this.timeRemaining);
+        } else {
+          this.timeRemaining = 0;
+          this.timeDisplay = 'Time Expired';
+        }
+      }, 1000);
+    }
   }
 
   transform(value: number): string {
@@ -167,7 +171,12 @@ export class DraftComponent implements OnInit {
     }, error => {
       this.alertify.error('Error getting draft tracker');
     }, () => {
-      this.currentRound = this.tracker.round;
+      if (this.tracker != null) {
+        this.currentRound = this.tracker.round;
+      } else {
+        this.currentRound = 0;
+      }
+      
       this.getDraftDetails();
       this.onClockLoaded++;
       this.timerDisplay();

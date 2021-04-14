@@ -41,9 +41,9 @@
 	<div class="nav-bar nav-bar-center">
 		<div class="nav-bar-item color-8" [ngClass]="this.rosterSelected == 1 ? 'active' : ''" (click)="this.rosterSelection()"><span class="fa fa-users fs-2"></span><br>Roster</div>
 		<div class="nav-bar-item color-8" [ngClass]="this.coachingSelected == 1 ? 'active' : ''" (click)="this.coachingSelection()"><span class="fa fa-bullhorn fs-2"></span><br>Coaching</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.finacnesSelected == 1 ? 'active' : ''" (click)="this.finacnesSelection()"><span class="fa fa-list-ol fs-2"></span><br>Finances</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.tradesSelected == 1 ? 'active' : ''" (click)="this.tradesSelection()"><span class="fa fa-retweet fs-2"></span><br>Trades</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.freeagentsSelected == 1 ? 'active' : ''" (click)="this.freeagentsSelection()"><span class="fa fa-list fs-2"></span><br>Free Agents</div>
+		<div *ngIf="this.league?.stateId >= 3" class="nav-bar-item color-8" [ngClass]="this.finacnesSelected == 1 ? 'active' : ''" (click)="this.finacnesSelection()"><span class="fa fa-list-ol fs-2"></span><br>Finances</div>
+		<div *ngIf="this.league?.stateId >= 3" class="nav-bar-item color-8" [ngClass]="this.tradesSelected == 1 ? 'active' : ''" (click)="this.tradesSelection()"><span class="fa fa-retweet fs-2"></span><br>Trades</div>
+		<div *ngIf="this.league?.stateId >= 5" class="nav-bar-item color-8" [ngClass]="this.freeagentsSelected == 1 ? 'active' : ''" (click)="this.freeagentsSelection()"><span class="fa fa-list fs-2"></span><br>Free Agents</div>
 	</div>
 	<div class="tab-contents">
 		<div class="tab-content active" *ngIf="this.rosterSelected == 1">

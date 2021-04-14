@@ -104,11 +104,12 @@ export class DraftPlayerPoolComponent implements OnInit {
 
   getDraftPlayers() {
     // Get all draft players
-    const summary: GetPlayoffSummary = {
-      round: this.pager,
-      leagueId: this.league.id
-    };
-    this.playerService.getInitialDraftPlayers(summary).subscribe(result => {
+    // const summary: GetPlayoffSummary = {
+    //   round: this.pager,
+    //   leagueId: this.league.id
+    // };
+    // this.playerService.getInitialDraftPlayers(summary).subscribe(result => {
+    this.playerService.getAllInitialDraftPlayers(this.league.id).subscribe(result => {
       this.draftPlayers = result;
       this.masterList = result;
       // this.setPageArray();
