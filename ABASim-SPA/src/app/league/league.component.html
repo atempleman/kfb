@@ -50,7 +50,7 @@
 			(click)="this.eventsSelection()"><span class="fa fa-calendar fs-2"></span><br>Today's Events</div> -->
 		<div class="nav-bar-item color-8" [ngClass]="this.standingsSelected == 1 ? 'active' : ''"
 			(click)="this.standingsSelection()"><span class="fa fa-list-ol fs-2"></span><br>Standings</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.statsSelected == 1 ? 'active' : ''"
+		<div class="nav-bar-item color-8" *ngIf="this.league.stateId >= 5" [ngClass]="this.statsSelected == 1 ? 'active' : ''"
 			(click)="this.statisticsSelection()"><span class="fa fa-signal fs-2"></span><br>Statistics</div>
 		<div class="nav-bar-item color-8" [ngClass]="this.scheduleSelected == 1 ? 'active' : ''"
 			(click)="this.scheduleSelection()"><span class="fa fa-calendar fs-2"></span><br>Schedule</div>
@@ -58,7 +58,7 @@
 			(click)="this.transactionsSelection()"><span class="fa fa-retweet fs-2"></span><br>Transactions</div>
 		<div class="nav-bar-item color-8" [ngClass]="this.injuresSelected == 1 ? 'active' : ''"
 			(click)="this.injuriesSelection()"><span class="fa fa-medkit fs-2"></span><br>Injuries</div>
-		<div class="nav-bar-item color-8" [ngClass]="this.awardsSelected == 1 ? 'active' : ''"
+		<div class="nav-bar-item color-8" *ngIf="this.league.stateId >= 5" [ngClass]="this.awardsSelected == 1 ? 'active' : ''"
 			(click)="this.awardsSelection()"><span class="fa fa-trophy fs-2"></span><br>Award Races</div>
 	</div>
 	<!-- <div class="tab-contents" *ngIf="this.eventsSelected == 1">

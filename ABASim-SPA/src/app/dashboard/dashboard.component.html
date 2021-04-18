@@ -515,19 +515,19 @@
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 4">
 				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Draft HQ</h4>
-				<p class="color-7">Round #{{ this.tracker.round }}</p>
+				<p class="color-7">Round #{{ this.tracker?.round }}</p>
 				<div class="small-card">
-					<p class="color-7">#{{ this.previousPick.pick }} - <button class="teamlink"
-							(click)="viewTeam(this.previousPick.teamMascot)">{{ this.previousPick.teamMascot }}</button>
+					<p class="color-7">#{{ this.previousPick?.pick }} - <button class="teamlink"
+							(click)="viewTeam(this.previousPick?.teamMascot)">{{ this.previousPick?.teamMascot }}</button>
 						-
-						{{ this.previousPick.playerName }}
+						{{ this.previousPick?.playerName }}
 					</p>
-					<p class="color-7">#{{ this.currentPick.pick }} - <button class="teamlink"
-							(click)="viewTeam(this.currentPick.teamMascot)">{{ this.currentPick.teamMascot }}</button> -
+					<p class="color-7">#{{ this.currentPick?.pick }} - <button class="teamlink"
+							(click)="viewTeam(this.currentPick?.teamMascot)">{{ this.currentPick?.teamMascot }}</button> -
 						ON THE
 						CLOCK</p>
-					<p class="color-7">#{{ this.nextPick.pick }} - <button class="teamlink"
-							(click)="viewTeam(this.nextPick.teamMascot)">{{ this.nextPick.teamMascot }}</button> - UP
+					<p class="color-7">#{{ this.nextPick?.pick }} - <button class="teamlink"
+							(click)="viewTeam(this.nextPick?.teamMascot)">{{ this.nextPick?.teamMascot }}</button> - UP
 						NEXT</p>
 					<div style="text-align: center;">
 						<button type="button" class="btn btn-link text-left" (click)="goToDraft()">Go to Draft</button>

@@ -433,16 +433,24 @@ namespace ABASim.api.Data
             }
 
             // Now need to get the team for that pick
-            var id_pick = await _context.InitialDrafts.FirstOrDefaultAsync(x => x.Round == roundNumber && x.Pick == pickDto.Pick && x.LeagueId == pick);
+            var id_pick = await _context.InitialDrafts.FirstOrDefaultAsync(x => x.Round == roundNumber && x.Pick == pickDto.Pick && x.LeagueId == leagueId);
 
             // Now need the team
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == id_pick.TeamId);
-            pickDto.TeamMascot = team.Mascot;
+            if (roundNumber != 0) {
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == id_pick.TeamId && x.LeagueId == leagueId);
+                pickDto.TeamMascot = team.Mascot;
+            } else {
+                pickDto.TeamMascot = "";
+            }
 
             if (pick == -1)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == id_pick.PlayerId && x.LeagueId == leagueId);
-                pickDto.PlayerName = player.FirstName + " " + player.Surname;
+                if (id_pick == null) {
+                    pickDto.PlayerName = "";
+                } else {
+                    var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == id_pick.PlayerId && x.LeagueId == leagueId);
+                    pickDto.PlayerName = player.FirstName + " " + player.Surname;
+                }
             }
             else
             {
