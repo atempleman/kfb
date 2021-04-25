@@ -13,6 +13,7 @@ import { DetailedRetiredPlayer } from '../_models/detailedRetiredPlayer';
 import { GetPlayerLeague } from '../_models/getPlayerLeague';
 import { GetPlayerIdLeague } from '../_models/getPlayerIdLeague';
 import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
+import { DraftSelectionPlayer } from '../_models/draftSelectionPlayer';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,10 @@ export class PlayerService {
 
   getAllInitialDraftPlayers(leagueId: number): Observable<DraftPlayer[]> {
     return this.http.get<DraftPlayer[]>(this.baseUrl + 'getinitialdraftplayers/' + leagueId);
+  }
+
+  getAllInitialDraftSelectionPlayers(leagueId: number): Observable<DraftSelectionPlayer[]> {
+    return this.http.get<DraftSelectionPlayer[]>(this.baseUrl + 'getinitialdraftselectionplayers/' + leagueId);
   }
 
   getCountOfAvailableDraftPlayers(leagueId: number) {

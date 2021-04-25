@@ -51,14 +51,11 @@
         <td>{{ player.passingGrade }}</td>
         <td>{{ player.intangiblesGrade }}</td>
         <td class="text-center">
-          <a (click)="viewPlayer(player?.playerId)" class="btn btn-primary small-btn mt-1"><i
-              class="fa fa-info"></i></a>
-          <a class="btn btn-danger small-btn ml-1 mt-1" (click)="removeDraftRanking(player)"><i
-              class="fa fa-minus"></i></a>
-          <a class="btn btn-info small-btn ml-1 mt-1" *ngIf="i != 0" (click)="moveUp(player)"><i
-              class="fa fa-arrow-up ml-1"></i></a>
-          <a class="btn btn-info small-btn ml-1 mt-1" *ngIf="i != this.draftPlayers?.length - 1"
-            (click)="moveDown(player)"><i class="fa fa-arrow-down ml-1"></i></a>
+          <button type="button" class="btn btn-primary mt-1 btn-xs" (click)="viewPlayer(player?.playerId)"><i class="fa fa-info"></i></button>
+          <button type="button" class="btn btn-danger mt-1 ml-1 btn-xs" (click)="removeDraftRanking(player)"><i class="fa fa-minus"></i></button>
+          <button type="button" class="btn btn-info mt-1 ml-1 btn-xs" *ngIf="i != 0" (click)="moveUp(player)"><i class="fa fa-arrow-up"></i></button>
+          <button type="button" class="btn btn-info mt-1 ml-1 btn-xs" *ngIf="i != this.draftPlayers?.length - 1"
+          (click)="moveDown(player)"><i class="fa fa-arrow-down"></i></button>
           <ng-container *ngIf="this.team?.teamId == this.currentPick?.teamId">
             <button type="submit" class="btn btn-primary" (click)="openModal(makePick, player)">Select</button>
           </ng-container>

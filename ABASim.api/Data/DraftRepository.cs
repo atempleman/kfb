@@ -281,7 +281,7 @@ namespace ABASim.api.Data
                         }
 
                         // Now update the TeamSalary Record
-                        var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.Id && x.LeagueId == draftPick.LeagueId);
+                        var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == draftPick.LeagueId);
                         salaryCap.CurrentCapAmount = teamSalary;
                         _context.TeamSalaryCaps.Update(salaryCap);
                     }
@@ -349,7 +349,7 @@ namespace ABASim.api.Data
             else
             {
                 // Now need to get the auto pick order
-                var autopick = await _context.AutoPickOrders.OrderByDescending(x => x.Score).FirstOrDefaultAsync();
+                var autopick = await _context.AutoPickOrders.OrderByDescending(x => x.Score).FirstOrDefaultAsync(x => x.LeagueId == draftPick.LeagueId);
                 draftPick.TeamId = teamId;
                 draftPick.PlayerId = autopick.PlayerId;
                 return await this.MakeDraftPick(draftPick);
@@ -479,7 +479,8 @@ namespace ABASim.api.Data
                 {
                     Round = i,
                     Pick = 5,
-                    Salary = info1.SalaryAmount
+                    Salary = info1.SalaryAmount,
+                    Years = info1.Years
                 };
                 details.Add(dto1);
 
@@ -487,7 +488,8 @@ namespace ABASim.api.Data
                 {
                     Round = i,
                     Pick = 15,
-                    Salary = info2.SalaryAmount
+                    Salary = info2.SalaryAmount,
+                    Years = info2.Years
                 };
                 details.Add(dto2);
 
@@ -495,7 +497,8 @@ namespace ABASim.api.Data
                 {
                     Round = i,
                     Pick = 25,
-                    Salary = info3.SalaryAmount
+                    Salary = info3.SalaryAmount,
+                    Years = info3.Years
                 };
                 details.Add(dto3);
             }

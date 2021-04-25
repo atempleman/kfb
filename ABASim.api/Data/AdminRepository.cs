@@ -85,7 +85,7 @@ namespace ABASim.api.Data
             // Now need to go through and save the draft picks
             for (int i = 1; i < 14; i++)
             {
-                if (i % 2 != 0)
+                if (i % 2 == 1)
                 {
                     for (int j = 1; j < 31; j++)
                     {
@@ -102,17 +102,19 @@ namespace ABASim.api.Data
                 }
                 else
                 {
+                    int pickNo = 1;
                     for (int j = 30; j > 0; j--)
                     {
                         InitialDraft draftPick = new InitialDraft
                         {
                             Round = i,
-                            Pick = j,
+                            Pick = pickNo,
                             TeamId = teamIds[j - 1],
                             PlayerId = 0,
                             LeagueId = leagueId
                         };
                         await _context.AddAsync(draftPick);
+                        pickNo++;
                     }
                 }
 

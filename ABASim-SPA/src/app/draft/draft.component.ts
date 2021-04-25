@@ -20,6 +20,7 @@ import { InitialPickSalary } from '../_models/initialPickSalary';
 import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
+import { DraftSelectionPlayer } from '../_models/draftSelectionPlayer';
 
 @Component({
   selector: 'app-draft',
@@ -48,6 +49,7 @@ export class DraftComponent implements OnInit {
   currentRound = 1;
   roundDraftPicks: InitialDraftPicks[] = [];
   draftablePlayers: DraftPlayer[] = [];
+  draftSelectionPlayers: DraftSelectionPlayer[] = [];
 
   allTeams: Team[] = [];
 
@@ -65,6 +67,8 @@ export class DraftComponent implements OnInit {
 
   initialPickSalary: InitialPickSalary[] = [];
   rounds: number[] = [];
+
+  viewingRound: number;
 
   constructor(private leagueService: LeagueService, private alertify: AlertifyService, private router: Router,
               private draftService: DraftService, private teamService: TeamService, private authService: AuthService,
@@ -101,16 +105,23 @@ export class DraftComponent implements OnInit {
         this.getDraftTracker();
       }
 
-      this.playerService.getAllInitialDraftPlayers(this.league.id).subscribe(result => {
-        this.draftablePlayers = result;
+      
+      this.playerService.getAllInitialDraftSelectionPlayers(this.league.id).subscribe(result => {
+        this.draftSelectionPlayers = result;
       }, error => {
         this.alertify.error('Error getting available players to draft');
       }, () => {
       });
+      // this.playerService.getAllInitialDraftPlayers(this.league.id).subscribe(result => {
+      //   this.draftablePlayers = result;
+      // }, error => {
+      //   this.alertify.error('Error getting available players to draft');
+      // }, () => {
+      // });
 
       this.pageInterval = setInterval(() => {
         this.getDraftTracker();
-      }, 10000);
+      }, 30000);
   
       this.draftService.getInitialDraftSalaryDetails().subscribe(result => {
         this.initialPickSalary = result;
@@ -184,6 +195,7 @@ export class DraftComponent implements OnInit {
   }
 
   getDraftDetails() {
+    this.viewingRound = this.currentRound;
     const summary: GetPlayoffSummary = {
       round: this.currentRound,
       leagueId: this.league.id
@@ -212,8 +224,25 @@ export class DraftComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
+  pageChange(page: number) {
+    this.viewingRound = page + 1;
+    // To add the paging code here
+    const summary: GetPlayoffSummary = {
+      round: page + 1,
+      leagueId: this.league.id
+    };
+    // Get the Initial Draft Details
+    this.draftService.getDraftPicksForRound(summary).subscribe(result => {
+      console.log(result);
+      this.draftPicks = result;
+    }, error => {
+      this.alertify.error('Error getting Draft Picks');
+    }, () => {
+      
+    });
+  }
+
   makeDraftPick() {
-    console.log(this.draftSelection);
     const selectedPick: DraftSelection = {
       pick: this.tracker.pick,
       playerId: +this.draftSelection,
@@ -244,6 +273,7 @@ export class DraftComponent implements OnInit {
         });
       } else {
         this.getDraftTracker();
+        window.location.reload();
       }
     });
   }
@@ -294,8 +324,10 @@ export class DraftComponent implements OnInit {
         }, () => {
           this.alertify.success('Draft Completed');
         });
+        window.location.reload();
       } else {
         this.getDraftTracker();
+        window.location.reload();
       }
     });
   }
@@ -315,6 +347,11 @@ export class DraftComponent implements OnInit {
   getPickSalary(round: number, pick: number) {
     const value = this.initialPickSalary.find(x => x.round === round && x.pick === pick);
     return value.salary;
+  }
+
+  getSalaryYears(round: number, pick: number) {
+    const value = this.initialPickSalary.find(x => x.round === round && x.pick === pick);
+    return value.years;
   }
 
   intialDraftSelection() {

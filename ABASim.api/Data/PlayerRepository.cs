@@ -874,47 +874,117 @@ namespace ABASim.api.Data
             return draftPool;
         }
 
+        public async Task<IEnumerable<DraftSelectionPlayerDto>> GetInitialDraftSelectionPlayerPool(int leagueId)
+        {
+            List<DraftSelectionPlayerDto> draftPool = new List<DraftSelectionPlayerDto>();
+            // Get players
+            var players = await _context.Players.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId
+                } 
+            ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
+
+            foreach (var player in players)
+            {
+                DraftSelectionPlayerDto newPlayer = new DraftSelectionPlayerDto();
+                newPlayer.PlayerId = player.PlayerId;
+                newPlayer.FirstName = player.FirstName;
+                newPlayer.Surname = player.Surname;
+                newPlayer.LeagueId = player.LeagueId;
+                draftPool.Add(newPlayer);
+            }
+           return draftPool;
+        }
+
         public async Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool(int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
-            // Get players
-            var players = await _context.Players.Where(x => x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
 
-            // foreach (var player in players)- 1;
+            var players = await _context.Players
+            .Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    TeamId = playerTeam.TeamId,
+                    LeagueId = players.LeagueId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition
+                } 
+            )
+            .Join(
+                _context.PlayerGradings,
+                combined => new { combined.PlayerId, combined.LeagueId },
+                gradings => new { gradings.PlayerId, gradings.LeagueId },
+                (combined, gradings) => new
+                {
+                    PlayerId = combined.PlayerId,
+                    FirstName = combined.FirstName,
+                    Surname = combined.Surname,
+                    TeamId = combined.TeamId,
+                    LeagueId = combined.LeagueId,
+                    Age = combined.Age,
+                    PGPosition = combined.PGPosition,
+                    SGPosition = combined.SGPosition,
+                    SFPosition = combined.SFPosition,
+                    PFPosition = combined.PFPosition,
+                    CPosition = combined.CPosition,
+                    BlockGrade = gradings.BlockGrade,
+                    DRebGrade = gradings.DRebGrade,
+                    FTGrade = gradings.FTGrade,
+                    HandlingGrade = gradings.HandlingGrade,
+                    IntangiblesGrade = gradings.IntangiblesGrade,
+                    ORebGrade = gradings.ORebGrade,
+                    PassingGrade = gradings.PassingGrade,
+                    StaminaGrade = gradings.StaminaGrade,
+                    StealGrade = gradings.StealGrade,
+                    ThreeGrade = gradings.ThreeGrade,
+                    TwoGrade = gradings.TwoGrade
+                }
+            ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
+
             foreach (var player in players)
             {
-                // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
+                // Now create the Dto
+                DraftPlayerDto newPlayer = new DraftPlayerDto();
+                newPlayer.PlayerId = player.PlayerId;
+                newPlayer.BlockGrade = player.BlockGrade;
+                newPlayer.CPosition = player.CPosition;
+                newPlayer.Age = player.Age;
+                newPlayer.DRebGrade = player.DRebGrade;
+                newPlayer.FirstName = player.FirstName;
+                newPlayer.FTGrade = player.FTGrade;
+                newPlayer.HandlingGrade = player.HandlingGrade;
+                newPlayer.IntangiblesGrade = player.IntangiblesGrade;
+                newPlayer.ORebGrade = player.ORebGrade;
+                newPlayer.PassingGrade = player.PassingGrade;
+                newPlayer.PFPosition = player.PFPosition;
+                newPlayer.PGPosition = player.PGPosition;
+                newPlayer.SFPosition = player.SFPosition;
+                newPlayer.SGPosition = player.SGPosition;
+                newPlayer.StaminaGrade = player.StaminaGrade;
+                newPlayer.StealGrade = player.StealGrade;
+                newPlayer.Surname = player.Surname;
+                newPlayer.ThreeGrade = player.ThreeGrade;
+                newPlayer.TwoGrade = player.TwoGrade;
 
-                if (playerTeamForPlayerId.TeamId == 31)
-                {
-                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
-
-                    // Now create the Dto
-                    DraftPlayerDto newPlayer = new DraftPlayerDto();
-                    newPlayer.PlayerId = player.PlayerId;
-                    newPlayer.BlockGrade = playerGrade.BlockGrade;
-                    newPlayer.CPosition = player.CPosition;
-                    newPlayer.Age = player.Age;
-                    newPlayer.DRebGrade = playerGrade.DRebGrade;
-                    newPlayer.FirstName = player.FirstName;
-                    newPlayer.FTGrade = playerGrade.FTGrade;
-                    newPlayer.HandlingGrade = playerGrade.HandlingGrade;
-                    newPlayer.IntangiblesGrade = playerGrade.IntangiblesGrade;
-                    newPlayer.ORebGrade = playerGrade.ORebGrade;
-                    newPlayer.PassingGrade = playerGrade.PassingGrade;
-                    newPlayer.PFPosition = player.PFPosition;
-                    newPlayer.PGPosition = player.PGPosition;
-                    newPlayer.SFPosition = player.SFPosition;
-                    newPlayer.SGPosition = player.SGPosition;
-                    newPlayer.StaminaGrade = playerGrade.StaminaGrade;
-                    newPlayer.StealGrade = playerGrade.StealGrade;
-                    newPlayer.Surname = player.Surname;
-                    newPlayer.ThreeGrade = playerGrade.ThreeGrade;
-                    newPlayer.TwoGrade = playerGrade.TwoGrade;
-
-                    draftPool.Add(newPlayer);
-                }
+                draftPool.Add(newPlayer);
             }
             return draftPool;
         }

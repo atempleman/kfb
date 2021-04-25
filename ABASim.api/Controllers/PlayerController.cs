@@ -30,6 +30,13 @@ namespace ABASim.api.Controllers
             return Ok(players);
         }
 
+        [HttpGet("getinitialdraftselectionplayers/{leagueId}")]
+        public async Task<IActionResult> GetInitialDraftSelectionPlayerPool(int leagueId)
+        {
+            var players = await _repo.GetInitialDraftSelectionPlayerPool(leagueId);
+            return Ok(players);
+        }
+
         [HttpGet("getplayerforid/{playerId}")]
         public async Task<IActionResult> GetPlayerForId(int playerId)
         {

@@ -59,6 +59,79 @@
 
     <div class="tab-content active" *ngIf="this.initialDraftSelected == 1">
         <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
+
+        <!-- Intial Draft Code -->
+        <div class="row justify-content-center" *ngIf=" this.league?.stateId == 2">
+            <p class="color-8">Initial Draft Lottery is awaiting to be run by the league
+                administrator.</p>
+        </div>
+
+        <div class="row justify-content-center"
+            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
+            <h6 class="fw-600 fs-0 ls text-success">Draft - Round {{ this.currentRound }} - {{ this.timeDisplay }}</h6>
+            <button class="btn btn-danger bn-sm ml-3" *ngIf="this.isAdmin == 1 && this.league?.stateId == 3"
+                (click)="beginDraft()">Start Draft</button>
+        </div>
+
+        <div class="row justify-content-center" *ngIf="this.league?.stateId >= 3 && this.league?.stateId <= 5">
+            <p class="color-7">View default salaries for each pick </p><i class="fa fa-info-circle ml-2 mt-1 color-8"
+                (click)="openModal(viewsalaries)"></i>
+        </div>
+
+        <div class="row justify-content-center" *ngIf="this.league?.stateId == 4">
+            <h4 class="fw-600 fs-0 ls color-8">
+                Current - Pick #{{ tracker?.pick }} <ng-container *ngIf="this.onClockLoaded == 2">{{ getTeamOnClock() }}</ng-container>
+            </h4>
+        </div>
+
+        <div class="row justify-content-center ml-2 mr-2" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
+            <h4 class="fw-600 fs-0 ls color-8">Viewing Round {{ this.viewingRound }}</h4>
+            <table class="table table-striped custab ml-3 mr-3">
+                <thead>
+                    <tr>
+                        <th>Pick</th>
+                        <th>Team</th>
+                        <th>Selection</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let picks of this.draftPicks; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td><button class="teamlink" (click)="viewTeam(this.picks.teamId)">{{ picks.teamName
+                            }}</button>
+                    </td>
+                    <td>{{ picks.playerName }}</td>
+                    <td>
+                        <ng-container
+                            *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.teamId == picks.teamId && this.tracker.round == this.viewingRound">
+                            <button type="submit" class="btn btn-primary btn-sm"
+                                (click)="openModal(makePick)">Make
+                                Pick</button>
+                        </ng-container>
+                        <ng-container
+                            *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.isAdmin == 1 && this.tracker.round == this.viewingRound">
+                            <button type="submit" class="btn btn-danger btn-sm ml-1"
+                                (click)="autoPickAction()">Auto
+                                Pick</button>
+                        </ng-container>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row justify-content-center" *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link">&laquo;</a>
+                </li>
+                <li class="page-item" *ngFor="let page of counter(13); let i = index;">
+                    <a class="page-link" (click)="pageChange(i)">{{ i + 1 }}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link">&raquo;</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="tab-content active" *ngIf="this.initialDraftLotterySelected == 1">
         <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
@@ -104,88 +177,10 @@
     </div>
 </div>
 
-<!-- Intial Draft Code -->
-<div class="box" *ngIf="this.initialDraftSelected == 1">
-    <div class="container">
-        <div class="row h-full align-items-center" *ngIf="this.league?.stateId == 2">
-            <!-- <blockquote class="blockquote"> -->
-            <p class="text-warning color-8">Initial Draft Lottery is awaiting to be run by the league administrator.</p>
-            <!-- </blockquote> -->
-        </div>
-
-        <div class="row h-full align-items-center"
-            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
-            <h6 class="fw-600 fs-0 ls text-success">Draft - Round {{ this.currentRound }} - {{ this.timeDisplay }}</h6>
-            <br />
-            <button class="btn btn-danger bn-sm ml-3" *ngIf="this.isAdmin == 1 && this.league?.stateId == 3"
-                (click)="beginDraft()">Start Draft</button>
-        </div>
-
-        <div class="row h-full align-items-center" *ngIf="this.league?.stateId >= 3 && this.league?.stateId <= 5">
-            <p class="color-7">View default salaries for each pick </p><i class="fa fa-info-circle ml-1"
-                (click)="openModal(viewsalaries)"></i>
-        </div>
-
-        <div class="row h-full align-items-center" *ngIf="this.league?.stateId == 4">
-            <h4 h6 class="fw-600 fs-0 ls">Current - Pick #{{ tracker?.pick }} <ng-container
-                    *ngIf="this.onClockLoaded == 2">{{ getTeamOnClock() }}</ng-container>
-            </h4>
-        </div>
-
-        <div class="row h-full align-items-center"
-            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
-            <table class="table table-striped custab">
-                <thead>
-                    <tr>
-                        <th>Pick</th>
-                        <th>Team</th>
-                        <th>Selection</th>
-                    </tr>
-                </thead>
-                <tr *ngFor="let picks of this.draftPicks; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td><button class="teamlink" (click)="viewTeam(this.picks.teamId)">{{ picks.teamName }}</button>
-                    </td>
-                    <td>{{ picks.playerName }}</td>
-                    <td></td>
-                    <td>
-                        <ng-container
-                            *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.teamId == picks.teamId">
-                            <button type="submit" class="btn btn-primary btn-sm" (click)="openModal(makePick)">Make
-                                Pick</button>
-                        </ng-container>
-                        <ng-container
-                            *ngIf="this.tracker.round == this.currentRound && this.tracker.pick == picks.pick && this.isAdmin == 1">
-                            <button type="submit" class="btn btn-danger btn-sm ml-1" (click)="autoPickAction()">Auto
-                                Pick</button>
-                        </ng-container>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="row h-full align-items-center"
-            *ngIf="this.league?.stateId == 3 || this.league?.stateId == 4 || this.league?.stateId == 5">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link">&laquo;</a>
-                </li>
-                <li class="page-item" *ngFor="let page of counter(13); let i = index;">
-                    <a class="page-link">{{ i + 1 }}</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link">&raquo;</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-
 
 <ng-template #makePick>
     <div class="modal-header">
-        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" class="modal-title">Make Draft Selection - Round #{{
+        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8">Make Draft Selection - Round #{{
             this.tracker?.round }} Pick #{{ this.tracker?.pick }}</h6>
         <button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
     </div>
@@ -193,7 +188,7 @@
         <div class="modal-body">
             <p class="color-7">The {{ this.team.teamname }} {{ this.team.mascot }} select:</p>
             <select name="leagueStatus" [(ngModel)]="this.draftSelection">
-                <option *ngFor="let player of this.draftablePlayers" [value]="player.playerId">{{ player.surname }}, {{
+                <option *ngFor="let player of this.draftSelectionPlayers" [value]="player.playerId">{{ player.surname }}, {{
                     player.firstName }}</option>
             </select>
         </div>
@@ -220,10 +215,10 @@
             </tr>
         </thead>
         <tr *ngFor="let round of this.rounds; let i = index;">
-            <td>Round #{{ i + 1 }}</td>
-            <td>${{ getPickSalary(i + 1, 5) | number }}</td>
-            <td>${{ getPickSalary(i + 1, 15) | number }}</td>
-            <td>${{ getPickSalary(i + 1, 25) | number }}</td>
+            <td class="text-success">Round #{{ i + 1 }}</td>
+            <td>${{ getPickSalary(i + 1, 5) | number }} - {{ getSalaryYears(i + 1, 5) }} years</td>
+            <td>${{ getPickSalary(i + 1, 15) | number }} - {{ getSalaryYears(i + 1, 5) }} years</td>
+            <td>${{ getPickSalary(i + 1, 25) | number }} - {{ getSalaryYears(i + 1, 5) }} years</td>
         </tr>
     </table>
     <div class="modal-footer form-group text-center">
