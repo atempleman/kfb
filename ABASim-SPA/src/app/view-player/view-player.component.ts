@@ -74,7 +74,6 @@ export class ViewPlayerComponent implements OnInit {
 
   setupPlayer() {
     this.playerId = this.transferService.getData();
-
     const playerIdLeague: GetPlayerIdLeague = {
       playerId: this.playerId,
       leagueId: this.league.id
@@ -121,7 +120,6 @@ export class ViewPlayerComponent implements OnInit {
 
     this.playerService.getPlayerContractForPlayer(playerIdLeague).subscribe(result => {
       this.playerContract = result;
-      console.log(result);
     }, error => {
       this.alertify.error('Error getting players contract');
     });

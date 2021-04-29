@@ -103,7 +103,7 @@ export class PlayerService {
 
   getCareerStats(pil: GetPlayerIdLeague): Observable<CareerStats[]> {
     const params = new HttpParams()
-      .set('filter', pil.playerId.toString())
+      .set('playerId', pil.playerId.toString())
       .set('leagueId', pil.leagueId.toString());
 
     return this.http.get<CareerStats[]>(this.baseUrl + 'getcareerstats', {params});
@@ -119,7 +119,7 @@ export class PlayerService {
 
   getContractForPlayer(pil: GetPlayerIdLeague): Observable<PlayerContractQuickView> {
     const params = new HttpParams()
-      .set('filter', pil.playerId.toString())
+      .set('playerId', pil.playerId.toString())
       .set('leagueId', pil.leagueId.toString());
 
     return this.http.get<PlayerContractQuickView>(this.baseUrl + 'getcontractforplayer', {params});
@@ -127,7 +127,7 @@ export class PlayerService {
 
   getPlayerContractForPlayer(pil: GetPlayerIdLeague): Observable<PlayerContract> {
     const params = new HttpParams()
-      .set('filter', pil.playerId.toString())
+      .set('playerId', pil.playerId.toString())
       .set('leagueId', pil.leagueId.toString());
 
     return this.http.get<PlayerContract>(this.baseUrl + 'getfullcontractforplayer', {params});

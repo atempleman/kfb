@@ -759,19 +759,72 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<Player>> GetFreeAgents(int leagueId)
         {
             List<Player> freeAgents = new List<Player>();
-            var players = await _context.Players.Where(x => x.LeagueId == leagueId).ToListAsync();
+            // var players = await _context.Players.Where(x => x.LeagueId == leagueId).ToListAsync();
+            var players = await _context.Players.
+            Join(
+                _context.PlayerTeams,
+                player => new {player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition,
+                }
+            ).Where(x => x.TeamId == 0).ToListAsync();
 
             foreach (var player in players)
             {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
-
-                if (playerTeam.TeamId == 0)
+                Player p = new Player
                 {
-                    // Player is free agent
-                    freeAgents.Add(player);
-                }
+                    PlayerId = player.PlayerId,
+                    FirstName = player.FirstName,
+                    Surname = player.Surname,
+                    Age = player.Age,
+                    PGPosition = player.PGPosition,
+                    SGPosition = player.SGPosition,
+                    SFPosition = player.SFPosition,
+                    PFPosition = player.PFPosition,
+                    CPosition = player.CPosition
+                };
+                freeAgents.Add(p);
             }
             return freeAgents;
+
+            // ASH TODO
+            // var players = await _context.Players.Join(
+            //     _context.PlayerTeams,
+            //     player => new { player.PlayerId, player.LeagueId },
+            //     playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+            //     (players, playerTeam) => new
+            //     {
+            //         PlayerId = players.PlayerId,
+            //         FirstName = players.FirstName,
+            //         Surname = players.Surname,
+            //         LeagueId = players.LeagueId,
+            //         TeamId = playerTeam.TeamId
+            //     } 
+            // ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
+
+            // foreach (var player in players)
+            // {
+            //     var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
+
+            //     if (playerTeam.TeamId == 0)
+            //     {
+            //         // Player is free agent
+            //         freeAgents.Add(player);
+            //     }
+            // }
+            
         }
 
         public async Task<IEnumerable<Player>> GetFreeAgentsByPos(PlayerIdLeagueDto pos)

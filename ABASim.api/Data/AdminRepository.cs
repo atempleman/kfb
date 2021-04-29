@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System;
 using ABASim.api.Dtos;
+using Microsoft.Data.SqlClient;
 
 namespace ABASim.api.Data
 {
@@ -2573,12 +2574,14 @@ namespace ABASim.api.Data
         public async Task<bool> GenerateDraftLottery(int leagueId)
         {
             var existingPicks = await _context.DraftPicks.Where(x => x.LeagueId == leagueId).ToListAsync();
+            SqlParameter lid = new SqlParameter("@lid", leagueId);
             if (existingPicks != null)
             {
-                await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftPicks");
+                string sql = "delete from DraftPicks where LeagueId = @lid";
+                await _context.Database.ExecuteSqlRawAsync(sql, lid);
             }
-
-            await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE DraftRankings");
+            string sqldr = "delete from DraftRankings where LeagueId = @lid";
+            await _context.Database.ExecuteSqlRawAsync(sqldr, lid);
 
             List<int> teamIds = new List<int>();
             var standings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderBy(x => x.Wins).ToListAsync();

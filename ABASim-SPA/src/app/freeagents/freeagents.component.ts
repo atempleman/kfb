@@ -44,11 +44,11 @@ export class FreeagentsComponent implements OnInit {
   year4Amount = 0;
   year5Amount = 0;
   guarenteed1 = true;
-  guarenteed2 = 0;
-  guarenteed3 = 0;
-  guarenteed4 = 0;
-  guarenteed5 = 0;
-  option = 1;
+  guarenteed2 = false;
+  guarenteed3 = false;
+  guarenteed4 = false;
+  guarenteed5 = false;
+  option = 0;
 
   primaryColor: string = '22, 24, 100';
   secondaryColor: string = '12,126,120';
@@ -96,6 +96,7 @@ export class FreeagentsComponent implements OnInit {
   }
 
   setupPage() {
+    this.GetSalaryCapDetails();
     this.CheckRosterSpots();
     this.GetContractOffers();
     this.GetFreeAgents();
@@ -116,6 +117,7 @@ export class FreeagentsComponent implements OnInit {
     };
 
     this.teamService.getContractOffersForTeam(summary).subscribe(result => {
+      console.log(result);
       this.contractOffers = result;
     }, error => {
       this.alertify.error('Error getting contract offers made');
@@ -230,6 +232,19 @@ export class FreeagentsComponent implements OnInit {
   public openViewModal(template: TemplateRef<any>, offer: ContractOffer) {
 
     this.viewedOffer = offer;
+    
+    if (this.viewedOffer.yearFive > 0) {
+      this.contractYears = 5;
+    } else if (this.viewedOffer.yearFour > 0) {
+      this.contractYears = 4;
+    } else if (this.viewedOffer.yearThree > 0) {
+      this.contractYears = 3;
+    } else if (this.viewedOffer.yearTwo > 0) {
+      this.contractYears = 2;
+    } else if (this.viewedOffer.yearOne > 0) {
+      this.contractYears = 1;
+    }
+
     this.modalRef = this.modalService.show(template);
   }
 
@@ -312,6 +327,10 @@ export class FreeagentsComponent implements OnInit {
     this.contractYears = this.selectControl.value;
   }
 
+  optionChanged() {
+    this.option = this.optionControl.value;
+  }
+
   cancelContract() {
     this.teamService.deleteFreeAgentOffer(this.viewedOffer.contractId).subscribe(result => {
 
@@ -321,6 +340,7 @@ export class FreeagentsComponent implements OnInit {
       this.alertify.success('Contract offer has been cancelled');
       this.GetContractOffers();
       this.modalRef.hide();
+      window.location.reload();
     });
   }
 
@@ -376,6 +396,9 @@ export class FreeagentsComponent implements OnInit {
         let to = 0;
         let po = 0;
 
+        console.log('option');
+        console.log(this.option);
+
         if (this.option === 0) {
           to = 0;
           po = 0;
@@ -428,10 +451,10 @@ export class FreeagentsComponent implements OnInit {
           this.year5Amount = 0;
           this.option = 0;
           this.guarenteed1 = true;
-          this.guarenteed2 = 0;
-          this.guarenteed3 = 0;
-          this.guarenteed4 = 0;
-          this.guarenteed5 = 0;
+          this.guarenteed2 = true;
+          this.guarenteed3 = true;
+          this.guarenteed4 = true;
+          this.guarenteed5 = true;
 
           // Need to update the displayed cap space
           this.GetSalaryCapDetails();

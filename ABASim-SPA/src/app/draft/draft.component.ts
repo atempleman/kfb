@@ -200,6 +200,7 @@ export class DraftComponent implements OnInit {
       round: this.currentRound,
       leagueId: this.league.id
     };
+
     // Get the Initial Draft Details
     this.draftService.getDraftPicksForRound(summary).subscribe(result => {
       this.draftPicks = result;
@@ -281,9 +282,11 @@ export class DraftComponent implements OnInit {
   viewTeam(teamId: number) {
     let team: Team;
     const summary: GetRosterQuickView = {
-      teamId: this.team.teamId,
+      teamId: teamId,
       leagueId: this.league.id
     };
+
+    console.log(summary);
 
     // Need to go a call to get the team id
     this.teamService.getTeamForTeamId(summary).subscribe(result => {

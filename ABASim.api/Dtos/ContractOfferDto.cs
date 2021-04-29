@@ -39,5 +39,7 @@ namespace ABASim.api.Dtos
         public string PlayerName { get; set; }
 
         public int ContractId { get; set; }
+
+        public int LeagueId { get; set; }
     }
 }

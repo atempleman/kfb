@@ -161,7 +161,7 @@ namespace ABASim.api.Data
             };
             await _context.AddAsync(teamRoser);
 
-            var tracker = await _context.DraftTrackers.FirstOrDefaultAsync();
+            var tracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.LeagueId == draftPick.LeagueId);
 
             // Now need to add the InitialDraftPick Contract
             var contractDetails = await _context.InitialDraftContracts.FirstOrDefaultAsync(x => x.Round == tracker.Round && x.Pick == tracker.Pick);
@@ -325,17 +325,17 @@ namespace ABASim.api.Data
 
         public async Task<bool> MakeAutoPick(InitialDraftPicksDto draftPick)
         {
-            var draftSelection = await _context.InitialDrafts.FirstOrDefaultAsync(x => x.Pick == draftPick.Pick && x.Round == draftPick.Round);
+            var draftSelection = await _context.InitialDrafts.FirstOrDefaultAsync(x => x.Pick == draftPick.Pick && x.Round == draftPick.Round && x.LeagueId == draftPick.LeagueId);
             var teamId = draftSelection.TeamId;
 
             // Need to check whether the team has set a draft board
-            var draftboard = await _context.DraftRankings.Where(x => x.TeamId == teamId).OrderBy(x => x.Rank).ToListAsync();
+            var draftboard = await _context.DraftRankings.Where(x => x.TeamId == teamId && x.LeagueId == draftPick.LeagueId).OrderBy(x => x.Rank).ToListAsync();
 
             if (draftboard.Count > 0)
             {
                 foreach (var db in draftboard)
                 {
-                    var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == db.PlayerId);
+                    var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == db.PlayerId && x.LeagueId == draftPick.LeagueId);
 
                     if (playerTeamForPlayerId.TeamId == 31)
                     {

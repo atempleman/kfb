@@ -97,7 +97,7 @@
                 </thead>
                 <tr *ngFor="let picks of this.draftPicks; let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td><button class="teamlink" (click)="viewTeam(this.picks.teamId)">{{ picks.teamName
+                    <td><button class="teamlink" (click)="viewTeam(picks.teamId)">{{ picks.teamName
                             }}</button>
                     </td>
                     <td>{{ picks.playerName }}</td>

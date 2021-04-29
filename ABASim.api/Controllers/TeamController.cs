@@ -221,9 +221,9 @@ namespace ABASim.api.Controllers
         }
 
         [HttpGet("getinjuryforplayer")]
-        public async Task<IActionResult> GetInjuryForPlayer(string playerId, string teamId)
+        public async Task<IActionResult> GetInjuryForPlayer(string playerId, string leagueId)
         {
-            var injury = await _repo.GetInjuryForPlayer(Int32.Parse(playerId), Int32.Parse(teamId));
+            var injury = await _repo.GetInjuryForPlayer(Int32.Parse(playerId), Int32.Parse(leagueId));
             return Ok(injury);
         }
 

@@ -77,7 +77,7 @@
 					</tbody>
 					<tbody *ngIf="this.quickTeamRoster.length != 0">
 						<tr *ngFor="let player of this.quickTeamRoster">
-							<td><button class="link-button" (click)="viewPlayer(player.firstName, player.surname)">{{
+							<td><button class="link-button" (click)="viewPlayer(player.playerId)">{{
 									player.firstName }} {{ player.surname }}</button></td>
 							<td>
 								<ng-container *ngIf="player.pgPosition == 1">PG </ng-container>

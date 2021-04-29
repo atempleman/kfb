@@ -1106,12 +1106,22 @@ namespace ABASim.api.Data
             var capInfo = await _context.SalaryCaps.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
             var teamCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == teamId && x.LeagueId == leagueId);
 
+            int cap = 0;
+            if (capInfo != null) {
+                cap = capInfo.Cap;
+            }
+
+            int tCap = 0;
+            if (teamCap != null) {
+                tCap = teamCap.CurrentCapAmount;
+            }
+
             TeamSalaryCapInfo info = new TeamSalaryCapInfo
             {
                 SeasonId = league.Year,
                 SalaryCapAmount = capInfo.Cap,
                 TeamId = leagueId,
-                CurrentSalaryAmount = teamCap.CurrentCapAmount
+                CurrentSalaryAmount = tCap
             };
             return info;
         }
@@ -1458,10 +1468,10 @@ namespace ABASim.api.Data
 
         public async Task<bool> SaveContractOffer(ContractOfferDto offer)
         {
-            var league = await _context.Leagues.FirstOrDefaultAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == offer.LeagueId);
 
             // Check to see if the player has a decision already pending
-            var faDecision = await _context.FreeAgencyDecisions.FirstOrDefaultAsync(x => x.PlayerId == offer.PlayerId);
+            var faDecision = await _context.FreeAgencyDecisions.FirstOrDefaultAsync(x => x.PlayerId == offer.PlayerId && x.LeagueId == offer.LeagueId);
 
             if (faDecision == null)
             {
@@ -1507,12 +1517,13 @@ namespace ABASim.api.Data
                 PlayerOption = offer.PlayerOption,
                 DaySubmitted = league.Day,
                 StateSubmitted = league.StateId,
-                Decision = offer.Decision
+                Decision = offer.Decision,
+                LeagueId = offer.LeagueId
             };
             await _context.AddAsync(co);
 
             // Now need to update the cap for the team
-            var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == co.TeamId);
+            var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == co.TeamId && x.LeagueId == offer.LeagueId);
             salaryCap.CurrentCapAmount = salaryCap.CurrentCapAmount + co.YearOne;
             _context.Update(salaryCap);
 
@@ -1522,7 +1533,8 @@ namespace ABASim.api.Data
         public async Task<bool> SaveDepthChartForTeam(DepthChart[] charts)
         {
             int teamId = charts[0].TeamId;
-            var exists = await _context.DepthCharts.Where(x => x.TeamId == teamId).ToListAsync();
+            int leagueId = charts[0].LeagueId;
+            var exists = await _context.DepthCharts.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).ToListAsync();
 
             if (exists.Count == 0 || exists == null)
             {
@@ -1534,7 +1546,8 @@ namespace ABASim.api.Data
                         PlayerId = dc.PlayerId,
                         Position = dc.Position,
                         TeamId = dc.TeamId,
-                        Depth = dc.Depth
+                        Depth = dc.Depth,
+                        LeagueId = dc.LeagueId
                     };
                     await _context.AddAsync(depth);
                 }

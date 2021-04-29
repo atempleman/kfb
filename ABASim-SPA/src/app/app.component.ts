@@ -9,7 +9,7 @@ import { AuthService } from './_services/auth.service';
 })
 export class AppComponent implements OnInit {
   jwtHelper = new JwtHelperService();
-  title = 'ABA-Sim';
+  title = 'Klutch Fantasy Basketball';
 
   constructor(private authService: AuthService) { }
 
