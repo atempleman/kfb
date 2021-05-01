@@ -107,10 +107,10 @@ namespace ABASim.api.Controllers
             return Ok(players);
         }
 
-        [HttpGet("getfreeagentsbypos/{pos}")]
-        public async Task<IActionResult> GetFreeAgentsByPos(PlayerIdLeagueDto pos)
+        [HttpGet("getfreeagentsbypos")]
+        public async Task<IActionResult> GetFreeAgentsByPos(string playerId, string leagueId)
         {
-            var players = await _repo.GetFreeAgentsByPos(pos);
+            var players = await _repo.GetFreeAgentsByPos(Int32.Parse(playerId), Int32.Parse(leagueId));
             return Ok(players);
         }
 

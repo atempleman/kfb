@@ -19,7 +19,7 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<Player>> GetFilteredFreeAgents(string filter, int leagueId);
 
-         Task<IEnumerable<Player>> GetFreeAgentsByPos(PlayerIdLeagueDto pos);
+         Task<IEnumerable<Player>> GetFreeAgentsByPos(int pos, int leagueId);
 
          Task<IEnumerable<CareerStatsDto>> GetCareerStats(int playerId, int leagueId);
 

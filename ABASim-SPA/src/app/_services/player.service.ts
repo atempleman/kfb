@@ -60,7 +60,11 @@ export class PlayerService {
   }
 
   getFreeAgentsByPos(pos: GetPlayerIdLeague): Observable<Player[]> {
-    return this.http.get<Player[]>(this.baseUrl + 'getfreeagentsbypos/' + pos);
+    const params = new HttpParams()
+      .set('playerId', pos.playerId.toString())
+      .set('leagueId', pos.leagueId.toString());
+      console.log('ash');
+    return this.http.get<Player[]>(this.baseUrl + 'getfreeagentsbypos', {params});
   }
 
   filterFreeAgents(value: GetPlayerLeague): Observable<Player[]> {

@@ -20,66 +20,409 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<DraftPlayerDto>> DraftPoolFilterByPosition(int pos, int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
-            List<Player> players = new List<Player>();
-            // Get players
+
             if (pos == 1)
             {
-                players = await _context.Players.Where(x => x.PGPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos == 2)
-            {
-                players = await _context.Players.Where(x => x.SGPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos == 3)
-            {
-                players = await _context.Players.Where(x => x.SFPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos == 4)
-            {
-                players = await _context.Players.Where(x => x.PFPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos == 5)
-            {
-                players = await _context.Players.Where(x => x.CPosition == 1 && x.LeagueId == leagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-
-            int total = players.Count;
-            foreach (var player in players)
-            {
-                // NEED TO CHECK WHETHER THE PLAYER HAS BEEN DRAFTED
-                var playerTeamForPlayerId = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
-
-                if (playerTeamForPlayerId.TeamId == 31)
+                var players = await _context.Players.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
                 {
-                    var playerGrade = await _context.PlayerGradings.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition
+                }
+                )
+                .Join(
+                    _context.PlayerGradings,
+                combined => new { combined.PlayerId, combined.LeagueId },
+                gradings => new { gradings.PlayerId, gradings.LeagueId },
+                (combined, gradings) => new
+                {
+                    PlayerId = combined.PlayerId,
+                    FirstName = combined.FirstName,
+                    Surname = combined.Surname,
+                    TeamId = combined.TeamId,
+                    LeagueId = combined.LeagueId,
+                    Age = combined.Age,
+                    PGPosition = combined.PGPosition,
+                    SGPosition = combined.SGPosition,
+                    SFPosition = combined.SFPosition,
+                    PFPosition = combined.PFPosition,
+                    CPosition = combined.CPosition,
+                    BlockGrade = gradings.BlockGrade,
+                    DRebGrade = gradings.DRebGrade,
+                    FTGrade = gradings.FTGrade,
+                    HandlingGrade = gradings.HandlingGrade,
+                    IntangiblesGrade = gradings.IntangiblesGrade,
+                    ORebGrade = gradings.ORebGrade,
+                    PassingGrade = gradings.PassingGrade,
+                    StaminaGrade = gradings.StaminaGrade,
+                    StealGrade = gradings.StealGrade,
+                    ThreeGrade = gradings.ThreeGrade,
+                    TwoGrade = gradings.TwoGrade
+                }
+                ).Where(x => x.LeagueId == leagueId && x.TeamId == 31 && x.PGPosition == 1).OrderBy(x => x.Surname).ToListAsync();
 
-                    // Now create the Dto
+                foreach (var player in players)
+                {
                     DraftPlayerDto newPlayer = new DraftPlayerDto();
                     newPlayer.PlayerId = player.PlayerId;
-                    newPlayer.BlockGrade = playerGrade.BlockGrade;
+                    newPlayer.BlockGrade = player.BlockGrade;
                     newPlayer.CPosition = player.CPosition;
                     newPlayer.Age = player.Age;
-                    newPlayer.DRebGrade = playerGrade.DRebGrade;
+                    newPlayer.DRebGrade = player.DRebGrade;
                     newPlayer.FirstName = player.FirstName;
-                    newPlayer.FTGrade = playerGrade.FTGrade;
-                    newPlayer.HandlingGrade = playerGrade.HandlingGrade;
-                    newPlayer.IntangiblesGrade = playerGrade.IntangiblesGrade;
-                    newPlayer.ORebGrade = playerGrade.ORebGrade;
-                    newPlayer.PassingGrade = playerGrade.PassingGrade;
+                    newPlayer.FTGrade = player.FTGrade;
+                    newPlayer.HandlingGrade = player.HandlingGrade;
+                    newPlayer.IntangiblesGrade = player.IntangiblesGrade;
+                    newPlayer.ORebGrade = player.ORebGrade;
+                    newPlayer.PassingGrade = player.PassingGrade;
                     newPlayer.PFPosition = player.PFPosition;
                     newPlayer.PGPosition = player.PGPosition;
                     newPlayer.SFPosition = player.SFPosition;
                     newPlayer.SGPosition = player.SGPosition;
-                    newPlayer.StaminaGrade = playerGrade.StaminaGrade;
-                    newPlayer.StealGrade = playerGrade.StealGrade;
+                    newPlayer.StaminaGrade = player.StaminaGrade;
+                    newPlayer.StealGrade = player.StealGrade;
                     newPlayer.Surname = player.Surname;
-                    newPlayer.ThreeGrade = playerGrade.ThreeGrade;
-                    newPlayer.TwoGrade = playerGrade.TwoGrade;
+                    newPlayer.ThreeGrade = player.ThreeGrade;
+                    newPlayer.TwoGrade = player.TwoGrade;
 
                     draftPool.Add(newPlayer);
                 }
+                return draftPool;
+
             }
-            return draftPool;
+            else if (pos == 2)
+            {
+                var players = await _context.Players.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition
+                }
+                )
+                .Join(
+                    _context.PlayerGradings,
+                combined => new { combined.PlayerId, combined.LeagueId },
+                gradings => new { gradings.PlayerId, gradings.LeagueId },
+                (combined, gradings) => new
+                {
+                    PlayerId = combined.PlayerId,
+                    FirstName = combined.FirstName,
+                    Surname = combined.Surname,
+                    TeamId = combined.TeamId,
+                    LeagueId = combined.LeagueId,
+                    Age = combined.Age,
+                    PGPosition = combined.PGPosition,
+                    SGPosition = combined.SGPosition,
+                    SFPosition = combined.SFPosition,
+                    PFPosition = combined.PFPosition,
+                    CPosition = combined.CPosition,
+                    BlockGrade = gradings.BlockGrade,
+                    DRebGrade = gradings.DRebGrade,
+                    FTGrade = gradings.FTGrade,
+                    HandlingGrade = gradings.HandlingGrade,
+                    IntangiblesGrade = gradings.IntangiblesGrade,
+                    ORebGrade = gradings.ORebGrade,
+                    PassingGrade = gradings.PassingGrade,
+                    StaminaGrade = gradings.StaminaGrade,
+                    StealGrade = gradings.StealGrade,
+                    ThreeGrade = gradings.ThreeGrade,
+                    TwoGrade = gradings.TwoGrade
+                }
+                ).Where(x => x.LeagueId == leagueId && x.TeamId == 31 && x.SGPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    DraftPlayerDto newPlayer = new DraftPlayerDto();
+                    newPlayer.PlayerId = player.PlayerId;
+                    newPlayer.BlockGrade = player.BlockGrade;
+                    newPlayer.CPosition = player.CPosition;
+                    newPlayer.Age = player.Age;
+                    newPlayer.DRebGrade = player.DRebGrade;
+                    newPlayer.FirstName = player.FirstName;
+                    newPlayer.FTGrade = player.FTGrade;
+                    newPlayer.HandlingGrade = player.HandlingGrade;
+                    newPlayer.IntangiblesGrade = player.IntangiblesGrade;
+                    newPlayer.ORebGrade = player.ORebGrade;
+                    newPlayer.PassingGrade = player.PassingGrade;
+                    newPlayer.PFPosition = player.PFPosition;
+                    newPlayer.PGPosition = player.PGPosition;
+                    newPlayer.SFPosition = player.SFPosition;
+                    newPlayer.SGPosition = player.SGPosition;
+                    newPlayer.StaminaGrade = player.StaminaGrade;
+                    newPlayer.StealGrade = player.StealGrade;
+                    newPlayer.Surname = player.Surname;
+                    newPlayer.ThreeGrade = player.ThreeGrade;
+                    newPlayer.TwoGrade = player.TwoGrade;
+
+                    draftPool.Add(newPlayer);
+                }
+                return draftPool;
+            }
+            else if (pos == 3)
+            {
+                var players = await _context.Players.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition
+                }
+                )
+                .Join(
+                    _context.PlayerGradings,
+                combined => new { combined.PlayerId, combined.LeagueId },
+                gradings => new { gradings.PlayerId, gradings.LeagueId },
+                (combined, gradings) => new
+                {
+                    PlayerId = combined.PlayerId,
+                    FirstName = combined.FirstName,
+                    Surname = combined.Surname,
+                    TeamId = combined.TeamId,
+                    LeagueId = combined.LeagueId,
+                    Age = combined.Age,
+                    PGPosition = combined.PGPosition,
+                    SGPosition = combined.SGPosition,
+                    SFPosition = combined.SFPosition,
+                    PFPosition = combined.PFPosition,
+                    CPosition = combined.CPosition,
+                    BlockGrade = gradings.BlockGrade,
+                    DRebGrade = gradings.DRebGrade,
+                    FTGrade = gradings.FTGrade,
+                    HandlingGrade = gradings.HandlingGrade,
+                    IntangiblesGrade = gradings.IntangiblesGrade,
+                    ORebGrade = gradings.ORebGrade,
+                    PassingGrade = gradings.PassingGrade,
+                    StaminaGrade = gradings.StaminaGrade,
+                    StealGrade = gradings.StealGrade,
+                    ThreeGrade = gradings.ThreeGrade,
+                    TwoGrade = gradings.TwoGrade
+                }
+                ).Where(x => x.LeagueId == leagueId && x.TeamId == 31 && x.SFPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    DraftPlayerDto newPlayer = new DraftPlayerDto();
+                    newPlayer.PlayerId = player.PlayerId;
+                    newPlayer.BlockGrade = player.BlockGrade;
+                    newPlayer.CPosition = player.CPosition;
+                    newPlayer.Age = player.Age;
+                    newPlayer.DRebGrade = player.DRebGrade;
+                    newPlayer.FirstName = player.FirstName;
+                    newPlayer.FTGrade = player.FTGrade;
+                    newPlayer.HandlingGrade = player.HandlingGrade;
+                    newPlayer.IntangiblesGrade = player.IntangiblesGrade;
+                    newPlayer.ORebGrade = player.ORebGrade;
+                    newPlayer.PassingGrade = player.PassingGrade;
+                    newPlayer.PFPosition = player.PFPosition;
+                    newPlayer.PGPosition = player.PGPosition;
+                    newPlayer.SFPosition = player.SFPosition;
+                    newPlayer.SGPosition = player.SGPosition;
+                    newPlayer.StaminaGrade = player.StaminaGrade;
+                    newPlayer.StealGrade = player.StealGrade;
+                    newPlayer.Surname = player.Surname;
+                    newPlayer.ThreeGrade = player.ThreeGrade;
+                    newPlayer.TwoGrade = player.TwoGrade;
+
+                    draftPool.Add(newPlayer);
+                }
+                return draftPool;
+            }
+            else if (pos == 4)
+            {
+                var players = await _context.Players.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition
+                }
+                )
+                .Join(
+                    _context.PlayerGradings,
+                combined => new { combined.PlayerId, combined.LeagueId },
+                gradings => new { gradings.PlayerId, gradings.LeagueId },
+                (combined, gradings) => new
+                {
+                    PlayerId = combined.PlayerId,
+                    FirstName = combined.FirstName,
+                    Surname = combined.Surname,
+                    TeamId = combined.TeamId,
+                    LeagueId = combined.LeagueId,
+                    Age = combined.Age,
+                    PGPosition = combined.PGPosition,
+                    SGPosition = combined.SGPosition,
+                    SFPosition = combined.SFPosition,
+                    PFPosition = combined.PFPosition,
+                    CPosition = combined.CPosition,
+                    BlockGrade = gradings.BlockGrade,
+                    DRebGrade = gradings.DRebGrade,
+                    FTGrade = gradings.FTGrade,
+                    HandlingGrade = gradings.HandlingGrade,
+                    IntangiblesGrade = gradings.IntangiblesGrade,
+                    ORebGrade = gradings.ORebGrade,
+                    PassingGrade = gradings.PassingGrade,
+                    StaminaGrade = gradings.StaminaGrade,
+                    StealGrade = gradings.StealGrade,
+                    ThreeGrade = gradings.ThreeGrade,
+                    TwoGrade = gradings.TwoGrade
+                }
+                ).Where(x => x.LeagueId == leagueId && x.TeamId == 31 && x.PFPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    DraftPlayerDto newPlayer = new DraftPlayerDto();
+                    newPlayer.PlayerId = player.PlayerId;
+                    newPlayer.BlockGrade = player.BlockGrade;
+                    newPlayer.CPosition = player.CPosition;
+                    newPlayer.Age = player.Age;
+                    newPlayer.DRebGrade = player.DRebGrade;
+                    newPlayer.FirstName = player.FirstName;
+                    newPlayer.FTGrade = player.FTGrade;
+                    newPlayer.HandlingGrade = player.HandlingGrade;
+                    newPlayer.IntangiblesGrade = player.IntangiblesGrade;
+                    newPlayer.ORebGrade = player.ORebGrade;
+                    newPlayer.PassingGrade = player.PassingGrade;
+                    newPlayer.PFPosition = player.PFPosition;
+                    newPlayer.PGPosition = player.PGPosition;
+                    newPlayer.SFPosition = player.SFPosition;
+                    newPlayer.SGPosition = player.SGPosition;
+                    newPlayer.StaminaGrade = player.StaminaGrade;
+                    newPlayer.StealGrade = player.StealGrade;
+                    newPlayer.Surname = player.Surname;
+                    newPlayer.ThreeGrade = player.ThreeGrade;
+                    newPlayer.TwoGrade = player.TwoGrade;
+
+                    draftPool.Add(newPlayer);
+                }
+                return draftPool;
+            }
+            else if (pos == 5)
+            {
+                var players = await _context.Players.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (players, playerTeam) => new
+                {
+                    PlayerId = players.PlayerId,
+                    FirstName = players.FirstName,
+                    Surname = players.Surname,
+                    LeagueId = players.LeagueId,
+                    TeamId = playerTeam.TeamId,
+                    Age = players.Age,
+                    PGPosition = players.PGPosition,
+                    SGPosition = players.SGPosition,
+                    SFPosition = players.SFPosition,
+                    PFPosition = players.PFPosition,
+                    CPosition = players.CPosition
+                }
+                )
+                .Join(
+                    _context.PlayerGradings,
+                combined => new { combined.PlayerId, combined.LeagueId },
+                gradings => new { gradings.PlayerId, gradings.LeagueId },
+                (combined, gradings) => new
+                {
+                    PlayerId = combined.PlayerId,
+                    FirstName = combined.FirstName,
+                    Surname = combined.Surname,
+                    TeamId = combined.TeamId,
+                    LeagueId = combined.LeagueId,
+                    Age = combined.Age,
+                    PGPosition = combined.PGPosition,
+                    SGPosition = combined.SGPosition,
+                    SFPosition = combined.SFPosition,
+                    PFPosition = combined.PFPosition,
+                    CPosition = combined.CPosition,
+                    BlockGrade = gradings.BlockGrade,
+                    DRebGrade = gradings.DRebGrade,
+                    FTGrade = gradings.FTGrade,
+                    HandlingGrade = gradings.HandlingGrade,
+                    IntangiblesGrade = gradings.IntangiblesGrade,
+                    ORebGrade = gradings.ORebGrade,
+                    PassingGrade = gradings.PassingGrade,
+                    StaminaGrade = gradings.StaminaGrade,
+                    StealGrade = gradings.StealGrade,
+                    ThreeGrade = gradings.ThreeGrade,
+                    TwoGrade = gradings.TwoGrade
+                }
+                ).Where(x => x.LeagueId == leagueId && x.TeamId == 31 && x.CPosition == 1).OrderBy(x => x.Surname).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    DraftPlayerDto newPlayer = new DraftPlayerDto();
+                    newPlayer.PlayerId = player.PlayerId;
+                    newPlayer.BlockGrade = player.BlockGrade;
+                    newPlayer.CPosition = player.CPosition;
+                    newPlayer.Age = player.Age;
+                    newPlayer.DRebGrade = player.DRebGrade;
+                    newPlayer.FirstName = player.FirstName;
+                    newPlayer.FTGrade = player.FTGrade;
+                    newPlayer.HandlingGrade = player.HandlingGrade;
+                    newPlayer.IntangiblesGrade = player.IntangiblesGrade;
+                    newPlayer.ORebGrade = player.ORebGrade;
+                    newPlayer.PassingGrade = player.PassingGrade;
+                    newPlayer.PFPosition = player.PFPosition;
+                    newPlayer.PGPosition = player.PGPosition;
+                    newPlayer.SFPosition = player.SFPosition;
+                    newPlayer.SGPosition = player.SGPosition;
+                    newPlayer.StaminaGrade = player.StaminaGrade;
+                    newPlayer.StealGrade = player.StealGrade;
+                    newPlayer.Surname = player.Surname;
+                    newPlayer.ThreeGrade = player.ThreeGrade;
+                    newPlayer.TwoGrade = player.TwoGrade;
+
+                    draftPool.Add(newPlayer);
+                }
+                return draftPool;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Player>> FilterByPosition(int filter, int leagueId)
@@ -667,19 +1010,28 @@ namespace ABASim.api.Data
             {
                 int years = 0;
                 int total = 0;
-                if (playerContract.YearFive > 0) {
+                if (playerContract.YearFive > 0)
+                {
                     years = 5;
                     total = playerContract.YearFive + playerContract.YearFour + playerContract.YearThree + playerContract.YearTwo + playerContract.YearOne;
-                } else if (playerContract.YearFour > 0) {
+                }
+                else if (playerContract.YearFour > 0)
+                {
                     years = 4;
                     total = playerContract.YearFour + playerContract.YearThree + playerContract.YearTwo + playerContract.YearOne;
-                } else if (playerContract.YearThree > 0) {
+                }
+                else if (playerContract.YearThree > 0)
+                {
                     years = 3;
                     total = playerContract.YearThree + playerContract.YearTwo + playerContract.YearOne;
-                } else if (playerContract.YearTwo > 0) {
+                }
+                else if (playerContract.YearTwo > 0)
+                {
                     years = 2;
                     total = playerContract.YearTwo + playerContract.YearOne;
-                } else if (playerContract.YearOne > 0) {
+                }
+                else if (playerContract.YearOne > 0)
+                {
                     years = 1;
                     total = playerContract.YearOne;
                 }
@@ -709,10 +1061,13 @@ namespace ABASim.api.Data
         public async Task<int> GetCountOfDraftPlayers(int leagueId)
         {
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-            if (league.StateId <= 5) {
+            if (league.StateId <= 5)
+            {
                 var count = await _context.PlayerTeams.Where(x => x.TeamId == 31 && x.LeagueId == leagueId).CountAsync();
                 return count;
-            } else if (league.StateId > 5) {
+            }
+            else if (league.StateId > 5)
+            {
                 // var count = await _context.PlayerTeams.Where(x => x.TeamId == 31).CountAsync();
                 return 0; // NEED TO UPDATE THIS TO PULL FROM THE RIGHT TABLE
             }
@@ -763,7 +1118,7 @@ namespace ABASim.api.Data
             var players = await _context.Players.
             Join(
                 _context.PlayerTeams,
-                player => new {player.PlayerId, player.LeagueId },
+                player => new { player.PlayerId, player.LeagueId },
                 playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
                 (players, playerTeam) => new
                 {
@@ -798,70 +1153,217 @@ namespace ABASim.api.Data
                 freeAgents.Add(p);
             }
             return freeAgents;
-
-            // ASH TODO
-            // var players = await _context.Players.Join(
-            //     _context.PlayerTeams,
-            //     player => new { player.PlayerId, player.LeagueId },
-            //     playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
-            //     (players, playerTeam) => new
-            //     {
-            //         PlayerId = players.PlayerId,
-            //         FirstName = players.FirstName,
-            //         Surname = players.Surname,
-            //         LeagueId = players.LeagueId,
-            //         TeamId = playerTeam.TeamId
-            //     } 
-            // ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
-
-            // foreach (var player in players)
-            // {
-            //     var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == leagueId);
-
-            //     if (playerTeam.TeamId == 0)
-            //     {
-            //         // Player is free agent
-            //         freeAgents.Add(player);
-            //     }
-            // }
-            
         }
 
-        public async Task<IEnumerable<Player>> GetFreeAgentsByPos(PlayerIdLeagueDto pos)
+        public async Task<IEnumerable<Player>> GetFreeAgentsByPos(int pos, int leagueId)
         {
+
             List<Player> freeAgents = new List<Player>();
-            List<Player> players = new List<Player>();
 
-            if (pos.PlayerId == 1)
+            if (pos == 1)
             {
-                players = await _context.Players.Where(x => x.PGPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos.PlayerId == 2)
-            {
-                players = await _context.Players.Where(x => x.SGPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos.PlayerId == 3)
-            {
-                players = await _context.Players.Where(x => x.SFPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos.PlayerId == 4)
-            {
-                players = await _context.Players.Where(x => x.PFPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
-            else if (pos.PlayerId == 5)
-            {
-                players = await _context.Players.Where(x => x.CPosition == 1 && x.LeagueId == pos.LeagueId).OrderBy(x => x.Surname).ToListAsync();
-            }
+                var players = await _context.Players.
+                Join(
+                    _context.PlayerTeams,
+                    player => new { player.PlayerId, player.LeagueId },
+                    playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                    (players, playerTeam) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        TeamId = playerTeam.TeamId,
+                        Age = players.Age,
+                        PGPosition = players.PGPosition,
+                        SGPosition = players.SGPosition,
+                        SFPosition = players.SFPosition,
+                        PFPosition = players.PFPosition,
+                        CPosition = players.CPosition,
+                    }
+                ).Where(x => x.TeamId == 0 && x.LeagueId == leagueId && x.PGPosition == 1).ToListAsync();
 
-            foreach (var player in players)
-            {
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId && x.LeagueId == pos.LeagueId);
-
-                if (playerTeam.TeamId == 0)
+                foreach (var player in players)
                 {
-                    // Player is free agent
-                    freeAgents.Add(player);
+                    Player p = new Player
+                    {
+                        PlayerId = player.PlayerId,
+                        FirstName = player.FirstName,
+                        Surname = player.Surname,
+                        Age = player.Age,
+                        PGPosition = player.PGPosition,
+                        SGPosition = player.SGPosition,
+                        SFPosition = player.SFPosition,
+                        PFPosition = player.PFPosition,
+                        CPosition = player.CPosition
+                    };
+                    freeAgents.Add(p);
                 }
+                return freeAgents;
+            }
+            else if (pos == 2)
+            {
+                var players = await _context.Players.
+                Join(
+                    _context.PlayerTeams,
+                    player => new { player.PlayerId, player.LeagueId },
+                    playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                    (players, playerTeam) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        TeamId = playerTeam.TeamId,
+                        Age = players.Age,
+                        PGPosition = players.PGPosition,
+                        SGPosition = players.SGPosition,
+                        SFPosition = players.SFPosition,
+                        PFPosition = players.PFPosition,
+                        CPosition = players.CPosition,
+                    }
+                ).Where(x => x.TeamId == 0 && x.LeagueId == leagueId && x.SGPosition == 1).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    Player p = new Player
+                    {
+                        PlayerId = player.PlayerId,
+                        FirstName = player.FirstName,
+                        Surname = player.Surname,
+                        Age = player.Age,
+                        PGPosition = player.PGPosition,
+                        SGPosition = player.SGPosition,
+                        SFPosition = player.SFPosition,
+                        PFPosition = player.PFPosition,
+                        CPosition = player.CPosition
+                    };
+                    freeAgents.Add(p);
+                }
+                return freeAgents;
+            }
+            else if (pos == 3)
+            {
+                var players = await _context.Players.
+                Join(
+                    _context.PlayerTeams,
+                    player => new { player.PlayerId, player.LeagueId },
+                    playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                    (players, playerTeam) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        TeamId = playerTeam.TeamId,
+                        Age = players.Age,
+                        PGPosition = players.PGPosition,
+                        SGPosition = players.SGPosition,
+                        SFPosition = players.SFPosition,
+                        PFPosition = players.PFPosition,
+                        CPosition = players.CPosition,
+                    }
+                ).Where(x => x.TeamId == 0 && x.LeagueId == leagueId && x.SFPosition == 1).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    Player p = new Player
+                    {
+                        PlayerId = player.PlayerId,
+                        FirstName = player.FirstName,
+                        Surname = player.Surname,
+                        Age = player.Age,
+                        PGPosition = player.PGPosition,
+                        SGPosition = player.SGPosition,
+                        SFPosition = player.SFPosition,
+                        PFPosition = player.PFPosition,
+                        CPosition = player.CPosition
+                    };
+                    freeAgents.Add(p);
+                }
+                return freeAgents;
+            }
+            else if (pos == 4)
+            {
+                var players = await _context.Players.
+                Join(
+                    _context.PlayerTeams,
+                    player => new { player.PlayerId, player.LeagueId },
+                    playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                    (players, playerTeam) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        TeamId = playerTeam.TeamId,
+                        Age = players.Age,
+                        PGPosition = players.PGPosition,
+                        SGPosition = players.SGPosition,
+                        SFPosition = players.SFPosition,
+                        PFPosition = players.PFPosition,
+                        CPosition = players.CPosition,
+                    }
+                ).Where(x => x.TeamId == 0 && x.LeagueId == leagueId && x.PFPosition == 1).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    Player p = new Player
+                    {
+                        PlayerId = player.PlayerId,
+                        FirstName = player.FirstName,
+                        Surname = player.Surname,
+                        Age = player.Age,
+                        PGPosition = player.PGPosition,
+                        SGPosition = player.SGPosition,
+                        SFPosition = player.SFPosition,
+                        PFPosition = player.PFPosition,
+                        CPosition = player.CPosition
+                    };
+                    freeAgents.Add(p);
+                }
+                return freeAgents;
+            }
+            else if (pos == 5)
+            {
+                var players = await _context.Players.
+                Join(
+                    _context.PlayerTeams,
+                    player => new { player.PlayerId, player.LeagueId },
+                    playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                    (players, playerTeam) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        TeamId = playerTeam.TeamId,
+                        Age = players.Age,
+                        PGPosition = players.PGPosition,
+                        SGPosition = players.SGPosition,
+                        SFPosition = players.SFPosition,
+                        PFPosition = players.PFPosition,
+                        CPosition = players.CPosition,
+                    }
+                ).Where(x => x.TeamId == 0 && x.LeagueId == leagueId && x.CPosition == 1).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    Player p = new Player
+                    {
+                        PlayerId = player.PlayerId,
+                        FirstName = player.FirstName,
+                        Surname = player.Surname,
+                        Age = player.Age,
+                        PGPosition = player.PGPosition,
+                        SGPosition = player.SGPosition,
+                        SFPosition = player.SFPosition,
+                        PFPosition = player.PFPosition,
+                        CPosition = player.CPosition
+                    };
+                    freeAgents.Add(p);
+                }
+                return freeAgents;
             }
             return freeAgents;
         }
@@ -942,7 +1444,7 @@ namespace ABASim.api.Data
                     Surname = players.Surname,
                     LeagueId = players.LeagueId,
                     TeamId = playerTeam.TeamId
-                } 
+                }
             ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
 
             foreach (var player in players)
@@ -954,7 +1456,7 @@ namespace ABASim.api.Data
                 newPlayer.LeagueId = player.LeagueId;
                 draftPool.Add(newPlayer);
             }
-           return draftPool;
+            return draftPool;
         }
 
         public async Task<IEnumerable<DraftPlayerDto>> GetInitialDraftPlayerPool(int leagueId)
@@ -979,7 +1481,7 @@ namespace ABASim.api.Data
                     SFPosition = players.SFPosition,
                     PFPosition = players.PFPosition,
                     CPosition = players.CPosition
-                } 
+                }
             )
             .Join(
                 _context.PlayerGradings,
