@@ -70,6 +70,7 @@ export class DashboardComponent implements OnInit {
 
   chatRecords: GlobalChat[] = [];
   chatForm: FormGroup;
+  newChatForm: FormGroup;
   user: User;
   interval;
   draftInterval;
@@ -87,8 +88,8 @@ export class DashboardComponent implements OnInit {
 
   primaryColor: string = '22, 24, 100';
   secondaryColor: string = '12,126,120';
-  primaryTextColor: string;
-  secondaryTextColor: string;
+  primaryTextColor: string = '220, 220, 220';
+  secondaryTextColor: string = '220, 220, 220';
 
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
@@ -98,6 +99,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.spinner.show();
+    this.createChatForm();
 
     // Check to see if the user is an admin user
     this.isAdmin = this.authService.isAdmin();
@@ -122,7 +124,6 @@ export class DashboardComponent implements OnInit {
       this.alertify.error('Error getting League Details');
     }, () => {
       this.setupDashboard();
-      this.createChatForm();
       this.refreshChat();
       this.interval = setInterval(() => {
         this.refreshChat();
@@ -490,6 +491,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  createChatForm() {
+    console.log('atemp');
+    this.chatForm = this.fb.group({
+      message: ['']
+    });
+
+    console.log(this.chatForm);
+
+    // this.newChatForm = this.fb.group({
+    //   username: ['', Validators.required],
+    //   password: ['', Validators.required]
+    // });
+  }
+
   sendChat() {
     if (this.chatForm.valid) {
       const result = this.chatForm.controls['message'].value;
@@ -519,12 +534,6 @@ export class DashboardComponent implements OnInit {
     } else {
       this.alertify.error('Please populate your chat message');
     }
-  }
-
-  createChatForm() {
-    this.chatForm = this.fb.group({
-      message: ['', Validators.required]
-    });
   }
 
   getDraftTracker() {
@@ -638,6 +647,8 @@ export class DashboardComponent implements OnInit {
         // Boston
         this.primaryColor = '0, 122, 51';
         this.secondaryColor = '139,111,78';
+        this.secondaryTextColor = '200, 200, 200';
+        this.primaryTextColor = '200, 200, 200';
         break;
       case 9:
         // Indiana
@@ -760,6 +771,8 @@ export class DashboardComponent implements OnInit {
         break;
     }
   }
+
+  // getSecondaryFontColor
 
   teamSelection() {
     if (this.teamToggle == 0) {

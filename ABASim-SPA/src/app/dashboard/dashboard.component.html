@@ -125,7 +125,8 @@
 						</tr>
 					</thead>
 					<tbody *ngIf="this.quickTeamInjuries.length == 0">
-						<tr class="lead color-7 ml-2">Your team does not have any injuries.</tr>
+						<tr class="lead ml-2" [style.color]="'rgb(' + secondaryTextColor + ')'">Your team does not have
+							any injuries.</tr>
 					</tbody>
 					<tbody *ngIf="this.quickTeamInjuries.length != 0">
 						<tr *ngFor="let player of this.quickTeamInjuries">
@@ -158,8 +159,9 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 1">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-				<p class="color-7">Currently the league is taking on user registrations. If you know anyone get them to
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">Currently the league is taking on user
+					registrations. If you know anyone get them to
 					join the league! Once
 					the league is full, the initial draft lottery will be run. For now use the global chat and scout
 					players
@@ -168,14 +170,16 @@
 
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 2">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-				<p class="color-7">The league has now been filled! The draft lottery will be run shortly!</p>
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The league has now been filled! The draft lottery
+					will be run shortly!</p>
 			</div>
 
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 3">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-				<p class="color-7">The draft lottery has now been run. View the draft order and all things draft related
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The draft lottery has now been run. View the draft
+					order and all things draft related
 					under the draft menu
 					option and don't forget to set your draftboard to cover the auto-picks! The draft will begin soon,
 					exact
@@ -184,8 +188,9 @@
 
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 6">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Preseason</h4>
-				<p class="color-7">Preseason has now begun. Each team will play 4 games - 1 per day. Now is the time to
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Preseason</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">Preseason has now begun. Each team will play 4
+					games - 1 per day. Now is the time to
 					try and work out your
 					lineups.</p>
 			</div>
@@ -310,12 +315,13 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 8">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> First Round of the Playoffs
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> First Round of the Playoffs
 				</h4>
-				<p class="color-7">The playoffs have begun! The first round is underway.</p>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The playoffs have begun! The first round is
+					underway.</p>
 				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
-					<ul style="list-style-type:none;" class="color-7">
+					<h5 [style.color]="'rgb(' + secondaryTextColor + ')'">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" [style.color]="'rgb(' + secondaryTextColor + ')'">
 						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
 					</ul>
 				</div>
@@ -325,11 +331,11 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 10">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Conference Finals</h4>
-				<p class="color-7">The Conference Finals are now underway.</p>
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Conference Finals</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The Conference Finals are now underway.</p>
 				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
-					<ul style="list-style-type:none;" class="color-7">
+					<h5 [style.color]="'rgb(' + secondaryTextColor + ')'">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" [style.color]="'rgb(' + secondaryTextColor + ')'">
 						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
 					</ul>
 				</div>
@@ -339,11 +345,11 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 11">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> ABA Finals</h4>
-				<p class="color-7">The ABA Finals are now underway.</p>
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> ABA Finals</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The ABA Finals are now underway.</p>
 				<div class="rowpo ml-3 mt-2" *ngFor="let mu of this.playoffSummaries; let i = index">
-					<h5 class="color-7">Matchup #{{ i + 1 }}</h5>
-					<ul style="list-style-type:none;" class="color-7">
+					<h5 [style.color]="'rgb(' + secondaryTextColor + ')'">Matchup #{{ i + 1 }}</h5>
+					<ul style="list-style-type:none;" [style.color]="'rgb(' + secondaryTextColor + ')'">
 						{{ mu.awayTeam }} ({{ mu.awayWins }}) vs {{ mu.homeTeam }} ({{ mu.homeWins }})
 					</ul>
 				</div>
@@ -353,9 +359,10 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 12">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Champions: {{
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Champions: {{
 					this.champion.teamname }} {{ this.champion.mascot }}</h4>
-				<p class="color-7">The {{ this.champion.teamname }} {{ this.champion.mascot }} are the ABA champions!
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The {{ this.champion.teamname }} {{
+					this.champion.mascot }} are the ABA champions!
 					Congratulations.</p>
 			</div>
 		</div>
@@ -367,7 +374,7 @@
 				<carousel class="justify-content-center">
 					<slide class="justify-content-center">
 						<!-- <div class="justify-content-center"> -->
-						<h5 class="color-8">PPG Leaders</h5>
+						<h5 class="color-11">PPG Leaders</h5>
 						<table style="margin-left:auto;margin-right:auto;">
 							<thead>
 								<tr>
@@ -391,7 +398,7 @@
 						<!-- <button class="btn btn-link" (click)="goToStats(1)">More</button> -->
 					</slide>
 					<slide class="slideclass center-block">
-						<h5 class="color-8">RPG Leaders</h5>
+						<h5 class="color-11">RPG Leaders</h5>
 						<table style="margin-left:auto;margin-right:auto;">
 							<thead>
 								<tr>
@@ -414,7 +421,7 @@
 						<!-- <button class="btn btn-link" (click)="goToStats(2)">More</button> -->
 					</slide>
 					<slide class="slideclass center-block">
-						<h5 class="color-8">APG Leaders</h5>
+						<h5 class="color-11">APG Leaders</h5>
 						<table style="margin-left:auto;margin-right:auto;">
 							<thead>
 								<tr>
@@ -437,7 +444,7 @@
 						<!-- <button class="btn btn-link" (click)="goToStats(3)">More</button> -->
 					</slide>
 					<slide class="slideclass center-block">
-						<h5 class="color-8">SPG Leaders</h5>
+						<h5 class="color-11">SPG Leaders</h5>
 						<table style="margin-left:auto;margin-right:auto;">
 							<thead>
 								<tr>
@@ -460,7 +467,7 @@
 						<!-- <button class="btn btn-link" (click)="goToStats(4)">More</button> -->
 					</slide>
 					<slide class="slideclass center-block">
-						<h5 class="color-8">BPG Leaders</h5>
+						<h5 class="color-11">BPG Leaders</h5>
 						<table style="margin-left:auto;margin-right:auto;">
 							<thead>
 								<tr>
@@ -490,7 +497,7 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'"
 				*ngIf="this.league?.stateId == 6 || this.league?.stateId == 7 || this.league?.stateId == 15">
-				<h4><i class="fa fa-newspaper-o" aria-hidden="true"></i> Yesterday's Transactions</h4>
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Yesterday's Transactions</h4>
 				<table *ngIf="this.yesterdaysTransactions?.length > 0">
 					<thead>
 						<tr>
@@ -506,7 +513,8 @@
 						<td>{{ trans.transactionType }}</td>
 					</tr>
 				</table>
-				<p *ngIf="this.yesterdaysTransactions?.length == 0">No transactions were made.</p>
+				<p [style.color]="'rgb(' + primaryTextColor + ')'" *ngIf="this.yesterdaysTransactions?.length == 0">No
+					transactions were made.</p>
 			</div>
 		</div>
 
@@ -514,20 +522,23 @@
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 4">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Draft HQ</h4>
-				<p class="color-7">Round #{{ this.tracker?.round }}</p>
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Draft HQ</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">Round #{{ this.tracker?.round }}</p>
 				<div class="small-card">
-					<p class="color-7">#{{ this.previousPick?.pick }} - <button class="teamlink"
-							(click)="viewTeam(this.previousPick?.teamMascot)">{{ this.previousPick?.teamMascot }}</button>
+					<p [style.color]="'rgb(' + secondaryTextColor + ')'">#{{ this.previousPick?.pick }} - <button
+							class="teamlink" (click)="viewTeam(this.previousPick?.teamMascot)">{{
+							this.previousPick?.teamMascot }}</button>
 						-
 						{{ this.previousPick?.playerName }}
 					</p>
-					<p class="color-7">#{{ this.currentPick?.pick }} - <button class="teamlink"
-							(click)="viewTeam(this.currentPick?.teamMascot)">{{ this.currentPick?.teamMascot }}</button> -
+					<p [style.color]="'rgb(' + secondaryTextColor + ')'">#{{ this.currentPick?.pick }} - <button
+							class="teamlink" (click)="viewTeam(this.currentPick?.teamMascot)">{{
+							this.currentPick?.teamMascot }}</button> -
 						ON THE
 						CLOCK</p>
-					<p class="color-7">#{{ this.nextPick?.pick }} - <button class="teamlink"
-							(click)="viewTeam(this.nextPick?.teamMascot)">{{ this.nextPick?.teamMascot }}</button> - UP
+					<p [style.color]="'rgb(' + secondaryTextColor + ')'">#{{ this.nextPick?.pick }} - <button
+							class="teamlink" (click)="viewTeam(this.nextPick?.teamMascot)">{{ this.nextPick?.teamMascot
+							}}</button> - UP
 						NEXT</p>
 					<div style="text-align: center;">
 						<button type="button" class="btn btn-link text-left" (click)="goToDraft()">Go to Draft</button>
@@ -537,8 +548,9 @@
 
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 5">
-				<h4 class="color-8"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
-				<p class="color-7">The draft is no complete. Teams can fill out their rosters via Teams. A roster may
+				<h4 class="color-11"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The draft is no complete. Teams can fill out their
+					rosters via Teams. A roster may
 					contain up to 15 players.
 					Teams are required to set their depth charts via the Team section which is required. Teams may also
 					choose
@@ -555,10 +567,11 @@
 	<div class="content" *ngIf="this.chatToggle == 1">
 		<div>
 			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'">
-				<h4 class="color-8"><i class="fa fa-commenting-o" aria-hidden="true"></i> GLOBAL CHAT <button
+				<h4 class="color-11"><i class="fa fa-commenting-o" aria-hidden="true"></i> GLOBAL CHAT <button
 						class="btn btn-secondary ml-2" (click)="refreshChat()"><i class="fa fa-refresh"></i></button>
 				</h4>
-				<p class="color-7" *ngIf="this.chatRecords.length == 0">No chat records exist</p>
+				<p [style.color]="'rgb(' + primaryTextColor + ')'" *ngIf="this.chatRecords.length == 0">No chat records
+					exist</p>
 				<div class="container">
 					<div class="row">
 						<div class="message-wrap col-lg-12">
@@ -578,16 +591,48 @@
 				</div>
 				<br />
 				<div>
-					<form [formGroup]="this.chatForm" accept-charset="UTF-8" role="form" (ngSubmit)="sendChat()">
-						<fieldset>
-							<div class="form-group">
-								<label for="exampleTextarea">Your Message</label>
-								<textarea class="form-control background-white" id="message" rows="2" name="message"
-									formControlName="message"></textarea>
-							</div>
-							<input class="btn btn-primary mt-1" type="submit" value="Post">
-						</fieldset>
+
+					<form [formGroup]="chatForm" accept-charset="UTF-8" (ngSubmit)="sendChat()">
+
+						<div class="form-group">
+							<label class="ls text-uppercase color-8 fw-700 mb-0">Your Message</label>
+							<input class="form-control background-white" id="message" rows="2" name="message"
+								formControlName="message" type="text" />
+						</div>
+						<input class="btn btn-primary mt-1" type="submit" value="Post">
 					</form>
+					<!-- <form [formGroup]="chatForm" accept-charset="UTF-8" (ngSubmit)="sendChat()">
+
+						<div class="form-group">
+							<label class="ls text-uppercase color-8 fw-700 mb-0">Your Message</label>
+							<input class="form-control background-white" id="message" rows="2" name="message"
+								formControlName="message" type="text" />
+						</div>
+						<input class="btn btn-primary mt-1" type="submit" value="Post">
+					</form> -->
+					<!-- <form [formGroup]="newChatForm" class="zform p-3 p-md-6 background-2 radius-secondary border color-2" (ngSubmit)="sendChat()">
+						<div class="row justify-content-center">
+						  <h2 class="color-10 justify-content-center">Login</h2>
+							  <div class="col-md-12">
+							  </div>
+							  <div class="col-md-12">
+								  <div class="form-group">
+									  <label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Username</label>
+									  <input class="form-control background-white" type="text" formControlName="username" required="required" />
+								  </div>
+							  </div>
+							  <div class="col-md-12">
+								<div class="form-group">
+									<label class="ls text-uppercase color-8 fw-700 mb-0" for="name">Password</label>
+									<input class="form-control background-white" type="password" formControlName="password" required="required" />
+								</div>
+							</div>
+							  <div class="col-md-6 text-center mt-4">
+								  <input class="btn btn-primary btn-block" type="submit" name="submit" value="Login" />
+							  </div>
+						  </div>
+						  <div class="zform-feedback mt-3"></div>
+					  </form> -->
 				</div>
 			</div>
 		</div>
