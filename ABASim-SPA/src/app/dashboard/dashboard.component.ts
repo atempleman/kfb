@@ -91,6 +91,8 @@ export class DashboardComponent implements OnInit {
   primaryTextColor: string = '220, 220, 220';
   secondaryTextColor: string = '220, 220, 220';
 
+  secondaryLinkColor: string = '3, 252, 161';
+
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
     private authService: AuthService, private teamService: TeamService, private adminService: AdminService,
@@ -614,156 +616,244 @@ export class DashboardComponent implements OnInit {
     switch (this.team.teamId) {
       case 2:
         // Toronto
-        console.log('ash test#1');
         this.primaryColor = '206,17,65';
         this.secondaryColor = '6,25,34';
+        this.secondaryTextColor = '6,25,34'
+        this.secondaryLinkColor = '6,25,34'
+        this.primaryTextColor = '206,17,65';
         break;
       case 3:
         // Milwaukee
         this.primaryColor = '0,71,27';
         this.secondaryColor = '240,235,210';
+        this.secondaryTextColor = '240,235,210';
+        this.secondaryLinkColor = '240,235,210';
+        this.primaryTextColor = '0,71,27';
         break;
       case 4:
         // Miami
         this.primaryColor = '152,0,46';
         this.secondaryColor = '249,160,27';
+        this.secondaryTextColor = '249,160,27';
+        this.secondaryLinkColor = '249,160,27';
+        this.primaryTextColor = '152,0,46';
         break;
       case 5:
         // Denver
         this.primaryColor = '13,34,64';
         this.secondaryColor = '255,198,39';
+        this.secondaryTextColor = '255,198,39';
+        this.secondaryLinkColor = '255,198,39';
+        this.primaryTextColor = '13,34,64';
         break;
       case 6:
         // Lakers
         this.primaryColor = '85,37,130';
         this.secondaryColor = '253,185,39';
+        this.secondaryTextColor = '253,185,39';
+        this.secondaryLinkColor = '253,185,39';
+        this.primaryTextColor = '85,37,130';
         break;
       case 7:
         // Rockets
         this.primaryColor = '206,17,65';
         this.secondaryColor = '6,25,34';
+        this.secondaryTextColor = '6,25,34';
+        this.secondaryLinkColor = '6,25,34';
+        this.primaryTextColor = '206,17,65';
         break;
       case 8:
         // Boston
         this.primaryColor = '0, 122, 51';
         this.secondaryColor = '139,111,78';
-        this.secondaryTextColor = '200, 200, 200';
-        this.primaryTextColor = '200, 200, 200';
+        this.secondaryTextColor = '220, 220, 220';
+        this.primaryTextColor = '139,111,78';
+        this.primaryTextColor = '220, 220, 220';
         break;
       case 9:
         // Indiana
         this.primaryColor = '0,45,98';
         this.secondaryColor = '253,187,48';
+        this.secondaryTextColor = '253,187,48';
+        this.secondaryLinkColor = '253,187,48';
+        this.primaryTextColor = '0,45,98';
         break;
       case 10:
         // Orlando
         this.primaryColor = '0,125,197';
         this.secondaryColor = '196,206,211';
+        this.secondaryTextColor = '196,206,211';
+        this.secondaryLinkColor = '196,206,211';
+        this.primaryTextColor = '0,125,197';
         break;
       case 11:
         // OKC
         this.primaryColor = '0,125,195';
         this.secondaryColor = '239,59,36';
+        this.secondaryTextColor = '239,59,36';
+        this.secondaryLinkColor = '239,59,36';
+        this.primaryTextColor = '0,125,195';
         break;
       case 12:
         // Clippers
         this.primaryColor = '200,16,46';
         this.secondaryColor = '29,66,148';
+        this.secondaryTextColor = '29,66,148';
+        this.secondaryLinkColor = '29,66,148';
+        this.primaryTextColor = '200,16,46';
+        break;
         break;
       case 13:
         // Dallas
         this.primaryColor = '0,83,188';
         this.secondaryColor = '0,43,92';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '220,220,220';
+        this.primaryTextColor = '220,220,220';
         break;
       case 14:
         // 76ers
         this.primaryColor = '0,107,182';
         this.secondaryColor = '237,23,76';
+        this.secondaryTextColor = '237,23,76';
+        this.secondaryLinkColor = '237,23,76';
+        this.primaryTextColor = '0,107,182';
         break;
       case 15:
         // Chicago
         this.primaryColor = '206,17,65';
         this.secondaryColor = '6,25,34';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '6,25,34';
+        this.primaryTextColor = '220,220,220';
         break;
       case 16:
         // Charlotte
         this.primaryColor = '29,17,96';
         this.secondaryColor = '0,120,140';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '0,120,140';
+        this.primaryTextColor = '220,220,220';
         break;
       case 17:
         // Utah
         this.primaryColor = '0,43,92';
         this.secondaryColor = '0,71,27';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '0,71,27';
+        this.primaryTextColor = '220,220,220';
         break;
       case 18:
         // Phoenix
         this.primaryColor = '29,17,96';
         this.secondaryColor = '229,95,32';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '229,95,32';
+        this.primaryTextColor = '220,220,220';
         break;
       case 19:
         // Memphis
         this.primaryColor = '93,118,169';
         this.secondaryColor = '18,23,63';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '18,23,63';
+        this.primaryTextColor = '220,220,220';
         break;
       case 20:
         // Brooklyn
         this.primaryColor = '0,0,0';
         this.secondaryColor = '119,125,132';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '119,125,132';
+        this.primaryTextColor = '220,220,220';
         break;
       case 21:
         // Detroit
         this.primaryColor = '200,16,46';
         this.secondaryColor = '29,66,138';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '29,66,138';
+        this.primaryTextColor = '220,220,220';
         break;
       case 22:
         // Washington
         this.primaryColor = '0,43,92';
         this.secondaryColor = '227,24,55';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '227,24,55';
+        this.primaryTextColor = '220,220,220';
         break;
       case 23:
         // Portland
         this.primaryColor = '224,58,62';
         this.secondaryColor = '6,25,34';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '6,25,34';
+        this.primaryTextColor = '220,220,220';
         break;
       case 24:
         // Sacromento
         this.primaryColor = '91,43,130';
         this.secondaryColor = '99,113,122';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '99,113,122';
+        this.primaryTextColor = '220,220,220';
         break;
       case 25:
         // Spurs
         this.primaryColor = '196,206,211';
         this.secondaryColor = '6,25,34';
+        this.secondaryTextColor = '6,25,34';
+        this.secondaryLinkColor = '6,25,34';
+        this.primaryTextColor = '220,220,220';
         break;
       case 26:
         // Knicks
         this.primaryColor = '0,107,182';
         this.secondaryColor = '245,132,38';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '245,132,38';
+        this.primaryTextColor = '220,220,220';
         break;
       case 27:
         // Cavs
         this.primaryColor = '134,0,56';
         this.secondaryColor = '4,30,66';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '4,30,66';
+        this.primaryTextColor = '220,220,220';
         break;
       case 28:
         // Atlanta
         this.primaryColor = '225,68,52';
         this.secondaryColor = '196,214,0';
+        this.secondaryTextColor = '196,214,0';
+        this.secondaryLinkColor = '196,214,0';
+        this.primaryTextColor = '225,68,52';
         break;
       case 29:
         // Minnesota
         this.primaryColor = '12,35,64';
         this.secondaryColor = '35,97,146';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '35,97,146';
+        this.primaryTextColor = '220,220,220';
         break;
       case 30:
         // GSW
         this.primaryColor = '29,66,138';
         this.secondaryColor = '255,199,44';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '255,199,44';
+        this.primaryTextColor = '29,66,138';
         break;
       case 32:
         // New Orleans
         this.primaryColor = '0,22,65';
         this.secondaryColor = '225,58,62';
+        this.secondaryTextColor = '220,220,220';
+        this.secondaryLinkColor = '225,58,62';
+        this.primaryTextColor = '220,220,220';
         break;
       default:
         this.primaryColor = '22, 24, 100';

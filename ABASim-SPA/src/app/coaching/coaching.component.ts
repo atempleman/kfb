@@ -134,6 +134,8 @@ export class CoachingComponent implements OnInit {
       this.gotoOne = this.coachSetting.goToPlayerOne;
       this.gotoTwo = this.coachSetting.goToPlayerTwo;
       this.gotoThree = this.coachSetting.goToPlayerThree;
+
+      console.log(this.coachSetting);
     });
   }
 
@@ -177,7 +179,7 @@ export class CoachingComponent implements OnInit {
         this.injuredThree = 1;
       }
     } else {
-      const player = this.extendedPlayers.find(x => playerId === playerId);
+      const player = this.extendedPlayers.find(x => x.playerId === playerId);
       return player.firstName + ' ' + player.surname;
     }
   }
@@ -197,6 +199,8 @@ export class CoachingComponent implements OnInit {
 
   saveCoaching() {
     // Need to get the values
+    console.log(this.coachSetting);
+
     this.coachSetting.goToPlayerOne = +this.gotoOne;
     this.coachSetting.goToPlayerTwo = +this.gotoTwo;
     this.coachSetting.goToPlayerThree = +this.gotoThree;
