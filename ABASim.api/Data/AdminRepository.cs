@@ -619,7 +619,8 @@ namespace ABASim.api.Data
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             int leageState = league.StateId;
 
-            var freeAgentDecisions = await _context.FreeAgencyDecisions.Where(x => (x.DayToDecide <= (league.Day + 1)) && x.LeagueId == leagueId).ToListAsync();
+            // var freeAgentDecisions = await _context.FreeAgencyDecisions.FromSqlRaw("SELECT * FROM FreeAgencyDecisions WHERE LeagueId = {1} AND PlayerId IN (SELECT DISTINCT PlayerId FROM FreeAgencyDecisions WHERE DaysToDecide <= {0} AND LeagueId = {1})", league.Day + 1, leagueId).ToListAsync();
+            var freeAgentDecisions = await _context.FreeAgencyDecisions.Where(x => (x.DayToDecide <= (league.Day)) && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var fa in freeAgentDecisions)
             {
@@ -641,7 +642,7 @@ namespace ABASim.api.Data
                             // Now need to check if the team can still afford the player
                             var teamSalary = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == off.TeamId && x.LeagueId == leagueId);
                             var cap = await _context.SalaryCaps.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
-                            if ((teamSalary.CurrentCapAmount - cap.Cap) > 0 || off.YearOne == 1000000)
+                            if ((cap.Cap - (teamSalary.CurrentCapAmount - off.YearOne)) > off.YearOne || off.YearOne == 1000000)
                             {
                                 // Then can sign
                                 int offerTotalMoney = off.YearOne + off.YearTwo + off.YearThree + off.YearFour + off.YearFive;
@@ -679,7 +680,7 @@ namespace ABASim.api.Data
                                         }
                                         else if (offerValue == acceptValue)
                                         {
-                                            if (offGuarenteed > (accGuarenteed + 1))
+                                            if (offGuarenteed > (accGuarenteed))
                                             {
                                                 acceptedOffer = off;
                                             }
@@ -697,7 +698,7 @@ namespace ABASim.api.Data
                                         }
                                         else if (amountDifference == 0)
                                         {
-                                            if (offGuarenteed > (accGuarenteed + 1))
+                                            if (offGuarenteed > (accGuarenteed))
                                             {
                                                 acceptedOffer = off;
                                             }
@@ -718,7 +719,7 @@ namespace ABASim.api.Data
                                         }
                                         else if (offerValue == acceptValue)
                                         {
-                                            if (offGuarenteed > (accGuarenteed + 1))
+                                            if (offGuarenteed > (accGuarenteed))
                                             {
                                                 acceptedOffer = off;
                                             }
@@ -745,7 +746,7 @@ namespace ABASim.api.Data
                     {
                         var teamSalary = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == acceptedOffer.TeamId && x.LeagueId == leagueId);
                         var cap = await _context.SalaryCaps.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
-                        if ((teamSalary.CurrentCapAmount - cap.Cap) > 0 || acceptedOffer.YearOne == 1000000)
+                        if ((cap.Cap - (teamSalary.CurrentCapAmount - acceptedOffer.YearOne) > acceptedOffer.YearOne) || acceptedOffer.YearOne == 1000000)
                         {
                             // Now setting up the details of the signing
                             // Creating the players contract
@@ -844,6 +845,11 @@ namespace ABASim.api.Data
                                             LeagueId = leagueId
                                         };
                                         await _context.AddAsync(rejectMessage);
+
+                                        // Need to put the salary back on the teams salary cap
+                                        var capUpdate = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.LeagueId == off.LeagueId && x.TeamId == off.TeamId);
+                                        capUpdate.CurrentCapAmount = capUpdate.CurrentCapAmount - off.YearOne;
+                                        _context.Update(capUpdate);
                                     }
                                     _context.Remove(off);
                                 }

@@ -232,6 +232,7 @@ export class FreeagentsComponent implements OnInit {
   public openViewModal(template: TemplateRef<any>, offer: ContractOffer) {
 
     this.viewedOffer = offer;
+    console.log(this.viewedOffer);
     
     if (this.viewedOffer.yearFive > 0) {
       this.contractYears = 5;
@@ -357,6 +358,7 @@ export class FreeagentsComponent implements OnInit {
       this.alertify.error('Error in offer - Minimum contract is $1,000,000 per season');
     } else {
       if (this.availableCapSpace < this.year1Amount && this.year1Amount !== 1000000) {
+        console.log(this.availableCapSpace);
         if (this.availableCapSpace < 1000000) {
           this.alertify.error('You cannot afford this contract. You can offer a minimum contract of $1,000,000');
         } else {

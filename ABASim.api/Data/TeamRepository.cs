@@ -1494,7 +1494,8 @@ namespace ABASim.api.Data
                 FreeAgentDecision freeAgentDecision = new FreeAgentDecision
                 {
                     PlayerId = offer.PlayerId,
-                    DayToDecide = daysToDecide
+                    DayToDecide = daysToDecide,
+                    LeagueId = offer.LeagueId
                 };
                 await _context.AddAsync(freeAgentDecision);
             }

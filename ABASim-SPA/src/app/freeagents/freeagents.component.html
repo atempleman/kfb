@@ -310,7 +310,7 @@
 			<div class="col ml-3">
 				<p class="color-7">Guarenteed </p>
 				<input name="year1G" class="ml-2" [disabled]="true" type="checkbox"
-					checked="this.viewedOffer.guarenteed1 == 1">
+					[checked]="this.viewedOffer.guranteedOne == 1">
 			</div>
 		</div>
 		<div class="row color-1" *ngIf="this.contractYears >= 2">
@@ -322,7 +322,7 @@
 			</div>
 			<div class="col ml-3">
 				<p class="color-7">Guarenteed </p>
-				<input class="ml-2" name="year2G" type="checkbox" [disabled]="true" checked="this.viewedOffer.guarenteed2 == 1">
+				<input class="ml-2" name="year2G" type="checkbox" [disabled]="true" [checked]="this.viewedOffer.guranteedTwo == 1">
 			</div>
 		</div>
 		<div class="row color-1" *ngIf="this.contractYears >= 3">
@@ -334,7 +334,7 @@
 			</div>
 			<div class="col ml-3">
 				<p class="color-7">Guarenteed </p>
-				<input class="ml-2" name="year3G" type="checkbox" [disabled]="true" checked="this.viewedOffer.guarenteed3 == 1">
+				<input class="ml-2" name="year3G" type="checkbox" [disabled]="true" [checked]="this.viewedOffer.guranteedThree == 1">
 			</div>
 		</div>
 		<div class="row color-1" *ngIf="this.contractYears >= 4">
@@ -346,7 +346,7 @@
 			</div>
 			<div class="col ml-3">
 				<label>Guarenteed </label>
-				<input class="ml-2" type="checkbox" name="year4G" [disabled]="true" checked="this.viewedOffer.guarenteed4 == 1">
+				<input class="ml-2" type="checkbox" name="year4G" [disabled]="true" [checked]="this.viewedOffer.guranteedFour == 1">
 			</div>
 		</div>
 		<div class="row color-1" *ngIf="this.contractYears >= 5">
@@ -358,7 +358,7 @@
 			</div>
 			<div class="col ml-3">
 				<p class="color-7">Guarenteed </p>
-				<input class="ml-2" type="checkbox" name="year5G" [disabled]="true" checked="this.viewedOffer.guarenteed5 == 1">
+				<input class="ml-2" type="checkbox" name="year5G" [disabled]="true" [checked]="this.viewedOffer.guranteedFive == 1">
 			</div>
 		</div>
 		<div class="row color-1 mt-2">
