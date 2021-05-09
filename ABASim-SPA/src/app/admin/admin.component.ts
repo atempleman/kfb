@@ -78,7 +78,13 @@ export class AdminComponent implements OnInit {
   }
 
   setupPage() {
-    this.getTodaysGames();
+    if (this.league.stateId >= 6)
+    {
+      this.getTodaysGames();
+    } else {
+      
+    }
+    
     this.username = +this.authService.decodedToken.nameid;
   }
 

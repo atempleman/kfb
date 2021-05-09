@@ -2889,9 +2889,9 @@ namespace ABASim.api.Controllers
                         if (possibleAssist == 1)
                         {
                             // Update the Box Score
-                            BoxScore tempAst = _homeBoxScores.Find(x => x.Id == _playerPassed.Id);
+                            BoxScore tempAst = _homeBoxScores.Find(x => x.Id == _playerPassed.PlayerId);
                             tempAst.Assists++;
-                            int indexAst = _homeBoxScores.FindIndex(x => x.Id == _playerPassed.Id);
+                            int indexAst = _homeBoxScores.FindIndex(x => x.Id == _playerPassed.PlayerId);
                             _homeBoxScores[indexAst] = tempAst;
                             commAsts = tempAst.Assists;
                         }
@@ -2914,9 +2914,9 @@ namespace ABASim.api.Controllers
                         if (possibleAssist == 1)
                         {
                             // Update the Box Score
-                            BoxScore tempAst = _awayBoxScores.Find(x => x.Id == _playerPassed.Id);
+                            BoxScore tempAst = _awayBoxScores.Find(x => x.Id == _playerPassed.PlayerId);
                             tempAst.Assists++;
-                            int indexAst = _awayBoxScores.FindIndex(x => x.Id == _playerPassed.Id);
+                            int indexAst = _awayBoxScores.FindIndex(x => x.Id == _playerPassed.PlayerId);
                             _awayBoxScores[indexAst] = tempAst;
                             commAsts = tempAst.Assists;
                         }
@@ -3143,9 +3143,9 @@ namespace ABASim.api.Controllers
                             assistCounter++;
 
                             // Update the Box Score
-                            BoxScore temp2 = _homeBoxScores.Find(x => x.Id == _playerPassed.Id);
+                            BoxScore temp2 = _homeBoxScores.Find(x => x.Id == _playerPassed.PlayerId);
                             temp2.Assists++;
-                            int index2 = _homeBoxScores.FindIndex(x => x.Id == _playerPassed.Id);
+                            int index2 = _homeBoxScores.FindIndex(x => x.Id == _playerPassed.PlayerId);
                             _homeBoxScores[index2] = temp2;
                             commAsts = temp.Assists;
                         }
@@ -3172,9 +3172,9 @@ namespace ABASim.api.Controllers
                             assistCounter++;
 
                             // Update the Box Score
-                            BoxScore temp2 = _awayBoxScores.Find(x => x.Id == _playerPassed.Id);
+                            BoxScore temp2 = _awayBoxScores.Find(x => x.Id == _playerPassed.PlayerId);
                             temp2.Assists++;
-                            int index2 = _awayBoxScores.FindIndex(x => x.Id == _playerPassed.Id);
+                            int index2 = _awayBoxScores.FindIndex(x => x.Id == _playerPassed.PlayerId);
                             _awayBoxScores[index2] = temp2;
                             commAsts = temp.Assists;
                         }

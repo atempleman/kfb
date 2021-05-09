@@ -367,6 +367,7 @@ namespace ABASim.api.Data
         {
             List<GameVotes> votes = new List<GameVotes>();
             List<GameVotes> plusMinus = new List<GameVotes>();
+            int leagueId = boxScores[0].LeagueId;
 
             foreach (var bs in boxScores)
             {
@@ -379,7 +380,7 @@ namespace ABASim.api.Data
 
                 int score = points + rebs + asts + stls + blks - to;
 
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName && x.LeagueId == leagueId);
                 GameVotes gv = new GameVotes
                 {
                     PlayerId = player.PlayerId,
@@ -390,7 +391,7 @@ namespace ABASim.api.Data
                 GameVotes gvPM = new GameVotes
                 {
                     PlayerId = player.PlayerId,
-                    Score = bs.PlusMinus
+                    Score = bs.PlusMinus,
                 };
                 plusMinus.Add(gvPM);
             }
@@ -405,14 +406,15 @@ namespace ABASim.api.Data
             {
                 if (votesAwarded > 0)
                 {
-                    var existing = await _context.MvpVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId);
+                    var existing = await _context.MvpVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
 
                     if (existing == null)
                     {
                         MvpVote mvp = new MvpVote
                         {
                             PlayerId = vote.PlayerId,
-                            Votes = votesAwarded
+                            Votes = votesAwarded,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(mvp);
                         await _context.SaveChangesAsync();
@@ -437,14 +439,15 @@ namespace ABASim.api.Data
             {
                 if (votesAwarded > 0)
                 {
-                    var existing = await _context.MvpVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId);
+                    var existing = await _context.MvpVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
 
                     if (existing == null)
                     {
                         MvpVote mvp = new MvpVote
                         {
                             PlayerId = vote.PlayerId,
-                            Votes = votesAwarded
+                            Votes = votesAwarded,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(mvp);
                         await _context.SaveChangesAsync();
@@ -469,6 +472,7 @@ namespace ABASim.api.Data
         public async Task<bool> DpoyVotes(List<BoxScore> boxScores)
         {
             List<GameVotes> votes = new List<GameVotes>();
+            int leaugeId = boxScores[0].LeagueId;
 
             foreach (var bs in boxScores)
             {
@@ -479,7 +483,7 @@ namespace ABASim.api.Data
 
                 int score = pm + rebs + stls + blks;
 
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName && x.LeagueId == leaugeId);
                 GameVotes gv = new GameVotes
                 {
                     PlayerId = player.PlayerId,
@@ -497,14 +501,15 @@ namespace ABASim.api.Data
             {
                 if (votesAwarded > 0)
                 {
-                    var existing = await _context.DpoyVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId);
+                    var existing = await _context.DpoyVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leaugeId);
 
                     if (existing == null)
                     {
                         DpoyVote dpoy = new DpoyVote
                         {
                             PlayerId = vote.PlayerId,
-                            Votes = votesAwarded
+                            Votes = votesAwarded,
+                            LeagueId = leaugeId
                         };
                         await _context.AddAsync(dpoy);
                         await _context.SaveChangesAsync();
@@ -531,10 +536,11 @@ namespace ABASim.api.Data
             // NEED WAY TO KNOW WHERE WERE NOT STARTERS
             List<GameVotes> votes = new List<GameVotes>();
             List<GameVotes> plusMinus = new List<GameVotes>();
+            int leagueId = boxScores[0].LeagueId;
 
             foreach (var bs in boxScores)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.FirstName == bs.FirstName && x.Surname == bs.LastName && x.LeagueId == leagueId);
 
                 if (!homeStarters.Contains(player.PlayerId) && !awayStarters.Contains(player.PlayerId))
                 {
@@ -573,14 +579,15 @@ namespace ABASim.api.Data
             {
                 if (votesAwarded > 0)
                 {
-                    var existing = await _context.SixthManVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId);
+                    var existing = await _context.SixthManVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
 
                     if (existing == null)
                     {
                         SixthManVote sixth = new SixthManVote
                         {
                             PlayerId = vote.PlayerId,
-                            Votes = votesAwarded
+                            Votes = votesAwarded,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(sixth);
                         await _context.SaveChangesAsync();
@@ -605,14 +612,15 @@ namespace ABASim.api.Data
             {
                 if (votesAwarded > 0)
                 {
-                    var existing = await _context.SixthManVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId);
+                    var existing = await _context.SixthManVoting.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
 
                     if (existing == null)
                     {
                         SixthManVote sixth = new SixthManVote
                         {
                             PlayerId = vote.PlayerId,
-                            Votes = votesAwarded
+                            Votes = votesAwarded,
+                            LeagueId = leagueId
                         };
                         await _context.AddAsync(sixth);
                         await _context.SaveChangesAsync();
@@ -631,7 +639,6 @@ namespace ABASim.api.Data
                     break;
                 }
             }
-
             return true;
         }
 

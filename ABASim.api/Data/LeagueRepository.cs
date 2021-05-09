@@ -24,7 +24,7 @@ namespace ABASim.api.Data
 
         public async Task<GameDetailsDto> GetPreseasonGameDetails(int gameId, int leagueId)
         {
-            var game = await _context.PreseasonSchedules.FirstOrDefaultAsync(x => x.Id == gameId && x.LeagueId == leagueId); 
+            var game = await _context.PreseasonSchedules.FirstOrDefaultAsync(x => x.Id == gameId);  //&& x.LeagueId == leagueId 
             var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayId && x.LeagueId == leagueId);
             var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeId && x.LeagueId == leagueId);
             GameDetailsDto details = new GameDetailsDto
