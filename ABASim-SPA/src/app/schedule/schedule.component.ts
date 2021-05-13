@@ -114,7 +114,6 @@ export class ScheduleComponent implements OnInit {
 
     this.leagueService.getScheduleGames(summary).subscribe(result => {
       this.schedules = result;
-      console.log(this.schedules);
     }, error => {
       this.alertify.error('Error getting schedule games');
     });
@@ -134,7 +133,6 @@ export class ScheduleComponent implements OnInit {
 
     this.leagueService.getScheduleGames(summary).subscribe(result => {
       this.schedules = result;
-      console.log(this.schedules);
     }, error => {
       this.alertify.error('Error getting schedule games');
     });

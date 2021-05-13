@@ -111,7 +111,6 @@ export class PlayoffResultsComponent implements OnInit {
 
     this.leagueService.getPlayoffGames(summary).subscribe(result => {
       this.schedules = result;
-      console.log(this.schedules);
     }, error => {
       this.alertify.error('Error getting schedule games');
     });
@@ -131,7 +130,6 @@ export class PlayoffResultsComponent implements OnInit {
 
     this.leagueService.getPlayoffGames(summary).subscribe(result => {
       this.schedules = result;
-      console.log(this.schedules);
     }, error => {
       this.alertify.error('Error getting schedule games');
     });

@@ -386,7 +386,6 @@ export class ViewTeamComponent implements OnInit {
 
   getPlayoffTotalRebAverage(detailedPlayer: CompletePlayer) {
     const totalRebs = detailedPlayer.playoffOrebsStats + detailedPlayer.playoffDrebsStats;
-    // console.log('total rebs = ' + totalRebs);
     const value = (totalRebs / detailedPlayer.playoffGamesStats);
     const display = value.toFixed(1);
     return display;

@@ -64,7 +64,6 @@ export class RegisterComponent implements OnInit {
   checkAvailablePrivateTeams() {
     this.leagueService.checkPrivateLeagueTeams().subscribe(result => {
       this.availablePrivateTeams = result;
-      console.log(result);
       if (this.availablePrivateTeams) {
         this.registerEnabled = 1;
       }
@@ -117,10 +116,7 @@ export class RegisterComponent implements OnInit {
   register() {
     if (this.registerForm.valid) {
       this.user = Object.assign({}, this.registerForm.value);
-
       this.user.code = this.leagueCodeText;
-
-      console.log(this.user);
 
       this.authService.register(this.user).subscribe(() => {
         this.alertify.success('Registration successful');
@@ -220,8 +216,6 @@ export class RegisterComponent implements OnInit {
   }
 
   radioToggle(selection: number) {
-    // console.log(selection);
-
     if (this.currentLeagueSelection != selection) {
       // The we change the selection, otherwise we do nothing
       this.currentLeagueSelection = selection;

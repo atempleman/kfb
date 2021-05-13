@@ -29,7 +29,6 @@ export class GameEngineService {
   }
 
   startPlayoffGame(game: SimGame) {
-    console.log('inside game engine');
     return this.http.post(this.baseUrl + 'startPlayoffGame', game);
   }
 

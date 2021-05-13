@@ -134,8 +134,6 @@ export class CoachingComponent implements OnInit {
       this.gotoOne = this.coachSetting.goToPlayerOne;
       this.gotoTwo = this.coachSetting.goToPlayerTwo;
       this.gotoThree = this.coachSetting.goToPlayerThree;
-
-      console.log(this.coachSetting);
     });
   }
 
@@ -199,8 +197,6 @@ export class CoachingComponent implements OnInit {
 
   saveCoaching() {
     // Need to get the values
-    console.log(this.coachSetting);
-
     this.coachSetting.goToPlayerOne = +this.gotoOne;
     this.coachSetting.goToPlayerTwo = +this.gotoTwo;
     this.coachSetting.goToPlayerThree = +this.gotoThree;

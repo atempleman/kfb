@@ -507,8 +507,6 @@ export class DepthchartComponent implements OnInit {
       dc.playerId = pid;
     });
 
-    console.log(this.depthCharts);
-
     // Now call the service passing the array
     this.teamService.saveDepthCharts(this.depthCharts).subscribe(result => {
     }, error => {

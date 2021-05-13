@@ -112,7 +112,6 @@ export class InitialDraftComponent implements OnInit {
     // Get the Initial Draft Details
     this.draftService.getInitialDraftPicks(this.league.id).subscribe(result => {
       this.allDraftPicks = result;
-      console.log(this.allDraftPicks);
     }, error => {
       this.alertify.error('Error getting Draft Picks');
     }, () => {
@@ -209,7 +208,6 @@ export class InitialDraftComponent implements OnInit {
  }
 
  makeDraftPick() {
-  console.log(this.draftSelection);
   const selectedPick: DraftSelection = {
     pick: this.tracker.pick,
     playerId: +this.draftSelection,
@@ -228,8 +226,6 @@ export class InitialDraftComponent implements OnInit {
  }
 
  autoPickAction() {
-  console.log('Auto-picking');
-
   const selectedPick: DraftSelection = {
     pick: this.tracker.pick,
     playerId: 0,

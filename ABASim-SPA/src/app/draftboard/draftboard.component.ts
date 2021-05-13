@@ -51,7 +51,6 @@ export class DraftboardComponent implements OnInit {
   }
 
   setupLeague() {
-    console.log('b');
     this.leagueService.getLeagueForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.league = result;
     }, error => {
@@ -191,7 +190,6 @@ export class DraftboardComponent implements OnInit {
       } else {
         this.draftService.getCurrentInitialDraftPick(this.league.id).subscribe(result => {
           this.currentPick = result;
-          console.log(this.currentPick);
         }, error => {
           this.alertify.error('Error getting current draft pick');
         }, () => {

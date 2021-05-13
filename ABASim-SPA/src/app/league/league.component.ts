@@ -208,7 +208,6 @@ export class LeagueComponent implements OnInit {
   }
 
   watchGame(gameId: number) {
-    console.log(gameId);
     this.transferService.setData(gameId);
     this.router.navigate(['/watch-game']);
   }
@@ -253,7 +252,6 @@ export class LeagueComponent implements OnInit {
   }
 
   runGamePlayoffs(game: GameDisplayCurrent) {
-    console.log('ashley testing here');
     this.noRun = 1;
     const simGame: SimGame = {
       awayId: game.awayTeamId,
@@ -261,8 +259,6 @@ export class LeagueComponent implements OnInit {
       gameId: game.id,
       leagueId: this.league.id
     };
-
-    console.log(simGame);
 
     this.gameEngine.startPlayoffGame(simGame).subscribe(result => {
     }, error => {

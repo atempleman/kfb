@@ -212,7 +212,6 @@ export class TeamService {
   }
 
   getInjuryForPlayer(pil: GetPlayerIdLeague): Observable<PlayerInjury> {
-    console.log(pil);
     const params = new HttpParams()
       .set('playerId', pil.playerId.toString())
       .set('leagueId', pil.leagueId.toString());

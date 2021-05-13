@@ -117,7 +117,6 @@ export class FreeagentsComponent implements OnInit {
     };
 
     this.teamService.getContractOffersForTeam(summary).subscribe(result => {
-      console.log(result);
       this.contractOffers = result;
     }, error => {
       this.alertify.error('Error getting contract offers made');
@@ -194,7 +193,6 @@ export class FreeagentsComponent implements OnInit {
 
     this.teamService.rosterSpotCheck(summary).subscribe(result => {
       this.rosterSpotAvailable = result;
-      console.log(this.rosterSpotAvailable);
     }, error => {
       this.alertify.error('Error checking roster spots');
     });
@@ -229,10 +227,9 @@ export class FreeagentsComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
-  public openViewModal(template: TemplateRef<any>, offer: ContractOffer) {
-
+  public openViewModal(template: TemplateRef<any>, offer: ContractOffer) 
+  {
     this.viewedOffer = offer;
-    console.log(this.viewedOffer);
     
     if (this.viewedOffer.yearFive > 0) {
       this.contractYears = 5;
@@ -358,7 +355,6 @@ export class FreeagentsComponent implements OnInit {
       this.alertify.error('Error in offer - Minimum contract is $1,000,000 per season');
     } else {
       if (this.availableCapSpace < this.year1Amount && this.year1Amount !== 1000000) {
-        console.log(this.availableCapSpace);
         if (this.availableCapSpace < 1000000) {
           this.alertify.error('You cannot afford this contract. You can offer a minimum contract of $1,000,000');
         } else {
@@ -397,9 +393,6 @@ export class FreeagentsComponent implements OnInit {
         // Now determine the option values
         let to = 0;
         let po = 0;
-
-        console.log('option');
-        console.log(this.option);
 
         if (this.option === 0) {
           to = 0;

@@ -207,7 +207,6 @@ export class DashboardComponent implements OnInit {
     };
     this.leagueService.getFirstRoundSummaries(summary).subscribe(result => {
       this.playoffSummaries = result;
-      console.log(this.playoffSummaries);
     }, error => {
       this.alertify.error('Error getting playoff summaries');
     });
@@ -250,8 +249,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getLeagueLeaders() {
+    console.log('ash');
     this.leagueService.getTopFivePoints(this.league.id).subscribe(result => {
       this.topFivePoints = result;
+      console.log(result);
     }, error => {
       this.alertify.error('Error getting points leaders');
     });
@@ -283,10 +284,8 @@ export class DashboardComponent implements OnInit {
 
   getTodaysEvents() {
     if (this.league.stateId === 6 && this.league.day !== 0) {
-      console.log('ash');
       this.leagueService.getPreseasonGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
-        console.log(result);
       }, error => {
         this.alertify.error('Error getting todays events');
       }, () => {
@@ -449,6 +448,8 @@ export class DashboardComponent implements OnInit {
       leagueId: this.league.id
     };
 
+    console.log(simGame.leagueId);
+
     this.gameEngine.startSeasonGame(simGame).subscribe(result => {
     }, error => {
       this.alertify.error(error);
@@ -456,8 +457,8 @@ export class DashboardComponent implements OnInit {
     }, () => {
       // Need to pass feedback and re-get the days games
       this.alertify.success('Game run successfully');
-      this.noRun = 0;
       this.getTodaysEvents();
+      this.noRun = 0;
     });
   }
 
@@ -496,24 +497,14 @@ export class DashboardComponent implements OnInit {
   }
 
   createChatForm() {
-    console.log('atemp');
     this.chatForm = this.fb.group({
       message: ['']
     });
-
-    console.log(this.chatForm);
-
-    // this.newChatForm = this.fb.group({
-    //   username: ['', Validators.required],
-    //   password: ['', Validators.required]
-    // });
   }
 
   sendChat() {
     if (this.chatForm.valid) {
       const result = this.chatForm.controls['message'].value;
-      // const myDate = new Date();
-      // const dt = this.datePipe.transform(myDate, 'dd-MM-yyyy');
       const dt = formatDate(new Date(), 'dd/MM/yyyy', 'en');
       const chatRecord: GlobalChat = {
         chatText: result,

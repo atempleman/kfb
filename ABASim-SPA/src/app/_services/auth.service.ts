@@ -25,18 +25,15 @@ export class AuthService {
           localStorage.setItem('token', user.token);
           // localStorage.setItem('username', model.Username);
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
-          // console.log(this.decodedToken);
         }
       })
     );
   }
 
   register(user: UserRegister) {
-    // console.log(user);
     if (user.code == "") {
       user.code ='000000';
     }
-    // console.log(user);
     return this.http.post(this.baseUrl + 'register', user);
   }
 

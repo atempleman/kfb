@@ -94,7 +94,6 @@ export class PlayoffStatsComponent implements OnInit {
       };
 
       this.leagueService.getPlayoffsPointsLeagueLeadersForPage(summary).subscribe(result => {
-        console.log(result);
         this.pointsStats = result;
       }, error => {
         this.alertify.error('Error getting scoring stats');

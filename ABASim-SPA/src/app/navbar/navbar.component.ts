@@ -89,7 +89,6 @@ export class NavbarComponent implements OnInit {
   }
 
   loggedIn() {
-    // console.log('hitting logged in on auth service');
     return this.authService.loggedIn();
   }
 

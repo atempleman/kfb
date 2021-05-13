@@ -77,7 +77,6 @@ export class AwardsComponent implements OnInit {
 
     this.leagueService.getAllNBATeams(this.league.id).subscribe(result => {
       this.allnbateams = result;
-      console.log(result);
     }, error => {
       this.alertify.error('Error getting All-ABA Teams');
     }, () => {

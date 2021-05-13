@@ -306,6 +306,8 @@ namespace ABASim.api.Controllers
             foreach (var injury in _homeInjuries)
             {
                 PlayerInjury pi = new PlayerInjury();
+
+                // TODO check this function
                 if (injury.StartQuarterImpact == 1 && injury.StartTimeImpact == 720 && injury.EndQuarterImpact == 4 && injury.EndTimeImpact == 0)
                 {
                     // Player is pre-existing injured
@@ -321,6 +323,7 @@ namespace ABASim.api.Controllers
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
                         pi.CurrentlyInjured = 0;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 2)
                     {
@@ -332,6 +335,7 @@ namespace ABASim.api.Controllers
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
                         pi.CurrentlyInjured = 0;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 3)
                     {
@@ -342,6 +346,7 @@ namespace ABASim.api.Controllers
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
                         pi.CurrentlyInjured = 0;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 4)
                     {
@@ -352,6 +357,7 @@ namespace ABASim.api.Controllers
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
                         pi.CurrentlyInjured = 0;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 5)
                     {
@@ -362,6 +368,7 @@ namespace ABASim.api.Controllers
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
                         pi.CurrentlyInjured = 0;
+                        pi.LeagueId = game.LeagueId;
                     }
                     playerInjuries.Add(pi);
                 }
@@ -379,20 +386,10 @@ namespace ABASim.api.Controllers
                     pi.TimeMissed = 0;
                     pi.Type = injury.InjuryTypeName;
                     pi.CurrentlyInjured = 0;
+                    pi.LeagueId = game.LeagueId;
                 }
                 else if (injury.Severity == 2)
                 {
-                    // int tm = _random.Next(1, 1000);
-                    // int daysMissed = 0;
-                    // if (tm >= 900 && tm < 950)
-                    // {
-                    //     daysMissed = 1;
-                    // }
-                    // else if (tm >= 950)
-                    // {
-                    //     daysMissed = 2;
-                    // }
-
                     pi.PlayerId = injury.PlayerId;
                     pi.Severity = injury.Severity;
                     pi.StartDay = 0;
@@ -400,12 +397,10 @@ namespace ABASim.api.Controllers
                     pi.TimeMissed = 0;
                     pi.Type = injury.InjuryTypeName;
                     pi.CurrentlyInjured = 0;
+                    pi.LeagueId = game.LeagueId;
                 }
                 else if (injury.Severity == 3)
                 {
-                    // int tm = _random.Next(3, 21);
-                    // int daysMissed = tm;
-
                     pi.PlayerId = injury.PlayerId;
                     pi.Severity = injury.Severity;
                     pi.StartDay = 0;
@@ -413,12 +408,10 @@ namespace ABASim.api.Controllers
                     pi.TimeMissed = 0;
                     pi.Type = injury.InjuryTypeName;
                     pi.CurrentlyInjured = 0;
+                    pi.LeagueId = game.LeagueId;
                 }
                 else if (injury.Severity == 4)
                 {
-                    // int tm = _random.Next(21, 50);
-                    // int daysMissed = tm;
-
                     pi.PlayerId = injury.PlayerId;
                     pi.Severity = injury.Severity;
                     pi.StartDay = 0;
@@ -426,6 +419,7 @@ namespace ABASim.api.Controllers
                     pi.TimeMissed = 0;
                     pi.Type = injury.InjuryTypeName;
                     pi.CurrentlyInjured = 0;
+                    pi.LeagueId = game.LeagueId;
                 }
                 else if (injury.Severity == 5)
                 {
@@ -439,6 +433,7 @@ namespace ABASim.api.Controllers
                     pi.TimeMissed = 0;
                     pi.Type = injury.InjuryTypeName;
                     pi.CurrentlyInjured = 0;
+                    pi.LeagueId = game.LeagueId;
                 }
                 playerInjuries.Add(pi);
             }
@@ -496,6 +491,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 2)
                     {
@@ -506,6 +502,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 3)
                     {
@@ -515,6 +512,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 4)
                     {
@@ -524,6 +522,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 5)
                     {
@@ -533,6 +532,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     playerInjuries.Add(pi);
                 }
@@ -555,6 +555,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 2)
                     {
@@ -564,6 +565,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 3)
                     {
@@ -573,6 +575,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 4)
                     {
@@ -582,6 +585,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     else if (injury.Severity == 5)
                     {
@@ -591,6 +595,7 @@ namespace ABASim.api.Controllers
                         pi.EndDay = 0;
                         pi.TimeMissed = 0;
                         pi.Type = injury.InjuryTypeName;
+                        pi.LeagueId = game.LeagueId;
                     }
                     playerInjuries.Add(pi);
                 }
@@ -6513,15 +6518,11 @@ namespace ABASim.api.Controllers
 
                     if (result == 0 && onCourt == 0) // can sub the player on
                     {
-                        // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                        // if ((st != null) && (stam.StaminaValue > 500))
-                        // {
                         // Need action to make the sub
                         SubPlayer(team, position, player);
                         newPlayer = player;
                         playerSubbed = 1;
                         break;
-                        // }
                     }
                 }
 
@@ -6535,15 +6536,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6558,15 +6555,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6582,15 +6575,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6605,15 +6594,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6631,15 +6616,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6654,15 +6635,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6677,15 +6654,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6700,15 +6673,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6723,15 +6692,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6749,15 +6714,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6772,15 +6733,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6795,15 +6752,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6818,15 +6771,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6841,15 +6790,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6866,15 +6811,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6889,15 +6830,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6912,15 +6849,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6935,15 +6868,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6958,15 +6887,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -6983,15 +6908,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -7006,15 +6927,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -7029,15 +6946,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -7052,15 +6965,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }
@@ -7075,15 +6984,11 @@ namespace ABASim.api.Controllers
 
                         if (result == 0 && onCourt == 0) // can sub the player on
                         {
-                            // var stam = st.FirstOrDefault(x => x.PlayerId == player.Id);
-                            // if ((st != null) && (stam.StaminaValue > 500))
-                            // {
                             // Need action to make the sub
                             SubPlayer(team, position, player);
                             newPlayer = player;
                             playerSubbed = 1;
                             break;
-                            // }
                         }
                     }
                 }

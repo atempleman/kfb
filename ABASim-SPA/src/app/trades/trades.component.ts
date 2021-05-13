@@ -141,7 +141,6 @@ export class TradesComponent implements OnInit {
           this.tradesToDisplay.push(element);
         }
       });
-      console.log(this.tradesToDisplay);
     }, error => {
       this.alertify.error('Error getting your offered trades');
     }, () => {
@@ -149,12 +148,8 @@ export class TradesComponent implements OnInit {
     });
 
     this.teamService.getTeamDraftPicks(teamleague).subscribe(result => {
-      console.log('ash');
-      
       this.yourTeamPicks = result;
       this.yourTeamPicks.forEach(val => this.masterYourTeamPicks.push(Object.assign({}, val)));
-      console.log(this.yourTeamPicks);
-      console.log(this.masterYourTeamPicks);
     }, error => {
       this.alertify.error('Error getting your teams picks');
     });
@@ -252,9 +247,7 @@ export class TradesComponent implements OnInit {
     if (this.team.teamId === teamId) {
       return this.team.shortCode;
     } else {
-      console.log(this.allOtherTeams);
       const team = this.allOtherTeams.find(x => x.teamId === teamId);
-      console.log(team);
       return team.shortCode;
     }
   }
@@ -626,7 +619,6 @@ export class TradesComponent implements OnInit {
         years: 0,
         leagueId: this.league.id
       };
-      console.log(trade);
       this.proposedTradeSending.push(trade);
 
       // Need to remove the player from the players list

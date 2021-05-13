@@ -234,7 +234,6 @@ export class DraftComponent implements OnInit {
     };
     // Get the Initial Draft Details
     this.draftService.getDraftPicksForRound(summary).subscribe(result => {
-      console.log(result);
       this.draftPicks = result;
     }, error => {
       this.alertify.error('Error getting Draft Picks');
@@ -286,8 +285,6 @@ export class DraftComponent implements OnInit {
       leagueId: this.league.id
     };
 
-    console.log(summary);
-
     // Need to go a call to get the team id
     this.teamService.getTeamForTeamId(summary).subscribe(result => {
       team = result;
@@ -300,7 +297,6 @@ export class DraftComponent implements OnInit {
   }
 
   autoPickAction() {
-    console.log('Auto-picking');
     const selectedPick: DraftSelection = {
       pick: this.tracker.pick,
       playerId: 0,

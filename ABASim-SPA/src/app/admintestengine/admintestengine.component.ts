@@ -113,8 +113,6 @@ export class AdmintestengineComponent implements OnInit {
     };
     this.engineService.getBoxScoreForGameId(summary).subscribe(result => {
       this.boxScores = result;
-      console.log(this.boxScores);
-      console.log(this.boxScores[0].fga);
     }, error => {
       this.alertify.error('Wrror getting box scores');
     }, () => {
