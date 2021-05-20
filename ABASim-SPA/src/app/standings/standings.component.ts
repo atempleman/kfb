@@ -81,7 +81,7 @@ export class StandingsComponent implements OnInit {
     });
 
     const westSummary: GetStandingLeague = {
-      value: 1,
+      value: 2,
       leagueId: this.league.id
     };
 

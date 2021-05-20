@@ -99,7 +99,7 @@ namespace ABASim.api.Controllers
             return Ok(nextGames);
         }
 
-        [HttpGet("getstandingsforleague")]
+        [HttpGet("getstandingsforleague/{leagueId}")]
         public async Task<IActionResult> GetStandingsForLeague(int leagueId)
         {
             var standings = await _repo.GetStandingsForLeague(leagueId);
