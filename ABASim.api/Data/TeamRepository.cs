@@ -150,10 +150,10 @@ namespace ABASim.api.Data
             }
 
             // Now need to send an inbox message
-            DateTime date = new DateTime();
-            var dd = date.Day.ToString();   //.getDate(); 
-            var mm = date.Month.ToString();
-            var yyyy = date.Year.ToString();
+            // DateTime date = new DateTime();
+            var dd = DateTime.Now.Day.ToString();   //.getDate(); 
+            var mm = DateTime.Now.Month.ToString();
+            var yyyy = DateTime.Now.Year.ToString();
 
             InboxMessage im = new InboxMessage
             {

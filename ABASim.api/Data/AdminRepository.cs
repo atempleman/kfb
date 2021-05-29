@@ -134,6 +134,20 @@ namespace ABASim.api.Data
         public async Task<bool> RunDayRollOver(int leagueId)
         {
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var lc = await _context.LeagueConfigs.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
+
+            if (league.Day >= 175 && lc.NewDrafteesLoaded == 0) {
+                try
+                {
+                    _context.RunInNewDraftees(league, lc);
+                    lc.NewDrafteesLoaded = 1;
+                    _context.Update(lc);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
 
             // Need to update player stats
             if (league.StateId == 7)
@@ -802,10 +816,10 @@ namespace ABASim.api.Data
                             var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == playerId && x.LeagueId == leagueId);
 
                             // Now need to send an inbox message
-                            DateTime date = new DateTime();
-                            var dd = date.Day.ToString();   //.getDate(); 
-                            var mm = date.Month.ToString();
-                            var yyyy = date.Year.ToString();
+                            // DateTime date = new DateTime();
+                            var dd = DateTime.Now.Day.ToString();   //.getDate(); 
+                            var mm = DateTime.Now.Month.ToString();
+                            var yyyy = DateTime.Now.Year.ToString();
 
                             InboxMessage im = new InboxMessage
                             {

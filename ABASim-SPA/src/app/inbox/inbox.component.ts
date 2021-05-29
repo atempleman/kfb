@@ -156,6 +156,8 @@ export class InboxComponent implements OnInit {
 
     const bodyValue = (document.getElementById('body') as HTMLInputElement).value;
     const dt = formatDate(new Date(), 'dd/MM/yyyy', 'en');
+    console.log('atemp');
+    console.log(dt);
     const receivingTeam = this.teams.find(x => x.teamId === +this.selectedTeam);
 
     let sender = this.team.mascot;

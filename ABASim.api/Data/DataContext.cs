@@ -1,4 +1,5 @@
 using ABASim.api.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ABASim.api.Data
@@ -6,7 +7,7 @@ namespace ABASim.api.Data
 
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base (options) {}
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<DepthChart> DepthCharts { get; set; }
 
@@ -131,5 +132,32 @@ namespace ABASim.api.Data
         public DbSet<BiAnnualException> BiAnnualExceptions { get; set; }
 
         public DbSet<WaiverWire> WaiverWires { get; set; }
+
+        public DbSet<LeagueConfig> LeagueConfigs { get; set; }
+
+        public void RunInNewDraftees(League league, LeagueConfig lconfig)
+        {
+            int nextSeasonYear = 0;
+            if (league.Year == 1314) {
+                nextSeasonYear = 1415;
+            } else if (league.Year == 1415) {
+                nextSeasonYear = 1516;
+            } else if (league.Year == 1516) {
+                nextSeasonYear = 1617;
+            } else if (league.Year == 1617) {
+                nextSeasonYear = 1718;
+            } else if (league.Year == 1718) {
+                nextSeasonYear = 1819;
+            } else if (league.Year == 1819) {
+                nextSeasonYear = 1920;
+            } else if (league.Year == 1920) {
+                nextSeasonYear = 2021;
+            }
+
+            var currentSeasonId = new SqlParameter("@currentSeasonId", league.Year);
+            var nextSeasonId = new SqlParameter("@nextSeasonId", nextSeasonYear);
+            var leagueId = new SqlParameter("@leagueId", league.Id);
+            this.Database.ExecuteSqlCommand("exec spNewDraftees @currentSeasonId, @nextSeasonId, @leagueId", currentSeasonId, nextSeasonId, leagueId);
+        }
     }
 }

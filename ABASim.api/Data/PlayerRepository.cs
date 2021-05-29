@@ -1134,7 +1134,7 @@ namespace ABASim.api.Data
                     PFPosition = players.PFPosition,
                     CPosition = players.CPosition,
                 }
-            ).Where(x => x.TeamId == 0).ToListAsync();
+            ).Where(x => x.TeamId == 0 && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var player in players)
             {

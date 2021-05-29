@@ -573,6 +573,7 @@ export class DashboardComponent implements OnInit {
     // Get Next Pick
     this.draftService.getDashboardPicks(pickleagueThree).subscribe(result => {
       this.nextPick = result;
+      console.log(result);
     }, error => {
       this.alertify.error('Error getting next pick');
     });

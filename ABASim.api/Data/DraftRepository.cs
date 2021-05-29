@@ -410,8 +410,14 @@ namespace ABASim.api.Data
                 // next pick
                 if (pickNumber == 30)
                 {
-                    roundNumber = roundNumber + 1;
-                    pickDto.Pick = 30;
+                    if (roundNumber != 13) {
+                        roundNumber = roundNumber + 1;
+                    } else {
+                        roundNumber = 0;
+                        pick = 0;
+                    }
+                    
+                    pickDto.Pick = 0;
                 }
                 else
                 {

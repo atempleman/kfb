@@ -536,7 +536,7 @@
 							this.currentPick?.teamMascot }}</button> -
 						ON THE
 						CLOCK</p>
-					<p [style.color]="'rgb(' + primaryTextColor + ')'">#{{ this.nextPick?.pick }} - <button
+					<p *ngIf="this.nextPick?.pick != 0" [style.color]="'rgb(' + primaryTextColor + ')'">#{{ this.nextPick?.pick }} - <button
 							class="teamlink" (click)="viewTeam(this.nextPick?.teamMascot)">{{ this.nextPick?.teamMascot
 							}}</button> - UP
 						NEXT</p>

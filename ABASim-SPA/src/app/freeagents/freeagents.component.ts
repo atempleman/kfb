@@ -156,7 +156,8 @@ export class FreeagentsComponent implements OnInit {
 
   GetFreeAgents() {
     this.spinner.show();
-
+    console.log('ash');
+    console.log(this.league.id);
     this.playerService.getFreeAgents(this.league.id).subscribe(result => {
       this.freeAgents = result;
     }, error => {
