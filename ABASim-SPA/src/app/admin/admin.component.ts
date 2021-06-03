@@ -352,6 +352,7 @@ export class AdminComponent implements OnInit {
         this.alertify.success('Day Rolled over successfully');
         this.modalRef.hide();
         this.run = 0;
+        this.gamesAllRun = 0;
         this.league.day = this.league.day + 1;
       } else {
         this.alertify.error('Error rolling over day');

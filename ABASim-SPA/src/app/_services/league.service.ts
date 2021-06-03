@@ -64,6 +64,7 @@ export class LeagueService {
   }
 
   getPreseasonGamesForToday(leagueId: number): Observable<GameDisplayCurrent[]> {
+    console.log('atemp');
     return this.http.get<GameDisplayCurrent[]>(this.baseUrl + 'getgamesfortoday/' + leagueId);
   }
 

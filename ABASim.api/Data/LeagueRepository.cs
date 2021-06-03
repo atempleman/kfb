@@ -314,9 +314,9 @@ namespace ABASim.api.Data
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeId);
-                var gameResult = await _context.PreseasonGameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayId && x.LeagueId == leagueId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeId && x.LeagueId == leagueId);
+                var gameResult = await _context.PreseasonGameResults.FirstOrDefaultAsync(x => x.GameId == game.Id && x.LeagueId == leagueId);
 
                 int awayScore = 0;
                 int homeScore = 0;
@@ -355,9 +355,9 @@ namespace ABASim.api.Data
             List<CurrentDayGamesDto> nextGamesList = new List<CurrentDayGamesDto>();
             foreach (var game in todaysGames)
             {
-                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId);
-                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId);
-                var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id);
+                var awayTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.AwayTeamId && x.LeagueId == leagueId);
+                var homeTeam = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == game.HomeTeamId && x.LeagueId == leagueId);
+                var gameResult = await _context.GameResults.FirstOrDefaultAsync(x => x.GameId == game.Id && x.LeagueId == leagueId);
 
                 int awayScore = 0;
                 int homeScore = 0;
@@ -790,9 +790,9 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 LeagueLeaderAssistsDto assist = new LeagueLeaderAssistsDto
                 {
@@ -815,9 +815,9 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 LeagueLeaderReboundsDto rebound = new LeagueLeaderReboundsDto
                 {
@@ -840,9 +840,9 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 LeagueLeaderBlocksDto block = new LeagueLeaderBlocksDto
                 {
@@ -865,9 +865,9 @@ namespace ABASim.api.Data
             
             foreach (var ps in playerStats)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId);
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
 
                 LeagueLeaderStealsDto steal = new LeagueLeaderStealsDto
                 {

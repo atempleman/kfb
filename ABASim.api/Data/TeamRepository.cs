@@ -481,8 +481,8 @@ namespace ABASim.api.Data
             foreach (var rosterPlayer in teamsRosteredPlayers)
             {
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-                var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId);
-                var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId);
+                var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId && x.LeagueId == leagueId);
+                var playerStats = await _context.PlayerStats.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId && x.LeagueId == leagueId);
 
                 if (playerStats != null)
                 {

@@ -2170,70 +2170,73 @@ namespace ABASim.api.Controllers
             // Check 
             if (_teamPossession == 0)
             {
-                // Need to check the go to player bonus
-                if (homePG.PlayerId == _homeSettings[0].GoToPlayerOne)
+                if (_homeSettings.Count != 0)
                 {
-                    pgBonus = 30;
-                }
-                else if (homePG.PlayerId == _homeSettings[0].GoToPlayerTwo)
-                {
-                    pgBonus = 20;
-                }
-                else if (homePG.PlayerId == _homeSettings[0].GoToPlayerThree)
-                {
-                    pgBonus = 10;
-                }
+                    // Need to check the go to player bonus
+                    if (homePG.PlayerId == _homeSettings[0].GoToPlayerOne)
+                    {
+                        pgBonus = 30;
+                    }
+                    else if (homePG.PlayerId == _homeSettings[0].GoToPlayerTwo)
+                    {
+                        pgBonus = 20;
+                    }
+                    else if (homePG.PlayerId == _homeSettings[0].GoToPlayerThree)
+                    {
+                        pgBonus = 10;
+                    }
 
-                if (homeSG.PlayerId == _homeSettings[0].GoToPlayerOne)
-                {
-                    sgBonus = 30;
-                }
-                else if (homeSG.PlayerId == _homeSettings[0].GoToPlayerTwo)
-                {
-                    sgBonus = 20;
-                }
-                else if (homeSG.PlayerId == _homeSettings[0].GoToPlayerThree)
-                {
-                    sgBonus = 10;
-                }
+                    if (homeSG.PlayerId == _homeSettings[0].GoToPlayerOne)
+                    {
+                        sgBonus = 30;
+                    }
+                    else if (homeSG.PlayerId == _homeSettings[0].GoToPlayerTwo)
+                    {
+                        sgBonus = 20;
+                    }
+                    else if (homeSG.PlayerId == _homeSettings[0].GoToPlayerThree)
+                    {
+                        sgBonus = 10;
+                    }
 
-                if (homeSF.PlayerId == _homeSettings[0].GoToPlayerOne)
-                {
-                    sfBonus = 30;
-                }
-                else if (homeSF.PlayerId == _homeSettings[0].GoToPlayerTwo)
-                {
-                    sfBonus = 20;
-                }
-                else if (homeSF.PlayerId == _homeSettings[0].GoToPlayerThree)
-                {
-                    sfBonus = 10;
-                }
+                    if (homeSF.PlayerId == _homeSettings[0].GoToPlayerOne)
+                    {
+                        sfBonus = 30;
+                    }
+                    else if (homeSF.PlayerId == _homeSettings[0].GoToPlayerTwo)
+                    {
+                        sfBonus = 20;
+                    }
+                    else if (homeSF.PlayerId == _homeSettings[0].GoToPlayerThree)
+                    {
+                        sfBonus = 10;
+                    }
 
-                if (homePF.PlayerId == _homeSettings[0].GoToPlayerOne)
-                {
-                    pfBonus = 30;
-                }
-                else if (homePF.PlayerId == _homeSettings[0].GoToPlayerTwo)
-                {
-                    pfBonus = 20;
-                }
-                else if (homePF.PlayerId == _homeSettings[0].GoToPlayerThree)
-                {
-                    pfBonus = 10;
-                }
+                    if (homePF.PlayerId == _homeSettings[0].GoToPlayerOne)
+                    {
+                        pfBonus = 30;
+                    }
+                    else if (homePF.PlayerId == _homeSettings[0].GoToPlayerTwo)
+                    {
+                        pfBonus = 20;
+                    }
+                    else if (homePF.PlayerId == _homeSettings[0].GoToPlayerThree)
+                    {
+                        pfBonus = 10;
+                    }
 
-                if (homeC.PlayerId == _homeSettings[0].GoToPlayerOne)
-                {
-                    cBonus = 30;
-                }
-                else if (homeC.PlayerId == _homeSettings[0].GoToPlayerTwo)
-                {
-                    cBonus = 20;
-                }
-                else if (homeC.PlayerId == _homeSettings[0].GoToPlayerThree)
-                {
-                    cBonus = 10;
+                    if (homeC.PlayerId == _homeSettings[0].GoToPlayerOne)
+                    {
+                        cBonus = 30;
+                    }
+                    else if (homeC.PlayerId == _homeSettings[0].GoToPlayerTwo)
+                    {
+                        cBonus = 20;
+                    }
+                    else if (homeC.PlayerId == _homeSettings[0].GoToPlayerThree)
+                    {
+                        cBonus = 10;
+                    }
                 }
 
                 homePGUsageRating = homePGRatings.UsageRating + pgBonus;
@@ -2291,70 +2294,73 @@ namespace ABASim.api.Controllers
             }
             else
             {
-                // Need to check the go to player bonus
-                if (awayPG.PlayerId == _awaySettings[0].GoToPlayerOne)
+                if (_awaySettings.Count != 0)
                 {
-                    pgBonus = 30;
-                }
-                else if (awayPG.PlayerId == _awaySettings[0].GoToPlayerTwo)
-                {
-                    pgBonus = 20;
-                }
-                else if (awayPG.PlayerId == _awaySettings[0].GoToPlayerThree)
-                {
-                    pgBonus = 10;
-                }
+                    // Need to check the go to player bonus
+                    if (awayPG.PlayerId == _awaySettings[0].GoToPlayerOne)
+                    {
+                        pgBonus = 30;
+                    }
+                    else if (awayPG.PlayerId == _awaySettings[0].GoToPlayerTwo)
+                    {
+                        pgBonus = 20;
+                    }
+                    else if (awayPG.PlayerId == _awaySettings[0].GoToPlayerThree)
+                    {
+                        pgBonus = 10;
+                    }
 
-                if (awaySG.PlayerId == _awaySettings[0].GoToPlayerOne)
-                {
-                    sgBonus = 30;
-                }
-                else if (awaySG.PlayerId == _awaySettings[0].GoToPlayerTwo)
-                {
-                    sgBonus = 20;
-                }
-                else if (awaySG.PlayerId == _awaySettings[0].GoToPlayerThree)
-                {
-                    sgBonus = 10;
-                }
+                    if (awaySG.PlayerId == _awaySettings[0].GoToPlayerOne)
+                    {
+                        sgBonus = 30;
+                    }
+                    else if (awaySG.PlayerId == _awaySettings[0].GoToPlayerTwo)
+                    {
+                        sgBonus = 20;
+                    }
+                    else if (awaySG.PlayerId == _awaySettings[0].GoToPlayerThree)
+                    {
+                        sgBonus = 10;
+                    }
 
-                if (awaySF.PlayerId == _awaySettings[0].GoToPlayerOne)
-                {
-                    sfBonus = 30;
-                }
-                else if (awaySF.PlayerId == _awaySettings[0].GoToPlayerTwo)
-                {
-                    sfBonus = 20;
-                }
-                else if (awaySF.PlayerId == _awaySettings[0].GoToPlayerThree)
-                {
-                    sfBonus = 10;
-                }
+                    if (awaySF.PlayerId == _awaySettings[0].GoToPlayerOne)
+                    {
+                        sfBonus = 30;
+                    }
+                    else if (awaySF.PlayerId == _awaySettings[0].GoToPlayerTwo)
+                    {
+                        sfBonus = 20;
+                    }
+                    else if (awaySF.PlayerId == _awaySettings[0].GoToPlayerThree)
+                    {
+                        sfBonus = 10;
+                    }
 
-                if (awayPF.PlayerId == _awaySettings[0].GoToPlayerOne)
-                {
-                    pfBonus = 30;
-                }
-                else if (awayPF.PlayerId == _awaySettings[0].GoToPlayerTwo)
-                {
-                    pfBonus = 20;
-                }
-                else if (awayPF.PlayerId == _awaySettings[0].GoToPlayerThree)
-                {
-                    pfBonus = 10;
-                }
+                    if (awayPF.PlayerId == _awaySettings[0].GoToPlayerOne)
+                    {
+                        pfBonus = 30;
+                    }
+                    else if (awayPF.PlayerId == _awaySettings[0].GoToPlayerTwo)
+                    {
+                        pfBonus = 20;
+                    }
+                    else if (awayPF.PlayerId == _awaySettings[0].GoToPlayerThree)
+                    {
+                        pfBonus = 10;
+                    }
 
-                if (awayC.PlayerId == _awaySettings[0].GoToPlayerOne)
-                {
-                    cBonus = 30;
-                }
-                else if (awayC.PlayerId == _awaySettings[0].GoToPlayerTwo)
-                {
-                    cBonus = 20;
-                }
-                else if (awayC.PlayerId == _awaySettings[0].GoToPlayerThree)
-                {
-                    cBonus = 10;
+                    if (awayC.PlayerId == _awaySettings[0].GoToPlayerOne)
+                    {
+                        cBonus = 30;
+                    }
+                    else if (awayC.PlayerId == _awaySettings[0].GoToPlayerTwo)
+                    {
+                        cBonus = 20;
+                    }
+                    else if (awayC.PlayerId == _awaySettings[0].GoToPlayerThree)
+                    {
+                        cBonus = 10;
+                    }
                 }
 
                 awayPGUsageRating = awayPGRatings.UsageRating + pgBonus;
@@ -7061,16 +7067,16 @@ namespace ABASim.api.Controllers
 
                     if (onCourt == 0)
                     {
-                    SubPlayer(0, i, player);
-                    newPlayer = player;
-                    // playerSubbed = 1;
+                        SubPlayer(0, i, player);
+                        newPlayer = player;
+                        // playerSubbed = 1;
 
-                    // Commentary
-                    string outPlayer = current.FirstName + " " + current.Surname;
-                    string inPlayer = player.FirstName + " " + player.Surname;
+                        // Commentary
+                        string outPlayer = current.FirstName + " " + current.Surname;
+                        string inPlayer = player.FirstName + " " + player.Surname;
 
-                    commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot));
-                    PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                        commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot));
+                        PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                     }
                 }
                 else if (dc.PlayerId == current.PlayerId)
@@ -7094,14 +7100,14 @@ namespace ABASim.api.Controllers
                         {
                             SubPlayer(0, i, player);
                             newPlayer = player;
-                        // playerSubbed = 1;
+                            // playerSubbed = 1;
 
-                        // Commentary
-                        string outPlayer = current.FirstName + " " + current.Surname;
-                        string inPlayer = player.FirstName + " " + player.Surname;
+                            // Commentary
+                            string outPlayer = current.FirstName + " " + current.Surname;
+                            string inPlayer = player.FirstName + " " + player.Surname;
 
-                        commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot));
-                        PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                            commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot));
+                            PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                         }
                     }
                     else if (dc2.PlayerId == current.PlayerId)
@@ -7124,15 +7130,15 @@ namespace ABASim.api.Controllers
                             if (onCourt == 0)
                             {
                                 SubPlayer(0, i, player);
-                            newPlayer = player;
-                            // playerSubbed = 1;
+                                newPlayer = player;
+                                // playerSubbed = 1;
 
-                            // Commentary
-                            string outPlayer = current.FirstName + " " + current.Surname;
-                            string inPlayer = player.FirstName + " " + player.Surname;
+                                // Commentary
+                                string outPlayer = current.FirstName + " " + current.Surname;
+                                string inPlayer = player.FirstName + " " + player.Surname;
 
-                            commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot));
-                            PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                                commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot));
+                                PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 0, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                             }
                         }
                         else if (dc3.PlayerId == current.PlayerId)
@@ -7183,16 +7189,16 @@ namespace ABASim.api.Controllers
 
                     if (onCourt == 0)
                     {
-                    SubPlayer(1, j, player);
-                    newPlayer = player;
-                    // playerSubbed = 1;
+                        SubPlayer(1, j, player);
+                        newPlayer = player;
+                        // playerSubbed = 1;
 
-                    // Commentary
-                    string outPlayer = current.FirstName + " " + current.Surname;
-                    string inPlayer = player.FirstName + " " + player.Surname;
+                        // Commentary
+                        string outPlayer = current.FirstName + " " + current.Surname;
+                        string inPlayer = player.FirstName + " " + player.Surname;
 
-                    commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
-                    PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                        commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
+                        PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                     }
                 }
                 else if (dc.PlayerId == current.PlayerId)
@@ -7214,16 +7220,16 @@ namespace ABASim.api.Controllers
 
                         if (onCourt == 0)
                         {
-                        SubPlayer(1, j, player);
-                        newPlayer = player;
-                        // playerSubbed = 1;
+                            SubPlayer(1, j, player);
+                            newPlayer = player;
+                            // playerSubbed = 1;
 
-                        // Commentary
-                        string outPlayer = current.FirstName + " " + current.Surname;
-                        string inPlayer = player.FirstName + " " + player.Surname;
+                            // Commentary
+                            string outPlayer = current.FirstName + " " + current.Surname;
+                            string inPlayer = player.FirstName + " " + player.Surname;
 
-                        commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
-                        PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                            commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
+                            PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                         }
                     }
                     else if (dc2.PlayerId == current.PlayerId)
@@ -7245,16 +7251,16 @@ namespace ABASim.api.Controllers
 
                             if (onCourt == 0)
                             {
-                            SubPlayer(1, j, player);
-                            newPlayer = player;
-                            // playerSubbed = 1;
+                                SubPlayer(1, j, player);
+                                newPlayer = player;
+                                // playerSubbed = 1;
 
-                            // Commentary
-                            string outPlayer = current.FirstName + " " + current.Surname;
-                            string inPlayer = player.FirstName + " " + player.Surname;
+                                // Commentary
+                                string outPlayer = current.FirstName + " " + current.Surname;
+                                string inPlayer = player.FirstName + " " + player.Surname;
 
-                            commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
-                            PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                                commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
+                                PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                             }
                         }
                         else if (dc3.PlayerId == current.PlayerId)
@@ -9470,13 +9476,13 @@ namespace ABASim.api.Controllers
 
                         if (onCourt == 0)
                         {
-                        // Now we go through the SubPlayer actions
-                        SubPlayer(1, i, newPlayer);
-                        // Add the commentary here
-                        string outPlayer = p.FirstName + " " + p.Surname;
-                        string inPlayer = newPlayer.FirstName + " " + newPlayer.Surname;
-                        // commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
-                        PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
+                            // Now we go through the SubPlayer actions
+                            SubPlayer(1, i, newPlayer);
+                            // Add the commentary here
+                            string outPlayer = p.FirstName + " " + p.Surname;
+                            string inPlayer = newPlayer.FirstName + " " + newPlayer.Surname;
+                            // commentaryData.Add(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot));
+                            PlayByPlayTracker(comm.GetSubCommentary(outPlayer, inPlayer, 1, _awayTeam.Mascot, _homeTeam.Mascot), 1);
                         }
                     }
                     else
