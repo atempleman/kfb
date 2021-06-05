@@ -12,7 +12,7 @@
       </thead>
       <tr *ngFor="let team of this.teams">
         <td>1</td>
-        <td>{{ team.teamname }}, {{ team.mascot }}</td>
+        <td>{{ team.teamname }} {{ team.mascot }}</td>
         <td>3.33%</td>
       </tr>
     </table>
@@ -29,6 +29,24 @@
       <tr *ngFor="let team of this.teams; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ team.teamname }} {{ team.mascot }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Season Lottery -->
+  <div class="row justify-content-center mt-2 mb-2 color-1 ml- mr-2" *ngIf="this.league?.stateId >= 7 && this.league?.stateId <= 14">
+    <table  class="table table-striped custab">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Team </th>
+          <th>Chance</th>
+        </tr>
+      </thead>
+      <tr *ngFor="let team of this.teams; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ team.teamname }} {{ team.mascot }}</td>
+        <td>{{ this.odds[i] }}</td>
       </tr>
     </table>
   </div>

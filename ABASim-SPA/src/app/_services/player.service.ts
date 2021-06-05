@@ -42,6 +42,10 @@ export class PlayerService {
     return this.http.get<number>(this.baseUrl + 'getcountofdraftplayers/' + leagueId);
   }
 
+  getCountOfAvailableDraftPlayersSeason(leagueId: number) {
+    return this.http.get<number>(this.baseUrl + 'getcountofdraftplayersupcoming/' + leagueId);
+  }
+
   getPlayerForId(playerId: number) {
     return this.http.get<Player>(this.baseUrl + 'getplayerforid/' + playerId);
   }
@@ -144,4 +148,8 @@ export class PlayerService {
   getDetailedRetiredPlayer(playerId: number): Observable<DetailedRetiredPlayer> {
     return this.http.get<DetailedRetiredPlayer>(this.baseUrl + 'getdetailedretiredplayer/' + playerId);
   }
+
+  getAllUpcomingPlayers(leagueId: number): Observable<Player[]> {
+    return this.http.get<Player[]>(this.baseUrl + 'getallupcomingplayers/' + leagueId);
+  } 
 }

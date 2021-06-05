@@ -39,6 +39,7 @@ import { RetiredComponent } from './retired/retired.component';
 import { ViewRetiredPlayerComponent } from './view-retired-player/view-retired-player.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { DraftPlayerPoolSeasonComponent } from './draft-player-pool-season/draft-player-pool-season.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -63,6 +64,7 @@ const routes: Routes = [
   { path: 'box-score', component: BoxScoreComponent, canActivate: [AuthGuard] },
   { path: 'draft', component: DraftComponent, canActivate: [AuthGuard] },
   { path: 'draftplayerpool', component: DraftPlayerPoolComponent, canActivate: [AuthGuard] },
+  { path: 'draftplayerpoolseason', component: DraftPlayerPoolSeasonComponent, canActivate: [AuthGuard] },
   { path: 'draftboard', component: DraftboardComponent, canActivate: [AuthGuard] },
   { path: 'playoffs', component: PlayoffsComponent, canActivate: [AuthGuard]},
   { path: 'playoffs-stats', component: PlayoffStatsComponent, canActivate: [AuthGuard]},

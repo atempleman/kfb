@@ -1,0 +1,32 @@
+<div class="row justify-content-center">
+  <p class="color-8">The following table displays all of the players who will be available in the next draft.</p>
+</div>
+
+<div class="box">
+  <ngx-spinner [fullScreen]="true" type="ball-spin-fade" size="medium">
+    <p class="loading">Loading Players...</p>
+  </ngx-spinner>
+
+  <div class="row justify-content-center mt-3 ml-2 mr-2">
+    <table *ngIf="this.draftPlayers?.length != 0" class="table table-striped custab">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Pos(s)</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tr *ngFor="let player of this.draftPlayers">
+        <td>{{ player.firstName }} {{ player.surname }}</td>
+        <td>
+          <ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
+          <ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
+          <ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
+          <ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
+          <ng-container *ngIf="player.cPosition == 1">C </ng-container>
+        </td>
+        <td class="text-center">{{ player.age }}</td>
+      </tr>
+    </table>
+  </div>
+</div>

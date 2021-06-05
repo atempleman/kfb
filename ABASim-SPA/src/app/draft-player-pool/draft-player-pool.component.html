@@ -8,11 +8,11 @@
     <p class="loading">Loading Player Pool...</p>
   </ngx-spinner>
 
-  <div class="row justify-content-center mt-3" *ngIf="this.draftPlayers.length == 0">
+  <div class="row justify-content-center mt-3" *ngIf="this.draftPlayers?.length == 0 && this.league?.stateId < 6">
     <p class="color-7">There are no players left in the draft pool</p>
   </div>
 
-  <div class="row justify-content-center mt-3" *ngIf="this.draftPlayers?.length != 0">
+  <div class="row justify-content-center mt-3" *ngIf="this.draftPlayers?.length != 0 && this.league?.stateId < 6">
     <form id="filter_form" class="btn-group" [formGroup]="searchForm">
       <input type="text" id="filter_keywords" name="filter_keywords" placeholder="Filter by name" formControlName="filter"/>
       <input class="btn btn-default" type="submit" id="filter_submit" name="filter_submit" value="Go" (click)="filterTable()"/>
@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0">
+  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0 && this.league?.stateId < 6">
     <table *ngIf="this.draftPlayers?.length != 0" class="table table-striped custab">
       <thead>
         <tr>
@@ -84,7 +84,7 @@
     </table>
   </div>
 
-  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0">
+  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.draftPlayers?.length != 0 && this.league?.stateId < 6">
     <div class="pager" *ngIf="this.displayPaging == 0">
       <ul class="pagination">
         <li class="page-item">

@@ -23,6 +23,8 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<Team>> GetTeamInitialLotteryOrder(int leagueId);
 
+         Task<IEnumerable<Team>> GetTeamSeasonLotteryOrder(int leagueId);
+
          Task<Team> GetTeamForTeamName(string teamname, int leagueId);
 
          Task<Team> GetTeamForTeamMascot(string teamname, int leagueId);

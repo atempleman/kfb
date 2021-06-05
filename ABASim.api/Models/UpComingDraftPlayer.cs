@@ -1,11 +1,11 @@
 namespace ABASim.api.Models
 {
-    public class UpComingDraftPlayers
+    public class UpComingDraftPlayer
     {
         public int Id { get; set; }
 
         public int LeagueId { get; set; }
-
+        
         public int PlayerId { get; set; }
 
         public string FirstName { get; set; }

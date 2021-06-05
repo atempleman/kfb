@@ -1058,6 +1058,36 @@ namespace ABASim.api.Data
             }
         }
 
+        public async Task<int> GetCountOfDraftPlayersUpcoming(int leagueId)
+        {
+            var count = await _context.UpComingDraftPlayers.Where(x => x.LeagueId == leagueId).CountAsync();
+            return count;
+        }
+
+        public async Task<IEnumerable<Player>> GetAllUpcomingPlayers(int leagueId)
+        {
+            List<Player> players = new List<Player>();
+            var upcomingPlayers = await _context.UpComingDraftPlayers.Where(x => x.LeagueId == leagueId).ToListAsync();
+            foreach(var p in upcomingPlayers)
+            {
+                Player player = new Player
+                {
+                    Id = p.Id,
+                    PlayerId = p.PlayerId,
+                    FirstName = p.FirstName,
+                    Surname = p.Surname,
+                    Age = p.Age,
+                    PGPosition = p.PGPosition,
+                    SGPosition = p.SGPosition,
+                    SFPosition = p.SFPosition,
+                    PFPosition = p.PFPosition,
+                    CPosition = p.CPosition
+                };
+                players.Add(player);
+            }
+            return players;
+        }
+
         public async Task<int> GetCountOfDraftPlayers(int leagueId)
         {
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);

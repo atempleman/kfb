@@ -135,6 +135,8 @@ namespace ABASim.api.Data
 
         public DbSet<LeagueConfig> LeagueConfigs { get; set; }
 
+        public DbSet<UpComingDraftPlayer> UpComingDraftPlayers { get; set; }
+
         public void RunInNewDraftees(League league, LeagueConfig lconfig)
         {
             int nextSeasonYear = 0;

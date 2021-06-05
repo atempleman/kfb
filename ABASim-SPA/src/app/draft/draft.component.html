@@ -155,13 +155,15 @@
             (click)="this.seasonDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>
         <div class="nav-bar-item color-8" [ngClass]="this.seasonPlayerPoolSelected == 1 ? 'active' : ''"
             (click)="this.seasonPlayerPoolSelection()"><span class="fa fa-signal fs-2"></span><br>PlayerPool</div>
-        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftboardSelected == 1 ? 'active' : ''"
-            (click)="this.seasonDraftboardSelection()"><span class="fa fa-list-ol fs-2"></span><br>Draftboard</div>
     </div>
 
     <div class="tab-content active" *ngIf="this.seasonDraftSelected == 1">
         <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">DRAFT</h6>
 
+            <!-- Season Draft Code -->
+            <div class="row justify-content-center" *ngIf=" this.league?.stateId >= 7 && this.league?.stateId <= 12">
+                <p class="color-8">Draft will not be run until next season. You can view upcoming draft players from day #175.</p>
+            </div>
     </div>
     <div class="tab-content active" *ngIf="this.seasonDraftLotterySelected == 1">
         <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">LOTTERY</h6>
@@ -169,11 +171,7 @@
     </div>
     <div class="tab-content active" *ngIf="this.seasonPlayerPoolSelected == 1">
         <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Player Pool</h6>
-        <app-draft-player-pool></app-draft-player-pool>
-    </div>
-    <div class="tab-content active" *ngIf="this.seasonDraftboardSelected == 1">
-        <h6 class="fw-600 fs-0 ls color-10 mb-6 mt-3 color-8" style="text-align:center">Draftboard</h6>
-        <app-draftboard></app-draftboard>
+        <app-draft-player-pool-season></app-draft-player-pool-season>
     </div>
 </div>
 

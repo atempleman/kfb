@@ -57,13 +57,14 @@ import { RegisterComponent } from './register/register.component';
 import { RosterComponent } from './roster/roster.component';
 import { FinancesComponent } from './finances/finances.component';
 import { RouterModule } from '@angular/router';
+import { DraftPlayerPoolSeasonComponent } from './draft-player-pool-season/draft-player-pool-season.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
 }
 
 @NgModule({
-   declarations: [							
+   declarations: [								
       AppComponent,
       NavbarComponent,
       FooterComponent,
@@ -108,7 +109,8 @@ export function tokenGetter() {
       RegisterComponent,
       RosterComponent,
       FinancesComponent,
-      FinancesComponent
+      FinancesComponent,
+      DraftPlayerPoolSeasonComponent
    ],
    imports: [
       BrowserModule,

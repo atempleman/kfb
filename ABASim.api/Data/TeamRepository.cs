@@ -1086,6 +1086,20 @@ namespace ABASim.api.Data
             return team;
         }
 
+        public async Task<IEnumerable<Team>> GetTeamSeasonLotteryOrder(int leagueId)
+        {
+            List<Team> teams = new List<Team>();
+            var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).Take(14).OrderBy(x => x.Wins).ToListAsync();
+
+            foreach(var ls in leagueStandings)
+            {
+                // Need to get the team and add to list
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == ls.TeamId && x.LeagueId == leagueId);
+                teams.Add(team);
+            }
+            return teams;
+        }
+
         public async Task<IEnumerable<Team>> GetTeamInitialLotteryOrder(int leagueId)
         {
             List<Team> teams = new List<Team>();

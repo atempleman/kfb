@@ -136,6 +136,10 @@ export class TeamService {
     return this.http.get<Team[]>(this.baseUrl + 'getTeamInitialLotteryOrder/' + leagueId);
   }
 
+  getTeamSeasonLotteryOrder(leagueId: number): Observable<Team[]> {
+    return this.http.get<Team[]>(this.baseUrl + 'getTeamSeasonLotteryOrder/' + leagueId);
+  }
+
   waivePlayer(waivedPlayer: WaivedPlayer) {
     return this.http.post(this.baseUrl + 'waiveplayer', waivedPlayer);
   }

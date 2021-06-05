@@ -72,11 +72,26 @@ namespace ABASim.api.Controllers
             return Ok(player);
         }
 
+        
+        [HttpGet("getcountofdraftplayersupcoming/{leagueId}")]
+        public async Task<IActionResult> GetCountOfDraftPlayersUpcoming(int leagueId)
+        {
+            var count = await _repo.GetCountOfDraftPlayersUpcoming(leagueId);
+            return Ok(count);
+        }
+
         [HttpGet("getcountofdraftplayers/{leagueId}")]
         public async Task<IActionResult> GetCountOfDraftPlayers(int leagueId)
         {
             var count = await _repo.GetCountOfDraftPlayers(leagueId);
             return Ok(count);
+        }
+
+        [HttpGet("getallupcomingplayers/{leagueId}")]
+        public async Task<IActionResult> GetAllUpcomingPlayers(int leagueId)
+        {
+            var players = await _repo.GetAllUpcomingPlayers(leagueId);
+            return Ok(players);
         }
 
         [HttpGet("filterdraftplayers")]
