@@ -405,7 +405,22 @@ export class TradesComponent implements OnInit {
 
   acceptTrade(tradeId: number) {
     const yourSalary = this.yourSalaryCapSpace.salaryCapAmount - this.yourSalaryCapSpace.currentSalaryAmount;
-    const theirSalary = this.theirSalaryCapSpace.salaryCapAmount - this.theirSalaryCapSpace.currentSalaryAmount;
+
+    let originalTeamId = this.tradesToDisplay[0].originalTeamId;
+    // Need to get the value here
+    const summary: GetRosterQuickView = {
+      teamId: originalTeamId,
+      leagueId: this.league.id
+    };
+
+    let tsi: TeamSalaryCapInfo;
+    this.teamService.getTeamSalaryCapDetails(summary).subscribe(result => {
+      tsi = result;
+    }, error => {
+      this.alertify.error('Error getting salary cap details');
+    }, () => {
+
+      const theirSalary = tsi.salaryCapAmount - tsi.currentSalaryAmount;
     this.validTrade = 0;
 
     // tslint:disable-next-line: max-line-length
@@ -470,10 +485,13 @@ export class TradesComponent implements OnInit {
           this.modalRef.hide();
           this.alertify.success('Trade completed!');
           this.spinner.hide();
-          this.goToTeam();
+          // this.goToTeam();
+          window.location.reload();
         }
       });
     }
+
+    });
   }
 
   pullTrade(tradeId: number) {
