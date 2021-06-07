@@ -568,7 +568,8 @@ export class TradesComponent implements OnInit {
         yearOne: player.currentSeasonValue,
         totalValue: player.totalValue,
         years: player.years,
-        leagueId: this.league.id
+        leagueId: this.league.id,
+        tradeInitiator: this.team.teamId
       };
 
       this.proposedTradeSending.push(trade);
@@ -601,7 +602,8 @@ export class TradesComponent implements OnInit {
         yearOne: player.currentSeasonValue,
         totalValue: player.totalValue,
         years: player.years,
-        leagueId: this.league.id
+        leagueId: this.league.id,
+        tradeInitiator: this.team.teamId
       };
 
       this.proposedTradeReceiving.push(trade);
@@ -635,7 +637,8 @@ export class TradesComponent implements OnInit {
         yearOne: 0,
         totalValue: 0,
         years: 0,
-        leagueId: this.league.id
+        leagueId: this.league.id,
+        tradeInitiator: this.team.teamId
       };
       this.proposedTradeSending.push(trade);
 
@@ -662,7 +665,8 @@ export class TradesComponent implements OnInit {
         yearOne: 0,
         totalValue: 0,
         years: 0,
-        leagueId: this.league.id
+        leagueId: this.league.id,
+        tradeInitiator: this.team.teamId
       };
 
       this.proposedTradeReceiving.push(trade);
@@ -728,10 +732,17 @@ export class TradesComponent implements OnInit {
   public openModal(template: TemplateRef<any>, tradeId: number) {
     this.tradeDisplay = this.offeredTrades.filter(x => x.tradeId === tradeId);
 
+    console.log(this.tradeDisplay[0]);
+    // console.log(this.team.teamId);
+    console.log(this.tradeDisplay[0].receivingTeam);
+    console.log(this.tmDisplay);
+
     if (this.team.teamId !== this.tradeDisplay[0].receivingTeam) {
-      this.recevingTeamText = this.tradesToDisplay[0].receivingTeamName;
+      console.log('here');
+      this.recevingTeamText = this.tradeDisplay[0].receivingTeamName;
     } else if (this.team.teamId !== this.tradeDisplay[0].tradingTeam) {
-      this.recevingTeamText = this.tradesToDisplay[0].tradingTeamName;
+      console.log('here2');
+      this.recevingTeamText = this.tradeDisplay[0].tradingTeamName;
     }
 
     if (this.tradeDisplay[0].status === 2) {

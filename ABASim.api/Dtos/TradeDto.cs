@@ -31,5 +31,7 @@ namespace ABASim.api.Dtos
         public int TotalValue { get; set; }
 
         public int LeagueId { get; set; }
+
+        public int TradeInitiator { get; set; }
     }
 }

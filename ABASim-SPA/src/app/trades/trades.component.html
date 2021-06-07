@@ -395,7 +395,7 @@
 			<p class="color-7" *ngIf="trade.receivingTeam == this.team.teamId && trade.playerId == 0">Pick -
 				{{ getTeamShortCode(trade.originalTeamId) }} Year: {{ trade.year }} Round: {{ trade.pick }}</p>
 			<div class="divider"></div>
-			<span>&nbsp;<i class="fa fa-info-circle color-white" *ngIf="trade.receivingTeam == this.team.teamId"
+			<span>&nbsp;<i class="fa fa-info-circle color-white" *ngIf="trade.receivingTeam == this.team.teamId && trade.playerId != 0"
 				(click)="viewPlayerForId(trade.playerId)"></i></span>
 			<p class="color-7" *ngIf="trade.receivingTeam == this.team.teamId && trade.playerId != 0"> - {{ trade.years }}
 				year(s) - ${{ trade.totalValue | number }} - current ${{ trade.yearOne | number }} </p>
@@ -408,7 +408,7 @@
 			<p class="color-7" *ngIf="trade.receivingTeam != this.team.teamId && trade.playerId == 0">Pick -
 				{{ getTeamShortCode(trade.originalTeamId) }} Year: {{ trade.year }} Round: {{ trade.pick }}</p>
 			<div class="divider"></div>
-			<span>&nbsp;<i class="fa fa-info-circle color-white" *ngIf="trade.receivingTeam != this.team.teamId"
+			<span>&nbsp;<i class="fa fa-info-circle color-white" *ngIf="trade.receivingTeam != this.team.teamId && trade.playerId != 0"
 					(click)="viewPlayerForId(trade.playerId)"></i></span>
 			<p class="color-7" *ngIf="trade.receivingTeam != this.team.teamId && trade.playerId != 0"> - {{ trade.years }}
 				year(s) - ${{ trade.totalValue | number }} - current ${{ trade.yearOne | number }} </p>
@@ -433,13 +433,13 @@
 	</div>
 	<div class="modal-footer form-group text-center">
 		<button type="submit" class="btn btn-primary btn-sm"
-			*ngIf="this.team.teamId == this.tradeDisplay[0].tradingTeam && !this.tmDisplay && this.tradeDisplay[0].status != 2"
+			*ngIf="this.team.teamId != this.tradeDisplay[0].tradeInitiator && !this.tmDisplay && this.tradeDisplay[0].status != 2"
 			(click)="acceptTrade(this.tradeDisplay[0].tradeId)">Accept</button>
 		<button type="submit" class="btn btn-primary btn-sm" (click)="modalRef.hide()" *ngIf="!this.tmDisplay">Close</button>
 		<button type="button" class="btn btn-danger btn-sm"
-			*ngIf="this.team.teamId == this.tradeDisplay[0].receivingTeam && !this.tmDisplay"
+			*ngIf="this.team.teamId == this.tradeDisplay[0].tradeInitiator && !this.tmDisplay"
 			(click)="pullTrade(this.tradeDisplay[0].tradeId)">Cancel Offer</button>
 		<button type="button" class="btn btn-danger btn-sm" (click)="rejectTrade()"
-			*ngIf="this.team.teamId == this.tradeDisplay[0].tradingTeam && !this.tmDisplay && this.tradeDisplay[0].status != 2">Reject</button>
+			*ngIf="this.team.teamId != this.tradeDisplay[0].tradeInitiator && !this.tmDisplay && this.tradeDisplay[0].status != 2">Reject</button>
 	</div>
 </ng-template>

@@ -27,5 +27,7 @@ namespace ABASim.api.Models
         public int TotalValue { get; set; }
 
         public int LeagueId { get; set; }
+
+        public int TradeInitiator { get; set; }
     }
 }

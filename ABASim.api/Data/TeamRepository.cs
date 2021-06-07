@@ -114,7 +114,8 @@ namespace ABASim.api.Data
                         TransactionType = 3,
                         Day = league.Day,
                         Pick = 0,
-                        PickText = ""
+                        PickText = "",
+                        LeagueId = league.Id
                     };
                     await _context.AddAsync(trans);
                 }
@@ -140,7 +141,8 @@ namespace ABASim.api.Data
                         TransactionType = 3,
                         Day = league.Day,
                         Pick = 1,
-                        PickText = origTeamName.ShortCode + " Year: " + tp.Year + " Round " + tp.Pick
+                        PickText = origTeamName.ShortCode + " Year: " + tp.Year + " Round " + tp.Pick,
+                        LeagueId = league.Id
                     };
                     await _context.AddAsync(trans);
                 }
@@ -166,7 +168,8 @@ namespace ABASim.api.Data
                 Subject = "A Trade has been accepted and processed",
                 Body = "A Trade has been accepted and processed.",
                 MessageDate = dd + "/" + mm + "/" + yyyy,
-                IsNew = 1
+                IsNew = 1,
+                LeagueId = tradePieces[0].LeagueId
             };
             await _context.AddAsync(im);
 
@@ -181,7 +184,8 @@ namespace ABASim.api.Data
                 Subject = "A Trade has been accepted and processed",
                 Body = "A Trade has been accepted and processed.",
                 MessageDate = dd + "/" + mm + "/" + yyyy,
-                IsNew = 1
+                IsNew = 1,
+                LeagueId = tradePieces[0].LeagueId
             };
             await _context.AddAsync(im2);
 
@@ -280,7 +284,8 @@ namespace ABASim.api.Data
                     Status = trade.Status,
                     YearOne = current,
                     Years = years,
-                    TotalValue = total
+                    TotalValue = total,
+                    TradeInitiator = trade.TradeInitiator
                 };
                 tradesList.Add(newTrade);
             }
@@ -351,7 +356,8 @@ namespace ABASim.api.Data
                     Status = trade.Status,
                     YearOne = current,
                     Years = years,
-                    TotalValue = total
+                    TotalValue = total,
+                    TradeInitiator = trade.TradeInitiator
                 };
                 tradesList.Add(newTrade);
             }
@@ -453,7 +459,8 @@ namespace ABASim.api.Data
                     StateSubmitted = co.StateSubmitted,
                     Decision = co.Decision,
                     PlayerName = player.FirstName + ' ' + player.Surname,
-                    ContractId = co.Id
+                    ContractId = co.Id,
+                    LeagueId = leagueId
                 };
                 offers.Add(dto);
             }
@@ -1261,7 +1268,8 @@ namespace ABASim.api.Data
                         Status = trade.Status,
                         YearOne = current,
                         Years = years,
-                        TotalValue = total
+                        TotalValue = total,
+                        TradeInitiator = trade.TradeInitiator
                     };
                     tradesList.Add(newTrade);
                 }
@@ -1398,7 +1406,8 @@ namespace ABASim.api.Data
                 Subject = "Trade Proposal has been removed",
                 Body = "A new trade proposal has been removed by the sender.",
                 MessageDate = dd + "/" + mm + "/" + yyyy,
-                IsNew = 1
+                IsNew = 1,
+                LeagueId = tradeRecords[0].LeagueId
             };
             await _context.AddAsync(im);
 
@@ -1454,7 +1463,8 @@ namespace ABASim.api.Data
                 Subject = "Trade Proposal Rejected",
                 Body = "A new trade proposal has been rejected.",
                 MessageDate = dd + "/" + mm + "/" + yyyy,
-                IsNew = 1
+                IsNew = 1,
+                LeagueId = tradeRecords[0].LeagueId
             };
             await _context.AddAsync(im);
 
@@ -1634,7 +1644,8 @@ namespace ABASim.api.Data
                     YearOne = trade.YearOne,
                     Years = trade.Years,
                     TotalValue = trade.TotalValue,
-                    LeagueId = trade.LeagueId
+                    LeagueId = trade.LeagueId,
+                    TradeInitiator = trade.TradeInitiator
                 };
                 await _context.AddAsync(t);
 
@@ -1659,7 +1670,8 @@ namespace ABASim.api.Data
                 Subject = "Trade Proposal Received",
                 Body = "You have received a new trade proposal. Please go to Teams > Trades to view",
                 MessageDate = dd + "/" + mm + "/" + yyyy,
-                IsNew = 1
+                IsNew = 1,
+                LeagueId = trades[0].LeagueId
             };
             await _context.AddAsync(im);
             return await _context.SaveChangesAsync() > 0;
