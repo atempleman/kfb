@@ -74,6 +74,14 @@ export class TeamService {
     return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewroster', { params });
   }
 
+  getQuickViewRosterPlayoffsForTeam(quickview: GetRosterQuickView): Observable<QuickViewPlayer[]> {
+    const params = new HttpParams()
+      .set('teamId', quickview.teamId.toString())
+      .set('leagueId', quickview.leagueId.toString());
+
+    return this.http.get<QuickViewPlayer[]>(this.baseUrl + 'getquickviewrosterplayoffs', { params });
+  }
+
   getInjuriesForTeam(quickview: GetRosterQuickView): Observable<LeaguePlayerInjury[]> {
     const params = new HttpParams()
       .set('teamId', quickview.teamId.toString())

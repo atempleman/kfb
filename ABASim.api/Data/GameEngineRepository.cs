@@ -168,7 +168,8 @@ namespace ABASim.api.Data
                     GameId = play.GameId,
                     Ordering = play.Ordering,
                     PlayNumber = play.PlayNumber,
-                    Commentary = play.Commentary
+                    Commentary = play.Commentary,
+                    LeagueId = play.LeagueId
                 };
 
                 await _context.AddAsync(pbp);

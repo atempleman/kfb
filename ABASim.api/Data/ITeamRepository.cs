@@ -39,6 +39,8 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(int teamId, int leagueId);
 
+         Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRosterPlayoffs(int teamId, int leagueId);
+
          Task<IEnumerable<LeaguePlayerInjuryDto>> GetTeamInjuries(int teamId, int leagueId);
 
          Task<bool> WaivePlayer(WaivePlayerDto waived);

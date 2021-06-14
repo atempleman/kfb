@@ -317,7 +317,8 @@ namespace ABASim.api.Data
                                     Bpg = bs.Blocks / 1,
                                     Mpg = bs.Minutes / 1,
                                     Fpg = bs.Fouls / 1,
-                                    Tpg = bs.Turnovers / 1
+                                    Tpg = bs.Turnovers / 1,
+                                    LeagueId = leagueId
                                 };
                                 await _context.AddAsync(newPlayerStats);
                             }

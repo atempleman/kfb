@@ -122,8 +122,12 @@ export class FullgamepbpComponent implements OnInit {
       }, error => {
         this.alertify.error('Error getting game details');
       }, () => {
+        console.log('ash');
+        console.log(gameLeague);
         this.leagueService.getPlayoffsPlayByPlaysForId(gameLeague).subscribe(result => {
           this.playByPlays = result;
+          // console.log('atemp');
+          // console.log(this.playByPlays);
           const element = this.playByPlays[this.playByPlays.length - 1];
           this.numberOfPlays = element.ordering;
           this.playByPlays.sort((n1, n2) => {

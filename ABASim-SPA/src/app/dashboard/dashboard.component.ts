@@ -359,12 +359,22 @@ export class DashboardComponent implements OnInit {
       teamId: this.team.teamId,
       leagueId: this.league.id
     };
-    this.teamService.getQuickViewRosterForTeam(quickView).subscribe(result => {
-      this.quickTeamRoster = result;
-      this.quickRostCount = this.quickTeamRoster.length;
-    }, error => {
-      this.alertify.error('Error getting your roster');
-    });
+
+    if (this.league.stateId > 7) {
+      this.teamService.getQuickViewRosterPlayoffsForTeam(quickView).subscribe(result => {
+        this.quickTeamRoster = result;
+        this.quickRostCount = this.quickTeamRoster.length;
+      }, error => {
+        this.alertify.error('Error getting your roster');
+      });
+    } else {
+      this.teamService.getQuickViewRosterForTeam(quickView).subscribe(result => {
+        this.quickTeamRoster = result;
+        this.quickRostCount = this.quickTeamRoster.length;
+      }, error => {
+        this.alertify.error('Error getting your roster');
+      });
+    }
   }
 
   getTeamInjuries() {

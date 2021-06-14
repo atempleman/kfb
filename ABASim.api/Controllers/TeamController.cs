@@ -67,6 +67,13 @@ namespace ABASim.api.Controllers
             return Ok(team);
         }
 
+        [HttpGet("getquickviewrosterplayoffs")]
+        public async Task<IActionResult> GetQuickViewRosterPlayoffs(string teamId, string leagueId)
+        {
+            var team = await _repo.GetQuickViewRosterPlayoffs(Int32.Parse(teamId), Int32.Parse(leagueId));
+            return Ok(team);
+        }
+
         [HttpGet("getteaminjuries")]
         public async Task<IActionResult> GetTeamInjuries(string teamId, string leagueId)
         {

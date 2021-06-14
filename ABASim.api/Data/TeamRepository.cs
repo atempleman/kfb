@@ -479,6 +479,62 @@ namespace ABASim.api.Data
             return deptchCharts;
         }
 
+        public async Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRosterPlayoffs(int teamId, int leagueId)
+        {
+            List<QuickViewPlayerDto> players = new List<QuickViewPlayerDto>();
+            var teamsRosteredPlayers = await _context.Rosters.Where(x => x.TeamId == teamId && x.LeagueId == leagueId).ToListAsync();
+
+            // Now need to get the player details
+            foreach (var rosterPlayer in teamsRosteredPlayers)
+            {
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+                var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId && x.LeagueId == leagueId);
+                var playerStats = await _context.PlayerStatsPlayoffs.FirstOrDefaultAsync(x => x.PlayerId == rosterPlayer.PlayerId && x.LeagueId == leagueId);
+
+                if (playerStats != null)
+                {
+                    QuickViewPlayerDto dto = new QuickViewPlayerDto
+                    {
+                        PlayerId = rosterPlayer.PlayerId,
+                        FirstName = playerDetails.FirstName,
+                        Surname = playerDetails.Surname,
+                        PGPosition = playerDetails.PGPosition,
+                        SGPosition = playerDetails.SGPosition,
+                        SFPosition = playerDetails.SFPosition,
+                        PFPosition = playerDetails.PFPosition,
+                        CPosition = playerDetails.CPosition,
+                        GamesStats = playerStats.GamesPlayed,
+                        OrebsStats = playerStats.ORebs,
+                        DrebsStats = playerStats.DRebs,
+                        AstStats = playerStats.Assists,
+                        PtsStats = playerStats.Points
+                    };
+                    players.Add(dto);
+                }
+                else
+                {
+                    QuickViewPlayerDto dto = new QuickViewPlayerDto
+                    {
+                        PlayerId = rosterPlayer.PlayerId,
+                        FirstName = playerDetails.FirstName,
+                        Surname = playerDetails.Surname,
+                        PGPosition = playerDetails.PGPosition,
+                        SGPosition = playerDetails.SGPosition,
+                        SFPosition = playerDetails.SFPosition,
+                        PFPosition = playerDetails.PFPosition,
+                        CPosition = playerDetails.CPosition,
+                        GamesStats = 0,
+                        OrebsStats = 0,
+                        DrebsStats = 0,
+                        AstStats = 0,
+                        PtsStats = 0
+                    };
+                    players.Add(dto);
+                }
+            }
+            return players;
+        }
+
         public async Task<IEnumerable<QuickViewPlayerDto>> GetQuickViewRoster(int teamId, int leagueId)
         {
             List<QuickViewPlayerDto> players = new List<QuickViewPlayerDto>();
