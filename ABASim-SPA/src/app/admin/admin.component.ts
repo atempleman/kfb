@@ -28,6 +28,7 @@ export class AdminComponent implements OnInit {
   league: League;
   public modalRef: BsModalRef;
 
+  masterActionAccordion = 0;
   nextActionAccordion = 1;
   otherAccordion = 0;
 
@@ -45,10 +46,18 @@ export class AdminComponent implements OnInit {
 
   dayEntered = 0;
   dayForm: FormGroup;
+  newLeagueForm: FormGroup;
   todaysGames: GameDisplayCurrent[] = [];
 
   username = 0;
   team: Team;
+
+  userId = 0;
+
+  leaguename = '';
+  seasonid = '';
+  leaguecode = '';
+  newLeagueCreate = 0;
 
   constructor(private router: Router, private leagueService: LeagueService, private alertify: AlertifyService,
               private authService: AuthService, private modalService: BsModalService, private adminService: AdminService,
@@ -56,6 +65,7 @@ export class AdminComponent implements OnInit {
               private draftService: DraftService) { }
 
   ngOnInit() {
+    this.userId = this.authService.decodedToken.nameid;
     this.teamService.getTeamForUserId(this.authService.decodedToken.nameid).subscribe(result => {
       this.team = result;
       // Need to persist the team to cookie
@@ -549,11 +559,54 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  createNewLeague() {
+    this.newLeagueCreate = 1;
+
+    this.spinner.show();
+
+    let newLeague: League = 
+    {
+      id: 0,
+      stateId: 0,
+      day: 0,
+      state: '',
+      year: +this.seasonid,
+      leagueName: this.leaguename,
+      leagueCode: this.leaguecode
+    };
+
+    this.adminService.createNewLeague(this.league).subscribe(result => {
+
+    }, error => {
+      this.alertify.error('Error creating new league');
+      this.newLeagueCreate = 0;
+    }, () => {
+      this.alertify.success('New league has successfully been created');
+      this.modalRef.hide();
+      this.spinner.hide();
+      this.newLeagueCreate = 0;
+    });
+  }
+
   toggleNextAction() {
     if (this.nextActionAccordion == 0) {
       this.nextActionAccordion = 1;
     } else {
       this.nextActionAccordion = 0;
+    }
+  }
+
+  toogleMasterAction() {
+    if (this.masterActionAccordion == 0) {
+      this.newLeagueForm = this.fb.group({
+        leaguename: ['', Validators.required],
+        seasonid: ['', Validators.required],
+        leaguecode: ['', Validators.required]        
+      });
+
+      this.masterActionAccordion = 1;
+    } else {
+      this.masterActionAccordion = 0;
     }
   }
 

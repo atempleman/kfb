@@ -905,6 +905,19 @@ namespace ABASim.api.Data
             }
         }
 
+        public async Task<bool> CreateNewLeague(League league)
+        {
+            try
+            {
+                _context.CreateNewLeauge(league);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return true;
+        }
+
         public int GetWaivedContractYears(WaivedContract offer)
         {
             if (offer.YearFive > 0)

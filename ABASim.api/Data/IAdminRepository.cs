@@ -15,6 +15,8 @@ namespace ABASim.api.Data
 
          Task<bool> RunDayRollOver(int leagueId);
 
+         Task<bool> CreateNewLeague(League league);
+
          Task<bool> CheckGamesRun(int leagueId);
 
          Task<bool> ChangeDay(int day, int leagueId);

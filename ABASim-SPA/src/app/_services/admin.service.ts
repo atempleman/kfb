@@ -9,6 +9,7 @@ import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
 import { GetScheduleLeague } from '../_models/getScheduleLeague';
 import { GetGameLeague } from '../_models/getGameLeague';
+import { League } from '../_models/league';
 
 @Injectable({
   providedIn: 'root'
@@ -145,5 +146,9 @@ export class AdminService {
 
   resetLeague(leagueId: number) {
     return this.http.get<boolean>(this.baseUrl + 'resetleague/' + leagueId);
+  }
+  
+  createNewLeague(newLeague: League) {
+    return this.http.post(this.baseUrl + 'createnewleague', newLeague);
   }
 }

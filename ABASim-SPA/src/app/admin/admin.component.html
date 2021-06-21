@@ -42,12 +42,37 @@
 
 
 <div class="container">
+	<div class="ui styled fluid accordion" *ngIf="this.userId == 1">
+		<div class="title" (click)="toogleMasterAction()">
+			<i class="fa fa-caret-right mr-3" *ngIf="this.masterActionAccordion == 0"></i>
+			<i class="fa fa-caret-down mr-3" *ngIf="this.masterActionAccordion == 1"></i> Master Admin Actions
+		</div>
+	</div>
+	<div class="content" *ngIf="this.masterActionAccordion == 1">
+		<div class="ui styled fluid accordion">
+			<!-- Create new league -->
+			<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-question-circle fa-2x"></i><span
+							class="header-card ml-3"><strong>Create New League</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Spin up a new league.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left" (click)="openConfirm(createleague)">New
+								League</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="ui styled fluid accordion">
 		<div class="title" (click)="toggleNextAction()">
 			<i class="fa fa-caret-right mr-3" *ngIf="this.nextActionAccordion == 0"></i>
 			<i class="fa fa-caret-down mr-3" *ngIf="this.nextActionAccordion == 1"></i> Next Actions
 		</div>
 	</div>
+
 	<div class="content" *ngIf="this.nextActionAccordion == 1">
 		<div class="ui styled fluid accordion">
 			<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
@@ -101,7 +126,8 @@
 					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
 							class="header-card ml-3"><strong>Initial Draft is runnings</strong></span></div>
 					<div class="card-body">
-						<p class="lead color-7">The initial draft is underway. Once it completes, the league will move into
+						<p class="lead color-7">The initial draft is underway. Once it completes, the league will move
+							into
 							draft completed state automatically.</p>
 					</div>
 				</div>
@@ -238,7 +264,8 @@
 					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
 							class="header-card ml-3"><strong>Begin Conf Semis</strong></span></div>
 					<div class="card-body">
-						<p class="lead color-7">Setup the playoffs and move the league into the Conference Semis state.</p>
+						<p class="lead color-7">Setup the playoffs and move the league into the Conference Semis state.
+						</p>
 						<div style="text-align: right;">
 							<button type="button" class="btn btn-link text-left"
 								(click)="openModal(beginconfsemis, 5)">Begin Semis</button>
@@ -287,140 +314,150 @@
 	</div>
 	<div class="content" *ngIf="this.otherAccordion == 1">
 		<div class="ui styled fluid accordion">
-		<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
-			<!-- Remove Team Registration -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-user-times fa-2x"></i><span
-						class="header-card ml-3"><strong>REMOVE TEAM REGISTRATION</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Remove the registration of an existing user and opening up a free slot.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="openModal(removeRego, 1)">Remove
-							User</button>
+			<div class="row justify-content-center mt-3 ml-4 mr-4 color-1">
+				<!-- Remove Team Registration -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-user-times fa-2x"></i><span
+							class="header-card ml-3"><strong>REMOVE TEAM REGISTRATION</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Remove the registration of an existing user and opening up a free slot.
+						</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(removeRego, 1)">Remove
+								User</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- CHANGE LEAGUE STATUS -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-question-circle fa-2x"></i><span
-						class="header-card ml-3"><strong>LEAGUE STATUS</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Change League Status the League. Transition from one state to the next.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="openModal(status, 0)">League
-							Status</button>
+				<!-- CHANGE LEAGUE STATUS -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-question-circle fa-2x"></i><span
+							class="header-card ml-3"><strong>LEAGUE STATUS</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Change League Status the League. Transition from one state to the next.
+						</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left" (click)="openModal(status, 0)">League
+								Status</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- CHANGE DAY -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>Change Day</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Change the day if required. Should be used sparingly.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="openModal(changeday, 3)">Change
-							Day</button>
+				<!-- CHANGE DAY -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
+							class="header-card ml-3"><strong>Change Day</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Change the day if required. Should be used sparingly.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(changeday, 3)">Change
+								Day</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Reset Game -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-sync-alt"></i><span class="header-card ml-3"><strong>Reset
-							Game</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Had an error in a game? Reset a specific game for the current day.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(resetgame, 10)">Reset</button>
+				<!-- Reset Game -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-sync-alt"></i><span class="header-card ml-3"><strong>Reset
+								Game</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Had an error in a game? Reset a specific game for the current day.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(resetgame, 10)">Reset</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Reset League -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header">
-					<i class="fa fa-sync-alt"></i>
-					<span class="header-card ml-3"><strong>Reset League</strong></span>
-				</div>
-				<div class="card-body">
-					<p class="lead color-7">Reset the league to its original, no data state.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(resetleague, 11)">Reset</button>
+				<!-- Reset League -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header">
+						<i class="fa fa-sync-alt"></i>
+						<span class="header-card ml-3"><strong>Reset League</strong></span>
+					</div>
+					<div class="card-body">
+						<p class="lead color-7">Reset the league to its original, no data state.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(resetleague, 11)">Reset</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Test Game -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-play-circle fa-2x" aria-hidden="true"></i><span
-						class="header-card ml-3"><strong>Test Game Engine</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Run the game engine and test various games. A one off game.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left" (click)="runEngine()">Run Engine</button>
+				<!-- Test Game -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-play-circle fa-2x" aria-hidden="true"></i><span
+							class="header-card ml-3"><strong>Test Game Engine</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Run the game engine and test various games. A one off game.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left" (click)="runEngine()">Run
+								Engine</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Test Autopick order -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-cog"></i><span class="header-card ml-3"><strong>Test Auto Pick
-							Ordering</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Temporary tool to test auto picker order.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(autopicktest, 10)">Generate</button>
+				<!-- Test Autopick order -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-cog"></i><span class="header-card ml-3"><strong>Test Auto
+								Pick
+								Ordering</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Temporary tool to test auto picker order.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(autopicktest, 10)">Generate</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Setup Draft Picks -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-step-forward"></i><span class="header-card ml-3"><strong>Setup
-							Draft Picks</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Setup teams draft picks for the first 5 seasons. Should only ever be run once.
-					</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(setupdraftpicks, 7)">Setup picks</button>
+				<!-- Setup Draft Picks -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-step-forward"></i><span
+							class="header-card ml-3"><strong>Setup
+								Draft Picks</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Setup teams draft picks for the first 5 seasons. Should only ever be run
+							once.
+						</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(setupdraftpicks, 7)">Setup picks</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Initial Draft Contracts Update -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-file-contract"></i><span
-						class="header-card ml-3"><strong>Initial Draft Contracts Update</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Temporary tool to generate initial draft contracts while not implmented.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(generatecontracts, 9)">Generate</button>
+				<!-- Initial Draft Contracts Update -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-file-contract"></i><span
+							class="header-card ml-3"><strong>Initial Draft Contracts Update</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Temporary tool to generate initial draft contracts while not implmented.
+						</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(generatecontracts, 9)">Generate</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- Generate Initial Team Salary Caps -->
-			<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
-				<div class="card-header"><i class="fa fa-file-contract"></i><span
-						class="header-card ml-3"><strong>Initial Team Salary Caps</strong></span></div>
-				<div class="card-body">
-					<p class="lead color-7">Temporary tool to generate initial team salary caps while not implmented.</p>
-					<div style="text-align: right;">
-						<button type="button" class="btn btn-link text-left"
-							(click)="openModal(generatesalarycaps, 10)">Generate</button>
+				<!-- Generate Initial Team Salary Caps -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;">
+					<div class="card-header"><i class="fa fa-file-contract"></i><span
+							class="header-card ml-3"><strong>Initial Team Salary Caps</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Temporary tool to generate initial team salary caps while not
+							implmented.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(generatesalarycaps, 10)">Generate</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </div>
 
@@ -605,6 +642,32 @@
 	</form>
 </ng-template>
 
+<!-- CREATE NEW LEAGUE MODAL -->
+<ng-template #createleague>
+	<div class="modal-header">
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8">Create New League</h6>
+		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+	</div>
+	<form [formGroup]="newLeagueForm" (ngSubmit)="createNewLeague()">
+		<div class="modal-body">
+			<div class="form-group">
+				<span>
+					<input class="form-control" placeholder="League Name" name="leaguename" type="text"
+						formControlName="leaguename" [(ngModel)]="this.leaguename">
+					<input class="form-control" placeholder="Starting Season" name="seasonid" type="text"
+						formControlName="seasonid" [(ngModel)]="this.seasonid">
+					<input class="form-control" placeholder="League Code" name="leaguecode" type="text"
+						formControlName="leaguecode" [(ngModel)]="this.leaguecode">
+				</span>
+			</div>
+		</div>
+		<div class="modal-footer form-group text-center">
+			<button type="submit" class="btn btn-primary btn-sm" *ngIf="this.newLeagueCreate == 0">Create</button>
+			<button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Cancel</button>
+		</div>
+	</form>
+</ng-template>
+
 <!-- Setup team initial draft picks -->
 <ng-template #setupdraftpicks>
 	<div class="modal-header">
@@ -708,7 +771,8 @@
 		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
 	</div>
 	<div class="modal-body">
-		<p class="color-7">Move to the next day of the preseason. This can only be done once all of the days games have been run.</p>
+		<p class="color-7">Move to the next day of the preseason. This can only be done once all of the days games have
+			been run.</p>
 		<p class="color-7">To run games, click on the run option for games on the Dashboard.</p>
 	</div>
 	<div class="modal-footer form-group text-center">
@@ -725,7 +789,8 @@
 		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
 	</div>
 	<div class="modal-body">
-		<p class="color-7">Move to the next day of the season. This can only be done once all of the days games have been run.</p>
+		<p class="color-7">Move to the next day of the season. This can only be done once all of the days games have
+			been run.</p>
 		<p class="color-7">To run games, click on the run option for games on the Dashboard.</p>
 	</div>
 	<div class="modal-footer form-group text-center">

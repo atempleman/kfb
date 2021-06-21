@@ -357,5 +357,4 @@ export class LeagueService {
   checkLeagueCode(leaguecode: string) {
     return this.http.get<boolean>(this.baseUrl + 'checkleaguecode/' + leaguecode);
   }
-
 }

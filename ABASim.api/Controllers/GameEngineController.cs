@@ -2817,7 +2817,7 @@ namespace ABASim.api.Controllers
                 // Need to determine whether an assist chance has been created
                 if (_playerRatingPassed != null)
                 {
-                    int assistRating = (_playerRatingPassed.AssitRating * 5);
+                    int assistRating = (int)(_playerRatingPassed.AssitRating * 5.2);
 
                     int assistStrategy = 0;
                     if (_teamPossession == 0)
@@ -3076,7 +3076,7 @@ namespace ABASim.api.Controllers
                 // Need to determine whether an assist chance has been created
                 if (_playerRatingPassed != null)
                 {
-                    int assistRating = (_playerRatingPassed.AssitRating * 5); // Factor applied to increase the low Assist to Pass rate for low pass counts in sim
+                    int assistRating = (int)(_playerRatingPassed.AssitRating * 5.2); // Factor applied to increase the low Assist to Pass rate for low pass counts in sim
 
                     int assistStrategy = 0;
                     if (_teamPossession == 0)
@@ -5687,6 +5687,7 @@ namespace ABASim.api.Controllers
 
             _playerPassed = null;
             _playerRatingPassed = null;
+            _shotClock = 24;
 
             switch (_quarter)
             {

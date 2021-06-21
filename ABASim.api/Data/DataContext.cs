@@ -137,7 +137,15 @@ namespace ABASim.api.Data
 
         public DbSet<UpComingDraftPlayer> UpComingDraftPlayers { get; set; }
 
-        public void RunInNewDraftees(League league, LeagueConfig lconfig)
+        public async void CreateNewLeauge(League league)
+        {
+            var leagueName = new SqlParameter("@leagueName", league.LeagueName);
+            var seasonId = new SqlParameter("@seasonId", league.Year);
+            var leagueCode = new SqlParameter("@leagueCode", league.LeagueCode);
+            await this.Database.ExecuteSqlCommandAsync("exec spCreateNewLeague @leagueName, @seasonId, @leagueCode", leagueName, seasonId, leagueCode);
+        }
+
+        public async void RunInNewDraftees(League league, LeagueConfig lconfig)
         {
             int nextSeasonYear = 0;
             if (league.Year == 1314) {
@@ -159,7 +167,7 @@ namespace ABASim.api.Data
             var currentSeasonId = new SqlParameter("@currentSeasonId", league.Year);
             var nextSeasonId = new SqlParameter("@nextSeasonId", nextSeasonYear);
             var leagueId = new SqlParameter("@leagueId", league.Id);
-            this.Database.ExecuteSqlCommand("exec spNewDraftees @currentSeasonId, @nextSeasonId, @leagueId", currentSeasonId, nextSeasonId, leagueId);
+            await this.Database.ExecuteSqlCommandAsync("exec spNewDraftees @currentSeasonId, @nextSeasonId, @leagueId", currentSeasonId, nextSeasonId, leagueId);
         }
     }
 }

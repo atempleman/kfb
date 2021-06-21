@@ -21,22 +21,6 @@ namespace ABASim.api.Controllers
             return "At Point Guard is " + awayPG.FirstName + " " + awayPG.Surname + ". At the other guard " + awaySG.FirstName + " " + awaySG.Surname + ". " + "At the Small Forward position, " + awaySF.FirstName + " " + awaySF.Surname + ". The Power Forward today is " + awayPF.FirstName + " " + awayPF.Surname + ". And the man in the middle, " + awayC.FirstName + " " + awayC.Surname;
         }
 
-        // public string GetJumpballCommentary(SimTeamDto team, int quarter, int time, int awayScore, int homeScore, int possession, string awayTeamName, string homeTeamName)
-        // {
-        //     int minutes = time / 60;
-        //     int seconds = time % 60;
-
-        //     string scoreComm = "";
-        //     if (possession == 0) {
-        //         scoreComm = homeTeamName + " " + homeScore + " " + awayTeamName + " " + awayScore + " - ";
-        //     } else {
-        //         scoreComm = awayTeamName + " " + awayScore + " " + homeTeamName + " " + homeScore + " - ";
-        //     }
-
-        //     string comm = "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " The jump ball is controlled by the " + team.TeamName + " " + team.Mascot;
-        //     return comm;
-        // }
-
         public string GetJumpballCommentary(int quarter, int time, int awayScore, int homeScore, int possession, string awayTeamName, string homeTeamName, string awayJumpPlayer, string homeJumpPlayer, string possessionPlayer)
         {
             int minutes = time / 60;
@@ -248,13 +232,13 @@ namespace ABASim.api.Controllers
             switch (choice)
             {
                 case 0:
-                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes the three point shot";
+                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes the three point shot" + " (" + commPoints + " pts)" + assistComm;
                 case 1:
-                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes corner three point shot";
+                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes corner three point shot" + " (" + commPoints + " pts)" + assistComm;
                 case 2:
-                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes deep three point shot";
+                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes deep three point shot" + " (" + commPoints + " pts)" + assistComm;
                 case 3:
-                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes three point shot";
+                    return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes three point shot" + " (" + commPoints + " pts)" + assistComm;
                 case 4:
                     return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + " " + playername + " makes three point shot";
                 default:
@@ -558,7 +542,7 @@ namespace ABASim.api.Controllers
                 scoreComm = awayTeamName + " " + awayScore + " " + homeTeamName + " " + homeScore + " - ";
             }
 
-            return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + "This will be a shooting foul due to being in the penalty.";
+            return "This will be a shooting foul due to being in the penalty.";
         }
 
         public string GetMadeFreeThrowCommentary(string playername, int time, int quarter, int awayScore, int homeScore, int possession, string awayTeamName, string homeTeamName, int commPoints)
@@ -599,7 +583,7 @@ namespace ABASim.api.Controllers
             } else {
                 subComm = awayTeamName;
             }
-            return subComm = " - " + inPlayer + " enters the game for " + outPlayer;
+            return subComm = subComm + " - SUB: " + inPlayer + " enters the game for " + outPlayer;
         }
 
         public string GetHoldBallCommentary(string playername, int time, int quarter, int awayScore, int homeScore, int possession, string awayTeamName, string homeTeamName)
