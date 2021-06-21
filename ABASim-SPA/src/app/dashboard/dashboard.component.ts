@@ -807,11 +807,15 @@ export class DashboardComponent implements OnInit {
         break;
       case 25:
         // Spurs
-        this.primaryColor = '196,206,211';
+        this.primaryColor = '6,25,34';
         this.secondaryColor = '6,25,34';
-        this.secondaryTextColor = '6,25,34';
-        this.secondaryLinkColor = '6,25,34';
-        this.primaryTextColor = '220,220,220';
+        // this.secondaryColor = '196,206,211';
+        // this.secondaryTextColor = '6,25,34';
+        // this.secondaryLinkColor = '6,25,34';
+        // this.primaryTextColor = '6,25,34';
+        // this.primaryTextColor = '6,25,34';
+        // this.secondaryTextColor = '220,220,220';
+        // this.secondaryLinkColor = '220,220,220';
         break;
       case 26:
         // Knicks
