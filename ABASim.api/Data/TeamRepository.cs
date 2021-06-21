@@ -599,8 +599,8 @@ namespace ABASim.api.Data
 
             foreach (var injury in playerInjuries)
             {
-                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId);
-                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId);
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == injury.PlayerId && x.LeagueId == leagueId);
 
                 if (playerTeam.TeamId == teamId)
                 {
