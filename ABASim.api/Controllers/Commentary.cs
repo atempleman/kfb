@@ -372,7 +372,7 @@ namespace ABASim.api.Controllers
             int commTotal = commDReb + commOReb;
             
             string scoreComm = "";
-            if (possession == 0) {
+            if (possession == 1) {
                 scoreComm = homeTeamName + " " + homeScore + " " + awayTeamName + " " + awayScore + " - ";
                 return "Quarter #" + quarter + " - " + minutes + ":" + seconds + " - " + scoreComm + "  " + homeTeamName + " defensive team rebound";
             } else {
@@ -468,6 +468,12 @@ namespace ABASim.api.Controllers
                 default:
                     return "Error in turnover commentary";
             }
+        }
+
+        public string SecondHalfStarters(string teamName, string pg, string sg, string sf, string pf, string c, int homeAway)
+        {
+            string text = teamName + " starters for the 2nd half - PG: " + pg + ", SG: " + sg + ", SF: " + sf + ", PF: " + pf + ", C: " + c;
+            return text;
         }
 
         public string FoulCommentary(string playername, string foulingPlayer, int type, int time, int quarter, int awayScore, int homeScore, int possession, string awayTeamName, string homeTeamName, int foulComm)
