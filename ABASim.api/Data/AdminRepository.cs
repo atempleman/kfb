@@ -1870,6 +1870,11 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
+        // public async Task<bool> EndOfSeasonRoller(int leagueId)
+        // {
+
+        // }
+
         public async Task<bool> EndSeason(int leagueId)
         {
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);

@@ -617,4 +617,63 @@ export class AdminComponent implements OnInit {
       this.otherAccordion = 0;
     }
   }
+
+  endOfSeasonRollOver() {
+
+    // PSEUDO CODE
+      // Get the Leagues current RollOverStatus
+
+      // Save season results
+
+      // Reset Standings
+
+      // Delete player stats
+
+      // Delete Season PBP
+
+      // Delete Playoff PBP
+
+      // Delete PlayoffSeries
+
+      // Delete Game Results
+
+      // Delete Playoff Results
+
+      // Delete Playoff Box Scores
+
+      // Delete Season Boxscores
+
+      // Delete Preseason Results
+
+      // Delete Preseason box scores
+
+      // Delete Preseason PBP
+
+      // Delete all award voting
+
+      // Add in next seasons draft picks
+
+      // Remove all teams depth charts
+
+      // Remove all teams go to settings
+
+      // Remove all current trade offers
+
+      // Remove all inbox messages
+
+      // Retired Players
+
+      // Update Player contracts & Rosters
+
+      // Delete all players data for current season
+
+      // Roll League season id over
+
+      // Run in new player data
+
+      // Add new players player teams
+
+      // Update RolloverStatus table
+      
+  }
 }

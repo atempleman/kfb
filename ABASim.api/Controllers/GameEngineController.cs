@@ -2091,11 +2091,47 @@ namespace ABASim.api.Controllers
                     }
                 }
 
+                if (_quarter > 3 && _time <= 48) {
+                    // Need to reset the sections if any are set as values and adjust accordingly
+                    // Three must be less than 0 just because some players wont shoot the 3
+                    if (twoSection <= 0 || threeSection <= 0)
+                    {
+                        int originalTwo = twoSection;
+                        int originalThree = threeSection - twoSection;
+                        
+                        if (twoSection <= 0) {
+                            twoSection = 5;
+                        }
+
+                        if (threeSection <= 0 && originalTwo != originalThree) {
+                            if (originalThree <= 5)
+                            {
+                                // threeSection = originalThree + 5; // this is wrong
+                                threeSection = 10;
+                            }
+                            else
+                            {
+                                threeSection = 10;
+                            }
+                        } else {
+                            threeSection = 10;
+                        }                        
+
+                        // if (foulSection <= 0) {
+                        //     foulSection = fouledTendancy + foulBonusValue + threeSection;
+                        // }
+
+                        foulSection = fouledTendancy + foulBonusValue + threeSection;
+                        turnoverSection = turnoverTendancy + foulSection;
+                    }
+                }
+
                 int value = 1000 + foulBonusValue;
                 if (turnoverSection > 1000)
                 {
                     value = turnoverSection + 10;
                 }
+
                 int result = _random.Next(1, value + 1);
 
                 if (result <= twoSection)
@@ -4859,27 +4895,6 @@ namespace ABASim.api.Controllers
                             _endGameShotClockBonus = 800;
                         }
                     }
-
-                    // if (_time > 16 || _shotClock > 16)
-                    // {
-                    //     _endGameShotClockBonus = -500;
-                    // }
-                    // else if (_time > 12 || _shotClock > 12)
-                    // {
-                    //     _endGameShotClockBonus = -300;
-                    // }
-                    // else if (_time > 8 || _shotClock > 8)
-                    // {
-                    //     _endGameShotClockBonus = 400;
-                    // }
-                    // else if (_time > 4 || _shotClock > 4)
-                    // {
-                    //     _endGameShotClockBonus = 750;
-                    // }
-                    // else
-                    // {
-                    //     _endGameShotClockBonus = 1000;
-                    // }
                 }
                 else if (diff > 0)
                 {
@@ -4921,39 +4936,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1100;
                         }
-
-                        // if (_time > 16 || _shotClock > 16)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 400;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 500;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 600;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 750;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 9000;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 1000;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1100;
-                        // }
                     }
                     else if (diff == 5 || diff == 6 || diff == 7)
                     {
@@ -4992,39 +4974,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1000;
                         }
-
-                        //  if (_time > 16 || _shotClock > 16)
-                        // {
-                        //     _endGameShotClockBonus = 150;
-                        // }
-                        // else if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 250;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 300;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 500;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 600;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 800;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1000;
-                        // }
                     }
                     else if (diff == 4)
                     {
@@ -5061,39 +5010,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1250;
                         }
-
-                        // if (_time > 16 || _shotClock > 16)
-                        // {
-                        //     _endGameShotClockBonus = 150;
-                        // }
-                        // else if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 250;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 300;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 500;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 750;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 900;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1250;
-                        // }
 
                         // random between 5 and 10% added to shot result
                         _endGameResultIncrease = (_random.Next(20, 51));
@@ -5132,35 +5048,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1250;
                         }
-
-                        // if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 100;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 150;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 250;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 300;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 700;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 850;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1250;
-                        // }
                     }
                     else if (diff <= 2)
                     {
@@ -5194,35 +5081,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1250;
                         }
-
-                        // if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = -0;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 0;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 50;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 600;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 900;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1250;
-                        // }
                     }
                 }
             }
@@ -5268,26 +5126,6 @@ namespace ABASim.api.Controllers
                             _endGameShotClockBonus = 800;
                         }
                     }
-                    // if (_time > 16 || _shotClock > 16)
-                    // {
-                    //     _endGameShotClockBonus = -500;
-                    // }
-                    // else if (_time > 12 || _shotClock > 12)
-                    // {
-                    //     _endGameShotClockBonus = -300;
-                    // }
-                    // else if (_time > 8 || _shotClock > 8)
-                    // {
-                    //     _endGameShotClockBonus = 400;
-                    // }
-                    // else if (_time > 4 || _shotClock > 4)
-                    // {
-                    //     _endGameShotClockBonus = 750;
-                    // }
-                    // else
-                    // {
-                    //     _endGameShotClockBonus = 1000;
-                    // }
                 }
                 else if (diff > 0)
                 {
@@ -5328,39 +5166,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1100;
                         }
-
-                        // if (_time > 16 || _shotClock > 16)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 400;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 500;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 600;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 750;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 9000;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 1000;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1100;
-                        // }
                     }
                     else if (diff == 5 || diff == 6 || diff == 7)
                     {
@@ -5399,39 +5204,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1000;
                         }
-
-                        // if (_time > 16 || _shotClock > 16)
-                        // {
-                        //     _endGameShotClockBonus = 150;
-                        // }
-                        // else if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 250;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 300;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 500;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 600;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 800;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1000;
-                        // }
                     }
                     else if (diff == 4)
                     {
@@ -5469,39 +5241,6 @@ namespace ABASim.api.Controllers
                             _endGameShotClockBonus = 1250;
                         }
 
-                        // if (_time > 16 || _shotClock > 16)
-                        // {
-                        //     _endGameShotClockBonus = 150;
-                        // }
-                        // else if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 250;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 300;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 500;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 750;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 900;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1250;
-                        // }
-
                         // random between 5 and 10% added to shot result
                         _endGameResultIncrease = (_random.Next(20, 51));
                     }
@@ -5538,35 +5277,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1250;
                         }
-
-                        // if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = 100;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 150;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 250;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 300;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 700;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 850;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1250;
-                        // }
                     }
                     else if (diff <= 2)
                     {
@@ -5600,35 +5310,6 @@ namespace ABASim.api.Controllers
                         {
                             _endGameShotClockBonus = 1250;
                         }
-
-                        // if (_time > 14 || _shotClock > 14)
-                        // {
-                        //     _endGameShotClockBonus = -0;
-                        // }
-                        // else if (_time > 12 || _shotClock > 12)
-                        // {
-                        //     _endGameShotClockBonus = 0;
-                        // }
-                        // else if (_time > 10 || _shotClock > 10)
-                        // {
-                        //     _endGameShotClockBonus = 50;
-                        // }
-                        // else if (_time > 8 || _shotClock > 8)
-                        // {
-                        //     _endGameShotClockBonus = 200;
-                        // }
-                        // else if (_time > 6 || _shotClock > 6)
-                        // {
-                        //     _endGameShotClockBonus = 600;
-                        // }
-                        // else if (_time > 4 || _shotClock > 4)
-                        // {
-                        //     _endGameShotClockBonus = 900;
-                        // }
-                        // else
-                        // {
-                        //     _endGameShotClockBonus = 1250;
-                        // }
                     }
                 }
             }
