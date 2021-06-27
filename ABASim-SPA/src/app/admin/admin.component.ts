@@ -18,6 +18,7 @@ import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
 import { GetScheduleLeague } from '../_models/getScheduleLeague';
 import { GetGameLeague } from '../_models/getGameLeague';
+import { RolloverStatus } from '../_models/rolloverStatus';
 
 @Component({
   selector: 'app-admin',
@@ -40,6 +41,9 @@ export class AdminComponent implements OnInit {
 
   teams: Team[] = [];
   teamSelected: number;
+
+  rolloverStatus: RolloverStatus;
+  rolloverPerc = 0;
 
   run = 0;
   progress = 0;
@@ -619,61 +623,247 @@ export class AdminComponent implements OnInit {
   }
 
   endOfSeasonRollOver() {
-
-    // PSEUDO CODE
-      // Get the Leagues current RollOverStatus
-
-      // Save season results
-
-      // Reset Standings
-
-      // Delete player stats
-
-      // Delete Season PBP
-
-      // Delete Playoff PBP
-
-      // Delete PlayoffSeries
-
-      // Delete Game Results
-
-      // Delete Playoff Results
-
-      // Delete Playoff Box Scores
-
-      // Delete Season Boxscores
-
-      // Delete Preseason Results
-
-      // Delete Preseason box scores
-
-      // Delete Preseason PBP
-
-      // Delete all award voting
-
-      // Add in next seasons draft picks
-
-      // Remove all teams depth charts
-
-      // Remove all teams go to settings
-
-      // Remove all current trade offers
-
-      // Remove all inbox messages
-
-      // Retired Players
-
-      // Update Player contracts & Rosters
-
-      // Delete all players data for current season
-
-      // Roll League season id over
-
-      // Run in new player data
-
-      // Add new players player teams
-
-      // Update RolloverStatus table
-      
+      this.spinner.show();
+      this.adminService.getLeagueRolloverStatus(this.league.id).subscribe(result => {
+        this.rolloverStatus = result;
+      }, error => {
+        this.alertify.error('Error getting league rollover status');
+        this.spinner.hide();
+      }, () => {
+        this.rolloverPerc = 1;
+        this.rolloverSaveSeasonResults();
+      });
   }
+
+  rolloverSaveSeasonResults() {
+    // Save season results
+    let saveResult = false;
+    // Champion, Runners Up, Award Winner, Standings, Player Stats(season & playoffs), PlayoffSeries
+    this.adminService.saveSeasonResults(this.league.id).subscribe(result => {
+      saveResult = result;
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error saving season results');
+    }, () => {
+      this.rolloverPerc = 10;
+      this.rolloverResetStandings();
+    });    
+  }
+
+  rolloverResetStandings() {
+    this.adminService.resetStandings(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error resetting standings');
+    }, () => {
+      this.rolloverPerc = 12;
+      this.rolloverDeletePlayerStats();
+    })
+  }
+
+  rolloverDeletePlayerStats() {
+    this.adminService.rolloverDeletePlayerData(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleting player data');
+    }, () => {
+      this.rolloverPerc = 15;
+      this.rolloverDeleteSeasonPBP();
+    })
+  }
+
+  rolloverDeleteSeasonPBP() {
+    this.adminService.rolloverDeletePlayByPlaySeason(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleing season play by play');
+    }, () => {
+      this.rolloverPerc = 25;
+      this.rolloverDeletePlayoffPBP();
+    });
+  }
+
+  rolloverDeletePlayoffPBP() {
+    this.adminService.rolloverDeletePlayByPlayPlayoffs(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleing playoffs play by play');
+    }, () => {
+      this.rolloverPerc = 30;
+      this.rolloverDeletePlayoffSerieses();
+    });
+  }
+
+  rolloverDeletePlayoffSerieses() {
+    this.adminService.rolloverDeletePlayoffSerieses(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleing playoff serieses');
+    }, () => {
+      this.rolloverPerc = 32;
+      this.rolloverDeleteGameResults();
+    });
+  }
+
+  rolloverDeleteGameResults() {
+    this.adminService.rolloverDeleteGameResults(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleing game results');
+    }, () => {
+      this.rolloverPerc = 37;
+      this.rolloverDeleteBoxScores();
+    });
+  }
+
+  rolloverDeleteBoxScores() {
+    this.adminService.rolloverDeleteBoxScores(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleing box scores');
+    }, () => {
+      this.rolloverPerc = 40;
+      this.rolloverDeleteAwards();
+    });
+  }
+
+  rolloverDeleteAwards() {
+    this.adminService.rolloverDeleteAwards(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleing awards');
+    }, () => {
+      this.rolloverPerc = 45;
+      this.rolloverNextAdditionalSeasonDraftPicks();
+    });
+  }
+
+  rolloverNextAdditionalSeasonDraftPicks() {
+    this.adminService.rolloverLoadNextDraftPicks(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error loading next draft picks');
+    }, () => {
+      this.rolloverPerc = 50;
+      this.rolloverDeleteTeamSettings();
+    });
+  }
+
+  rolloverDeleteTeamSettings() {
+    this.adminService.rolloverDeleteTeamSettings(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleting team settings');
+    }, () => {
+      this.rolloverPerc = 60;
+      this.rolloverDeleteMessagesAndOffers();
+    });
+  }
+
+  rolloverDeleteMessagesAndOffers() {
+    this.adminService.rolloverDeleteMessagesAndOffers(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleting messages and offers');
+    }, () => {
+      this.rolloverPerc = 62;
+      this.rolloverRetiredPlayers();
+    });
+  }
+
+  rolloverRetiredPlayers() {
+    this.adminService.rolloverRetiredPlayers(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error with retired player process');
+    }, () => {
+      this.rolloverPerc = 62;
+      this.rolloverUpdateContractsAndPlayers();
+    });
+  }
+
+  rolloverUpdateContractsAndPlayers() {
+    this.adminService.rolloverUpdateContractsAndPlayers(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error updating players and contracts');
+    }, () => {
+      this.rolloverPerc = 67;
+      this.rolloverDeletePlayerData();
+    });
+  }
+
+  rolloverDeletePlayerData() {
+    this.adminService.rolloverDeletePlayerDetailsData(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error deleting player details');
+    }, () => {
+      this.rolloverPerc = 75;
+      this.rolloverUpdateSeasonId();
+    });
+  }
+
+  rolloverUpdateSeasonId() {
+    this.adminService.rolloverUpdateSeason(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error updating league');
+    }, () => {
+      this.rolloverPerc = 80;
+       this.rolloverAddPlayerData();
+    });
+  }
+
+  rolloverAddPlayerData() {
+    this.adminService.rolloverAddPlayerData(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error updating new player data');
+    }, () => {
+      this.rolloverPerc = 90;
+      this.rolloverSetPlayerTeams();
+    });
+  }
+
+  rolloverSetPlayerTeams() {
+    this.adminService.rolloverSetPlayerTeams(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error updating player teams');
+    }, () => {
+      this.rolloverPerc = 95;
+      this.rolloverFinishUp();
+    });
+  }
+
+  rolloverFinishUp() {
+    this.adminService.rolloverFinishUp(this.league.id).subscribe(result => {
+
+    }, error => {
+      this.spinner.hide();
+      this.alertify.error('Error finishing rollover');
+    }, () => {
+      this.rolloverPerc = 100;
+      this.spinner.hide();
+    });
+  }
+      // Update League Status and RolloverStatus table
 }

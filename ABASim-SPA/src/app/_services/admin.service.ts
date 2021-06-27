@@ -10,6 +10,7 @@ import { GetRosterQuickView } from '../_models/getRosterQuickView';
 import { GetScheduleLeague } from '../_models/getScheduleLeague';
 import { GetGameLeague } from '../_models/getGameLeague';
 import { League } from '../_models/league';
+import { RolloverStatus } from '../_models/rolloverStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -150,5 +151,81 @@ export class AdminService {
   
   createNewLeague(newLeague: League) {
     return this.http.post(this.baseUrl + 'createnewleague', newLeague);
+  }
+
+  getLeagueRolloverStatus(leagueId: number) {
+    return this.http.get<RolloverStatus>(this.baseUrl + 'getrolloverstatus/' + leagueId);
+  }
+
+  saveSeasonResults(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'saveseasonresults/' + leagueId);
+  }
+
+  rolloverDeletePlayerData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteplayerdata/' + leagueId);
+  }
+
+  rolloverDeletePlayByPlaySeason(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteplaybyplayseason/' + leagueId);
+  }
+
+  rolloverDeletePlayByPlayPlayoffs(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteplaybyplayplayoffs/' + leagueId);
+  }
+
+  rolloverDeletePlayoffSerieses(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteplayoffserieses/' + leagueId);
+  }
+
+  rolloverDeleteGameResults(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeletegameresults/' + leagueId);
+  }
+
+  rolloverDeleteBoxScores(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteboxscores/' + leagueId);
+  }
+
+  rolloverDeleteAwards(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteawards/' + leagueId);
+  }
+
+  rolloverLoadNextDraftPicks(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverloadnextdraftpicks/' + leagueId);
+  }
+
+  rolloverDeleteTeamSettings(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverteamsettings/' + leagueId);
+  }
+
+  rolloverDeleteMessagesAndOffers(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeletemessagesandoffers/' + leagueId);
+  }
+
+  rolloverRetiredPlayers(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverretiredplayers/' + leagueId);
+  }
+
+  rolloverUpdateContractsAndPlayers(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverupdatecontractsandplayers/' + leagueId);
+  }
+
+  rolloverDeletePlayerDetailsData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverdeleteplayerdetailsdata/' + leagueId);
+  }
+
+  rolloverUpdateSeason(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverupdateseason/' + leagueId);
+  }
+
+  rolloverAddPlayerData(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloveraddplayerdata/' + leagueId);
+  }
+
+  rolloverSetPlayerTeams(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloversetplayerteams/' + leagueId);
+  }
+
+  rolloverFinishUp(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'rolloverfinishup/' + leagueId);
   }
 }

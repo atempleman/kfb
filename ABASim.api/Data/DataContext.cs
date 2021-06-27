@@ -137,37 +137,22 @@ namespace ABASim.api.Data
 
         public DbSet<UpComingDraftPlayer> UpComingDraftPlayers { get; set; }
 
+        public DbSet<RolloverStatus> RolloverStatuses { get; set; }
+
+        public DbSet<LeagueHistory> LeagueHistorys { get; set; }
+
+        public DbSet<RetiringPlayer> RetiringPlayers { get; set; }
+
+        public DbSet<PlayoffSeriesHistory> PlayoffSeriesHistorys { get; set; }
+
+        public DbSet<TeamHistory> TeamHistorys { get; set; }
+
         public async void CreateNewLeauge(League league)
         {
             var leagueName = new SqlParameter("@leagueName", league.LeagueName);
             var seasonId = new SqlParameter("@seasonId", league.Year);
             var leagueCode = new SqlParameter("@leagueCode", league.LeagueCode);
             await this.Database.ExecuteSqlCommandAsync("exec spCreateNewLeague @leagueName, @seasonId, @leagueCode", leagueName, seasonId, leagueCode);
-        }
-
-        public async void RunInNewDraftees(League league, LeagueConfig lconfig)
-        {
-            int nextSeasonYear = 0;
-            if (league.Year == 1314) {
-                nextSeasonYear = 1415;
-            } else if (league.Year == 1415) {
-                nextSeasonYear = 1516;
-            } else if (league.Year == 1516) {
-                nextSeasonYear = 1617;
-            } else if (league.Year == 1617) {
-                nextSeasonYear = 1718;
-            } else if (league.Year == 1718) {
-                nextSeasonYear = 1819;
-            } else if (league.Year == 1819) {
-                nextSeasonYear = 1920;
-            } else if (league.Year == 1920) {
-                nextSeasonYear = 2021;
-            }
-
-            var currentSeasonId = new SqlParameter("@currentSeasonId", league.Year);
-            var nextSeasonId = new SqlParameter("@nextSeasonId", nextSeasonYear);
-            var leagueId = new SqlParameter("@leagueId", league.Id);
-            await this.Database.ExecuteSqlCommandAsync("exec spNewDraftees @currentSeasonId, @nextSeasonId, @leagueId", currentSeasonId, nextSeasonId, leagueId);
         }
     }
 }

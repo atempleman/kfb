@@ -235,5 +235,138 @@ namespace ABASim.api.Controllers
             var result = await _repo.CreateNewLeague(league);
             return Ok(result);
         }
+
+        [HttpGet("getrolloverstatus/{leagueId}")]
+        public async Task<IActionResult> GetRolloverStatus(int leagueId)
+        {
+            var result = await _repo.GetRolloverStatus(leagueId);
+            return Ok(result);
+        }
+
+        [HttpGet("saveseasonresults/{leagueId}")]
+        public async Task<IActionResult> SaveSeasonResults(int leagueId)
+        {
+            var result = await _repo.SaveSeasonResults(leagueId);
+            return Ok(result);
+        }
+
+        [HttpGet("rolloverdeleteplayerdata/{leagueId}")]
+        public async Task<IActionResult> RolloverDeletePlayerData(int leagueId)
+        {
+            var result = await _repo.RolloverDeletePlayerData(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverdeleteplaybyplayseason/{leagueId}")]
+        public async Task<IActionResult> RolloverDeletePlayByPlaySeason(int leagueId)
+        {
+            var result = await _repo.RolloverDeletePlayByPlaySeason(leagueId);
+            return Ok(result);
+        }
+
+        [HttpGet("rolloverdeleteplaybyplayplayoffs/{leagueId}")]
+        public async Task<IActionResult> RolloverDeletePlayByPlayPlayoffs(int leagueId)
+        {
+            var result = await _repo.RolloverDeletePlayByPlayPlayoffs(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverdeleteplayoffserieses/{leagueId}")]
+        public async Task<IActionResult> RolloverDeletePlayoffSerieses(int leagueId)
+        {
+            var result = await _repo.RolloverDeletePlayoffSerieses(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverdeletegameresults/{leagueId}")]
+        public async Task<IActionResult> RolloverDeleteGameResults(int leagueId)
+        {
+            var result = await _repo.RolloverDeleteGameResults(leagueId);
+            return Ok(result);
+        }
+
+        [HttpGet("rolloverdeleteboxscores/{leagueId}")]
+        public async Task<IActionResult> RolloverDeleteBoxScores(int leagueId)
+        {
+            var result = await _repo.RolloverDeleteBoxScores(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverdeleteawards/{leagueId}")]
+        public async Task<IActionResult> RolloverDeleteAwards(int leagueId)
+        {
+            var result = await _repo.RolloverDeleteAwards(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverloadnextdraftpicks/{leagueId}")]
+        public async Task<IActionResult> RolloverLoadNextDraftPicks(int leagueId)
+        {
+            var result = await _repo.RolloverLoadNextDraftPicks(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverteamsettings/{leagueId}")]
+        public async Task<IActionResult> RolloverTeamSettings(int leagueId)
+        {
+            var result = await _repo.RolloverTeamSettings(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverdeletemessagesandoffers/{leagueId}")]
+        public async Task<IActionResult> RolloverDeleteMessagesAndOffers(int leagueId)
+        {
+            var result = await _repo.RolloverDeleteMessagesAndOffers(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverretiredplayers/{leagueId}")]
+        public async Task<IActionResult> RolloverRetiredPlayers(int leagueId)
+        {
+            var result = await _repo.RolloverRetiredPlayers(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverupdatecontractsandplayers/{leagueId}")]
+        public async Task<IActionResult> RolloverUpdateContractsAndPlayers(int leagueId)
+        {
+            var result = await _repo.RolloverUpdateContractsAndPlayers(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverdeleteplayerdetailsdata/{leagueId}")]
+        public async Task<IActionResult> RolloverDeletePlayerDetailsData(int leagueId)
+        {
+            var result = await _repo.RolloverDeletePlayerDetailsData(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloverupdateseason/{leagueId}")]
+        public async Task<IActionResult> RolloverUpdateSeason(int leagueId)
+        {
+            var result = await _repo.RolloverUpdateSeason(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloveraddplayerdata/{leagueId}")]
+        public async Task<IActionResult> RolloverAddPlayerData(int leagueId)
+        {
+            var result = await _repo.RolloverAddPlayerData(leagueId);
+            return Ok(result);
+        }
+        
+        [HttpGet("rolloversetplayerteams/{leagueId}")]
+        public async Task<IActionResult> RolloverSetPlayerTeams(int leagueId)
+        {
+            var result = await _repo.RolloverSetPlayerTeams(leagueId);
+            return Ok(result);
+        }
+        // rolloverfinishup
+        [HttpGet("rolloverfinishup/{leagueId}")]
+        public async Task<IActionResult> RolloverFinishUp(int leagueId)
+        {
+            var result = await _repo.RolloverFinishUp(leagueId);
+            return Ok(result);
+        }
     }
 }

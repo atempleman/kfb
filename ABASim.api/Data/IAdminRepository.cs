@@ -70,5 +70,43 @@ namespace ABASim.api.Data
          Task<bool> ResetLeague(int leagueId);
 
          Task<bool> GenerateInitialSalaryCaps(int leagueId);
+
+         Task<RolloverStatus> GetRolloverStatus(int leagueId);
+
+         Task<bool> SaveSeasonResults(int leagueId);
+         
+         Task<bool> RolloverDeletePlayerData(int leagueId);
+
+         Task<bool> RolloverDeletePlayByPlaySeason(int leagueId);
+
+         Task<bool> RolloverDeletePlayByPlayPlayoffs(int leagueId);
+
+         Task<bool> RolloverDeletePlayoffSerieses(int leagueId);
+
+         Task<bool> RolloverDeleteGameResults(int leagueId);
+
+         Task<bool> RolloverDeleteBoxScores(int leagueId);
+
+         Task<bool> RolloverDeleteAwards(int leagueId);
+
+         Task<bool> RolloverLoadNextDraftPicks(int leagueId);
+
+         Task<bool> RolloverTeamSettings(int leagueId);
+
+         Task<bool> RolloverDeleteMessagesAndOffers(int leagueId);
+
+         Task<bool> RolloverRetiredPlayers(int leagueId);
+
+         Task<bool> RolloverUpdateContractsAndPlayers(int leagueId);
+
+         Task<bool> RolloverDeletePlayerDetailsData(int leagueId);
+
+         Task<bool> RolloverUpdateSeason(int leagueId);
+
+         Task<bool> RolloverAddPlayerData(int leagueId);
+
+         Task<bool> RolloverSetPlayerTeams(int leagueId);
+
+         Task<bool> RolloverFinishUp(int leagueId);
     }
 }

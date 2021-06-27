@@ -120,7 +120,7 @@ namespace ABASim.api.Data
                 }
 
 
-                
+
             }
 
             // Now need to update the league status
@@ -136,10 +136,31 @@ namespace ABASim.api.Data
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             var lc = await _context.LeagueConfigs.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
 
-            if (league.Day >= 175 && lc.NewDrafteesLoaded == 0) {
+            if (league.Day >= 175 && lc.NewDrafteesLoaded == 0)
+            {
                 try
                 {
-                    _context.RunInNewDraftees(league, lc);
+                    int nextSeasonYear = 0;
+                    if (league.Year == 1314) {
+                        nextSeasonYear = 1415;
+                    } else if (league.Year == 1415) {
+                        nextSeasonYear = 1516;
+                    } else if (league.Year == 1516) {
+                        nextSeasonYear = 1617;
+                    } else if (league.Year == 1617) {
+                        nextSeasonYear = 1718;
+                    } else if (league.Year == 1718) {
+                        nextSeasonYear = 1819;
+                    } else if (league.Year == 1819) {
+                        nextSeasonYear = 1920;
+                    } else if (league.Year == 1920) {
+                        nextSeasonYear = 2021;
+                    }
+
+                    var currentSeasonId = new SqlParameter("@currentSeasonId", league.Year);
+                    var nextSeasonId = new SqlParameter("@nextSeasonId", nextSeasonYear);
+                    var lid = new SqlParameter("@leagueId", league.Id);
+                    await _context.Database.ExecuteSqlRawAsync("exec spNewDraftees @currentSeasonId, @nextSeasonId, @leagueId", currentSeasonId, nextSeasonId, lid);
                     lc.NewDrafteesLoaded = 1;
                     _context.Update(lc);
                 }
@@ -355,23 +376,28 @@ namespace ABASim.api.Data
                                 {
                                     // Game 2
                                     nextGameDay = 220;
-                                } else if (league.Day == 221)
+                                }
+                                else if (league.Day == 221)
                                 {
                                     // Game 3
                                     nextGameDay = 223;
-                                } else if (league.Day == 225)
+                                }
+                                else if (league.Day == 225)
                                 {
                                     // Game 4
                                     nextGameDay = 226;
-                                } else if (league.Day == 228)
+                                }
+                                else if (league.Day == 228)
                                 {
                                     // Game 5
                                     nextGameDay = 229;
-                                } else if (league.Day == 230)
+                                }
+                                else if (league.Day == 230)
                                 {
                                     // Game 6
                                     nextGameDay = 231;
-                                } else if (league.Day == 232)
+                                }
+                                else if (league.Day == 232)
                                 {
                                     // Game 7
                                     nextGameDay = 233;
@@ -417,30 +443,35 @@ namespace ABASim.api.Data
                                 int awayTeamId = 0;
 
                                 int totalGamesPlayed = series.HomeWins + series.AwayWins;
-                                
+
                                 // This is where the day needs to be determined
                                 int nextGameDay = 0;
                                 if (league.Day == 236)
                                 {
                                     // Game 2
                                     nextGameDay = 237;
-                                } else if (league.Day == 238)
+                                }
+                                else if (league.Day == 238)
                                 {
                                     // Game 3
                                     nextGameDay = 240;
-                                } else if (league.Day == 241)
+                                }
+                                else if (league.Day == 241)
                                 {
                                     // Game 4
                                     nextGameDay = 242;
-                                } else if (league.Day == 243)
+                                }
+                                else if (league.Day == 243)
                                 {
                                     // Game 5
                                     nextGameDay = 245;
-                                } else if (league.Day == 246)
+                                }
+                                else if (league.Day == 246)
                                 {
                                     // Game 6
                                     nextGameDay = 247;
-                                } else if (league.Day == 248)
+                                }
+                                else if (league.Day == 248)
                                 {
                                     // Game 7
                                     nextGameDay = 249;
@@ -486,30 +517,35 @@ namespace ABASim.api.Data
                                 int awayTeamId = 0;
 
                                 int totalGamesPlayed = series.HomeWins + series.AwayWins;
-                                
+
                                 // This is where the day needs to be determined
                                 int nextGameDay = 0;
                                 if (league.Day == 251)
                                 {
                                     // Game 2
                                     nextGameDay = 252;
-                                } else if (league.Day == 253)
+                                }
+                                else if (league.Day == 253)
                                 {
                                     // Game 3
                                     nextGameDay = 255;
-                                } else if (league.Day == 256)
+                                }
+                                else if (league.Day == 256)
                                 {
                                     // Game 4
                                     nextGameDay = 257;
-                                } else if (league.Day == 258)
+                                }
+                                else if (league.Day == 258)
                                 {
                                     // Game 5
                                     nextGameDay = 260;
-                                } else if (league.Day == 261)
+                                }
+                                else if (league.Day == 261)
                                 {
                                     // Game 6
                                     nextGameDay = 262;
-                                } else if (league.Day == 263)
+                                }
+                                else if (league.Day == 263)
                                 {
                                     // Game 7
                                     nextGameDay = 264;
@@ -555,30 +591,35 @@ namespace ABASim.api.Data
                                 int awayTeamId = 0;
 
                                 int totalGamesPlayed = series.HomeWins + series.AwayWins;
-                                
+
                                 // This is where the day needs to be determined
                                 int nextGameDay = 0;
                                 if (league.Day == 268)
                                 {
                                     // Game 2
                                     nextGameDay = 269;
-                                } else if (league.Day == 270)
+                                }
+                                else if (league.Day == 270)
                                 {
                                     // Game 3
                                     nextGameDay = 272;
-                                } else if (league.Day == 273)
+                                }
+                                else if (league.Day == 273)
                                 {
                                     // Game 4
                                     nextGameDay = 274;
-                                } else if (league.Day == 275)
+                                }
+                                else if (league.Day == 275)
                                 {
                                     // Game 5
                                     nextGameDay = 277;
-                                } else if (league.Day == 278)
+                                }
+                                else if (league.Day == 278)
                                 {
                                     // Game 6
                                     nextGameDay = 279;
-                                } else if (league.Day == 280)
+                                }
+                                else if (league.Day == 280)
                                 {
                                     // Game 7
                                     nextGameDay = 281;
@@ -700,7 +741,7 @@ namespace ABASim.api.Data
                                             {
                                                 acceptedOffer = off;
                                             }
-                                            
+
                                         }
                                     }
                                     else if (offerYears == acceptedYears)
@@ -739,7 +780,7 @@ namespace ABASim.api.Data
                                             {
                                                 acceptedOffer = off;
                                             }
-                                            
+
                                         }
                                     }
                                 }
@@ -1870,10 +1911,1279 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        // public async Task<bool> EndOfSeasonRoller(int leagueId)
-        // {
+        public async Task<RolloverStatus> GetRolloverStatus(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            return ros;
+        }
 
-        // }
+        public async Task<IEnumerable<VotesDto>> GetAllNBATeams(int leagueId)
+        {
+            List<VotesDto> allFirstTeam = new List<VotesDto>();
+            List<VotesDto> allSecondTeam = new List<VotesDto>();
+            List<VotesDto> allThirdTeam = new List<VotesDto>();
+            List<VotesDto> allTeams = new List<VotesDto>();
+            List<int> addedPlayers = new List<int>();
+            var votes = await _context.MvpVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).ToListAsync();
+
+            // Point Guard
+            int pgCount = 0;
+            foreach (var vote in votes)
+            {
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+
+                if (player.PGPosition == 1)
+                {
+                    var added = addedPlayers.Contains(player.PlayerId);
+
+                    if (!added)
+                    {
+                        VotesDto dto = new VotesDto
+                        {
+                            PlayerId = vote.PlayerId,
+                            PlayerName = player.FirstName + " " + player.Surname,
+                            TeamName = team.ShortCode,
+                            Votes = vote.Votes
+                        };
+
+                        if (pgCount == 0)
+                        {
+                            allFirstTeam.Add(dto);
+                        }
+
+                        if (pgCount == 1)
+                        {
+                            allSecondTeam.Add(dto);
+                        }
+
+                        if (pgCount == 2)
+                        {
+                            allThirdTeam.Add(dto);
+                        }
+                        addedPlayers.Add(dto.PlayerId);
+                        pgCount++;
+
+                        if (pgCount == 3)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Shooting Guard
+            int sgCount = 0;
+            foreach (var vote in votes)
+            {
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+
+                if (player.SGPosition == 1)
+                {
+                    var added = addedPlayers.Contains(player.PlayerId);
+
+                    if (!added)
+                    {
+                        VotesDto dto = new VotesDto
+                        {
+                            PlayerId = vote.PlayerId,
+                            PlayerName = player.FirstName + " " + player.Surname,
+                            TeamName = team.ShortCode,
+                            Votes = vote.Votes
+                        };
+
+                        if (sgCount == 0)
+                        {
+                            allFirstTeam.Add(dto);
+                        }
+
+                        if (sgCount == 1)
+                        {
+                            allSecondTeam.Add(dto);
+                        }
+
+                        if (sgCount == 2)
+                        {
+                            allThirdTeam.Add(dto);
+                        }
+                        addedPlayers.Add(dto.PlayerId);
+                        sgCount++;
+
+                        if (sgCount == 3)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Small Forward
+            int sfCount = 0;
+            foreach (var vote in votes)
+            {
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+
+                if (player.SFPosition == 1)
+                {
+                    var added = addedPlayers.Contains(player.PlayerId);
+
+                    if (!added)
+                    {
+                        VotesDto dto = new VotesDto
+                        {
+                            PlayerId = vote.PlayerId,
+                            PlayerName = player.FirstName + " " + player.Surname,
+                            TeamName = team.ShortCode,
+                            Votes = vote.Votes
+                        };
+
+                        if (sfCount == 0)
+                        {
+                            allFirstTeam.Add(dto);
+                        }
+
+                        if (sfCount == 1)
+                        {
+                            allSecondTeam.Add(dto);
+                        }
+
+                        if (sfCount == 2)
+                        {
+                            allThirdTeam.Add(dto);
+                        }
+                        addedPlayers.Add(dto.PlayerId);
+                        sfCount++;
+
+                        if (sfCount == 3)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Power Forward
+            int pfCount = 0;
+            foreach (var vote in votes)
+            {
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+
+                if (player.PFPosition == 1)
+                {
+                    var added = addedPlayers.Contains(player.PlayerId);
+
+                    if (!added)
+                    {
+                        VotesDto dto = new VotesDto
+                        {
+                            PlayerId = vote.PlayerId,
+                            PlayerName = player.FirstName + " " + player.Surname,
+                            TeamName = team.ShortCode,
+                            Votes = vote.Votes
+                        };
+
+                        if (pfCount == 0)
+                        {
+                            allFirstTeam.Add(dto);
+                        }
+
+                        if (pfCount == 1)
+                        {
+                            allSecondTeam.Add(dto);
+                        }
+
+                        if (pfCount == 2)
+                        {
+                            allThirdTeam.Add(dto);
+                        }
+                        addedPlayers.Add(dto.PlayerId);
+                        pfCount++;
+
+                        if (pfCount == 3)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Centre
+            int cCount = 0;
+            foreach (var vote in votes)
+            {
+                var player = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == vote.PlayerId && x.LeagueId == leagueId);
+                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+
+                if (player.CPosition == 1)
+                {
+                    var added = addedPlayers.Contains(player.PlayerId);
+
+                    if (!added)
+                    {
+                        VotesDto dto = new VotesDto
+                        {
+                            PlayerId = vote.PlayerId,
+                            PlayerName = player.FirstName + " " + player.Surname,
+                            TeamName = team.ShortCode,
+                            Votes = vote.Votes
+                        };
+
+                        if (cCount == 0)
+                        {
+                            allFirstTeam.Add(dto);
+                        }
+
+                        if (cCount == 1)
+                        {
+                            allSecondTeam.Add(dto);
+                        }
+
+                        if (cCount == 2)
+                        {
+                            allThirdTeam.Add(dto);
+                        }
+                        addedPlayers.Add(dto.PlayerId);
+                        cCount++;
+
+                        if (cCount == 3)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Now to add the 3 lists together in apprporiate order
+            foreach (var item in allFirstTeam)
+            {
+                allTeams.Add(item);
+            }
+
+            foreach (var item in allSecondTeam)
+            {
+                allTeams.Add(item);
+            }
+
+            foreach (var item in allThirdTeam)
+            {
+                allTeams.Add(item);
+            }
+            return allTeams;
+        }
+
+        public async Task<bool> SaveSeasonResults(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+
+
+            if (ros.RollOverStatus == 0)
+            {
+                // Get the champion and runner up
+                var series = await _context.PlayoffSerieses.FirstOrDefaultAsync(x => x.Round == 4 && x.LeagueId == leagueId);
+
+                int championId = 0;
+                int runnerupId = 0;
+                if (series.HomeWins == 4)
+                {
+                    championId = series.HomeTeamId;
+                    runnerupId = series.AwayTeamId;
+                }
+                else
+                {
+                    championId = series.AwayTeamId;
+                    runnerupId = series.HomeTeamId;
+                }
+
+                // Get the award winner details
+                var mvp = await _context.MvpVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
+                var mvpPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == mvp.PlayerId && x.LeagueId == leagueId);
+                var mvpPlayer = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == mvp.PlayerId && x.LeagueId == leagueId);
+
+                var dpoy = await _context.DpoyVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
+                var dpoyPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == dpoy.PlayerId && x.LeagueId == leagueId);
+                var dpoyPlayer = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == dpoy.PlayerId && x.LeagueId == leagueId);
+
+                var sixth = await _context.SixthManVoting.Where(x => x.LeagueId == leagueId).OrderByDescending(x => x.Votes).FirstOrDefaultAsync();
+                var sixthPlayerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == sixth.PlayerId && x.LeagueId == leagueId);
+                var sixthPlayer = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == sixth.PlayerId && x.LeagueId == leagueId);
+
+                // All-NBA Teams
+                var allNbaTeams = await GetAllNBATeams(leagueId);
+                int counter = 0;
+                string firstTeamPGName = "";
+                int firstTeamPGTeamId = 0;
+                string firstTeamSGName = "";
+                int firstTeamSGTeamId = 0;
+                string firstTeamSFName = "";
+                int firstTeamSFTeamId = 0;
+                string firstTeamPFName = "";
+                int firstTeamPFTeamId = 0;
+                string firstTeamCName = "";
+                int firstTeamCTeamId = 0;
+                string secondTeamPGName = "";
+                int secondTeamPGTeamId = 0;
+                string secondTeamSGName = "";
+                int secondTeamSGTeamId = 0;
+                string secondTeamSFName = "";
+                int secondTeamSFTeamId = 0;
+                string secondTeamPFName = "";
+                int secondTeamPFTeamId = 0;
+                string secondTeamCName = "";
+                int secondTeamCTeamId = 0;
+                string thirdTeamPGName = "";
+                int thirdTeamPGTeamId = 0;
+                string thirdTeamSGName = "";
+                int thirdTeamSGTeamId = 0;
+                string thirdTeamSFName = "";
+                int thirdTeamSFTeamId = 0;
+                string thirdTeamPFName = "";
+                int thirdTeamPFTeamId = 0;
+                string thirdTeamCName = "";
+                int thirdTeamCTeamId = 0;
+
+                foreach (var allnba in allNbaTeams)
+                {
+                    counter++;
+                    switch (counter)
+                    {
+                        case 1:
+                            firstTeamPGName = allnba.PlayerName;
+                            var firstPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            firstTeamPGTeamId = firstPGTeam.TeamId;
+                            break;
+                        case 2:
+                            firstTeamSGName = allnba.PlayerName;
+                            var firstSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            firstTeamSGTeamId = firstSGTeam.TeamId;
+                            break;
+                        case 3:
+                            firstTeamSFName = allnba.PlayerName;
+                            var firstSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            firstTeamSFTeamId = firstSFTeam.TeamId;
+                            break;
+                        case 4:
+                            firstTeamPFName = allnba.PlayerName;
+                            var firstPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            firstTeamPFTeamId = firstPFTeam.TeamId;
+                            break;
+                        case 5:
+                            firstTeamCName = allnba.PlayerName;
+                            var firstCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            firstTeamCTeamId = firstCTeam.TeamId;
+                            break;
+                        case 6:
+                            secondTeamPGName = allnba.PlayerName;
+                            var secondPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            secondTeamPGTeamId = secondPGTeam.TeamId;
+                            break;
+                        case 7:
+                            secondTeamSGName = allnba.PlayerName;
+                            var secondSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            secondTeamSGTeamId = secondSGTeam.TeamId;
+                            break;
+                        case 8:
+                            secondTeamSFName = allnba.PlayerName;
+                            var secondSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            secondTeamSFTeamId = secondSFTeam.TeamId;
+                            break;
+                        case 9:
+                            secondTeamPFName = allnba.PlayerName;
+                            var secondPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            secondTeamPFTeamId = secondPFTeam.TeamId;
+                            break;
+                        case 10:
+                            secondTeamCName = allnba.PlayerName;
+                            var secondCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            secondTeamCTeamId = secondCTeam.TeamId;
+                            break;
+                        case 11:
+                            thirdTeamPGName = allnba.PlayerName;
+                            var thirdPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            thirdTeamPGTeamId = thirdPGTeam.TeamId;
+                            break;
+                        case 12:
+                            thirdTeamSGName = allnba.PlayerName;
+                            var thirdSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            thirdTeamSGTeamId = thirdSGTeam.TeamId;
+                            break;
+                        case 13:
+                            thirdTeamSFName = allnba.PlayerName;
+                            var thirdSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            thirdTeamSFTeamId = thirdSFTeam.TeamId;
+                            break;
+                        case 14:
+                            thirdTeamPFName = allnba.PlayerName;
+                            var thirdPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            thirdTeamPFTeamId = thirdPFTeam.TeamId;
+                            break;
+                        case 15:
+                            thirdTeamCName = allnba.PlayerName;
+                            var thirdCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            thirdTeamCTeamId = thirdCTeam.TeamId;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // League History
+                LeagueHistory history = new LeagueHistory
+                {
+                    LeagueId = leagueId,
+                    SeasonId = league.Year,
+                    ChampionsId = championId,
+                    RunnerUpId = runnerupId,
+                    DpoyPlayer = dpoyPlayer.FirstName + " " + dpoyPlayer.Surname,
+                    DpoyTeamId = dpoyPlayerTeam.TeamId,
+                    MVPPlayer = mvpPlayer.FirstName + " " + mvpPlayer.Surname,
+                    MvpTeamId = mvpPlayerTeam.TeamId,
+                    SixthPlayer = sixthPlayer.FirstName + " " + sixthPlayer.Surname,
+                    SixthTeamId = sixthPlayerTeam.TeamId,
+                    FirstTeamPGPlayer = firstTeamPGName,
+                    FirstTeamPGTeamId = firstTeamPGTeamId,
+                    FirstTeamSGPlayer = firstTeamSGName,
+                    FirstTeamSGTeamId = firstTeamSGTeamId,
+                    FirstTeamSFPlayer = firstTeamSFName,
+                    FirstTeamSFTeamId = firstTeamSFTeamId,
+                    FirstTeamPFPlayer = firstTeamPFName,
+                    FirstTeamPFTeamId = firstTeamPFTeamId,
+                    FirstTeamCPlayer = firstTeamCName,
+                    FirstTeamCTeamId = firstTeamCTeamId,
+                    SecondTeamPGPlayer = secondTeamPGName,
+                    SecondTeamPGTeamId = secondTeamPGTeamId,
+                    SecondTeamSGPlayer = secondTeamSGName,
+                    SecondTeamSGTeamId = secondTeamSGTeamId,
+                    SecondTeamSFPlayer = secondTeamSFName,
+                    SecondTeamSFTeamId = secondTeamSFTeamId,
+                    SecondTeamPFPlayer = secondTeamPFName,
+                    SecondTeamPFTeamId = secondTeamPFTeamId,
+                    SecondTeamCPlayer = secondTeamCName,
+                    SecondTeamCTeamId = secondTeamCTeamId,
+                    ThirdTeamPGPlayer = thirdTeamPGName,
+                    ThirdTeamPGTeamId = thirdTeamPGTeamId,
+                    ThirdTeamSGPlayer = thirdTeamSGName,
+                    ThirdTeamSGTeamId = thirdTeamSGTeamId,
+                    ThirdTeamSFPlayer = thirdTeamSFName,
+                    ThirdTeamSFTeamId = thirdTeamSFTeamId,
+                    ThirdTeamPFPlayer = thirdTeamPFName,
+                    ThirdTeamPFTeamId = thirdTeamPFTeamId,
+                    ThirdTeamCPlayer = thirdTeamCName,
+                    ThirdTeamCTeamId = thirdTeamCTeamId
+                };
+                await _context.AddAsync(history);
+                ros.RollOverStatus = 1;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 1)
+            {
+                // Player Stats
+                // Player Stats move into Career
+                var playerStats = await _context.PlayerStats.Where(x => x.LeagueId == leagueId).ToListAsync();
+
+                foreach (var ps in playerStats)
+                {
+                    var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+                    CareerPlayerStat stats = new CareerPlayerStat
+                    {
+                        PlayerId = ps.PlayerId,
+                        SeasonId = league.Year,
+                        Team = team.ShortCode,
+                        GamesPlayed = ps.GamesPlayed,
+                        Minutes = ps.Minutes,
+                        Points = ps.Points,
+                        Rebounds = ps.Rebounds,
+                        Assists = ps.Assists,
+                        Steals = ps.Steals,
+                        Blocks = ps.Blocks,
+                        FieldGoalsMade = ps.FieldGoalsMade,
+                        FieldGoalsAttempted = ps.FieldGoalsAttempted,
+                        ThreeFieldGoalsMade = ps.ThreeFieldGoalsMade,
+                        ThreeFieldGoalsAttempted = ps.ThreeFieldGoalsAttempted,
+                        FreeThrowsMade = ps.FreeThrowsMade,
+                        FreeThrowsAttempted = ps.FreeThrowsAttempted,
+                        ORebs = ps.ORebs,
+                        DRebs = ps.DRebs,
+                        Turnovers = ps.Turnovers,
+                        Fouls = ps.Fouls,
+                        Ppg = ps.Ppg,
+                        Apg = ps.Apg,
+                        Rpg = ps.Rpg,
+                        Spg = ps.Spg,
+                        Bpg = ps.Bpg,
+                        Mpg = ps.Mpg,
+                        Tpg = ps.Tpg,
+                        Fpg = ps.Fpg,
+                        LeagueId = leagueId
+                    };
+                    await _context.AddAsync(stats);
+                }
+                await _context.SaveChangesAsync();
+
+                // Player Stats move into career
+                var playerStatsPlayoffs = await _context.PlayerStatsPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var ps in playerStatsPlayoffs)
+                {
+                    var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
+                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
+                    CareerPlayerStatsPlayoff stats = new CareerPlayerStatsPlayoff
+                    {
+                        PlayerId = ps.PlayerId,
+                        SeasonId = league.Year,
+                        Team = team.ShortCode,
+                        GamesPlayed = ps.GamesPlayed,
+                        Minutes = ps.Minutes,
+                        Points = ps.Points,
+                        Rebounds = ps.Rebounds,
+                        Assists = ps.Assists,
+                        Steals = ps.Steals,
+                        Blocks = ps.Blocks,
+                        FieldGoalsMade = ps.FieldGoalsMade,
+                        FieldGoalsAttempted = ps.FieldGoalsAttempted,
+                        ThreeFieldGoalsMade = ps.ThreeFieldGoalsMade,
+                        ThreeFieldGoalsAttempted = ps.ThreeFieldGoalsAttempted,
+                        FreeThrowsMade = ps.FreeThrowsMade,
+                        FreeThrowsAttempted = ps.FreeThrowsAttempted,
+                        ORebs = ps.ORebs,
+                        DRebs = ps.DRebs,
+                        Turnovers = ps.Turnovers,
+                        Fouls = ps.Fouls,
+                        Ppg = ps.Ppg,
+                        Apg = ps.Apg,
+                        Rpg = ps.Rpg,
+                        Spg = ps.Spg,
+                        Bpg = ps.Bpg,
+                        Mpg = ps.Mpg,
+                        Tpg = ps.Tpg,
+                        Fpg = ps.Fpg,
+                        LeagueId = leagueId
+                    };
+                    await _context.AddAsync(stats);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 2;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 2)
+            {
+                var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
+
+                foreach (var team in teams)
+                {
+                    var record = await _context.Standings.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == leagueId);
+
+                    // Team History
+                    TeamHistory history = new TeamHistory
+                    {
+                        LeagueId = leagueId,
+                        SeasonId = league.Year,
+                        TeamId = team.TeamId,
+                        Wins = record.Wins,
+                        Losses = record.Losses
+                    };
+                    await _context.AddAsync(history);
+                }
+                await _context.SaveChangesAsync();
+                ros.RollOverStatus = 3;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 3)
+            {
+                // Playoff Series History
+                var serieses = await _context.PlayoffSerieses.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var series in serieses)
+                {
+                    PlayoffSeriesHistory history = new PlayoffSeriesHistory
+                    {
+                        LeagueId = leagueId,
+                        SeasonId = league.Year,
+                        Round = series.Round,
+                        HomeTeamId = series.HomeTeamId,
+                        AwayTeamId = series.AwayTeamId,
+                        HomeWins = series.HomeWins,
+                        AwayWins = series.AwayWins,
+                        Conference = series.Conference
+                    };
+                    await _context.AddAsync(history);
+                }
+                await _context.SaveChangesAsync();
+                ros.RollOverStatus = 4;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeletePlayerData(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+
+            if (ros.RollOverStatus == 4) {
+                var playerStatsToRemove = await _context.PlayerStats.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var stats in playerStatsToRemove)
+                {
+                    _context.PlayerStats.Remove(stats);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 5;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 5) {
+                var playerStatsToRemove = await _context.PlayerStatsPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var stats in playerStatsToRemove)
+                {
+                    _context.PlayerStatsPlayoffs.Remove(stats);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 6;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeletePlayByPlaySeason(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+
+            if (ros.RollOverStatus == 6) 
+            {
+                var playbyplays = await _context.PlayByPlays.Where(x => x.LeagueId == leagueId).ToListAsync();
+                int count = playbyplays.Count;
+
+                foreach (var pbp in playbyplays)
+                {
+                    _context.PlayByPlays.Remove(pbp);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 7;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeletePlayByPlayPlayoffs(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 7)
+            {
+                var playbyplays = await _context.PlayByPlayPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
+                int count = playbyplays.Count;
+
+                foreach (var pbp in playbyplays)
+                {
+                    _context.PlayByPlayPlayoffs.Remove(pbp);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 8;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeletePlayoffSerieses(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 8)
+            {
+                var serieses = await _context.PlayoffSerieses.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var ps in serieses)
+                {
+                    _context.PlayoffSerieses.Remove(ps);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 9;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeleteGameResults(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 9)
+            {
+                var results = await _context.GameResults.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var gr in results)
+                {
+                    _context.GameResults.Remove(gr);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 10;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 10)
+            {
+                var results = await _context.PlayoffResults.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var pr in results)
+                {
+                    _context.PlayoffResults.Remove(pr);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 11;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 11)
+            {
+                var results = await _context.PreseasonGameResults.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var pr in results)
+                {
+                    _context.PreseasonGameResults.Remove(pr);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 12;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeleteBoxScores(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 12)
+            {
+                var boxScores = await _context.GameBoxScores.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var bs in boxScores)
+                {
+                    _context.GameBoxScores.Remove(bs);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 13;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 13)
+            {
+                var boxScores = await _context.PlayoffBoxScores.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var bs in boxScores)
+                {
+                    _context.PlayoffBoxScores.Remove(bs);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 14;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeleteAwards(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 14)
+            {
+                var mvps = await _context.MvpVoting.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var mvp in mvps)
+                {
+                    _context.MvpVoting.Remove(mvp);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 15;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 15)
+            {
+                var dpoys = await _context.DpoyVoting.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var dpoy in dpoys)
+                {
+                    _context.DpoyVoting.Remove(dpoy);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 16;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 16)
+            {
+                var sixths = await _context.SixthManVoting.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var six in sixths)
+                {
+                    _context.SixthManVoting.Remove(six);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 17;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverLoadNextDraftPicks(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 17) {
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+
+                int year = 0;
+                switch (league.Year)
+                {
+                    case 1314:
+                        year = 1718;
+                        break;
+                    case 1415:
+                        year = 1819;
+                        break;
+                    case 1516:
+                        year = 1920;
+                        break;
+                    case 1617:
+                        year = 2021;
+                        break;
+                    case 1718:
+                        year = 2122;
+                        break;
+                    case 1819:
+                        year = 2223;
+                        break;
+                    case 1920:
+                        year = 2324;
+                        break;
+                    case 2021:
+                        year = 2425;
+                        break;
+                    default:
+                        break;
+                }
+
+                // (Year, Round, OriginalTeam, CurrentTeam, LeagueId
+                var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var team in teams)
+                {
+                    // Now we add the first and second round pick for each team
+                    TeamDraftPick first = new TeamDraftPick
+                    {
+                        Year = year,
+                        Round = 1,
+                        OriginalTeam = team.TeamId,
+                        CurrentTeam = team.TeamId,
+                        LeagueId = leagueId
+                    };
+
+                    TeamDraftPick second = new TeamDraftPick
+                    {
+                        Year = year,
+                        Round = 2,
+                        OriginalTeam = team.TeamId,
+                        CurrentTeam = team.TeamId,
+                        LeagueId = leagueId
+                    };
+                    await _context.AddAsync(first);
+                    await _context.AddAsync(second);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 18;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverTeamSettings(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 18) 
+            {
+                // depth chart
+                var depthCharts = await _context.DepthCharts.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var dc in depthCharts)
+                {
+                    _context.DepthCharts.Remove(dc);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 19;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 19) 
+            {
+                // go to players
+                var coachSettings = await _context.CoachSettings.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var cs in coachSettings)
+                {
+                    cs.GoToPlayerOne = 0;
+                    cs.GoToPlayerTwo = 0;
+                    cs.GoToPlayerThree = 0;
+                    _context.Update(cs);
+                }
+                 await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 20;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 20) 
+            {
+                // reset team strategies
+                var teamSettings = await _context.TeamStrategies.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var ts in teamSettings)
+                {
+                    ts.OffensiveStrategyId = 1;
+                    ts.DefensiveStrategyId = 1;
+                    _context.Update(ts);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 21;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeleteMessagesAndOffers(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 21) {
+                var messages = await _context.InboxMessages.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var msg in messages)
+                {
+                    _context.Update(msg);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 22;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 22)
+            {
+                var trades = await _context.Trades.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var trade in trades)
+                {
+                    _context.Update(trade);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 23;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+
+            if (ros.RollOverStatus == 23)
+            {
+                var offers = await _context.ContractOffers.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var off in offers)
+                {
+                    _context.Update(off);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 24;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverRetiredPlayers(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 24)
+            {
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+                
+                // Need to load the retired players into the Retired Players table
+                var retiringPlayers = await _context.RetiringPlayers.Where(x => x.SeasonId == league.Year).ToListAsync();
+
+                foreach (var rp in retiringPlayers)
+                {
+                    var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
+
+                    string positions = "";
+                    if (playerDetails.PGPosition == 1) {
+                        positions = "PG ";
+                    }
+
+                    if (playerDetails.SGPosition == 1) {
+                        positions = positions + "SG ";
+                    }
+
+                    if (playerDetails.SFPosition == 1) {
+                        positions = positions + "SF ";
+                    }
+
+                    if (playerDetails.PFPosition == 1) {
+                        positions = positions + "PF ";
+                    }
+
+                    if (playerDetails.CPosition == 1) {
+                        positions = positions + "C";
+                    }
+
+                    RetiredPlayer player = new RetiredPlayer
+                    {
+                        Name = playerDetails.FirstName + " " + playerDetails.Surname,
+                        Year = league.Year,
+                        PlayerId = rp.PlayerId,
+                        Positions = positions,
+                        LeagueId = leagueId
+                    };
+                    await _context.AddAsync(player);
+
+                    // remove player from Rosters
+                    var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
+                    _context.Remove(rosterRecord);
+
+                    // Remove player from PlayerTeams
+                    var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
+                    _context.Remove(ptRecord);
+
+                    // Remove player from PlayerContracts
+                    var pcRecord = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
+                    _context.Remove(pcRecord);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 25;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverUpdateContractsAndPlayers(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 25) 
+            {
+                // get all player contracts for the league
+                var contracts = await _context.PlayerContracts.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var contract in contracts)
+                {
+                    // Update the contract
+                    contract.YearFive = 0;
+                    contract.GuranteedFive = 0;
+                    contract.YearFour = contract.YearFive;
+                    contract.GuranteedFour = contract.GuranteedFive;
+                    contract.YearThree = contract.YearFour;
+                    contract.GuranteedThree = contract.GuranteedFour;
+                    contract.YearTwo = contract.YearThree;
+                    contract.GuranteedTwo = contract.GuranteedThree;
+                    contract.YearOne = contract.YearTwo;
+                    contract.GuranteedOne = contract.GuranteedTwo;
+
+                    // Now need to check if the contract has expired
+                    if (contract.YearOne == 0)
+                    {
+                        // Remove the player from the roster
+                        var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
+                        _context.Remove(rosterRecord);
+
+                        // Change the players player team to be 31
+                        var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
+                        _context.Remove(ptRecord);
+
+                        // Delete the contract
+                        _context.Remove(contract);
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 26;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverDeletePlayerDetailsData(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 26) 
+            {
+                // Delete player data
+                // Players
+                var players = await _context.Players.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var player in players)
+                {
+                    _context.Remove(player);
+                }
+                await _context.SaveChangesAsync();
+
+                // PlayerRatings
+                var playerRatings = await _context.PlayerRatings.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var pr in playerRatings)
+                {
+                    _context.Remove(pr);
+                }
+                await _context.SaveChangesAsync();
+
+                // PlayerGradings
+                var playerGradings = await _context.PlayerGradings.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var pg in playerGradings)
+                {
+                    _context.Remove(pg);
+                }
+                await _context.SaveChangesAsync();
+
+                // PlayerTendancies
+                var tendancies = await _context.PlayerTendancies.Where(x => x.LeagueId == leagueId).ToListAsync();
+
+                foreach (var t in tendancies)
+                {
+                    _context.Remove(t);
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 27;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }           
+            return true;
+        }
+
+        public async Task<bool> RolloverUpdateSeason(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 27)
+            {
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+                
+                int year = 0;
+                switch (league.Year)
+                {
+                    case 1314:
+                        year = 1718;
+                        break;
+                    case 1415:
+                        year = 1819;
+                        break;
+                    case 1516:
+                        year = 1920;
+                        break;
+                    case 1617:
+                        year = 2021;
+                        break;
+                    case 1718:
+                        year = 2122;
+                        break;
+                    case 1819:
+                        year = 2223;
+                        break;
+                    case 1920:
+                        year = 2324;
+                        break;
+                    case 2021:
+                        year = 2425;
+                        break;
+                    default:
+                        break;
+                }
+                league.Year = year;
+                _context.Update(league);
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 28;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+        
+        public async Task<bool> RolloverAddPlayerData(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 28)
+            {
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+                var seasonId = new SqlParameter("@nextSeasonId", league.Year);
+                var lid = new SqlParameter("@leagueId", league.Id);
+                await _context.Database.ExecuteSqlRawAsync("exec spLoadNewPlayerData @leagueId, @seasonId", lid, seasonId);
+                
+                ros.RollOverStatus = 29;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverSetPlayerTeams(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 29)
+            {
+                var players = await _context.Players.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var p in players)
+                {
+                    var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && p.PlayerId == x.PlayerId);
+                    if (pt == null) {
+                        PlayerTeam newPt = new PlayerTeam
+                        {
+                            PlayerId = p.PlayerId,
+                            TeamId = 31,
+                            LeagueId = leagueId
+                        };
+                        await _context.AddAsync(newPt);
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+                ros.RollOverStatus = 30;
+                _context.Update(ros);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> RolloverFinishUp(int leagueId)
+        {
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 30)
+            {
+                var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+                league.StateId = 15;
+                ros.RollOverStatus = 0;
+            }
+            return await _context.SaveChangesAsync() > 1;
+        }
 
         public async Task<bool> EndSeason(int leagueId)
         {
@@ -2963,22 +4273,27 @@ namespace ABASim.api.Data
 
         public async Task<bool> ResetStandings(int leagueId)
         {
-            var standings = await _context.Standings.Where(x => x.LeagueId == leagueId).ToListAsync();
-
-            foreach (var s in standings)
+            var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
+            if (ros.RollOverStatus == 4)
             {
-                s.ConfLosses = 0;
-                s.ConfWins = 0;
-                s.GamesPlayed = 0;
-                s.HomeLosses = 0;
-                s.HomeWins = 0;
-                s.Losses = 0;
-                s.RoadLosses = 0;
-                s.RoadWins = 0;
-                s.Wins = 0;
+                var standings = await _context.Standings.Where(x => x.LeagueId == leagueId).ToListAsync();
 
-                _context.Standings.Update(s);
+                foreach (var s in standings)
+                {
+                    s.ConfLosses = 0;
+                    s.ConfWins = 0;
+                    s.GamesPlayed = 0;
+                    s.HomeLosses = 0;
+                    s.HomeWins = 0;
+                    s.Losses = 0;
+                    s.RoadLosses = 0;
+                    s.RoadWins = 0;
+                    s.Wins = 0;
+
+                    _context.Standings.Update(s);
+                }
             }
+            ros.RollOverStatus = 5;
             return await _context.SaveChangesAsync() > 0;
         }
 
@@ -3115,7 +4430,7 @@ namespace ABASim.api.Data
                 }
 
                 // Now update the TeamSalary Record
-                var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.TeamId &&  x.LeagueId == leagueId);
+                var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == leagueId);
                 salaryCap.CurrentCapAmount = teamSalary;
                 _context.TeamSalaryCaps.Update(salaryCap);
             }

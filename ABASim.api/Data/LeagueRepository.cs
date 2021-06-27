@@ -1217,7 +1217,7 @@ namespace ABASim.api.Data
                 teamId = series.AwayTeamId;
             }
 
-            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == teamId);
+            var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == teamId && x.LeagueId == leagueId);
             return team;
         }
 
