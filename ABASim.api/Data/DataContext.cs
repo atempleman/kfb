@@ -147,12 +147,5 @@ namespace ABASim.api.Data
 
         public DbSet<TeamHistory> TeamHistorys { get; set; }
 
-        public async void CreateNewLeauge(League league)
-        {
-            var leagueName = new SqlParameter("@leagueName", league.LeagueName);
-            var seasonId = new SqlParameter("@seasonId", league.Year);
-            var leagueCode = new SqlParameter("@leagueCode", league.LeagueCode);
-            await this.Database.ExecuteSqlCommandAsync("exec spCreateNewLeague @leagueName, @seasonId, @leagueCode", leagueName, seasonId, leagueCode);
-        }
     }
 }

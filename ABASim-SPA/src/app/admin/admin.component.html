@@ -302,6 +302,20 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Begin Season Rollover -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
+					*ngIf="this.league?.stateId == 11 && this.league?.day == 285">
+					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
+							class="header-card ml-3"><strong>Rollover Season</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">End the current season and roll into the next season, starting with draft lottery.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(rolloverseason, 5)">Rollover Season</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -865,7 +879,21 @@
 	</form>
 </ng-template>
 
-
+<ng-template #rolloverseason>
+	<div class="modal-header">
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8">End and Rollover the Season</h6>
+		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+	</div>
+	<form #draftlotteryForm (ngSubmit)="endOfSeasonRollOver()">
+		<div class="modal-body">
+			<p class="color-7">End the current season and perform the process of rolling over to the next season, landing at the draft lottery stage. Note: this will take a few minutes.</p>
+		</div>
+		<div class="modal-footer form-group text-center">
+			<button type="submit" class="btn btn-primary btn-sm" *ngIf="this.rolloverButton == 0">Rollover</button>
+			<button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Cancel</button>
+		</div>
+	</form>
+</ng-template>
 
 
 

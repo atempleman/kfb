@@ -950,7 +950,10 @@ namespace ABASim.api.Data
         {
             try
             {
-                _context.CreateNewLeauge(league);
+                var leagueName = new SqlParameter("@leagueName", league.LeagueName);
+                var seasonId = new SqlParameter("@seasonId", league.Year);
+                var leagueCode = new SqlParameter("@leagueCode", league.LeagueCode);
+                await _context.Database.ExecuteSqlRawAsync("exec spCreateNewLeague @leagueName, @seasonId, @leagueCode", leagueName, seasonId, leagueCode);
             }
             catch (Exception)
             {
@@ -2257,77 +2260,77 @@ namespace ABASim.api.Data
                     {
                         case 1:
                             firstTeamPGName = allnba.PlayerName;
-                            var firstPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var firstPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             firstTeamPGTeamId = firstPGTeam.TeamId;
                             break;
                         case 2:
                             firstTeamSGName = allnba.PlayerName;
-                            var firstSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var firstSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             firstTeamSGTeamId = firstSGTeam.TeamId;
                             break;
                         case 3:
                             firstTeamSFName = allnba.PlayerName;
-                            var firstSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var firstSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             firstTeamSFTeamId = firstSFTeam.TeamId;
                             break;
                         case 4:
                             firstTeamPFName = allnba.PlayerName;
-                            var firstPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var firstPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             firstTeamPFTeamId = firstPFTeam.TeamId;
                             break;
                         case 5:
                             firstTeamCName = allnba.PlayerName;
-                            var firstCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var firstCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             firstTeamCTeamId = firstCTeam.TeamId;
                             break;
                         case 6:
                             secondTeamPGName = allnba.PlayerName;
-                            var secondPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var secondPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             secondTeamPGTeamId = secondPGTeam.TeamId;
                             break;
                         case 7:
                             secondTeamSGName = allnba.PlayerName;
-                            var secondSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var secondSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             secondTeamSGTeamId = secondSGTeam.TeamId;
                             break;
                         case 8:
                             secondTeamSFName = allnba.PlayerName;
-                            var secondSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var secondSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             secondTeamSFTeamId = secondSFTeam.TeamId;
                             break;
                         case 9:
                             secondTeamPFName = allnba.PlayerName;
-                            var secondPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var secondPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             secondTeamPFTeamId = secondPFTeam.TeamId;
                             break;
                         case 10:
                             secondTeamCName = allnba.PlayerName;
-                            var secondCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var secondCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             secondTeamCTeamId = secondCTeam.TeamId;
                             break;
                         case 11:
                             thirdTeamPGName = allnba.PlayerName;
-                            var thirdPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var thirdPGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             thirdTeamPGTeamId = thirdPGTeam.TeamId;
                             break;
                         case 12:
                             thirdTeamSGName = allnba.PlayerName;
-                            var thirdSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var thirdSGTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             thirdTeamSGTeamId = thirdSGTeam.TeamId;
                             break;
                         case 13:
                             thirdTeamSFName = allnba.PlayerName;
-                            var thirdSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var thirdSFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             thirdTeamSFTeamId = thirdSFTeam.TeamId;
                             break;
                         case 14:
                             thirdTeamPFName = allnba.PlayerName;
-                            var thirdPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var thirdPFTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             thirdTeamPFTeamId = thirdPFTeam.TeamId;
                             break;
                         case 15:
                             thirdTeamCName = allnba.PlayerName;
-                            var thirdCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Teamname == allnba.TeamName);
+                            var thirdCTeam = await _context.Teams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.ShortCode == allnba.TeamName);
                             thirdTeamCTeamId = thirdCTeam.TeamId;
                             break;
                         default:
@@ -2388,91 +2391,13 @@ namespace ABASim.api.Data
             if (ros.RollOverStatus == 1)
             {
                 // Player Stats
-                // Player Stats move into Career
-                var playerStats = await _context.PlayerStats.Where(x => x.LeagueId == leagueId).ToListAsync();
-
-                foreach (var ps in playerStats)
-                {
-                    var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
-                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
-                    CareerPlayerStat stats = new CareerPlayerStat
-                    {
-                        PlayerId = ps.PlayerId,
-                        SeasonId = league.Year,
-                        Team = team.ShortCode,
-                        GamesPlayed = ps.GamesPlayed,
-                        Minutes = ps.Minutes,
-                        Points = ps.Points,
-                        Rebounds = ps.Rebounds,
-                        Assists = ps.Assists,
-                        Steals = ps.Steals,
-                        Blocks = ps.Blocks,
-                        FieldGoalsMade = ps.FieldGoalsMade,
-                        FieldGoalsAttempted = ps.FieldGoalsAttempted,
-                        ThreeFieldGoalsMade = ps.ThreeFieldGoalsMade,
-                        ThreeFieldGoalsAttempted = ps.ThreeFieldGoalsAttempted,
-                        FreeThrowsMade = ps.FreeThrowsMade,
-                        FreeThrowsAttempted = ps.FreeThrowsAttempted,
-                        ORebs = ps.ORebs,
-                        DRebs = ps.DRebs,
-                        Turnovers = ps.Turnovers,
-                        Fouls = ps.Fouls,
-                        Ppg = ps.Ppg,
-                        Apg = ps.Apg,
-                        Rpg = ps.Rpg,
-                        Spg = ps.Spg,
-                        Bpg = ps.Bpg,
-                        Mpg = ps.Mpg,
-                        Tpg = ps.Tpg,
-                        Fpg = ps.Fpg,
-                        LeagueId = leagueId
-                    };
-                    await _context.AddAsync(stats);
-                }
-                await _context.SaveChangesAsync();
+                var seasonId = new SqlParameter("@seasonId", league.Year);
+                var lid = new SqlParameter("@leagueId", league.Id);
+                await _context.Database.ExecuteSqlRawAsync("exec spRolloverPlayerStatsSeason @leagueId, @seasonId", lid, seasonId);
 
                 // Player Stats move into career
-                var playerStatsPlayoffs = await _context.PlayerStatsPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
-                foreach (var ps in playerStatsPlayoffs)
-                {
-                    var playerTeam = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.PlayerId == ps.PlayerId && x.LeagueId == leagueId);
-                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == playerTeam.TeamId && x.LeagueId == leagueId);
-                    CareerPlayerStatsPlayoff stats = new CareerPlayerStatsPlayoff
-                    {
-                        PlayerId = ps.PlayerId,
-                        SeasonId = league.Year,
-                        Team = team.ShortCode,
-                        GamesPlayed = ps.GamesPlayed,
-                        Minutes = ps.Minutes,
-                        Points = ps.Points,
-                        Rebounds = ps.Rebounds,
-                        Assists = ps.Assists,
-                        Steals = ps.Steals,
-                        Blocks = ps.Blocks,
-                        FieldGoalsMade = ps.FieldGoalsMade,
-                        FieldGoalsAttempted = ps.FieldGoalsAttempted,
-                        ThreeFieldGoalsMade = ps.ThreeFieldGoalsMade,
-                        ThreeFieldGoalsAttempted = ps.ThreeFieldGoalsAttempted,
-                        FreeThrowsMade = ps.FreeThrowsMade,
-                        FreeThrowsAttempted = ps.FreeThrowsAttempted,
-                        ORebs = ps.ORebs,
-                        DRebs = ps.DRebs,
-                        Turnovers = ps.Turnovers,
-                        Fouls = ps.Fouls,
-                        Ppg = ps.Ppg,
-                        Apg = ps.Apg,
-                        Rpg = ps.Rpg,
-                        Spg = ps.Spg,
-                        Bpg = ps.Bpg,
-                        Mpg = ps.Mpg,
-                        Tpg = ps.Tpg,
-                        Fpg = ps.Fpg,
-                        LeagueId = leagueId
-                    };
-                    await _context.AddAsync(stats);
-                }
-                await _context.SaveChangesAsync();
-
+                await _context.Database.ExecuteSqlRawAsync("exec spRolloverPlayerStatsPlayoffs @leagueId, @seasonId", lid, seasonId);
+                
                 ros.RollOverStatus = 2;
                 _context.Update(ros);
                 await _context.SaveChangesAsync();
@@ -2535,6 +2460,22 @@ namespace ABASim.api.Data
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
 
             if (ros.RollOverStatus == 4) {
+                // Need to handle updated injuries over the season
+                var injuries = await _context.PlayerInjuries.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var injury in injuries)
+                {
+                    if(injury.TimeMissed > 10)
+                    {
+                        injury.TimeMissed = injury.TimeMissed - 10;
+                        _context.Update(injury);
+                    }
+                    else
+                    {
+                        _context.Remove(injury);
+                    }
+                }
+                await _context.SaveChangesAsync();
+
                 var playerStatsToRemove = await _context.PlayerStats.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var stats in playerStatsToRemove)
                 {
@@ -2970,7 +2911,9 @@ namespace ABASim.api.Data
 
                     // remove player from Rosters
                     var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
-                    _context.Remove(rosterRecord);
+                    if (rosterRecord != null) {
+                        _context.Remove(rosterRecord);
+                    }
 
                     // Remove player from PlayerTeams
                     var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
@@ -2978,7 +2921,9 @@ namespace ABASim.api.Data
 
                     // Remove player from PlayerContracts
                     var pcRecord = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
-                    _context.Remove(pcRecord);
+                    if (pcRecord != null) {
+                        _context.Remove(pcRecord);
+                    }
                 }
                 await _context.SaveChangesAsync();
 
@@ -2998,6 +2943,31 @@ namespace ABASim.api.Data
                 var contracts = await _context.PlayerContracts.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var contract in contracts)
                 {
+                    // Need to check player options here
+                    if (contract.YearTwo == 0 && contract.YearOne != 0 && contract.PlayerOption == 1)
+                    {
+                        // Player has an option
+                        Random r = new Random();
+                        int result = r.Next(101);
+
+                        if (result <= 66) {
+                            // Player has taken the option
+                            contract.PlayerOption = 0;
+                        } else {
+                            // Player has rejected the option
+                            // Remove the player from the roster
+                            var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
+                            _context.Remove(rosterRecord);
+
+                            // Change the players player team to be 31
+                            var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
+                            _context.Remove(ptRecord);
+
+                            // Delete the contract
+                            _context.Remove(contract);
+                        }
+                    }
+                    
                     // Update the contract
                     contract.YearFive = 0;
                     contract.GuranteedFive = 0;
@@ -3024,6 +2994,23 @@ namespace ABASim.api.Data
                         // Delete the contract
                         _context.Remove(contract);
                     }
+                }
+                await _context.SaveChangesAsync();
+
+                // Now need to update all teams salary caps
+                var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var team in teams)
+                {
+                    int capAmount = 0;
+                    var cap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == leagueId);
+                    var playersOnTeam = await _context.PlayerTeams.Where(x => x.TeamId == team.TeamId && x.LeagueId == leagueId).ToListAsync();
+                    foreach (var p in playersOnTeam)
+                    {
+                        var contract = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == p.PlayerId);
+                        capAmount = capAmount + contract.YearOne;
+                    }
+                    cap.CurrentCapAmount = capAmount;
+                    _context.Update(cap);
                 }
                 await _context.SaveChangesAsync();
 
@@ -3091,25 +3078,25 @@ namespace ABASim.api.Data
                 switch (league.Year)
                 {
                     case 1314:
-                        year = 1718;
+                        year = 1415;
                         break;
                     case 1415:
-                        year = 1819;
+                        year = 1516;
                         break;
                     case 1516:
-                        year = 1920;
+                        year = 1617;
                         break;
                     case 1617:
-                        year = 2021;
+                        year = 1718;
                         break;
                     case 1718:
-                        year = 2122;
+                        year = 1819;
                         break;
                     case 1819:
-                        year = 2223;
+                        year = 2920;
                         break;
                     case 1920:
-                        year = 2324;
+                        year = 2021;
                         break;
                     case 2021:
                         year = 2425;
@@ -3134,7 +3121,7 @@ namespace ABASim.api.Data
             if (ros.RollOverStatus == 28)
             {
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-                var seasonId = new SqlParameter("@nextSeasonId", league.Year);
+                var seasonId = new SqlParameter("@seasonId", league.Year);
                 var lid = new SqlParameter("@leagueId", league.Id);
                 await _context.Database.ExecuteSqlRawAsync("exec spLoadNewPlayerData @leagueId, @seasonId", lid, seasonId);
                 
@@ -3179,7 +3166,8 @@ namespace ABASim.api.Data
             if (ros.RollOverStatus == 30)
             {
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-                league.StateId = 15;
+                league.StateId = 13;
+                league.Day = 0;
                 ros.RollOverStatus = 0;
             }
             return await _context.SaveChangesAsync() > 1;
@@ -3199,7 +3187,7 @@ namespace ABASim.api.Data
                 {
                     PlayerId = ps.PlayerId,
                     SeasonId = league.Year,
-                    Team = team.ShortCode,
+                    Team = team.TeamId,
                     GamesPlayed = ps.GamesPlayed,
                     Minutes = ps.Minutes,
                     Points = ps.Points,
@@ -3242,7 +3230,7 @@ namespace ABASim.api.Data
                 {
                     PlayerId = ps.PlayerId,
                     SeasonId = league.Year,
-                    Team = team.ShortCode,
+                    Team = team.TeamId,
                     GamesPlayed = ps.GamesPlayed,
                     Minutes = ps.Minutes,
                     Points = ps.Points,
@@ -3814,7 +3802,7 @@ namespace ABASim.api.Data
                 CareerPlayerStat stats = new CareerPlayerStat
                 {
                     PlayerId = ps.PlayerId,
-                    Team = team.ShortCode,
+                    Team = team.TeamId,
                     SeasonId = league.Year,
                     GamesPlayed = ps.GamesPlayed,
                     Minutes = ps.Minutes,
@@ -3856,7 +3844,7 @@ namespace ABASim.api.Data
                 CareerPlayerStatsPlayoff stats = new CareerPlayerStatsPlayoff
                 {
                     PlayerId = ps.PlayerId,
-                    Team = team.ShortCode,
+                    Team = team.TeamId,
                     SeasonId = league.Year,
                     GamesPlayed = ps.GamesPlayed,
                     Minutes = ps.Minutes,
@@ -4293,7 +4281,6 @@ namespace ABASim.api.Data
                     _context.Standings.Update(s);
                 }
             }
-            ros.RollOverStatus = 5;
             return await _context.SaveChangesAsync() > 0;
         }
 

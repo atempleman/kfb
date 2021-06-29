@@ -284,8 +284,6 @@ export class DashboardComponent implements OnInit {
 
   getTodaysEvents() {
     if (this.league.stateId === 6 && this.league.day !== 0) {
-      console.log('ash');
-      console.log(this.league.id);
       this.leagueService.getPreseasonGamesForToday(this.league.id).subscribe(result => {
         this.todaysGames = result;
       }, error => {

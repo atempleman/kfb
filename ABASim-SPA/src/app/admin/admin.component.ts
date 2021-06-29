@@ -44,6 +44,7 @@ export class AdminComponent implements OnInit {
 
   rolloverStatus: RolloverStatus;
   rolloverPerc = 0;
+  rolloverButton = 0;
 
   run = 0;
   progress = 0;
@@ -622,15 +623,20 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  /* The Rollover code begins here */
+
   endOfSeasonRollOver() {
+    this.rolloverButton = 1
       this.spinner.show();
       this.adminService.getLeagueRolloverStatus(this.league.id).subscribe(result => {
         this.rolloverStatus = result;
       }, error => {
         this.alertify.error('Error getting league rollover status');
         this.spinner.hide();
+        this.rolloverButton = 0;
       }, () => {
         this.rolloverPerc = 1;
+        this.alertify.success('Completed Getting Season Rollover - ' + this.rolloverPerc + '% completed');
         this.rolloverSaveSeasonResults();
       });
   }
@@ -644,8 +650,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error saving season results');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 10;
+      this.alertify.success('Completed Saving Season Results - ' + this.rolloverPerc + '% completed');
       this.rolloverResetStandings();
     });    
   }
@@ -656,8 +664,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error resetting standings');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 12;
+      this.alertify.success('Completed Resetting standings - ' + this.rolloverPerc + '% completed');
       this.rolloverDeletePlayerStats();
     })
   }
@@ -668,8 +678,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleting player data');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 15;
+      this.alertify.success('Completed Deleting Player Data - ' + this.rolloverPerc + '% completed');
       this.rolloverDeleteSeasonPBP();
     })
   }
@@ -680,8 +692,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleing season play by play');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 25;
+      this.alertify.success('Completed Deleting Season Play by Play - ' + this.rolloverPerc + '% completed');
       this.rolloverDeletePlayoffPBP();
     });
   }
@@ -692,8 +706,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleing playoffs play by play');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 30;
+      this.alertify.success('Completed Deleting Playoffs Play by Play - ' + this.rolloverPerc + '% completed');
       this.rolloverDeletePlayoffSerieses();
     });
   }
@@ -704,8 +720,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleing playoff serieses');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 32;
+      this.alertify.success('Completed Deleting Playoff Series - ' + this.rolloverPerc + '% completed');
       this.rolloverDeleteGameResults();
     });
   }
@@ -716,8 +734,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleing game results');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 37;
+      this.alertify.success('Completed Deleting Game Results - ' + this.rolloverPerc + '% completed');
       this.rolloverDeleteBoxScores();
     });
   }
@@ -728,8 +748,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleing box scores');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 40;
+      this.alertify.success('Completed Deleting Box Scores - ' + this.rolloverPerc + '% completed');
       this.rolloverDeleteAwards();
     });
   }
@@ -740,8 +762,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleing awards');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 45;
+      this.alertify.success('Completed Deleting Awards - ' + this.rolloverPerc + '% completed');
       this.rolloverNextAdditionalSeasonDraftPicks();
     });
   }
@@ -752,8 +776,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error loading next draft picks');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 50;
+      this.alertify.success('Completed Loading Next Draft Picks - ' + this.rolloverPerc + '% completed');
       this.rolloverDeleteTeamSettings();
     });
   }
@@ -764,8 +790,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleting team settings');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 60;
+      this.alertify.success('Completed Deleting Team Settings - ' + this.rolloverPerc + '% completed');
       this.rolloverDeleteMessagesAndOffers();
     });
   }
@@ -776,8 +804,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleting messages and offers');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 62;
+      this.alertify.success('Completed Deleting messages and offers - ' + this.rolloverPerc + '% completed');
       this.rolloverRetiredPlayers();
     });
   }
@@ -788,8 +818,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error with retired player process');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 62;
+      this.alertify.success('Completed Retired Player Process - ' + this.rolloverPerc + '% completed');
       this.rolloverUpdateContractsAndPlayers();
     });
   }
@@ -800,8 +832,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error updating players and contracts');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 67;
+      this.alertify.success('Completed Updating Players and contracts - ' + this.rolloverPerc + '% completed');
       this.rolloverDeletePlayerData();
     });
   }
@@ -812,8 +846,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error deleting player details');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 75;
+      this.alertify.success('Completed Deleting Player Details - ' + this.rolloverPerc + '% completed');
       this.rolloverUpdateSeasonId();
     });
   }
@@ -824,8 +860,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error updating league');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 80;
+      this.alertify.success('Completed Updating League - ' + this.rolloverPerc + '% completed');
        this.rolloverAddPlayerData();
     });
   }
@@ -836,8 +874,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error updating new player data');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 90;
+      this.alertify.success('Completed Updating New Player Data - ' + this.rolloverPerc + '% completed');
       this.rolloverSetPlayerTeams();
     });
   }
@@ -848,8 +888,10 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error updating player teams');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 95;
+      this.alertify.success('Completed Updating Player Teams - ' + this.rolloverPerc + '% completed');
       this.rolloverFinishUp();
     });
   }
@@ -860,10 +902,11 @@ export class AdminComponent implements OnInit {
     }, error => {
       this.spinner.hide();
       this.alertify.error('Error finishing rollover');
+      this.rolloverButton = 0;
     }, () => {
       this.rolloverPerc = 100;
+      this.alertify.success('Completed Season Rollover - ' + this.rolloverPerc + '% completed');
       this.spinner.hide();
     });
   }
-      // Update League Status and RolloverStatus table
 }

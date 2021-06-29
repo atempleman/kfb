@@ -623,7 +623,7 @@ namespace ABASim.api.Data
                     {
                         PlayerId = currentSeasonPlayerStats.PlayerId,
                         SeasonId = league.Year,
-                        TeamName = team.Mascot,
+                        TeamName = team.TeamId,
                         GamesStats = currentSeasonPlayerStats.GamesPlayed,
                         MinutesStats = currentSeasonPlayerStats.Minutes,
                         FgmStats = currentSeasonPlayerStats.FieldGoalsMade,
@@ -665,7 +665,7 @@ namespace ABASim.api.Data
                     {
                         PlayerId = currentSeasonPlayerStats.PlayerId,
                         SeasonId = league.Year,
-                        TeamName = team.Mascot,
+                        TeamName = team.TeamId,
                         GamesStats = currentSeasonPlayerStats.GamesPlayed,
                         MinutesStats = currentSeasonPlayerStats.Minutes,
                         FgmStats = currentSeasonPlayerStats.FieldGoalsMade,

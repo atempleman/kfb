@@ -165,10 +165,10 @@
                                     </table>
 
                                     <h4 class="color-8"
-                                        *ngIf="this.league?.stateId > 8 || (this.league?.stateId == 7 && this.league?.day > 0) && this.statusStats">
+                                        *ngIf="this.statusStats">
                                         Playoffs</h4>
                                     <table class="table table-hover roster-table"
-                                        *ngIf="this.league?.stateId > 8 || (this.league?.stateId == 7 && this.league?.day > 0) && this.statusStats">
+                                        *ngIf="this.statusStats">
                                         <thead>
                                             <tr>
                                                 <th>G</th>

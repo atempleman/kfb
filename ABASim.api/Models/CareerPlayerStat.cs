@@ -10,7 +10,7 @@ namespace ABASim.api.Models
 
         public int SeasonId { get; set; }
 
-        public string Team { get; set; }
+        public int Team { get; set; }
 
         public int GamesPlayed { get; set; }
 

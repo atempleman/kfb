@@ -6,7 +6,7 @@ namespace ABASim.api.Dtos
 
         public int SeasonId { get; set; }
 
-        public string TeamName { get; set; }
+        public int TeamName { get; set; }
 
         public int GamesStats { get; set; }
 
