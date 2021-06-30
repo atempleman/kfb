@@ -37,6 +37,29 @@ namespace ABASim.api.Data
             }
             else if (status == 6)
             {
+                // Need to remove some draft items
+                // TODO
+                // Delete AutoPickOrders
+                var autoPicks = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var ap in autoPicks)
+                {
+                    _context.Remove(ap);
+                }
+                await _context.SaveChangesAsync();
+
+                // Delete Draft Rankings
+                var draftRankings = await _context.DraftRankings.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var dr in draftRankings)
+                {
+                    _context.Remove(dr);
+                }
+                await _context.SaveChangesAsync();
+
+                // Delete Draft Tracker
+                var draftTracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
+                _context.Remove(draftTracker);
+                await _context.SaveChangesAsync();
+
                 league.Day = 30;
             }
             else if (status == 7)
@@ -141,19 +164,32 @@ namespace ABASim.api.Data
                 try
                 {
                     int nextSeasonYear = 0;
-                    if (league.Year == 1314) {
+                    if (league.Year == 1314)
+                    {
                         nextSeasonYear = 1415;
-                    } else if (league.Year == 1415) {
+                    }
+                    else if (league.Year == 1415)
+                    {
                         nextSeasonYear = 1516;
-                    } else if (league.Year == 1516) {
+                    }
+                    else if (league.Year == 1516)
+                    {
                         nextSeasonYear = 1617;
-                    } else if (league.Year == 1617) {
+                    }
+                    else if (league.Year == 1617)
+                    {
                         nextSeasonYear = 1718;
-                    } else if (league.Year == 1718) {
+                    }
+                    else if (league.Year == 1718)
+                    {
                         nextSeasonYear = 1819;
-                    } else if (league.Year == 1819) {
+                    }
+                    else if (league.Year == 1819)
+                    {
                         nextSeasonYear = 1920;
-                    } else if (league.Year == 1920) {
+                    }
+                    else if (league.Year == 1920)
+                    {
                         nextSeasonYear = 2021;
                     }
 
@@ -2397,7 +2433,7 @@ namespace ABASim.api.Data
 
                 // Player Stats move into career
                 await _context.Database.ExecuteSqlRawAsync("exec spRolloverPlayerStatsPlayoffs @leagueId, @seasonId", lid, seasonId);
-                
+
                 ros.RollOverStatus = 2;
                 _context.Update(ros);
                 await _context.SaveChangesAsync();
@@ -2459,14 +2495,18 @@ namespace ABASim.api.Data
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
 
-            if (ros.RollOverStatus == 4) {
+            if (ros.RollOverStatus == 4)
+            {
                 // Need to handle updated injuries over the season
                 var injuries = await _context.PlayerInjuries.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var injury in injuries)
                 {
-                    if(injury.TimeMissed > 10)
+                    if (injury.EndDay > 295)
                     {
-                        injury.TimeMissed = injury.TimeMissed - 10;
+                        // Need to correctly reflect the offseason injury
+                        int newInjuryEndDay = injury.EndDay - 295;
+                        injury.StartDay = 0;
+                        injury.EndDay = newInjuryEndDay;
                         _context.Update(injury);
                     }
                     else
@@ -2488,7 +2528,8 @@ namespace ABASim.api.Data
                 await _context.SaveChangesAsync();
             }
 
-            if (ros.RollOverStatus == 5) {
+            if (ros.RollOverStatus == 5)
+            {
                 var playerStatsToRemove = await _context.PlayerStatsPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var stats in playerStatsToRemove)
                 {
@@ -2507,7 +2548,7 @@ namespace ABASim.api.Data
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
 
-            if (ros.RollOverStatus == 6) 
+            if (ros.RollOverStatus == 6)
             {
                 var playbyplays = await _context.PlayByPlays.Where(x => x.LeagueId == leagueId).ToListAsync();
                 int count = playbyplays.Count;
@@ -2555,6 +2596,13 @@ namespace ABASim.api.Data
                 foreach (var ps in serieses)
                 {
                     _context.PlayoffSerieses.Remove(ps);
+                }
+                await _context.SaveChangesAsync();
+
+                var schedules = await _context.SchedulesPlayoffs.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var sch in schedules)
+                {
+                    _context.SchedulesPlayoffs.Remove(sch);
                 }
                 await _context.SaveChangesAsync();
 
@@ -2695,7 +2743,8 @@ namespace ABASim.api.Data
         public async Task<bool> RolloverLoadNextDraftPicks(int leagueId)
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
-            if (ros.RollOverStatus == 17) {
+            if (ros.RollOverStatus == 17)
+            {
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
                 int year = 0;
@@ -2766,7 +2815,7 @@ namespace ABASim.api.Data
         public async Task<bool> RolloverTeamSettings(int leagueId)
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
-            if (ros.RollOverStatus == 18) 
+            if (ros.RollOverStatus == 18)
             {
                 // depth chart
                 var depthCharts = await _context.DepthCharts.Where(x => x.LeagueId == leagueId).ToListAsync();
@@ -2781,7 +2830,7 @@ namespace ABASim.api.Data
                 await _context.SaveChangesAsync();
             }
 
-            if (ros.RollOverStatus == 19) 
+            if (ros.RollOverStatus == 19)
             {
                 // go to players
                 var coachSettings = await _context.CoachSettings.Where(x => x.LeagueId == leagueId).ToListAsync();
@@ -2792,14 +2841,14 @@ namespace ABASim.api.Data
                     cs.GoToPlayerThree = 0;
                     _context.Update(cs);
                 }
-                 await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 ros.RollOverStatus = 20;
                 _context.Update(ros);
                 await _context.SaveChangesAsync();
             }
 
-            if (ros.RollOverStatus == 20) 
+            if (ros.RollOverStatus == 20)
             {
                 // reset team strategies
                 var teamSettings = await _context.TeamStrategies.Where(x => x.LeagueId == leagueId).ToListAsync();
@@ -2821,11 +2870,12 @@ namespace ABASim.api.Data
         public async Task<bool> RolloverDeleteMessagesAndOffers(int leagueId)
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
-            if (ros.RollOverStatus == 21) {
+            if (ros.RollOverStatus == 21)
+            {
                 var messages = await _context.InboxMessages.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var msg in messages)
                 {
-                    _context.Update(msg);
+                    _context.Remove(msg);
                 }
                 await _context.SaveChangesAsync();
 
@@ -2839,7 +2889,7 @@ namespace ABASim.api.Data
                 var trades = await _context.Trades.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var trade in trades)
                 {
-                    _context.Update(trade);
+                    _context.Remove(trade);
                 }
                 await _context.SaveChangesAsync();
 
@@ -2853,7 +2903,14 @@ namespace ABASim.api.Data
                 var offers = await _context.ContractOffers.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var off in offers)
                 {
-                    _context.Update(off);
+                    _context.Remove(off);
+                }
+                await _context.SaveChangesAsync();
+
+                var transactions = await _context.Transactions.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var t in transactions)
+                {
+                    _context.Remove(t);
                 }
                 await _context.SaveChangesAsync();
 
@@ -2870,7 +2927,7 @@ namespace ABASim.api.Data
             if (ros.RollOverStatus == 24)
             {
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-                
+
                 // Need to load the retired players into the Retired Players table
                 var retiringPlayers = await _context.RetiringPlayers.Where(x => x.SeasonId == league.Year).ToListAsync();
 
@@ -2879,23 +2936,28 @@ namespace ABASim.api.Data
                     var playerDetails = await _context.Players.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
 
                     string positions = "";
-                    if (playerDetails.PGPosition == 1) {
+                    if (playerDetails.PGPosition == 1)
+                    {
                         positions = "PG ";
                     }
 
-                    if (playerDetails.SGPosition == 1) {
+                    if (playerDetails.SGPosition == 1)
+                    {
                         positions = positions + "SG ";
                     }
 
-                    if (playerDetails.SFPosition == 1) {
+                    if (playerDetails.SFPosition == 1)
+                    {
                         positions = positions + "SF ";
                     }
 
-                    if (playerDetails.PFPosition == 1) {
+                    if (playerDetails.PFPosition == 1)
+                    {
                         positions = positions + "PF ";
                     }
 
-                    if (playerDetails.CPosition == 1) {
+                    if (playerDetails.CPosition == 1)
+                    {
                         positions = positions + "C";
                     }
 
@@ -2911,7 +2973,8 @@ namespace ABASim.api.Data
 
                     // remove player from Rosters
                     var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
-                    if (rosterRecord != null) {
+                    if (rosterRecord != null)
+                    {
                         _context.Remove(rosterRecord);
                     }
 
@@ -2921,7 +2984,8 @@ namespace ABASim.api.Data
 
                     // Remove player from PlayerContracts
                     var pcRecord = await _context.PlayerContracts.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == rp.PlayerId);
-                    if (pcRecord != null) {
+                    if (pcRecord != null)
+                    {
                         _context.Remove(pcRecord);
                     }
                 }
@@ -2937,23 +3001,26 @@ namespace ABASim.api.Data
         public async Task<bool> RolloverUpdateContractsAndPlayers(int leagueId)
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
-            if (ros.RollOverStatus == 25) 
+            if (ros.RollOverStatus == 25)
             {
                 // get all player contracts for the league
                 var contracts = await _context.PlayerContracts.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var contract in contracts)
                 {
                     // Need to check player options here
-                    if (contract.YearTwo == 0 && contract.YearOne != 0 && contract.PlayerOption == 1)
+                    if (contract.YearTwo != 0 && contract.YearThree == 0 && contract.PlayerOption == 1)
                     {
                         // Player has an option
                         Random r = new Random();
                         int result = r.Next(101);
 
-                        if (result <= 66) {
+                        if (result <= 66)
+                        {
                             // Player has taken the option
                             contract.PlayerOption = 0;
-                        } else {
+                        }
+                        else
+                        {
                             // Player has rejected the option
                             // Remove the player from the roster
                             var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
@@ -2961,38 +3028,42 @@ namespace ABASim.api.Data
 
                             // Change the players player team to be 31
                             var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
-                            _context.Remove(ptRecord);
+                            ptRecord.TeamId = 31;
+                            _context.Update(ptRecord);
 
                             // Delete the contract
                             _context.Remove(contract);
                         }
                     }
-                    
-                    // Update the contract
-                    contract.YearFive = 0;
-                    contract.GuranteedFive = 0;
-                    contract.YearFour = contract.YearFive;
-                    contract.GuranteedFour = contract.GuranteedFive;
-                    contract.YearThree = contract.YearFour;
-                    contract.GuranteedThree = contract.GuranteedFour;
-                    contract.YearTwo = contract.YearThree;
-                    contract.GuranteedTwo = contract.GuranteedThree;
-                    contract.YearOne = contract.YearTwo;
-                    contract.GuranteedOne = contract.GuranteedTwo;
-
-                    // Now need to check if the contract has expired
-                    if (contract.YearOne == 0)
+                    else
                     {
-                        // Remove the player from the roster
-                        var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
-                        _context.Remove(rosterRecord);
+                        // Update the contract
+                        contract.YearFive = 0;
+                        contract.GuranteedFive = 0;
+                        contract.YearFour = contract.YearFive;
+                        contract.GuranteedFour = contract.GuranteedFive;
+                        contract.YearThree = contract.YearFour;
+                        contract.GuranteedThree = contract.GuranteedFour;
+                        contract.YearTwo = contract.YearThree;
+                        contract.GuranteedTwo = contract.GuranteedThree;
+                        contract.YearOne = contract.YearTwo;
+                        contract.GuranteedOne = contract.GuranteedTwo;
 
-                        // Change the players player team to be 31
-                        var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
-                        _context.Remove(ptRecord);
+                        // Now need to check if the contract has expired
+                        if (contract.YearOne == 0)
+                        {
+                            // Remove the player from the roster
+                            var rosterRecord = await _context.Rosters.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
+                            _context.Remove(rosterRecord);
 
-                        // Delete the contract
-                        _context.Remove(contract);
+                            // Change the players player team to be 31
+                            var ptRecord = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.PlayerId == contract.PlayerId);
+                            ptRecord.TeamId = 31;
+                            _context.Update(ptRecord);
+
+                            // Delete the contract
+                            _context.Remove(contract);
+                        }
                     }
                 }
                 await _context.SaveChangesAsync();
@@ -3024,7 +3095,7 @@ namespace ABASim.api.Data
         public async Task<bool> RolloverDeletePlayerDetailsData(int leagueId)
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
-            if (ros.RollOverStatus == 26) 
+            if (ros.RollOverStatus == 26)
             {
                 // Delete player data
                 // Players
@@ -3060,10 +3131,18 @@ namespace ABASim.api.Data
                 }
                 await _context.SaveChangesAsync();
 
+                // Delete Free Agency Decisions
+                var decisions = await _context.FreeAgencyDecisions.Where(x => x.LeagueId == leagueId).ToListAsync();
+                foreach (var fa in decisions)
+                {
+                    _context.Remove(fa);
+                }
+                await _context.SaveChangesAsync();
+
                 ros.RollOverStatus = 27;
                 _context.Update(ros);
                 await _context.SaveChangesAsync();
-            }           
+            }
             return true;
         }
 
@@ -3073,7 +3152,7 @@ namespace ABASim.api.Data
             if (ros.RollOverStatus == 27)
             {
                 var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
-                
+
                 int year = 0;
                 switch (league.Year)
                 {
@@ -3114,7 +3193,7 @@ namespace ABASim.api.Data
             }
             return true;
         }
-        
+
         public async Task<bool> RolloverAddPlayerData(int leagueId)
         {
             var ros = await _context.RolloverStatuses.FirstOrDefaultAsync(x => x.LeagueID == leagueId);
@@ -3124,7 +3203,7 @@ namespace ABASim.api.Data
                 var seasonId = new SqlParameter("@seasonId", league.Year);
                 var lid = new SqlParameter("@leagueId", league.Id);
                 await _context.Database.ExecuteSqlRawAsync("exec spLoadNewPlayerData @leagueId, @seasonId", lid, seasonId);
-                
+
                 ros.RollOverStatus = 29;
                 _context.Update(ros);
                 await _context.SaveChangesAsync();
@@ -3141,7 +3220,8 @@ namespace ABASim.api.Data
                 foreach (var p in players)
                 {
                     var pt = await _context.PlayerTeams.FirstOrDefaultAsync(x => x.LeagueId == leagueId && p.PlayerId == x.PlayerId);
-                    if (pt == null) {
+                    if (pt == null)
+                    {
                         PlayerTeam newPt = new PlayerTeam
                         {
                             PlayerId = p.PlayerId,

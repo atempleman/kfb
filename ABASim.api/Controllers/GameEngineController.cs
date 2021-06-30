@@ -1675,12 +1675,6 @@ namespace ABASim.api.Controllers
                         _homeStaminas[index] = homeSTSF;
                         break;
                     case 4:
-
-                        if (homePF == null)
-                        {
-                            string t = "";
-                        }
-
                         onCourt = CheckIfPlayerIsOnCourt(0, hd[i].PlayerId);
                         injured = _homeInjuries.Exists(x => x.PlayerId == hd[i].PlayerId);
                         if (injured)
