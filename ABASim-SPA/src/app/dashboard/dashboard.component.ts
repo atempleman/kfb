@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { LeagueService } from '../_services/league.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { League } from '../_models/league';
-import { LeagueState } from '../_models/leagueState';
 import { AuthService } from '../_services/auth.service';
 import { TeamService } from '../_services/team.service';
 import { Team } from '../_models/team';
@@ -23,7 +22,6 @@ import { PlayoffSummary } from '../_models/playoffSummary';
 import { GlobalChat } from '../_models/globalChat';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from '../_models/user';
-// import { DatePipe } from '@angular/common';
 import { formatDate } from '@angular/common';
 import { ContactService } from '../_services/contact.service';
 import { DraftTracker } from '../_models/draftTracker';
@@ -32,7 +30,6 @@ import { DashboardDraftPick } from '../_models/dashboardDraftPick';
 import { Transaction } from '../_models/transaction';
 import { Votes } from '../_models/votes';
 import { QuickViewPlayer } from '../_models/QuickViewPlayer';
-import { PlayerInjury } from '../_models/playerInjury';
 import { LeaguePlayerInjury } from '../_models/leaguePlayerInjury';
 import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
@@ -54,8 +51,8 @@ export class DashboardComponent implements OnInit {
   playoffSummaries: PlayoffSummary[] = [];
   noRun = 0;
 
-  teamToggle = 1;
-  leagueToggle = 1;
+  teamToggle = 0;
+  leagueToggle = 0;
   chatToggle = 1;
 
   quickTeamRoster: QuickViewPlayer[] = [];
@@ -331,6 +328,9 @@ export class DashboardComponent implements OnInit {
       }, () => {
         this.spinner.hide();
       });
+    } else {
+      console.log(this.todaysGames.length);
+      console.log(this.league.stateId);
     }
   }
 

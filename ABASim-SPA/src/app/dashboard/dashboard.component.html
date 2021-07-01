@@ -176,6 +176,13 @@
 			</div>
 
 			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
+				*ngIf="this.league?.stateId == 13">
+				<h4 [style.color]="'rgb(' + primaryTextColor + ')'"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
+				<p [style.color]="'rgb(' + primaryTextColor + ')'">The new season is beginning. The draft lottery
+					will be run shortly!</p>
+			</div>
+
+			<div class="card" [style.background-color]="'rgb(' + secondaryColor + ')'"
 				*ngIf="this.league?.stateId == 3">
 				<h4 [style.color]="'rgb(' + primaryTextColor + ')'"><i class="fa fa-newspaper-o" aria-hidden="true"></i> League News</h4>
 				<p [style.color]="'rgb(' + primaryTextColor + ')'">The draft lottery has now been run. View the draft
@@ -197,7 +204,7 @@
 		</div>
 
 		<!-- <div class="ui styled fluid accordion"> -->
-		<div>
+		<div *ngIf="this.league?.stateId != 13 && this.league?.stateId == 14">
 			<!-- Todays Games Card -->
 			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'">
 				<h4 [style.color]="'rgb(' + secondaryTextColor + ')'"><i class="fa fa-calendar" aria-hidden="true"></i> TODAY'S GAMES</h4>
@@ -289,7 +296,7 @@
 
 		<!-- Awards -->
 		<div>
-			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'" *ngIf="this.league?.stateId > 7">
+			<div class="card" [style.background-color]="'rgb(' + primaryColor + ')'" *ngIf="this.league?.stateId > 7 && this.league?.stateId < 13">
 				<h4 [style.color]="'rgb(' + secondaryTextColor + ')'"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Award Winners</h4>
 				<p [style.color]="'rgb(' + secondaryTextColor + ')'">The Award Winners for the season have been announced</p>
 				<div class="rowpo ml-3 mt-2">
