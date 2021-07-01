@@ -150,7 +150,13 @@ export class AdminService {
   }
   
   createNewLeague(newLeague: League) {
-    return this.http.post(this.baseUrl + 'createnewleague', newLeague);
+    // return this.http.post(this.baseUrl + 'createnewleague', newLeague);
+    console.log(newLeague);
+    const params = new HttpParams()
+      .set('leagueName', newLeague.leagueName)
+      .set('leagueCode', newLeague.leagueCode)
+      .set('year', newLeague.year.toString());
+    return this.http.get<boolean>(this.baseUrl + 'createnewleague', {params});
   }
 
   getLeagueRolloverStatus(leagueId: number) {

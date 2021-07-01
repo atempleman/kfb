@@ -580,7 +580,7 @@ export class AdminComponent implements OnInit {
       leagueCode: this.leaguecode
     };
 
-    this.adminService.createNewLeague(this.league).subscribe(result => {
+    this.adminService.createNewLeague(newLeague).subscribe(result => {
 
     }, error => {
       this.alertify.error('Error creating new league');

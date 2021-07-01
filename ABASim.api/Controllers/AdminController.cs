@@ -229,9 +229,21 @@ namespace ABASim.api.Controllers
             return result;
         }
 
-        [HttpPost("createnewleague")]
-        public async Task<IActionResult> CreateNeweague(League league)
+        // [HttpPost("createnewleague")]
+        // string gameId, string leagueId)
+        // {
+        //     var result = await _repo.ResetGame(Int32.Parse(gameId), Int32.Parse(leagueId));
+        //     return result;
+        // }
+        [HttpGet("createnewleague")]
+        public async Task<IActionResult> CreateNeweague(string leagueName, string leagueCode, string year)
         {
+            League league = new League
+            {
+                LeagueName = leagueName,
+                LeagueCode = leagueCode,
+                Year = Int32.Parse(year)
+            };
             var result = await _repo.CreateNewLeague(league);
             return Ok(result);
         }

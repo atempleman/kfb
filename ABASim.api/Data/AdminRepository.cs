@@ -3038,16 +3038,16 @@ namespace ABASim.api.Data
                     else
                     {
                         // Update the contract
-                        contract.YearFive = 0;
-                        contract.GuranteedFive = 0;
-                        contract.YearFour = contract.YearFive;
-                        contract.GuranteedFour = contract.GuranteedFive;
-                        contract.YearThree = contract.YearFour;
-                        contract.GuranteedThree = contract.GuranteedFour;
-                        contract.YearTwo = contract.YearThree;
-                        contract.GuranteedTwo = contract.GuranteedThree;
                         contract.YearOne = contract.YearTwo;
                         contract.GuranteedOne = contract.GuranteedTwo;
+                        contract.YearTwo = contract.YearThree;
+                        contract.GuranteedTwo = contract.GuranteedThree;
+                        contract.YearThree = contract.YearFour;
+                        contract.GuranteedThree = contract.GuranteedFour;
+                        contract.YearFour = contract.YearFive;
+                        contract.GuranteedFour = contract.GuranteedFive;
+                        contract.YearFive = 0;
+                        contract.GuranteedFive = 0;
 
                         // Now need to check if the contract has expired
                         if (contract.YearOne == 0)
