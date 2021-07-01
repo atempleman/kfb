@@ -99,7 +99,7 @@
 				<td class="text-center">
 					<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"> View</button>
 					<button class="btn btn-success btn-xs tablebutton" (click)="openModal(sign, player)"
-						*ngIf="this.rosterSpotAvailable == true">Sign</button>
+						*ngIf="this.rosterSpotAvailable == true && this.league?.stateId < 8 && this.league?.stateId > 14">Sign</button>
 					<label class="ml-3" *ngIf="!this.rosterSpotAvailable">No Roster Spots Available</label>
 				</td>
 			</tr>
