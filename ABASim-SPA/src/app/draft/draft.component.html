@@ -149,7 +149,7 @@
 
 <div class="tabs" *ngIf="this.league?.stateId > 5">
     <div class="nav-bar nav-bar-center">
-        <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftSelected == 1 ? 'active' : ''"
+        <div class="nav-bar-item color-8" *ngIf="this.league?.stateId != 13" [ngClass]="this.seasonDraftSelected == 1 ? 'active' : ''"
             (click)="this.seasonDraftSelection()"><span class="fa fa-calendar fs-2"></span><br>Draft</div>
         <div class="nav-bar-item color-8" [ngClass]="this.seasonDraftLotterySelected == 1 ? 'active' : ''"
             (click)="this.seasonDraftLotterySelection()"><span class="fa fa-retweet fs-2"></span><br>Lottery</div>

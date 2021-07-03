@@ -83,6 +83,204 @@ namespace ABASim.api.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<bool> RunSeasonDraftLottery(int leagueId)
+        {
+            List<Team> teams = new List<Team>();
+            List<int> lotteryOrder = new List<int>();
+            var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).OrderBy(x => x.Wins).ToListAsync();
+
+            // Now we only need the first 14
+            List<int> teamIds = new List<int>();
+            int i = 0;
+            foreach (var t in leagueStandings)
+            {
+                switch (i)
+                {
+                    case 0:
+                        for (int j = 0; j < 28; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 1:
+                        for (int j = 0; j < 28; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 2:
+                        for (int j = 0; j < 28; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 3:
+                        for (int j = 0; j < 25; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 4:
+                        for (int j = 0; j < 21; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 5:
+                        for (int j = 0; j < 18; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 6:
+                        for (int j = 0; j < 15; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 7:
+                        for (int j = 0; j < 12; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 8:
+                        for (int j = 0; j < 9; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 9:
+                        for (int j = 0; j < 6; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 10:
+                        for (int j = 0; j < 4; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 11:
+                        for (int j = 0; j < 3; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 12:
+                        for (int j = 0; j < 2; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    case 13:
+                        for (int j = 0; j < 1; j++)
+                        {
+                            teamIds.Add(t.TeamId);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                i++;
+
+                if (i == 14)
+                {
+                    break;
+                }
+            }
+
+            // We have the order, now need to run the lottery side of things
+            for (int k = 0; k < 5; k++)
+            {
+                int count = teamIds.Count - 1;
+                int l = rng.Next(count + 1);
+                int value = teamIds[l];
+
+                lotteryOrder.Add(value);
+                teamIds.RemoveAll(x => x == value);
+            }
+
+            // We now have the first 5 picks
+            // Now need to add the rest in
+            foreach (var ls in leagueStandings)
+            {
+                if (!lotteryOrder.Contains(ls.TeamId))
+                {
+                    // The team is not in the list yet, so we can add
+                    lotteryOrder.Add(ls.TeamId);
+                }
+            }
+
+            // Now we need to set up the draft pick orders
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+            var teamDraftPicks = await _context.TeamDraftPicks.Where(x => x.LeagueId == leagueId && x.Year == league.Year).ToListAsync();
+
+            // Do the rounds
+            for (int draftRound = 1; draftRound < 3; draftRound++) {
+                if (draftRound == 1) {
+                    // Round 1
+                    var firstRoundTeamPicks = teamDraftPicks.FindAll(x => x.Round == 1);
+
+                    // Now we have all the first round picks
+                    int pickNo = 1;
+                    foreach (var lo in lotteryOrder)
+                    {
+                        // Now need to find the TeamDraftPick record for that team
+                        var teamPick = firstRoundTeamPicks.Find(x => x.Round == 1 && x.OriginalTeam == lo);
+
+                        DraftPick dp = new DraftPick
+                        {
+                            Round = 1,
+                            Pick = pickNo,
+                            TeamId = teamPick.CurrentTeam,
+                            PlayerId = 0,
+                            LeagueId = leagueId
+                        };
+                        await _context.AddAsync(dp);
+
+                        // Now we need to remove the TeamDraftPick record
+                        _context.Remove(teamPick);
+                        pickNo++;
+                    }
+                    await _context.SaveChangesAsync();
+                } else if (draftRound == 2) {
+                    // Round 2
+                    var secondRoundTeamPicks = teamDraftPicks.FindAll(x => x.Round == 2);
+
+                    // Now we have all the first round picks
+                    int pickNo = 1;
+                    foreach (var lo in lotteryOrder)
+                    {
+                        // Now need to find the TeamDraftPick record for that team
+                        var teamPick = secondRoundTeamPicks.Find(x => x.Round == 2 && x.OriginalTeam == lo);
+
+                        DraftPick dp = new DraftPick
+                        {
+                            Round = 2,
+                            Pick = pickNo,
+                            TeamId = teamPick.CurrentTeam,
+                            PlayerId = 0,
+                            LeagueId = leagueId
+                        };
+                        await _context.AddAsync(dp);
+
+                        // Now we need to remove the TeamDraftPick record
+                        _context.Remove(teamPick);
+                        pickNo++;
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // Now update the league status
+            league.StateId = 14;
+            _context.Update(league);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
         public async Task<bool> RunInitialDraftLottery(int leagueId)
         {
             var teams = await _context.Teams.Where(x => x.LeagueId == leagueId).ToListAsync();
@@ -3203,6 +3401,9 @@ namespace ABASim.api.Data
                 var seasonId = new SqlParameter("@seasonId", league.Year);
                 var lid = new SqlParameter("@leagueId", league.Id);
                 await _context.Database.ExecuteSqlRawAsync("exec spLoadNewPlayerData @leagueId, @seasonId", lid, seasonId);
+
+                // Need to run in the incoming players data for the draft
+                await _context.Database.ExecuteSqlRawAsync("exec spIncomingDraftPlayers @seasonId, @leagueId", seasonId, lid);
 
                 ros.RollOverStatus = 29;
                 _context.Update(ros);

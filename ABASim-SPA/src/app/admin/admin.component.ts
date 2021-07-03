@@ -143,6 +143,18 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  // Running lottery and changing to state 14
+  runSeasonDraftLottery() {
+    this.adminService.runSeasonDraftLottery(this.league.id).subscribe(result => {
+    }, error => {
+      this.alertify.error('Error running season draft lottery');
+    }, () => {
+      this.alertify.success('Season Draft Lottery Run successfully');
+      this.league.stateId = 14;
+      this.modalRef.hide();
+    });
+  }
+
   // Begin the draft
   beginDraft() {
     this.draftService.beginInitialDraft(this.league.id).subscribe(result => {

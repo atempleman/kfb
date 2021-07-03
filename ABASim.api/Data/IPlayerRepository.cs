@@ -39,6 +39,8 @@ namespace ABASim.api.Data
 
          Task<IEnumerable<Player>> GetAllUpcomingPlayers(int leagueId);
 
+         Task<IEnumerable<DraftPlayerDto>> GetDraftPlayerPoolSeason(int leagueId);
+
          Task<int> GetCountOfDraftPlayersUpcoming(int leagueId);
 
          Task<Player> GetPlayerForName(string playername, int leagueId);

@@ -13,6 +13,8 @@ namespace ABASim.api.Data
 
          Task<bool> RunInitialDraftLottery(int leagueId);
 
+         Task<bool> RunSeasonDraftLottery(int leagueId);
+
          Task<bool> RunDayRollOver(int leagueId);
 
          Task<bool> CreateNewLeague(League league);

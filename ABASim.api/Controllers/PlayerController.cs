@@ -93,6 +93,13 @@ namespace ABASim.api.Controllers
             var players = await _repo.GetAllUpcomingPlayers(leagueId);
             return Ok(players);
         }
+        
+        [HttpGet("getdraftplayerpoolseason/{leagueId}")]
+        public async Task<IActionResult> GetDraftPlayerPoolSeason(string leagueId)
+        {
+            var players = await _repo.GetDraftPlayerPoolSeason(Int32.Parse(leagueId));
+            return Ok(players);
+        }
 
         [HttpGet("filterdraftplayers")]
         public async Task<IActionResult> FilterInitialDraftPlayers(string filter, string leagueId)
@@ -163,7 +170,7 @@ namespace ABASim.api.Controllers
             var players = await _repo.GetRetiredPlayers();
             return Ok(players);
         }
-        // getdetailedretiredplayer
+        
         [HttpGet("getdetailedretiredplayer/{playerId}")]
         public async Task<IActionResult> GetDetailedRetiredPlayer(int playerId)
         {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DraftPlayer } from '../_models/draftPlayer';
 import { League } from '../_models/league';
 import { Player } from '../_models/player';
 import { Team } from '../_models/team';
@@ -8,6 +10,7 @@ import { AuthService } from '../_services/auth.service';
 import { LeagueService } from '../_services/league.service';
 import { PlayerService } from '../_services/player.service';
 import { TeamService } from '../_services/team.service';
+import { TransferService } from '../_services/transfer.service';
 
 @Component({
   selector: 'app-draft-player-pool-season',
@@ -21,9 +24,11 @@ export class DraftPlayerPoolSeasonComponent implements OnInit {
   pages = 1;
   pager = 1;
   draftPlayers: Player[] = [];
+  darftPlayersPool: DraftPlayer[] = [];
   
   constructor(private spinner: NgxSpinnerService, private alertify: AlertifyService, private teamService: TeamService,
-              private authService: AuthService, private leagueService: LeagueService, private playerService: PlayerService) { }
+              private authService: AuthService, private leagueService: LeagueService, private playerService: PlayerService,
+              private transferService: TransferService, private router: Router) { }
 
   ngOnInit() {
     this.spinner.show();
@@ -65,15 +70,34 @@ export class DraftPlayerPoolSeasonComponent implements OnInit {
   }
 
   getDraftPlayers() {
-    // Get all draft players
-    this.playerService.getAllUpcomingPlayers(this.league.id).subscribe(result => {
-      this.draftPlayers = result;
-      // this.masterList = result;
-    }, error => {
-      this.alertify.error('Error getting players available for the draft');
-      this.spinner.hide();
-    }, () => {
-      this.spinner.hide();
-    });
+    if (this.league.stateId == 13 || this.league.stateId == 14) {
+      console.log('ash');
+      // This is where we get the full player data
+      this.playerService.getAllDraftPoolPlayersSeason(this.league.id).subscribe(result => {
+        this.darftPlayersPool = result;
+        console.log(this.darftPlayersPool);
+      }, error => {
+        this.alertify.error('Error getting player pool available for the draft');
+        this.spinner.hide();
+      }, () => {
+        this.spinner.hide();
+      });
+    } else {
+      // Get all draft players
+      this.playerService.getAllUpcomingPlayers(this.league.id).subscribe(result => {
+        this.draftPlayers = result;
+        // this.masterList = result;
+      }, error => {
+        this.alertify.error('Error getting players available for the draft');
+        this.spinner.hide();
+      }, () => {
+        this.spinner.hide();
+      });
+    } 
+  }
+
+  viewPlayer(player: number) {
+    this.transferService.setData(player);
+    this.router.navigate(['/view-player']);
   }
 }

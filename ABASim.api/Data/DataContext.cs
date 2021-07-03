@@ -147,5 +147,7 @@ namespace ABASim.api.Data
 
         public DbSet<TeamHistory> TeamHistorys { get; set; }
 
+        public DbSet<IncomingDraftPlayer> IncomingDraftPlayers { get; set; }
+
     }
 }

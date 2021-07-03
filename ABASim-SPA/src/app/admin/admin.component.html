@@ -106,6 +106,21 @@
 					</div>
 				</div>
 
+				<!-- STATE 13 -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
+					*ngIf="this.league?.stateId == 13">
+					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
+							class="header-card ml-3"><strong>Run Season Lottery</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Run the Season Draft Lottery.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openConfirm(runSeasonLottery)">Run
+								Lottery</button>
+						</div>
+					</div>
+				</div>
+
 				<!-- STATE 3 -->
 				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
 					*ngIf="this.league?.stateId == 3">
@@ -502,6 +517,23 @@
 		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
 	</div>
 	<form #draftlotteryForm (ngSubmit)="runInitialDraftLottery()">
+		<div class="modal-body">
+			<p class="color-7">Click on run to perform the draft lottery</p>
+		</div>
+		<div class="modal-footer form-group text-center">
+			<button type="submit" class="btn btn-primary btn-sm">Run</button>
+			<button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Cancel</button>
+		</div>
+	</form>
+</ng-template>
+
+<!-- Run the season draft lottery and transaition to State 14 -->
+<ng-template #runSeasonLottery>
+	<div class="modal-header">
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8">Run Season Draft Lottery</h6>
+		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+	</div>
+	<form #draftlotteryForm (ngSubmit)="runSeasonDraftLottery()">
 		<div class="modal-body">
 			<p class="color-7">Click on run to perform the draft lottery</p>
 		</div>

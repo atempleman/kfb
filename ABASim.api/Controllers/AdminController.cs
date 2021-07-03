@@ -44,6 +44,17 @@ namespace ABASim.api.Controllers
             return runLottery;
         }
 
+        [HttpGet("runseasondraftlottery/{leagueId}")]
+        public async Task<bool> RunSeasonDraftLottery(int leagueId)
+        {
+            var runLottery = await _repo.RunSeasonDraftLottery(leagueId);
+
+            // Now need to setup the auto pick rankings
+            var autoPicksSet = await _repo.GenerateAutoPickOrder(leagueId);
+
+            return runLottery;
+        }
+
         [HttpGet("checkgamesrun/{leagueId}")]
         public async Task<IActionResult> CheckDaysGamesRun(int leagueId)
         {

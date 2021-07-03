@@ -99,6 +99,11 @@ export class DraftComponent implements OnInit {
       this.alertify.error('Error getting League Details');
     }, () => {
       this.loaded = 1;
+      if (this.league.stateId == 13) {
+        this.seasonDraftSelected = 0;
+        this.seasonDraftLotterySelected = 1;
+      }
+
       if (this.league.stateId === 3) {
         this.getDraftDetails();
       } else if (this.league.stateId === 4) {

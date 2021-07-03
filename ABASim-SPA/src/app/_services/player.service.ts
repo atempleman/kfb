@@ -152,4 +152,8 @@ export class PlayerService {
   getAllUpcomingPlayers(leagueId: number): Observable<Player[]> {
     return this.http.get<Player[]>(this.baseUrl + 'getallupcomingplayers/' + leagueId);
   } 
+
+  getAllDraftPoolPlayersSeason(leagueId: number): Observable<DraftPlayer[]> {
+    return this.http.get<DraftPlayer[]>(this.baseUrl + 'getdraftplayerpoolseason/' + leagueId);
+  }
 }

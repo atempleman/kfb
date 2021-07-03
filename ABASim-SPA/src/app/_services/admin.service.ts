@@ -234,4 +234,8 @@ export class AdminService {
   rolloverFinishUp(leagueId: number) {
     return this.http.get<boolean>(this.baseUrl + 'rolloverfinishup/' + leagueId);
   }
+
+  runSeasonDraftLottery(leagueId: number) {
+    return this.http.get<boolean>(this.baseUrl + 'runseasondraftlottery/' + leagueId);
+  }
 }

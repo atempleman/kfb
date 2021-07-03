@@ -452,6 +452,40 @@ namespace ABASim.api.Data
             return players;
         }
 
+        public async Task<IEnumerable<DraftPlayerDto>> GetDraftPlayerPoolSeason(int leagueId)
+        {
+            List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
+            var players = await _context.IncomingDraftPlayers.Where(x => x.LeagueId == leagueId).ToListAsync();
+            foreach (var p in players)
+            {
+                DraftPlayerDto dto = new DraftPlayerDto
+                {
+                    PlayerId = p.PlayerId,
+                    FirstName = p.FirstName,
+                    Surname = p.Surname,
+                    PGPosition = p.PGPosition,
+                    SGPosition = p.SGPosition,
+                    SFPosition = p.SFPosition,
+                    PFPosition = p.PFPosition,
+                    CPosition = p.CPosition,
+                    Age = p.Age,
+                    TwoGrade = p.TwoGrade,
+                    ThreeGrade = p.ThreeGrade,
+                    FTGrade = p.FTGrade,
+                    ORebGrade = p.ORebGrade,
+                    DRebGrade = p.DRebGrade,
+                    HandlingGrade = p.HandlingGrade,
+                    StealGrade = p.StealGrade,
+                    BlockGrade = p.BlockGrade,
+                    StaminaGrade = p.StaminaGrade,
+                    PassingGrade = p.PassingGrade,
+                    IntangiblesGrade = p.IntangiblesGrade
+                };
+                draftPool.Add(dto);
+            }
+            return draftPool;
+        }
+
         public async Task<IEnumerable<DraftPlayerDto>> FilterInitialDraftPlayerPool(string value, int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();

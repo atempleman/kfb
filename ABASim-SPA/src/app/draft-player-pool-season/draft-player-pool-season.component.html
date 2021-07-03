@@ -7,7 +7,7 @@
     <p class="loading">Loading Players...</p>
   </ngx-spinner>
 
-  <div class="row justify-content-center mt-3 ml-2 mr-2">
+  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="this.league?.stateId != 13 && this.league?.stateId != 14">
     <table *ngIf="this.draftPlayers?.length != 0" class="table table-striped custab">
       <thead>
         <tr>
@@ -26,6 +26,62 @@
           <ng-container *ngIf="player.cPosition == 1">C </ng-container>
         </td>
         <td class="text-center">{{ player.age }}</td>
+      </tr>
+    </table>
+  </div>
+
+
+
+  <div class="row justify-content-center mt-3 ml-2 mr-2" *ngIf="(this.league?.stateId == 13 || this.league?.stateId == 14) && this.darftPlayersPool?.length != 0">
+    <table *ngIf="this.draftPlayersPool?.length != 0" class="table table-striped custab">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Pos(s)</th>
+          <th>Age</th>
+          <th>2s</th>
+          <th>3s</th>
+          <th>FTs</th>
+          <th>ORebs</th>
+          <th>DRebs</th>
+          <th>Hands</th>
+          <th>Stls</th>
+          <th>Blks</th>
+          <th>Stam</th>
+          <th>Pass</th>
+          <th>Int</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tr *ngFor="let player of this.darftPlayersPool">
+        <td class="text-center">{{ player.firstName }} {{ player.surname }}</td>
+        <td class="text-center">
+          <ng-container *ngIf="player.pgPosition == 1">PG </ng-container>
+          <ng-container *ngIf="player.sgPosition == 1">SG </ng-container>
+          <ng-container *ngIf="player.sfPosition == 1">SF </ng-container>
+          <ng-container *ngIf="player.pfPosition == 1">PF </ng-container>
+          <ng-container *ngIf="player.cPosition == 1">C </ng-container>
+        </td>
+        <td class="text-center">{{ player.age }}</td>
+        <td class="text-center">{{ player.twoGrade }}</td>
+        <td class="text-center">{{ player.threeGrade }}</td>
+        <td class="text-center">{{ player.ftGrade }}</td>
+        <td class="text-center">{{ player.oRebGrade }}</td>
+        <td class="text-center">{{ player.dRebGrade }}</td>
+        <td class="text-center">{{ player.handlingGrade }}</td>
+        <td class="text-center">{{ player.stealGrade }}</td>
+        <td class="text-center">{{ player.blockGrade }}</td>
+        <td class="text-center">{{ player.staminaGrade }}</td>
+        <td class="text-center">{{ player.passingGrade }}</td>
+        <td class="text-center">{{ player.intangiblesGrade }}</td>
+        <td class="text-center">
+          <a (click)="viewPlayer(player?.playerId)" class="btn btn-primary btn-xs mt-1"><span
+              class="fa fa-info"></span></a>
+          <!-- <a *ngIf="checkPlayer(player?.playerId) == 0" (click)="this.addPlayerToDraftRank(player)"
+            class="btn btn-info btn-xs mt-1 ml-1"><span class="fa fa-plus"></span></a>
+          <a *ngIf="checkPlayer(player?.playerId) == 1" (click)="this.removePlayerDraftRank(player)"
+            class="btn btn-danger btn-xs mt-1 ml-1"><span class="fa fa-minus"></span></a> -->
+        </td>
       </tr>
     </table>
   </div>
