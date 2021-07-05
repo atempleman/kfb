@@ -149,5 +149,7 @@ namespace ABASim.api.Data
 
         public DbSet<IncomingDraftPlayer> IncomingDraftPlayers { get; set; }
 
+        public DbSet<RegularDraftContract> RegularDraftContracts { get; set; }
+
     }
 }

@@ -21,6 +21,7 @@ import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
 import { LeagueStatusUpdate } from '../_models/leagueStatusUpdate';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
 import { DraftSelectionPlayer } from '../_models/draftSelectionPlayer';
+import { RegularDraftContract } from '../_models/regularDraftContract';
 
 @Component({
   selector: 'app-draft',
@@ -66,14 +67,16 @@ export class DraftComponent implements OnInit {
   pageInterval;
 
   initialPickSalary: InitialPickSalary[] = [];
+  regularPickSalary: RegularDraftContract[] = [];
+
   rounds: number[] = [];
 
   viewingRound: number;
 
   constructor(private leagueService: LeagueService, private alertify: AlertifyService, private router: Router,
-              private draftService: DraftService, private teamService: TeamService, private authService: AuthService,
-              private modalService: BsModalService, private playerService: PlayerService, private adminService: AdminService,
-              private transferService: TransferService) { }
+    private draftService: DraftService, private teamService: TeamService, private authService: AuthService,
+    private modalService: BsModalService, private playerService: PlayerService, private adminService: AdminService,
+    private transferService: TransferService) { }
 
   ngOnInit() {
     this.isAdmin = +localStorage.getItem('isAdmin');
@@ -110,29 +113,37 @@ export class DraftComponent implements OnInit {
         this.getDraftTracker();
       }
 
-      
-      this.playerService.getAllInitialDraftSelectionPlayers(this.league.id).subscribe(result => {
-        this.draftSelectionPlayers = result;
-      }, error => {
-        this.alertify.error('Error getting available players to draft');
-      }, () => {
-      });
-      // this.playerService.getAllInitialDraftPlayers(this.league.id).subscribe(result => {
-      //   this.draftablePlayers = result;
-      // }, error => {
-      //   this.alertify.error('Error getting available players to draft');
-      // }, () => {
-      // });
+      if (this.league.stateId === 3 || this.league.stateId === 5 || this.league.stateId === 4) {
+        this.playerService.getAllInitialDraftSelectionPlayers(this.league.id).subscribe(result => {
+          this.draftSelectionPlayers = result;
+        }, error => {
+          this.alertify.error('Error getting available players to draft');
+        }, () => {
+        });
+
+        this.draftService.getInitialDraftSalaryDetails().subscribe(result => {
+          this.initialPickSalary = result;
+        }, error => {
+          this.alertify.error('Error getting salary details');
+        });
+      } else if (this.league.stateId === 14) {
+        this.playerService.getAllInitialDraftSelectionPlayers(this.league.id).subscribe(result => {
+          this.draftSelectionPlayers = result;
+        }, error => {
+          this.alertify.error('Error getting available players to draft');
+        }, () => {
+        });
+        
+        this.draftService.getRegularSeasonDraftSalaryDetails().subscribe(result => {
+          this.regularPickSalary = result;
+        }, error => {
+          this.alertify.error('Error getting salary details');
+        });
+      }
 
       this.pageInterval = setInterval(() => {
         this.getDraftTracker();
       }, 30000);
-  
-      this.draftService.getInitialDraftSalaryDetails().subscribe(result => {
-        this.initialPickSalary = result;
-      }, error => {
-        this.alertify.error('Error getting salary details');
-      });
     });
   }
 
@@ -192,7 +203,7 @@ export class DraftComponent implements OnInit {
       } else {
         this.currentRound = 0;
       }
-      
+
       this.getDraftDetails();
       this.onClockLoaded++;
       this.timerDisplay();
@@ -221,12 +232,17 @@ export class DraftComponent implements OnInit {
     }, error => {
       this.alertify.error('Error starting the draft');
     }, () => {
-      this.alertify.success('Initial Draft has begun!');
-      this.league.stateId = 4;
+      if (this.league.stateId == 14) {
+        this.alertify.success('Draft has begun!');
+      } else {
+        this.alertify.success('Initial Draft has begun!');
+        this.league.stateId = 4;
+      }
     });
   }
 
   public openModal(template: TemplateRef<any>) {
+    console.log(template);
     this.modalRef = this.modalService.show(template);
   }
 
@@ -237,14 +253,19 @@ export class DraftComponent implements OnInit {
       round: page + 1,
       leagueId: this.league.id
     };
-    // Get the Initial Draft Details
-    this.draftService.getDraftPicksForRound(summary).subscribe(result => {
-      this.draftPicks = result;
-    }, error => {
-      this.alertify.error('Error getting Draft Picks');
-    }, () => {
-      
-    });
+
+    if (this.league.stateId == 3 || this.league.stateId == 4 || this.league.stateId == 5) {
+      // Get the Initial Draft Details
+      this.draftService.getDraftPicksForRound(summary).subscribe(result => {
+        this.draftPicks = result;
+      }, error => {
+        this.alertify.error('Error getting Draft Picks');
+      }, () => {
+
+      });
+    } else if (this.league.stateId == 14) {
+
+    }
   }
 
   makeDraftPick() {
@@ -268,6 +289,18 @@ export class DraftComponent implements OnInit {
         // Update the leage state here
         const summary: LeagueStatusUpdate = {
           status: 5,
+          leagueId: this.league.id
+        };
+        this.adminService.updateLeagueStatus(summary).subscribe(result => {
+        }, error => {
+          this.alertify.error('Error changing league state');
+        }, () => {
+          this.alertify.success('Draft Completed');
+        });
+      } else if (this.league.stateId == 14 && this.tracker.round === 2 && this.tracker.pick === 30) {
+        // Update the leage state here
+        const summary: LeagueStatusUpdate = {
+          status: 15,
           leagueId: this.league.id
         };
         this.adminService.updateLeagueStatus(summary).subscribe(result => {
@@ -328,7 +361,18 @@ export class DraftComponent implements OnInit {
         }, () => {
           this.alertify.success('Draft Completed');
         });
-        window.location.reload();
+      } else if (this.league.stateId == 14 && this.tracker.round === 2 && this.tracker.pick === 30) {
+        // Update the leage state here
+        const summary: LeagueStatusUpdate = {
+          status: 15,
+          leagueId: this.league.id
+        };
+        this.adminService.updateLeagueStatus(summary).subscribe(result => {
+        }, error => {
+          this.alertify.error('Error changing league state');
+        }, () => {
+          this.alertify.success('Draft Completed');
+        });
       } else {
         this.getDraftTracker();
         window.location.reload();
@@ -351,6 +395,11 @@ export class DraftComponent implements OnInit {
   getPickSalary(round: number, pick: number) {
     const value = this.initialPickSalary.find(x => x.round === round && x.pick === pick);
     return value.salary;
+  }
+
+  getRegularSalary(round: number, pick: number) {
+    const value = this.regularPickSalary.find(x => x.round === round && x.pick === pick);
+    return value.salaryAmount;
   }
 
   getSalaryYears(round: number, pick: number) {

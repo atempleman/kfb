@@ -198,7 +198,7 @@ namespace ABASim.api.Data
                 .Join(_context.Leagues,
                 t => t.LeagueId,
                 l => l.Id,
-                (t,l) => new { Team = t, League = l })
+                (t, l) => new { Team = t, League = l })
                 .Where(lge => lge.League.LeagueCode == "000000" && lge.Team.UserId == 0).AnyAsync();
 
             // if (await _context.Teams.AnyAsync(x => x.UserId == 0))
@@ -1152,13 +1152,25 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<Team>> GetTeamSeasonLotteryOrder(int leagueId)
         {
             List<Team> teams = new List<Team>();
-            var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).Take(14).OrderBy(x => x.Wins).ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
-            foreach(var ls in leagueStandings)
+            if (league.StateId < 14)
             {
-                // Need to get the team and add to list
-                var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == ls.TeamId && x.LeagueId == leagueId);
-                teams.Add(team);
+                var leagueStandings = await _context.Standings.Where(x => x.LeagueId == leagueId).Take(14).OrderBy(x => x.Wins).ToListAsync();
+                foreach (var ls in leagueStandings)
+                {
+                    // Need to get the team and add to list
+                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == ls.TeamId && x.LeagueId == leagueId);
+                    teams.Add(team);
+                }
+            } else if (league.StateId == 14) {
+                var draftPicks = await _context.DraftPicks.Where(x => x.LeagueId == leagueId && x.Round == 1).OrderBy(x => x.Pick).ToListAsync();
+                foreach (var dp in draftPicks)
+                {
+                    // Need to get the team and add to list
+                    var team = await _context.Teams.FirstOrDefaultAsync(x => x.TeamId == dp.TeamId && x.LeagueId == leagueId);
+                    teams.Add(team);
+                }
             }
             return teams;
         }
@@ -1184,12 +1196,14 @@ namespace ABASim.api.Data
             var teamCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == teamId && x.LeagueId == leagueId);
 
             int cap = 0;
-            if (capInfo != null) {
+            if (capInfo != null)
+            {
                 cap = capInfo.Cap;
             }
 
             int tCap = 0;
-            if (teamCap != null) {
+            if (teamCap != null)
+            {
                 tCap = teamCap.CurrentCapAmount;
             }
 

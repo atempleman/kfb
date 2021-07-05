@@ -34,5 +34,7 @@ namespace ABASim.api.Data
          Task<InitialDraft> GetCurrentInitialDraftPick(int leagueId);
 
          Task<IEnumerable<InitialPickSalaryDto>> GetInitialDraftSalaryDetails();
+
+        Task<IEnumerable<RegularDraftContract>> GetRegularDraftSalaryDetails();
     }
 }

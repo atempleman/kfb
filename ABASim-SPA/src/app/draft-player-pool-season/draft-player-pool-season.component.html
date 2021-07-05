@@ -77,10 +77,10 @@
         <td class="text-center">
           <a (click)="viewPlayer(player?.playerId)" class="btn btn-primary btn-xs mt-1"><span
               class="fa fa-info"></span></a>
-          <!-- <a *ngIf="checkPlayer(player?.playerId) == 0" (click)="this.addPlayerToDraftRank(player)"
+          <a *ngIf="checkPlayer(player?.playerId) == 0" (click)="this.addPlayerToDraftRank(player)"
             class="btn btn-info btn-xs mt-1 ml-1"><span class="fa fa-plus"></span></a>
           <a *ngIf="checkPlayer(player?.playerId) == 1" (click)="this.removePlayerDraftRank(player)"
-            class="btn btn-danger btn-xs mt-1 ml-1"><span class="fa fa-minus"></span></a> -->
+            class="btn btn-danger btn-xs mt-1 ml-1"><span class="fa fa-minus"></span></a>
         </td>
       </tr>
     </table>

@@ -14,6 +14,7 @@ import { InitialPickSalary } from '../_models/initialPickSalary';
 import { GetDashboardPicks } from '../_models/getDashboardPicks';
 import { GetRosterQuickView } from '../_models/getRosterQuickView';
 import { GetPlayoffSummary } from '../_models/getPlayoffSummary';
+import { RegularDraftContract } from '../_models/regularDraftContract';
 
 @Injectable({
   providedIn: 'root'
@@ -86,5 +87,9 @@ export class DraftService {
 
   getInitialDraftSalaryDetails(): Observable<InitialPickSalary[]> {
     return this.http.get<InitialPickSalary[]>(this.baseUrl + 'getinitialdraftsalarydetails');
+  }
+
+  getRegularSeasonDraftSalaryDetails(): Observable<RegularDraftContract[]> {
+    return this.http.get<RegularDraftContract[]>(this.baseUrl + 'getregulardraftsalarydetails');
   }
 }

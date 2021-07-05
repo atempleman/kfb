@@ -219,8 +219,10 @@ namespace ABASim.api.Data
             var teamDraftPicks = await _context.TeamDraftPicks.Where(x => x.LeagueId == leagueId && x.Year == league.Year).ToListAsync();
 
             // Do the rounds
-            for (int draftRound = 1; draftRound < 3; draftRound++) {
-                if (draftRound == 1) {
+            for (int draftRound = 1; draftRound < 3; draftRound++)
+            {
+                if (draftRound == 1)
+                {
                     // Round 1
                     var firstRoundTeamPicks = teamDraftPicks.FindAll(x => x.Round == 1);
 
@@ -246,7 +248,9 @@ namespace ABASim.api.Data
                         pickNo++;
                     }
                     await _context.SaveChangesAsync();
-                } else if (draftRound == 2) {
+                }
+                else if (draftRound == 2)
+                {
                     // Round 2
                     var secondRoundTeamPicks = teamDraftPicks.FindAll(x => x.Round == 2);
 
@@ -274,6 +278,12 @@ namespace ABASim.api.Data
                     await _context.SaveChangesAsync();
                 }
             }
+
+            // Update the drafter tracker
+            var tracker = await _context.DraftTrackers.FirstOrDefaultAsync(x => x.LeagueId == leagueId);
+            tracker.Pick = 0;
+            tracker.Round = 0;
+            _context.Update(tracker);
 
             // Now update the league status
             league.StateId = 14;
@@ -2109,40 +2119,116 @@ namespace ABASim.api.Data
 
         public async Task<bool> GenerateAutoPickOrder(int leagueId)
         {
-            // League league = 
-            var autoCount = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).LongCountAsync();
-            if (autoCount == 0)
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
+
+            if (league.StateId < 6)
             {
-                var playerRatings = await _context.PlayerRatings.Where(x => x.LeagueId == leagueId).ToListAsync();
-                foreach (var player in playerRatings)
+                var autoCount = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).LongCountAsync();
+                if (autoCount == 0)
                 {
-                    int twoRating = (int)player.TwoRating / 3;
-                    int threeRating = (int)player.ThreeRating / 2;
-                    int ftRating = (int)player.FTRating / 4;
-                    int orebRating = player.ORebRating;
-                    int drebRating = player.DRebRating;
-                    int astRating = player.PassAssistRating;
-                    int ast2Rating = player.AssitRating / 3;
-                    int stealRating = player.StealRating;
-                    int blockRating = player.BlockRating;
-                    int orpm = (int)player.ORPMRating;
-                    int drpm = (int)player.DRPMRating;
-                    int staminaRating = 100 - player.StaminaRating;
-                    int foulRating = 100 - player.FoulingRating;
-
-                    // Need to get the players age
-                    var p = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
-
-                    int firstScore = twoRating + threeRating + ftRating + orebRating + drebRating + ast2Rating + astRating + stealRating + blockRating + staminaRating + orpm + drpm + foulRating;
-                    int finalScore = (firstScore - (ftRating) + ((100 - p.Age) * 5));
-
-                    AutoPickOrder apo = new AutoPickOrder
+                    var playerRatings = await _context.PlayerRatings.Where(x => x.LeagueId == leagueId).ToListAsync();
+                    foreach (var player in playerRatings)
                     {
-                        PlayerId = player.PlayerId,
-                        Score = finalScore,
-                        LeagueId = leagueId
-                    };
-                    await _context.AddAsync(apo);
+                        int twoRating = (int)player.TwoRating / 3;
+                        int threeRating = (int)player.ThreeRating / 2;
+                        int ftRating = (int)player.FTRating / 4;
+                        int orebRating = player.ORebRating;
+                        int drebRating = player.DRebRating;
+                        int astRating = player.PassAssistRating;
+                        int ast2Rating = player.AssitRating / 3;
+                        int stealRating = player.StealRating;
+                        int blockRating = player.BlockRating;
+                        int orpm = (int)player.ORPMRating;
+                        int drpm = (int)player.DRPMRating;
+                        int staminaRating = 100 - player.StaminaRating;
+                        int foulRating = 100 - player.FoulingRating;
+
+                        // Need to get the players age
+                        var p = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
+
+                        int firstScore = twoRating + threeRating + ftRating + orebRating + drebRating + ast2Rating + astRating + stealRating + blockRating + staminaRating + orpm + drpm + foulRating;
+                        int finalScore = (firstScore - (ftRating) + ((100 - p.Age) * 5));
+
+                        AutoPickOrder apo = new AutoPickOrder
+                        {
+                            PlayerId = player.PlayerId,
+                            Score = finalScore,
+                            LeagueId = leagueId
+                        };
+                        await _context.AddAsync(apo);
+                    }
+                }
+            } else if (league.StateId > 6) {
+                // First make the current order empty
+                var autoCount = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).LongCountAsync();
+                if (autoCount != 0) {
+                    var aps = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).ToListAsync();
+                    foreach (var ap in aps)
+                    {
+                        _context.Remove(ap);
+                    }
+                    await _context.SaveChangesAsync();
+                    autoCount = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).LongCountAsync();
+                } 
+                
+                if (autoCount == 0) {
+                    // Next we now work out the order
+
+                    var playerRatings = await _context.PlayerRatings.Join(
+                        _context.IncomingDraftPlayers,
+                        ratings => new { ratings.PlayerId, ratings.LeagueId },
+                        idp => new { idp.PlayerId, idp.LeagueId },
+                        (playerRatings, idp) => new
+                        {
+                            PlayerId = playerRatings.PlayerId,
+                            TwoRating = playerRatings.TwoRating,
+                            ThreeRating = playerRatings.ThreeRating,
+                            FTRating = playerRatings.FTRating,
+                            ORebRating = playerRatings.ORebRating,
+                            DRebRating = playerRatings.DRebRating,
+                            PassAssistRating = playerRatings.PassAssistRating,
+                            AssitRating = playerRatings.AssitRating,
+                            StealRating = playerRatings.StealRating,
+                            BlockRating = playerRatings.BlockRating,
+                            ORPMRating = playerRatings.ORPMRating,
+                            DRPMRating = playerRatings.DRPMRating,
+                            StaminaRating = playerRatings.StaminaRating,
+                            FoulingRating = playerRatings.FoulingRating,
+                            LeagueId = idp.LeagueId,
+                            SeasonId = idp.SeasonId
+                        }
+                    ).Where(x => x.LeagueId == leagueId && x.SeasonId == league.Year).ToListAsync();
+
+                    foreach (var player in playerRatings)
+                    {
+                        int twoRating = (int)player.TwoRating / 3;
+                        int threeRating = (int)player.ThreeRating / 2;
+                        int ftRating = (int)player.FTRating / 4;
+                        int orebRating = player.ORebRating;
+                        int drebRating = player.DRebRating;
+                        int astRating = player.PassAssistRating;
+                        int ast2Rating = player.AssitRating / 3;
+                        int stealRating = player.StealRating;
+                        int blockRating = player.BlockRating;
+                        int orpm = (int)player.ORPMRating;
+                        int drpm = (int)player.DRPMRating;
+                        int staminaRating = 100 - player.StaminaRating;
+                        int foulRating = 100 - player.FoulingRating;
+
+                        // Need to get the players age
+                        var p = await _context.Players.FirstOrDefaultAsync(x => x.PlayerId == player.PlayerId);
+
+                        int firstScore = twoRating + threeRating + ftRating + orebRating + drebRating + ast2Rating + astRating + stealRating + blockRating + staminaRating + orpm + drpm + foulRating;
+                        int finalScore = (firstScore - (ftRating) + ((100 - p.Age) * 5));
+
+                        AutoPickOrder apo = new AutoPickOrder
+                        {
+                            PlayerId = player.PlayerId,
+                            Score = finalScore,
+                            LeagueId = leagueId
+                        };
+                        await _context.AddAsync(apo);
+                    }
                 }
             }
             return await _context.SaveChangesAsync() > 0;

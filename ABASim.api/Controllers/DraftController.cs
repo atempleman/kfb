@@ -122,5 +122,12 @@ namespace ABASim.api.Controllers
             var draftPicks = await _repo.GetInitialDraftSalaryDetails();
             return Ok(draftPicks);
         }
+
+        [HttpGet("getregulardraftsalarydetails")]
+        public async Task<IActionResult> GetRegularDraftSalaryDetails()
+        {
+            var draftPicks = await _repo.GetRegularDraftSalaryDetails();
+            return Ok(draftPicks);
+        }
     }
 }

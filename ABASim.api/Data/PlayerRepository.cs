@@ -455,7 +455,38 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<DraftPlayerDto>> GetDraftPlayerPoolSeason(int leagueId)
         {
             List<DraftPlayerDto> draftPool = new List<DraftPlayerDto>();
-            var players = await _context.IncomingDraftPlayers.Where(x => x.LeagueId == leagueId).ToListAsync();
+            // var players = await _context.IncomingDraftPlayers.Where(x => x.LeagueId == leagueId).ToListAsync();
+            var players = await _context.IncomingDraftPlayers.Join(
+                _context.PlayerTeams,
+                player => new { player.PlayerId, player.LeagueId },
+                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                (player, playerTeam) => new
+                {
+                    PlayerId = player.PlayerId,
+                    FirstName = player.FirstName,
+                    Surname = player.Surname,
+                    PGPosition = player.PGPosition,
+                    SGPosition = player.SGPosition,
+                    SFPosition = player.SFPosition,
+                    PFPosition = player.PFPosition,
+                    CPosition = player.CPosition,
+                    Age = player.Age,
+                    TwoGrade = player.TwoGrade,
+                    ThreeGrade = player.ThreeGrade,
+                    FTGrade = player.FTGrade,
+                    ORebGrade = player.ORebGrade,
+                    DRebGrade = player.DRebGrade,
+                    HandlingGrade = player.HandlingGrade,
+                    StealGrade = player.StealGrade,
+                    BlockGrade = player.BlockGrade,
+                    StaminaGrade = player.StaminaGrade,
+                    PassingGrade = player.PassingGrade,
+                    IntangiblesGrade = player.IntangiblesGrade,
+                    TeamId = playerTeam.TeamId,
+                    LeagueId = player.LeagueId
+                }
+            ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).ToListAsync();
+
             foreach (var p in players)
             {
                 DraftPlayerDto dto = new DraftPlayerDto
@@ -1102,7 +1133,7 @@ namespace ABASim.api.Data
         {
             List<Player> players = new List<Player>();
             var upcomingPlayers = await _context.UpComingDraftPlayers.Where(x => x.LeagueId == leagueId).ToListAsync();
-            foreach(var p in upcomingPlayers)
+            foreach (var p in upcomingPlayers)
             {
                 Player player = new Player
                 {
@@ -1496,30 +1527,76 @@ namespace ABASim.api.Data
         public async Task<IEnumerable<DraftSelectionPlayerDto>> GetInitialDraftSelectionPlayerPool(int leagueId)
         {
             List<DraftSelectionPlayerDto> draftPool = new List<DraftSelectionPlayerDto>();
-            // Get players
-            var players = await _context.Players.Join(
-                _context.PlayerTeams,
-                player => new { player.PlayerId, player.LeagueId },
-                playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
-                (players, playerTeam) => new
-                {
-                    PlayerId = players.PlayerId,
-                    FirstName = players.FirstName,
-                    Surname = players.Surname,
-                    LeagueId = players.LeagueId,
-                    TeamId = playerTeam.TeamId
-                }
-            ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
+            var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
 
-            foreach (var player in players)
+            if (league.StateId < 6)
             {
-                DraftSelectionPlayerDto newPlayer = new DraftSelectionPlayerDto();
-                newPlayer.PlayerId = player.PlayerId;
-                newPlayer.FirstName = player.FirstName;
-                newPlayer.Surname = player.Surname;
-                newPlayer.LeagueId = player.LeagueId;
-                draftPool.Add(newPlayer);
+                // Get players
+                var players = await _context.Players.Join(
+                    _context.PlayerTeams,
+                    player => new { player.PlayerId, player.LeagueId },
+                    playerTeam => new { playerTeam.PlayerId, playerTeam.LeagueId },
+                    (players, playerTeam) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        TeamId = playerTeam.TeamId
+                    }
+                ).Where(x => x.LeagueId == leagueId && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    DraftSelectionPlayerDto newPlayer = new DraftSelectionPlayerDto();
+                    newPlayer.PlayerId = player.PlayerId;
+                    newPlayer.FirstName = player.FirstName;
+                    newPlayer.Surname = player.Surname;
+                    newPlayer.LeagueId = player.LeagueId;
+                    draftPool.Add(newPlayer);
+                }
+            } else if (league.StateId > 6) {
+                // Get players
+                var players = await _context.Players.Join(
+                    _context.IncomingDraftPlayers,
+                    player => new { player.PlayerId, player.LeagueId },
+                    idp => new { idp.PlayerId, idp.LeagueId },
+                    (players, idp) => new
+                    {
+                        PlayerId = players.PlayerId,
+                        FirstName = players.FirstName,
+                        Surname = players.Surname,
+                        LeagueId = players.LeagueId,
+                        SeasonId = idp.SeasonId
+                    }
+                )
+                .Join(
+                    _context.PlayerTeams,
+                    combined => new { combined.PlayerId, combined.LeagueId },
+                    playerTeams => new { playerTeams.PlayerId, playerTeams.LeagueId },
+                    (combined, playerTeams) => new
+                    {
+                        PlayerId = combined.PlayerId,
+                        FirstName = combined.FirstName,
+                        Surname = combined.Surname,
+                        LeagueId = combined.LeagueId,
+                        SeasonId = combined.SeasonId,
+                        TeamId = playerTeams.TeamId
+                    }
+                ).Where(x => x.LeagueId == leagueId && x.SeasonId == league.Year && x.TeamId == 31).OrderBy(x => x.Surname).ToListAsync();
+
+                foreach (var player in players)
+                {
+                    DraftSelectionPlayerDto newPlayer = new DraftSelectionPlayerDto();
+                    newPlayer.PlayerId = player.PlayerId;
+                    newPlayer.FirstName = player.FirstName;
+                    newPlayer.Surname = player.Surname;
+                    newPlayer.LeagueId = player.LeagueId;
+                    draftPool.Add(newPlayer);
+                }
             }
+
+
             return draftPool;
         }
 
