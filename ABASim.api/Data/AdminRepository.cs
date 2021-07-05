@@ -896,19 +896,18 @@ namespace ABASim.api.Data
                 }
 
             }
-            // else if (league.StateId == 6)
-            // {
-            // Preseaon - just rollover day
-            // league.Day = league.Day + 1;
-            // }
+
             if (league.StateId != 8 && league.StateId != 9 && league.StateId != 10 && league.StateId != 11)
             {
                 league.Day = league.Day + 1;
             }
 
-            // Need to do the free agency checks here - TODO
-            await FreeAgentDecisionMaking(leagueId);
-
+            // Need to do the free agency checks here
+            if (league.StateId == 6 || league.StateId == 7 || league.StateId == 15)
+            {
+                await FreeAgentDecisionMaking(leagueId);
+            }
+            
             // Need to rollover the day to the next day
             _context.Update(league);
 
@@ -920,7 +919,6 @@ namespace ABASim.api.Data
             var league = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == leagueId);
             int leageState = league.StateId;
 
-            // var freeAgentDecisions = await _context.FreeAgencyDecisions.FromSqlRaw("SELECT * FROM FreeAgencyDecisions WHERE LeagueId = {1} AND PlayerId IN (SELECT DISTINCT PlayerId FROM FreeAgencyDecisions WHERE DaysToDecide <= {0} AND LeagueId = {1})", league.Day + 1, leagueId).ToListAsync();
             var freeAgentDecisions = await _context.FreeAgencyDecisions.Where(x => (x.DayToDecide <= (league.Day)) && x.LeagueId == leagueId).ToListAsync();
 
             foreach (var fa in freeAgentDecisions)

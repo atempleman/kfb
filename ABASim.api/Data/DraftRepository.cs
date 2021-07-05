@@ -491,12 +491,12 @@ namespace ABASim.api.Data
                 }
                 else
                 {
-                    if (tracker.Round < 13)
+                    if (tracker.Round < 2)
                     {
                         tracker.Pick = 1;
                         tracker.Round++;
                     }
-                    else if (tracker.Round == 13 && tracker.Pick == 30)
+                    else if (tracker.Round == 2 && tracker.Pick == 30)
                     {
                         // Draft is finished
                         var leagueState = await _context.Leagues.FirstOrDefaultAsync(x => x.Id == draftPick.LeagueId);

@@ -41,7 +41,7 @@
 		<p class="lead color-7 ">There are no players left in the free agent pool</p>
 	</div>
 	
-	<div class="row justify-content-center mt-3 color-1" *ngIf="this.league?.stateId < 6">
+	<div class="row justify-content-center mt-3 color-1" *ngIf="this.league?.stateId < 6 || (this.league?.stateId >= 6 && this.league?.stateId < 15)">
 		<p class="lead color-7">Free agents are not able to be signed at this time.</p>
 	</div>
 
@@ -99,7 +99,7 @@
 				<td class="text-center">
 					<button class="btn btn-info btn-xs tablebutton" (click)="viewPlayer(player)"> View</button>
 					<button class="btn btn-success btn-xs tablebutton" (click)="openModal(sign, player)"
-						*ngIf="this.rosterSpotAvailable == true && this.league?.stateId < 8 && this.league?.stateId > 14">Sign</button>
+						*ngIf="(this.rosterSpotAvailable == true) && (this.league?.stateId < 8 || this.league?.stateId == 15)">Sign</button>
 					<label class="ml-3" *ngIf="!this.rosterSpotAvailable">No Roster Spots Available</label>
 				</td>
 			</tr>
