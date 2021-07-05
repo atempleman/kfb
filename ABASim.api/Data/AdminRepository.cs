@@ -38,7 +38,6 @@ namespace ABASim.api.Data
             else if (status == 6)
             {
                 // Need to remove some draft items
-                // TODO
                 // Delete AutoPickOrders
                 var autoPicks = await _context.AutoPickOrders.Where(x => x.LeagueId == leagueId).ToListAsync();
                 foreach (var ap in autoPicks)

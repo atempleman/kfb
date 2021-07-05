@@ -149,7 +149,7 @@
 
 				<!-- STATE 5 -->
 				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
-					*ngIf="this.league?.stateId == 5">
+					*ngIf="this.league?.stateId == 5 || (this.league?.day == 30 && this.league?.stateId == 15)">
 					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
 							class="header-card ml-3"><strong>Begin Preseason</strong></span></div>
 					<div class="card-body">
@@ -328,6 +328,20 @@
 						<div style="text-align: right;">
 							<button type="button" class="btn btn-link text-left"
 								(click)="openModal(rolloverseason, 5)">Rollover Season</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Free Agency -->
+				<div class="card border-info mb-3 ml-2 mr-2" style="max-width: 20rem;"
+					*ngIf="this.league?.stateId == 15 && this.league?.day < 30">
+					<div class="card-header"><i class="fa fa-exchange fa-2x" aria-hidden="true"></i><span
+							class="header-card ml-3"><strong>Run Free Agency Day</strong></span></div>
+					<div class="card-body">
+						<p class="lead color-7">Roll the day over to the next day of free agency.</p>
+						<div style="text-align: right;">
+							<button type="button" class="btn btn-link text-left"
+								(click)="openModal(freeagencyday, 2)">Complete Day</button>
 						</div>
 					</div>
 				</div>
@@ -553,6 +567,23 @@
 	<form #begininitialdraftform (ngSubmit)="beginDraft()">
 		<div class="modal-body">
 			<p class="color-7'">Are you sure you want to begin the draft</p>
+		</div>
+		<div class="modal-footer form-group text-center">
+			<button type="submit" class="btn btn-primary btn-sm">Run</button>
+			<button type="button" class="btn btn-danger btn-sm" (click)="modalRef.hide()">Cancel</button>
+		</div>
+	</form>
+</ng-template>
+
+<!-- Free Agency -->
+<ng-template #freeagencyday>
+	<div class="modal-header">
+		<h6 class="fw-600 fs-0 ls color-10 mt-3 color-8">Run Free Agency Day</h6>
+		<button type="button" class="close pull-right" (click)="modalRef.hide()">&times;</button>
+	</div>
+	<form #begininitialdraftform (ngSubmit)="confirmRollOverDay()">
+		<div class="modal-body">
+			<p class="color-7">Are you sure you want to compelte the day?</p>
 		</div>
 		<div class="modal-footer form-group text-center">
 			<button type="submit" class="btn btn-primary btn-sm">Run</button>
