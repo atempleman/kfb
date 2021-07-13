@@ -117,6 +117,7 @@ export function tokenGetter() {
       AppRoutingModule,
       HttpClientModule,
       // CollapseModule.forRoot(),
+      RouterModule,
       FormsModule,
       NgxSpinnerModule,
       NgbCollapseModule,

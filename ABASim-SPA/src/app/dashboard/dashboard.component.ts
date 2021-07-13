@@ -692,11 +692,16 @@ export class DashboardComponent implements OnInit {
         break;
       case 11:
         // OKC
-        this.primaryColor = '0,125,195';
-        this.secondaryColor = '239,59,36';
-        this.secondaryTextColor = '239,59,36';
-        this.secondaryLinkColor = '239,59,36';
-        this.primaryTextColor = '0,125,195';
+        // this.primaryColor = '0,125,195';
+        // this.secondaryColor = '239,59,36';
+        // this.secondaryTextColor = '239,59,36';
+        // this.secondaryLinkColor = '239,59,36';
+        // this.primaryTextColor = '0,125,195';
+        this.primaryColor = '0,101,58';
+        this.secondaryColor = '255,194,32';
+        this.secondaryTextColor = '255,194,32';
+        this.secondaryLinkColor = '255,194,32';
+        this.primaryTextColor = '0,101,58';
         break;
       case 12:
         // Clippers

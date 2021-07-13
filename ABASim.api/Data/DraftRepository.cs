@@ -527,6 +527,13 @@ namespace ABASim.api.Data
                             var salaryCap = await _context.TeamSalaryCaps.FirstOrDefaultAsync(x => x.TeamId == team.TeamId && x.LeagueId == draftPick.LeagueId);
                             salaryCap.CurrentCapAmount = teamSalary;
                             _context.TeamSalaryCaps.Update(salaryCap);
+
+                            // Now delete all IncomingDraftPlayerRecords
+                            var incomingDraftPlayers = await _context.IncomingDraftPlayers.Where(x => x.LeagueId == draftPick.LeagueId).ToListAsync();
+                            foreach (var idp in incomingDraftPlayers)
+                            {
+                                _context.Remove(idp);
+                            }   
                         }
                     }
                 }
