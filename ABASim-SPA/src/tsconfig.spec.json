@@ -5,8 +5,8 @@
     "types": [
       "jasmine",
       "node"
-    ],
-    "enableIvy": false
+    ]
+    // "enableIvy": false
   },
   "files": [
     "test.ts",

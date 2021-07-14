@@ -5,7 +5,6 @@ import { AlertifyService } from '../_services/alertify.service';
 import { AuthService } from '../_services/auth.service';
 import { League } from '../_models/league';
 import { Transaction } from '../_models/transaction';
-import { Player } from '@angular/core/src/render3/interfaces/player';
 import { TransferService } from '../_services/transfer.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TeamService } from '../_services/team.service';

@@ -10,7 +10,6 @@ import { League } from '../_models/league';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { PlayerService } from '../_services/player.service';
-import { Player } from '@angular/core/src/render3/interfaces/player';
 import { TeamService } from '../_services/team.service';
 import { Team } from '../_models/team';
 import { GetGameLeague } from '../_models/getGameLeague';
